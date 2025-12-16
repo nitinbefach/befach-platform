@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Sensitive data - Keep structure, exclude content
+SECURITY_LOGS/AUDIT_LOGS/*.md
+!SECURITY_LOGS/AUDIT_LOGS/.gitkeep
+SECURITY_LOGS/VULNERABILITY_TRACKING/*.md
+!SECURITY_LOGS/VULNERABILITY_TRACKING/.gitkeep
+
+# Budget and financial data
+RESOURCES/BUDGET/*.md
+!RESOURCES/BUDGET/.gitkeep
+
+# Secrets and credentials
+config/secrets.json
+*.pem
+*.key
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel/
+
+# Miscellaneous
+*.log
+*.tmp
+*.temp
+Thumbs.db
+
+# Package lock files (optional - uncomment if you want to ignore)
+# package-lock.json
+# yarn.lock
+

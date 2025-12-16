@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variant 5: Split View Layout</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --sidebar-bg: #1e293b;
+      --accent-primary: #f97316;
+      --accent-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border-color: #e2e8f0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      min-height: 100vh;
+      padding: 16px 12px;
+      flex-shrink: 0;
+    }
+    .org-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+    }
+    .org-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-gradient);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    .org-name { color: white; font-weight: 600; }
+    .org-type { color: rgba(255,255,255,0.6); font-size: 0.75rem; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.1); }
+    .nav-item.active {
+      background: rgba(249, 115, 22, 0.2);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+    .nav-icon { width: 20px; height: 20px; opacity: 0.8; }
+
+    /* VARIANT 5: Split View */
+    .split-container {
+      flex: 1;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Left Panel - Actions & Filters */
+    .left-panel {
+      width: 340px;
+      background: white;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .left-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .left-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .left-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .action-section {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .action-btn-full {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .action-btn-full:hover {
+      border-color: var(--accent-primary);
+      background: rgba(249, 115, 22, 0.05);
+    }
+    .action-btn-full.primary {
+      background: var(--accent-gradient);
+      color: white;
+    }
+    .action-btn-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .action-btn-full.primary .action-btn-icon {
+      background: rgba(255,255,255,0.2);
+    }
+    .action-btn-text h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .action-btn-text p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .action-btn-full.primary .action-btn-text p {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Filter Section */
+    .filter-section {
+      padding: 20px;
+      flex: 1;
+    }
+
+    .filter-group {
+      margin-bottom: 16px;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+
+    .filter-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .filter-checkbox input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent-primary);
+    }
+
+    /* Stats Mini */
+    .stats-mini {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+    }
+    .stat-mini-card {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-mini-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .stat-mini-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Right Panel - Results */
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .right-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      background: white;
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-secondary);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .view-tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .view-tab.active {
+      background: white;
+      color: var(--accent-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .view-tab .badge {
+      background: var(--bg-secondary);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      margin-left: 6px;
+    }
+    .view-tab.active .badge {
+      background: rgba(249, 115, 22, 0.1);
+      color: var(--accent-primary);
+    }
+
+    .sort-dropdown {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+
+    .results-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      background: var(--bg-primary);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .result-card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .result-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .result-title h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .result-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .result-score {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .result-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .result-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .result-status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .status-new { background: #fff7ed; color: #f97316; }
+    .status-rfq { background: #dbeafe; color: #2563eb; }
+    .status-quote { background: #dcfce7; color: #16a34a; }
+
+    .result-actions {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 14px;
+    }
+    .result-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-view {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+    .btn-rfq {
+      background: var(--accent-gradient);
+      border: none;
+      color: white;
+    }
+
+    .variant-label {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent-gradient);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 1000;
+    }
+
+    @media (max-width: 1200px) {
+      .left-panel { width: 280px; }
+    }
+    @media (max-width: 1024px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .left-panel { display: none; }
+      .split-container { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="variant-label">Variant 5: Split View</div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="org-badge">
+      <div class="org-icon">B</div>
+      <div>
+        <div class="org-name">Befach Corp</div>
+        <div class="org-type">Business</div>
+      </div>
+    </div>
+    <nav>
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        </svg>
+        My Orders
+      </a>
+      <a class="nav-item active" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        Sourcing
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        Tools
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <path d="M16 8h4l3 3v5h-7V8z"></path>
+        </svg>
+        Logistics
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+        </svg>
+        Team
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        Account
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Split Container -->
+  <div class="split-container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <div class="left-header">
+        <h1>Sourcing</h1>
+        <p>Find and manage suppliers</p>
+      </div>
+
+      <div class="action-section">
+        <div class="section-title">Quick Actions</div>
+        <button class="action-btn-full primary">
+          <div class="action-btn-icon">+</div>
+          <div class="action-btn-text">
+            <h4>Submit Requirement</h4>
+            <p>Find suppliers for your product</p>
+          </div>
+        </button>
+        <button class="action-btn-full">
+          <div class="action-btn-icon">📁</div>
+          <div class="action-btn-text">
+            <h4>Bulk Upload</h4>
+            <p>Upload CSV with products</p>
+          </div>
+        </button>
+        <button class="action-btn-full">
+          <div class="action-btn-icon">👥</div>
+          <div class="action-btn-text">
+            <h4>Invite Supplier</h4>
+            <p>Add existing suppliers</p>
+          </div>
+        </button>
+      </div>
+
+      <div class="filter-section">
+        <div class="section-title">Filters</div>
+        <div class="filter-group">
+          <label>Search</label>
+          <input type="text" placeholder="Products, suppliers...">
+        </div>
+        <div class="filter-group">
+          <label>Location</label>
+          <select>
+            <option>All Locations</option>
+            <option>China</option>
+            <option>India</option>
+            <option>Vietnam</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Match Score</label>
+          <input type="range" min="0" max="100" value="70">
+        </div>
+        <div class="filter-group">
+          <label>Status</label>
+          <div class="filter-checkboxes">
+            <label class="filter-checkbox">
+              <input type="checkbox" checked> New Match
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" checked> RFQ Sent
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" checked> Quote Received
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-mini">
+        <div class="stat-mini-card">
+          <div class="stat-mini-value">2,847</div>
+          <div class="stat-mini-label">Matched</div>
+        </div>
+        <div class="stat-mini-card">
+          <div class="stat-mini-value">1,523</div>
+          <div class="stat-mini-label">RFQs Sent</div>
+        </div>
+        <div class="stat-mini-card">
+          <div class="stat-mini-value">87%</div>
+          <div class="stat-mini-label">Response</div>
+        </div>
+        <div class="stat-mini-card">
+          <div class="stat-mini-value">2.3s</div>
+          <div class="stat-mini-label">Avg Time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="right-header">
+        <div class="view-tabs">
+          <button class="view-tab active">Matches <span class="badge">124</span></button>
+          <button class="view-tab">Saved <span class="badge">18</span></button>
+          <button class="view-tab">Requirements <span class="badge">5</span></button>
+        </div>
+        <select class="sort-dropdown">
+          <option>Sort by: Match Score</option>
+          <option>Sort by: Newest</option>
+          <option>Sort by: Location</option>
+        </select>
+      </div>
+
+      <div class="results-container">
+        <div class="results-grid">
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                <h3>LED Bulbs 9W</h3>
+                <p>Shenzhen Lighting Co.</p>
+              </div>
+              <span class="result-score">98%</span>
+            </div>
+            <div class="result-meta">
+              <span>📍 China</span>
+              <span>🏭 Electronics</span>
+              <span>HSN: 8539</span>
+            </div>
+            <span class="result-status status-rfq">RFQ Sent</span>
+            <div class="result-actions">
+              <button class="btn-view">View Profile</button>
+              <button class="btn-rfq">Send RFQ</button>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                <h3>Cotton T-shirts</h3>
+                <p>Garments India Pvt.</p>
+              </div>
+              <span class="result-score">95%</span>
+            </div>
+            <div class="result-meta">
+              <span>📍 India</span>
+              <span>🏭 Textiles</span>
+              <span>HSN: 6109</span>
+            </div>
+            <span class="result-status status-quote">Quote Received</span>
+            <div class="result-actions">
+              <button class="btn-view">View Profile</button>
+              <button class="btn-rfq">Send RFQ</button>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                <h3>Mobile Chargers</h3>
+                <p>Vietnam Tech Electronics</p>
+              </div>
+              <span class="result-score">92%</span>
+            </div>
+            <div class="result-meta">
+              <span>📍 Vietnam</span>
+              <span>🏭 Electronics</span>
+              <span>HSN: 8504</span>
+            </div>
+            <span class="result-status status-new">New Match</span>
+            <div class="result-actions">
+              <button class="btn-view">View Profile</button>
+              <button class="btn-rfq">Send RFQ</button>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                <h3>Solar Panels 300W</h3>
+                <p>Taiwan Solar Industries</p>
+              </div>
+              <span class="result-score">88%</span>
+            </div>
+            <div class="result-meta">
+              <span>📍 Taiwan</span>
+              <span>🏭 Energy</span>
+              <span>HSN: 8541</span>
+            </div>
+            <span class="result-status status-new">New Match</span>
+            <div class="result-actions">
+              <button class="btn-view">View Profile</button>
+              <button class="btn-rfq">Send RFQ</button>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                <h3>Stainless Steel Bottles</h3>
+                <p>Vietnam Housewares</p>
+              </div>
+              <span class="result-score">89%</span>
+            </div>
+            <div class="result-meta">
+              <span>📍 Vietnam</span>
+              <span>🏭 Housewares</span>
+              <span>HSN: 7323</span>
+            </div>
+            <span class="result-status status-quote">Quote Received</span>
+            <div class="result-actions">
+              <button class="btn-view">View Profile</button>
+              <button class="btn-rfq">Send RFQ</button>
+            </div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                <h3>Industrial Motors 5HP</h3>
+                <p>Guangzhou Machinery Co.</p>
+              </div>
+              <span class="result-score">86%</span>
+            </div>
+            <div class="result-meta">
+              <span>📍 China</span>
+              <span>🏭 Machinery</span>
+              <span>HSN: 8501</span>
+            </div>
+            <span class="result-status status-new">New Match</span>
+            <div class="result-actions">
+              <button class="btn-view">View Profile</button>
+              <button class="btn-rfq">Send RFQ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

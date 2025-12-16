@@ -1,0 +1,332 @@
+/* Sidebar Wrapper */
+.sidebarWrapper {
+  position: relative;
+  display: flex;
+  height: calc(100vh - 64px);
+  z-index: 100;
+}
+
+/* Icon Sidebar */
+.iconSidebar {
+  width: 70px;
+  min-width: 70px;
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--sidebar-border);
+}
+
+.sidebarLogo {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.logoBadge {
+  width: 40px;
+  height: 40px;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.navIcons {
+  flex: 1;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navIconItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+}
+
+.iconWrapper {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.iconWrapper svg {
+  width: 22px;
+  height: 22px;
+  color: var(--sidebar-text-muted);
+  transition: all 0.2s ease;
+}
+
+.navIconItem:hover .iconWrapper,
+.navIconItem.hovered .iconWrapper {
+  background: var(--sidebar-hover);
+}
+
+.navIconItem:hover .iconWrapper svg,
+.navIconItem.hovered .iconWrapper svg {
+  color: var(--sidebar-text);
+}
+
+.navIconItem.active .iconWrapper {
+  background: var(--accent-gradient);
+}
+
+.navIconItem.active .iconWrapper svg {
+  color: white;
+}
+
+/* Active indicator */
+.navIconItem.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 28px;
+  background: var(--accent-primary);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  left: 75px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 200;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--sidebar-border);
+}
+
+.navIconItem:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hide tooltip when panel is visible */
+.navIconItem.hovered .tooltip {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.sidebarFooter {
+  padding: 12px 0;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.logoutItem:hover .iconWrapper {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.logoutItem:hover .iconWrapper svg {
+  color: #ef4444;
+}
+
+/* Expand Panel */
+.expandPanel {
+  position: fixed;
+  left: 70px;
+  top: 64px;
+  width: 260px;
+  height: calc(100vh - 64px);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  transform: translateX(-260px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.expandPanel.visible {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.panelHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--sidebar-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panelTitle {
+  color: var(--sidebar-text);
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panelIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--sidebar-text);
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.closeButton:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.panelIcon svg {
+  width: 20px;
+  height: 20px;
+  color: var(--accent-primary);
+}
+
+.panelNav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+.panelSectionTitle {
+  color: var(--sidebar-text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 14px 12px 8px;
+  font-weight: 600;
+}
+
+.panelNavItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--sidebar-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.panelNavItem:hover {
+  background: var(--sidebar-hover);
+}
+
+.panelNavItem.active {
+  background: var(--accent-gradient);
+  color: white;
+}
+
+.itemIcon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.itemIcon svg {
+  width: 16px;
+  height: 16px;
+  color: var(--sidebar-text-muted);
+}
+
+.panelNavItem:hover .itemIcon svg {
+  color: var(--sidebar-text);
+}
+
+.panelNavItem.active .itemIcon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.panelNavItem.active .itemIcon svg {
+  color: white;
+}
+
+.itemText {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 450;
+}
+
+.itemBadge {
+  background: rgba(249, 115, 22, 0.2);
+  color: var(--accent-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.panelNavItem.active .itemBadge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Mobile */
+@media (max-width: 1024px) {
+  .sidebarWrapper {
+    display: none;
+  }
+
+  .sidebarWrapper.open {
+    display: flex;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    z-index: 999;
+  }
+
+  .expandPanel {
+    position: absolute;
+  }
+}

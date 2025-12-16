@@ -1,0 +1,306 @@
+/* Market Insights Specific Styles */
+
+.marketInsightsContainer {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f9fafb, #ffffff);
+}
+
+/* Responsive Grid Layouts */
+.marketGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .marketGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mainContent {
+    grid-column: span 3;
+  }
+
+  .sidebar {
+    grid-column: span 1;
+    position: sticky;
+    top: 1rem;
+    height: fit-content;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .marketGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mainContent {
+    grid-column: span 2;
+  }
+
+  .sidebar {
+    grid-column: span 2;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .marketGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mainContent,
+  .sidebar {
+    grid-column: span 1;
+  }
+}
+
+/* Data Visualization Enhancements */
+.chartContainer {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.chartContainer:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Sparkline Charts */
+.sparklineContainer {
+  width: 100%;
+  height: 40px;
+  cursor: pointer;
+}
+
+/* Table Enhancements */
+.dataTable {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dataTable table {
+  min-width: 650px;
+}
+
+/* Mobile Table Adjustments */
+@media (max-width: 640px) {
+  .dataTable {
+    font-size: 0.875rem;
+  }
+
+  .dataTable th,
+  .dataTable td {
+    padding: 0.5rem;
+  }
+
+  /* Hide less important columns on mobile */
+  .hideOnMobile {
+    display: none;
+  }
+}
+
+/* Watchlist Styles */
+.watchlistItem {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.watchlistItem:hover {
+  transform: translateX(4px);
+  background: #f3f4f6;
+}
+
+/* Filter Bar */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .filterBar {
+    flex-direction: column;
+  }
+
+  .filterBar > * {
+    width: 100%;
+  }
+}
+
+/* Price Change Indicators */
+.priceUp {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.priceDown {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.priceNeutral {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* Loading States */
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #f3f4f6;
+  }
+  100% {
+    background-color: #e5e7eb;
+  }
+}
+
+/* Tab Navigation */
+.tabNavigation {
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.tabNavigation button {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tabNavigation button:hover {
+  color: #111827;
+}
+
+.tabNavigation button.active {
+  color: #ff6b35;
+  border-bottom-color: #ff6b35;
+}
+
+/* Market Cards */
+.marketCard {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.marketCard:hover {
+  border-color: #ff6b35;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Alert Badges */
+.alertBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.alertBadge.success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.alertBadge.warning {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.alertBadge.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+  .hideSm {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hideMd {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hideLg {
+    display: none !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .noPrint {
+    display: none !important;
+  }
+
+  .marketGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .chartContainer {
+    page-break-inside: avoid;
+  }
+}
+
+/* Accessibility Improvements */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus Styles */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #ff6b35;
+  outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
+.customScroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.customScroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.customScroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.customScroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

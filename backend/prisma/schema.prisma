@@ -1,0 +1,162 @@
+// Prisma Schema for Befach International
+// Database: PostgreSQL via Supabase
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum OrgType {
+  company
+  individual
+}
+
+enum UserRole {
+  owner
+  admin
+  member
+  viewer
+}
+
+enum OrderStatus {
+  processing
+  confirmed
+  in_transit
+  customs
+  delivered
+  cancelled
+}
+
+// ==========================================
+// MODELS
+// ==========================================
+
+// Organization - Company/Business profiles
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  type      OrgType  @default(company)
+  industry  String?
+  website   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  users        User[]
+  orders       Order[]
+  suppliers    Supplier[]
+  calculations Calculation[]
+
+  @@map("organizations")
+}
+
+// User - User accounts
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String
+  role           UserRole @default(member)
+  phone          String?
+  organizationId String?  @map("organization_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  organization Organization?  @relation(fields: [organizationId], references: [id])
+  orders       Order[]
+  calculations Calculation[]
+
+  @@map("users")
+}
+
+// Supplier - Supplier network
+model Supplier {
+  id             String   @id @default(uuid())
+  name           String
+  contactPerson  String?  @map("contact_person")
+  email          String?
+  phone          String?
+  location       String?
+  country        String?
+  specialization String?
+  rating         Decimal  @default(0) @db.Decimal(2, 1)
+  totalOrders    Int      @default(0) @map("total_orders")
+  verified       Boolean  @default(false)
+  organizationId String?  @map("organization_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  orders       Order[]
+
+  @@map("suppliers")
+}
+
+// Order - Import orders
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique @map("order_number")
+  product         String
+  hsnCode         String?     @map("hsn_code")
+  quantity        Int
+  unit            String      @default("pcs")
+  fobValue        Decimal?    @map("fob_value") @db.Decimal(12, 2)
+  landedCost      Decimal?    @map("landed_cost") @db.Decimal(12, 2)
+  currency        String      @default("USD")
+  status          OrderStatus @default(processing)
+  originCountry   String?     @map("origin_country")
+  destinationPort String?     @map("destination_port")
+  notes           String?
+  supplierId      String?     @map("supplier_id")
+  userId          String?     @map("user_id")
+  organizationId  String?     @map("organization_id")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  supplier     Supplier?     @relation(fields: [supplierId], references: [id])
+  user         User?         @relation(fields: [userId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+// Calculation - Saved cost calculations
+model Calculation {
+  id             String   @id @default(uuid())
+  productName    String   @map("product_name")
+  hsnCode        String   @map("hsn_code")
+  originCountry  String   @map("origin_country")
+  shippingMethod String   @map("shipping_method")
+  fobValue       Decimal  @map("fob_value") @db.Decimal(12, 2)
+  freight        Decimal? @db.Decimal(12, 2)
+  insurance      Decimal? @db.Decimal(12, 2)
+  cifValue       Decimal? @map("cif_value") @db.Decimal(12, 2)
+  basicDuty      Decimal? @map("basic_duty") @db.Decimal(12, 2)
+  socialWelfare  Decimal? @map("social_welfare") @db.Decimal(12, 2)
+  igst           Decimal? @db.Decimal(12, 2)
+  totalDuty      Decimal? @map("total_duty") @db.Decimal(12, 2)
+  landedCost     Decimal? @map("landed_cost") @db.Decimal(12, 2)
+  dutyRates      Json?    @map("duty_rates")
+  userId         String?  @map("user_id")
+  organizationId String?  @map("organization_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user         User?         @relation(fields: [userId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@index([userId])
+  @@map("calculations")
+}

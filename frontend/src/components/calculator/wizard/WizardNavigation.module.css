@@ -1,0 +1,228 @@
+.navigationContainer {
+  margin-top: 2rem;
+}
+
+.navigationContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.rightButtons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Button Styles */
+.btnBack,
+.btnCancel {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnBack:hover,
+.btnCancel:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--text-secondary);
+}
+
+.btnBack:disabled,
+.btnCancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnNext,
+.btnCalculate {
+  padding: 0.75rem 1.5rem;
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+}
+
+.btnNext:hover,
+.btnCalculate:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.3);
+}
+
+.btnNext:disabled,
+.btnCalculate:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btnSkip {
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnSkip:hover {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+}
+
+.btnCalculate {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile Bottom Bar */
+.mobileBottomBar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem;
+  z-index: 100;
+  box-shadow: 0 -2px 10px var(--shadow-color);
+}
+
+@media (max-width: 768px) {
+  .navigationContent {
+    display: none;
+  }
+
+  .mobileBottomBar {
+    display: block;
+  }
+}
+
+.mobileNavigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.mobileBack,
+.mobileNext,
+.mobileCalculate {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobileBack {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.mobileNext,
+.mobileCalculate {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+}
+
+.mobileBack:hover {
+  background: var(--bg-secondary);
+}
+
+.mobileNext:hover,
+.mobileCalculate:hover {
+  background: var(--accent-secondary);
+  transform: scale(1.05);
+}
+
+.mobileBack:disabled,
+.mobileNext:disabled,
+.mobileCalculate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.mobileStepIndicator {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .mobileBottomBar {
+  background: var(--surface-dark);
+}
+
+[data-theme="dark"] .btnBack,
+[data-theme="dark"] .btnCancel {
+  border-color: var(--border-dark);
+}
+
+[data-theme="dark"] .btnBack:hover,
+[data-theme="dark"] .btnCancel:hover {
+  background: var(--surface-dark);
+}
+
+[data-theme="dark"] .mobileBack {
+  background: var(--surface-dark);
+}
+
+[data-theme="dark"] .mobileStepIndicator {
+  background: var(--surface-dark);
+}
