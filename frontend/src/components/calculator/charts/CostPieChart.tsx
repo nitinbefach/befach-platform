@@ -202,7 +202,7 @@ export default function CostPieChart({ data, currency = 'INR' }: CostPieChartPro
         <ResponsiveContainer width="100%" height={400}>
           <PieChart>
             <Pie
-              activeIndex={activeIndex}
+              {...{ activeIndex } as any}
               activeShape={renderActiveShape}
               data={chartData}
               cx="50%"

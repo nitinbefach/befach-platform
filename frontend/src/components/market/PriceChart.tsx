@@ -176,7 +176,7 @@ export function PriceChart({
       xAxis: {
         dataKey: 'formattedDate',
         angle: -45,
-        textAnchor: 'end',
+        textAnchor: 'end' as const,
         height: 80
       },
       yAxis: {

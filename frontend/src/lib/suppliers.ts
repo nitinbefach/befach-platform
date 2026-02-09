@@ -1148,7 +1148,7 @@ export function getChatMessages(supplierId: string): ChatMessage[] {
   }
 }
 
-export function addChatMessage(supplierId: string, message: Omit<ChatMessage, 'id' | 'timestamp'>): ChatMessage {
+export function addChatMessage(supplierId: string, message: Omit<ChatMessage, 'id' | 'timestamp' | 'supplierId'>): ChatMessage {
   if (typeof window === 'undefined') {
     return { ...message, id: '', timestamp: '', supplierId };
   }
