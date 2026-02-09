@@ -43,7 +43,7 @@ const tourSteps: TourStep[] = [
     id: 'tracking',
     title: 'Track Everything',
     description: 'Monitor your shipments in real-time and access all your documents in one place.',
-    target: '[href="/logistics-tracking"]',
+    target: '[href="/track-shipment"]',
     position: 'right'
   },
   {

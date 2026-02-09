@@ -34,6 +34,7 @@ export function SupplierPipelineStats({
           const config = RELATIONSHIP_STAGE_CONFIG[stage];
           const count = stats.byStage[stage];
           const isActive = activeStages.includes(stage);
+          const Icon = config.icon;
 
           return (
             <div key={stage} className="stage-card-wrapper">
@@ -46,7 +47,7 @@ export function SupplierPipelineStats({
                 } as React.CSSProperties}
               >
                 <div className="card-header">
-                  <span className="stage-icon">{config.icon}</span>
+                  <span className="stage-icon"><Icon size={16} /></span>
                   <span className="stage-count">{count}</span>
                 </div>
                 <span className="stage-label">{config.label}</span>
@@ -274,17 +275,83 @@ export function SupplierPipelineStats({
         }
 
         @media (max-width: 768px) {
-          .stage-cards {
-            justify-content: flex-start;
+          .pipeline-stats {
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 12px;
           }
 
-          .quick-stats {
-            grid-template-columns: repeat(2, 1fr);
+          .pipeline-header {
+            margin-bottom: 12px;
+          }
+
+          .pipeline-header h2 {
+            font-size: 1rem;
+          }
+
+          .total-count {
+            font-size: 0.8rem;
+          }
+
+          /* Horizontal scroll strip on mobile */
+          .stage-cards {
+            justify-content: flex-start;
+            gap: 0;
+            margin-bottom: 16px;
+            margin-left: -16px;
+            margin-right: -16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+
+          .stage-cards::-webkit-scrollbar {
+            display: none;
           }
 
           .stage-card {
             min-width: 80px;
-            padding: 12px 16px;
+            padding: 10px 14px;
+            gap: 4px;
+            flex-shrink: 0;
+          }
+
+          .stage-count {
+            font-size: 1.25rem;
+          }
+
+          .stage-label {
+            font-size: 0.75rem;
+          }
+
+          .stage-connector {
+            display: none;
+          }
+
+          /* 2x2 quick stats */
+          .quick-stats {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 12px;
+          }
+
+          .stat-value {
+            font-size: 1.1rem;
+          }
+
+          .stat-label {
+            font-size: 0.7rem;
+          }
+
+          .secondary-stats {
+            margin-top: 12px;
+            padding-top: 12px;
+          }
+
+          .secondary-badge {
+            font-size: 0.8rem;
+            padding: 6px 12px;
           }
         }
       `}</style>

@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PublicLayout from '@/components/layout/PublicLayout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 
 export default function ContactPage() {
+  const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const [darkMode, setDarkMode] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -24,6 +26,7 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    triggerFeedback('contact');
   };
 
   return (
@@ -567,6 +570,7 @@ export default function ContactPage() {
           }
         `}</style>
       </div>
+      {promptElement}
     </PublicLayout>
   );
 }

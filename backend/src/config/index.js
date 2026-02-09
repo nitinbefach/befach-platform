@@ -8,9 +8,9 @@ module.exports = {
     credentials: true
   },
   
-  // Future database config
+  // Database config — actual connection handled by Prisma via DATABASE_URL env var
   database: {
-    url: process.env.DATABASE_URL || 'mongodb://localhost:27017/befach'
+    url: process.env.DATABASE_URL || 'postgresql://localhost:5432/befach'
   },
   
   // Future JWT config

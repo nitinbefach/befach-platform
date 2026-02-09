@@ -818,6 +818,216 @@ export function detectCategory(specialization: string): string {
 }
 
 // ============================================================================
+// AUTO-SAVE HELPER FUNCTIONS (for Our Vendors feature)
+// ============================================================================
+
+// Country flag mapping
+const COUNTRY_FLAGS: Record<string, string> = {
+  'China': '🇨🇳',
+  'India': '🇮🇳',
+  'Taiwan': '🇹🇼',
+  'South Korea': '🇰🇷',
+  'Vietnam': '🇻🇳',
+  'Thailand': '🇹🇭',
+  'Malaysia': '🇲🇾',
+  'Japan': '🇯🇵',
+  'United States': '🇺🇸',
+  'Germany': '🇩🇪',
+  'United Kingdom': '🇬🇧',
+  'France': '🇫🇷',
+  'Italy': '🇮🇹',
+  'Spain': '🇪🇸',
+  'Brazil': '🇧🇷',
+  'Mexico': '🇲🇽',
+  'Indonesia': '🇮🇩',
+  'Philippines': '🇵🇭',
+  'Bangladesh': '🇧🇩',
+  'Pakistan': '🇵🇰'
+};
+
+function getCountryFlag(country: string): string {
+  return COUNTRY_FLAGS[country] || '🌍';
+}
+
+/**
+ * Check if a supplier already exists by name or email
+ */
+export function findExistingSupplier(name?: string, email?: string): SavedSupplier | null {
+  const suppliers = getSavedSuppliers();
+
+  if (name) {
+    const byName = suppliers.find(s => s.name.toLowerCase() === name.toLowerCase());
+    if (byName) return byName;
+  }
+
+  if (email) {
+    const byEmail = suppliers.find(s => s.email?.toLowerCase() === email.toLowerCase());
+    if (byEmail) return byEmail;
+  }
+
+  return null;
+}
+
+/**
+ * Save supplier from an invitation (Invite Supplier page)
+ * Automatically creates a vendor record when user sends an invitation
+ */
+export interface InvitationData {
+  id: string;
+  companyName: string;
+  contactName: string;
+  contactEmail: string;
+  phone?: string;
+  category?: string;
+  country?: string;
+  website?: string;
+}
+
+export function saveSupplierFromInvitation(invitation: InvitationData): SavedSupplier | null {
+  // Check if already exists
+  const existing = findExistingSupplier(invitation.companyName, invitation.contactEmail);
+  if (existing) {
+    // Update last contacted date if exists
+    return updateSupplier(existing.id, {
+      lastContactedDate: new Date().toISOString(),
+      communicationCount: existing.communicationCount + 1
+    });
+  }
+
+  const now = new Date().toISOString();
+  const country = invitation.country || 'Unknown';
+  const category = invitation.category || detectCategory(invitation.companyName);
+
+  const newSupplier: Omit<SavedSupplier, 'id' | 'savedAt' | 'updatedAt'> = {
+    name: invitation.companyName,
+    country: country,
+    countryFlag: getCountryFlag(country),
+    location: country,
+    category: category,
+    specialization: category,
+    verified: false,
+    rating: 0,
+    contactPerson: invitation.contactName,
+    email: invitation.contactEmail,
+    phone: invitation.phone,
+    website: invitation.website,
+    relationshipStage: 'contacted',
+    stageChangedAt: now,
+    stageHistory: [{
+      id: `history-${Date.now()}`,
+      fromStage: null,
+      toStage: 'contacted',
+      changedAt: now,
+      reason: 'Invitation sent'
+    }],
+    source: 'invitation',
+    sourceId: invitation.id,
+    tags: ['Invitation Sent'],
+    priority: 'medium',
+    lastContactedDate: now,
+    communicationCount: 1,
+    totalOrders: 0,
+    totalOrderValue: 0,
+    activeDeals: 0,
+    completedDeals: 0,
+    pendingQuotes: 0
+  };
+
+  return saveSupplier(newSupplier);
+}
+
+/**
+ * Save supplier from AI Search (Smart Sourcing page)
+ * Automatically creates a vendor record when user contacts or chats with a supplier
+ */
+export interface SearchSupplierData {
+  id: string;
+  companyName: string;
+  location?: {
+    country?: string;
+    city?: string;
+    region?: string;
+  };
+  contacts?: Array<{
+    name?: string;
+    email?: string;
+    phone?: string;
+  }>;
+  catalogue?: Array<{
+    name?: string;
+  }>;
+  metrics?: {
+    avgRating?: number;
+  };
+  website?: string;
+  description?: string;
+}
+
+export function saveSupplierFromSearch(
+  supplier: SearchSupplierData,
+  interactionType: 'contact' | 'chat'
+): SavedSupplier | null {
+  // Check if already exists
+  const contact = supplier.contacts?.[0];
+  const existing = findExistingSupplier(supplier.companyName, contact?.email);
+
+  if (existing) {
+    // Update last contacted date if exists
+    return updateSupplier(existing.id, {
+      lastContactedDate: new Date().toISOString(),
+      communicationCount: existing.communicationCount + 1
+    });
+  }
+
+  const now = new Date().toISOString();
+  const country = supplier.location?.country || 'Unknown';
+  const city = supplier.location?.city || '';
+  const location = city ? `${city}, ${country}` : country;
+
+  // Get category from catalogue
+  const category = supplier.catalogue?.[0]?.name
+    ? detectCategory(supplier.catalogue[0].name)
+    : detectCategory(supplier.companyName);
+
+  const newSupplier: Omit<SavedSupplier, 'id' | 'savedAt' | 'updatedAt'> = {
+    name: supplier.companyName,
+    country: country,
+    countryFlag: getCountryFlag(country),
+    location: location,
+    category: category,
+    specialization: supplier.description?.substring(0, 100) || category,
+    verified: false,
+    rating: supplier.metrics?.avgRating || 0,
+    contactPerson: contact?.name,
+    email: contact?.email,
+    phone: contact?.phone,
+    website: supplier.website,
+    relationshipStage: 'contacted',
+    stageChangedAt: now,
+    stageHistory: [{
+      id: `history-${Date.now()}`,
+      fromStage: null,
+      toStage: 'contacted',
+      changedAt: now,
+      reason: interactionType === 'chat' ? 'Chat initiated from AI Search' : 'Contacted from AI Search'
+    }],
+    source: 'discovery',
+    sourceId: supplier.id,
+    tags: [interactionType === 'chat' ? 'Chat Started' : 'Contacted'],
+    priority: 'medium',
+    lastContactedDate: now,
+    communicationCount: 1,
+    totalOrders: 0,
+    totalOrderValue: 0,
+    activeDeals: 0,
+    completedDeals: 0,
+    pendingQuotes: 0
+  };
+
+  return saveSupplier(newSupplier);
+}
+
+// ============================================================================
 // DEMO DATA GENERATOR
 // ============================================================================
 

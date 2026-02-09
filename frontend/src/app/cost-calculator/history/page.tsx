@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import {
   FaHistory,
   FaSearch,
@@ -33,6 +34,11 @@ const ITEMS_PER_PAGE = 10;
 
 export default function HistoryPage() {
   const router = useRouter();
+  const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
+
+  useEffect(() => {
+    triggerTimeBasedFeedback('cost-calculator-history', 20000);
+  }, [triggerTimeBasedFeedback]);
 
   // State
   const [calculations, setCalculations] = useState<CalculationRecord[]>([]);
@@ -55,36 +61,37 @@ export default function HistoryPage() {
   });
 
   // Convert API record format to legacy format for backward compatibility
-  const convertAPIToLegacy = (apiRecord: APICalculationRecord): CalculationRecord => {
+  const convertAPIToLegacy = (apiRecord: any): CalculationRecord => {
     return {
       id: apiRecord.id,
+      version: 1, // Add version field for compatibility
       input: {
-        productName: apiRecord.input.productDetails.productName,
-        hsnCode: apiRecord.input.productDetails.hsnCode,
-        fobValue: apiRecord.input.productDetails.fobValue.toString(),
-        currency: apiRecord.input.productDetails.currency,
-        weight: apiRecord.input.productDetails.weight?.toString(),
-        dutyRate: apiRecord.result.duties.dutyRate.toString(),
-        shippingMode: apiRecord.input.shippingDetails.shippingMode,
-        originPort: apiRecord.input.shippingDetails.originPort,
-        destinationPort: apiRecord.input.shippingDetails.destinationPort,
-        estimatedDays: apiRecord.input.shippingDetails.transitDays?.toString(),
-        freightCost: apiRecord.input.shippingDetails.freightCost.toString(),
-        insuranceRequired: apiRecord.input.shippingDetails.insuranceRequired,
-        insuranceAmount: apiRecord.input.shippingDetails.insuranceAmount?.toString(),
-        packingCharges: apiRecord.input.additionalCosts.packingCharges?.toString(),
-        inlandFreight: apiRecord.input.additionalCosts.inlandFreight?.toString(),
-        customCharges: apiRecord.input.additionalCosts.customCharges,
-        totalAdditionalCosts: apiRecord.result.additionalCosts.totalAdditional?.toString() || '0'
+        productName: apiRecord.input?.productDetails?.productName || apiRecord.input?.productName || '',
+        hsnCode: apiRecord.input?.productDetails?.hsnCode || apiRecord.input?.hsnCode || '',
+        fobValue: (apiRecord.input?.productDetails?.fobValue || apiRecord.input?.fobValue || 0).toString(),
+        currency: apiRecord.input?.productDetails?.currency || apiRecord.input?.currency || 'USD',
+        weight: (apiRecord.input?.productDetails?.weight || apiRecord.input?.weight)?.toString(),
+        dutyRate: (apiRecord.result?.duties?.dutyRate || apiRecord.result?.dutyRate || 0).toString(),
+        shippingMode: apiRecord.input?.shippingDetails?.shippingMode || apiRecord.input?.shippingMode || '',
+        originPort: apiRecord.input?.shippingDetails?.originPort || apiRecord.input?.originPort || '',
+        destinationPort: apiRecord.input?.shippingDetails?.destinationPort || apiRecord.input?.destinationPort || '',
+        estimatedDays: (apiRecord.input?.shippingDetails?.transitDays || apiRecord.input?.estimatedDays)?.toString(),
+        freightCost: (apiRecord.input?.shippingDetails?.freightCost || apiRecord.input?.freightCost || 0).toString(),
+        insuranceRequired: apiRecord.input?.shippingDetails?.insuranceRequired || apiRecord.input?.insuranceRequired || false,
+        insuranceAmount: (apiRecord.input?.shippingDetails?.insuranceAmount || apiRecord.input?.insuranceAmount)?.toString(),
+        packingCharges: (apiRecord.input?.additionalCosts?.packingCharges || apiRecord.input?.packingCharges)?.toString(),
+        inlandFreight: (apiRecord.input?.additionalCosts?.inlandFreight || apiRecord.input?.inlandFreight)?.toString(),
+        customCharges: apiRecord.input?.additionalCosts?.customCharges || apiRecord.input?.customCharges || [],
+        totalAdditionalCosts: (apiRecord.result?.additionalCosts?.totalAdditional || apiRecord.result?.totalAdditionalCosts || 0).toString()
       },
       result: {
-        cifValue: apiRecord.result.cifValue.totalCif,
-        customsDuty: apiRecord.result.duties.basicCustomsDuty,
-        gst: apiRecord.result.duties.igst,
-        totalLandedCost: apiRecord.result.totalCost.landedCost,
-        breakdownPercentages: apiRecord.result.totalCost.costBreakdown || {}
+        cifValue: apiRecord.result?.cifValue?.totalCif || apiRecord.result?.cifValue || 0,
+        customsDuty: apiRecord.result?.duties?.basicCustomsDuty || apiRecord.result?.customsDuty || 0,
+        gst: apiRecord.result?.duties?.igst || apiRecord.result?.gst || 0,
+        totalLandedCost: apiRecord.result?.totalCost?.landedCost || apiRecord.result?.totalLandedCost || 0,
+        breakdownPercentages: apiRecord.result?.totalCost?.costBreakdown || apiRecord.result?.breakdownPercentages || {}
       },
-      metadata: apiRecord.metadata
+      metadata: apiRecord.metadata || { calculatedAt: new Date().toISOString() }
     };
   };
 
@@ -218,7 +225,7 @@ export default function HistoryPage() {
   const handleDuplicate = (calc: CalculationRecord) => {
     // Save to context and navigate to wizard
     localStorage.setItem('duplicateCalculation', JSON.stringify(calc.input));
-    router.push('/cost-calculator/new/step-1');
+    router.push('/cost-calculator');
   };
 
   const handleDelete = async (id: string) => {
@@ -338,7 +345,7 @@ export default function HistoryPage() {
             <h1>Calculation History</h1>
           </div>
           <div className={styles.headerActions}>
-            <Link href="/cost-calculator/new/step-1" className={styles.btnPrimary}>
+            <Link href="/cost-calculator" className={styles.btnPrimary}>
               + New Calculation
             </Link>
           </div>
@@ -542,7 +549,7 @@ export default function HistoryPage() {
             <FaHistory className={styles.emptyIcon} />
             <h3>No calculations found</h3>
             <p>Try adjusting your search or filters</p>
-            <Link href="/cost-calculator/new/step-1" className={styles.btnPrimary}>
+            <Link href="/cost-calculator" className={styles.btnPrimary}>
               Create New Calculation
             </Link>
           </div>
@@ -739,6 +746,7 @@ export default function HistoryPage() {
           </button>
         </div>
       )}
+      {promptElement}
     </div>
   );
 }

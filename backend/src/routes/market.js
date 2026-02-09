@@ -1,3 +1,4 @@
+// TODO: Connect to market data API. Currently returns mock data.
 const express = require('express');
 const router = express.Router();
 

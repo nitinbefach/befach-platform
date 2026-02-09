@@ -123,6 +123,7 @@ export function SupplierFilters({
           {mainStages.map(stage => {
             const config = RELATIONSHIP_STAGE_CONFIG[stage];
             const isActive = filters.relationshipStages.includes(stage);
+            const Icon = config.icon;
             return (
               <button
                 key={stage}
@@ -133,7 +134,7 @@ export function SupplierFilters({
                   '--stage-bg': config.bgColor
                 } as React.CSSProperties}
               >
-                <span>{config.icon}</span>
+                <span><Icon size={14} /></span>
                 <span>{config.label}</span>
               </button>
             );
@@ -141,6 +142,7 @@ export function SupplierFilters({
           {secondaryStages.map(stage => {
             const config = RELATIONSHIP_STAGE_CONFIG[stage];
             const isActive = filters.relationshipStages.includes(stage);
+            const Icon = config.icon;
             return (
               <button
                 key={stage}
@@ -151,7 +153,7 @@ export function SupplierFilters({
                   '--stage-bg': config.bgColor
                 } as React.CSSProperties}
               >
-                <span>{config.icon}</span>
+                <span><Icon size={14} /></span>
                 <span>{config.label}</span>
               </button>
             );

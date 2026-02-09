@@ -1,3 +1,4 @@
+// TODO: Migrate to Prisma. Currently uses in-memory storage (lost on restart).
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');

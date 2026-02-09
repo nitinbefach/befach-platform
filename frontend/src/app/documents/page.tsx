@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 
 interface Document {
   id: string;
@@ -106,9 +107,14 @@ const typeLabels: Record<Document['type'], string> = {
 };
 
 export default function DocumentsPage() {
+  const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
   const [filter, setFilter] = useState<'all' | Document['type']>('all');
   const [orderFilter, setOrderFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    triggerTimeBasedFeedback('document-management', 25000);
+  }, [triggerTimeBasedFeedback]);
 
   const uniqueOrders = Array.from(new Set(mockDocuments.map(d => d.orderId))).map(id => ({
     id,
@@ -555,6 +561,7 @@ export default function DocumentsPage() {
           }
         }
       `}</style>
+      {promptElement}
     </AppLayout>
   );
 }

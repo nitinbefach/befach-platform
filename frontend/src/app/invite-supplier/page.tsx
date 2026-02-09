@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import {
   CATEGORIES,
   COUNTRIES,
@@ -16,6 +17,7 @@ import {
   SupplierInvitation,
   CreateInvitationInput,
 } from '@/lib/suppliers';
+import { saveSupplierFromInvitation } from '@/lib/savedSuppliers';
 
 type TabType = 'single' | 'bulk' | 'invitations';
 type InvitationFilter = 'all' | 'pending' | 'accepted' | 'expired' | 'cancelled';
@@ -33,6 +35,7 @@ interface BulkUploadRow {
 
 export default function InviteSupplierPage() {
   const router = useRouter();
+  const { triggerFeedback, promptElement } = useFeedbackTrigger();
 
   // Tab state
   const [activeTab, setActiveTab] = useState<TabType>('single');
@@ -96,9 +99,22 @@ export default function InviteSupplierPage() {
       personalMessage: singleForm.personalMessage || undefined,
     });
 
+    // Auto-save supplier to Our Vendors
+    saveSupplierFromInvitation({
+      id: invitation.id,
+      companyName: invitation.companyName,
+      contactName: invitation.contactName,
+      contactEmail: invitation.contactEmail,
+      phone: invitation.phone,
+      category: invitation.category,
+      country: invitation.country,
+      website: invitation.website,
+    });
+
     setLastInvitation(invitation);
     setIsSubmitting(false);
     setSubmitted(true);
+    triggerFeedback('invite-supplier');
   };
 
   // Reset single form
@@ -227,10 +243,26 @@ export default function InviteSupplierPage() {
       country: row.country || undefined,
     }));
 
-    createBulkInvitations(inputs);
+    const invitations = createBulkInvitations(inputs);
+
+    // Auto-save all suppliers to Our Vendors
+    invitations.forEach(invitation => {
+      saveSupplierFromInvitation({
+        id: invitation.id,
+        companyName: invitation.companyName,
+        contactName: invitation.contactName,
+        contactEmail: invitation.contactEmail,
+        phone: invitation.phone,
+        category: invitation.category,
+        country: invitation.country,
+        website: invitation.website,
+      });
+    });
+
     setIsBulkSubmitting(false);
     setBulkSuccess(true);
     setBulkData([]);
+    triggerFeedback('invite-supplier');
   };
 
   // Handle resend invitation
@@ -1466,6 +1498,7 @@ export default function InviteSupplierPage() {
           }
         }
       `}</style>
+      {promptElement}
     </AppLayout>
   );
 }

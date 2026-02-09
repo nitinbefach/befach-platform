@@ -800,13 +800,13 @@ body {
 }
 
 .content-header {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .content-header h1 {
     font-size: 1.75rem;
     color: var(--text-primary);
-    margin-bottom: 6px;
+    margin-bottom: 0;
     font-weight: 600;
     letter-spacing: -0.02em;
 }
@@ -814,6 +814,21 @@ body {
 .content-header p {
     color: var(--text-secondary);
     font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+/* TEXT UTILITIES */
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 /* DASHBOARD GRID */
@@ -1504,7 +1519,7 @@ body {
     }
 
     .main-content {
-        padding: 20px;
+        padding: 16px;
     }
 
     .dashboard-grid,
@@ -1520,36 +1535,57 @@ body {
         padding: 0 16px;
     }
 
-    .quick-actions {
-        padding: 24px;
+    /* Compact content headers on mobile */
+    .content-header {
+        margin-bottom: 16px;
     }
 
-    .quick-actions h2 {
+    .content-header h1 {
         font-size: 1.25rem;
     }
 
+    .content-header p {
+        display: none;
+    }
+
+    /* Compact quick-actions on mobile */
+    .quick-actions {
+        padding: 16px;
+        border-radius: var(--radius-lg);
+        margin-bottom: 16px;
+    }
+
+    .quick-actions h2 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+
+    .quick-actions p {
+        display: none;
+    }
+
     .action-buttons {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 8px;
     }
 
     .btn-white,
     .btn-outline {
-        width: 100%;
+        flex: 1;
         text-align: center;
-    }
-
-    .content-header h1 {
-        font-size: 1.5rem;
+        padding: 10px 12px;
+        font-size: 0.8rem;
     }
 
     .insights-panel,
     .testimonials-slider {
-        padding: 20px;
+        padding: 16px;
     }
 
     .modal-container {
-        padding: 24px;
-        margin: 16px;
+        padding: 20px;
+        margin: 12px;
+        border-radius: var(--radius-lg);
     }
 
     .modal-actions {
@@ -1562,6 +1598,14 @@ body {
 
     .data-table table {
         min-width: 600px;
+    }
+
+    /* Ensure minimum readable font size */
+    .info-content p,
+    .notes-content,
+    .col-location,
+    .col-category {
+        font-size: 0.8125rem;
     }
 }
 
@@ -1950,4 +1994,368 @@ body {
     .market-card {
         page-break-inside: avoid;
     }
+}
+
+/* =====================================================
+   MOBILE TOUCH OPTIMIZATIONS
+   ===================================================== */
+
+/* Disable tap highlight on mobile */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling for entire page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prevent overscroll/bounce effect on iOS */
+body {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+}
+
+/* Ensure touch areas are large enough (44x44px minimum) */
+button,
+a,
+[role="button"],
+.clickable {
+    min-height: 44px;
+}
+
+/* Touch-friendly select and input */
+select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+textarea {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+}
+
+/* Safe area insets for notched devices */
+.safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-left {
+    padding-left: env(safe-area-inset-left, 0px);
+}
+
+.safe-right {
+    padding-right: env(safe-area-inset-right, 0px);
+}
+
+.safe-all {
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+
+/* =====================================================
+   MOBILE ANIMATION UTILITIES
+   ===================================================== */
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-tertiary) 25%,
+        var(--bg-secondary) 50%,
+        var(--bg-tertiary) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+    height: 1em;
+    margin-bottom: 0.5em;
+    border-radius: 4px;
+}
+
+.skeleton-circle {
+    border-radius: 50%;
+}
+
+.skeleton-card {
+    height: 120px;
+    border-radius: var(--radius-md);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Slide up animation */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUpFade 0.3s ease-out forwards;
+}
+
+/* Slide in from left */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out forwards;
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Slide in from bottom (for bottom sheets) */
+@keyframes slideInBottom {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-in-bottom {
+    animation: slideInBottom 0.3s ease-out forwards;
+}
+
+/* Scale in animation */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.2s ease-out forwards;
+}
+
+/* Bounce animation for attention */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 0.5s ease-in-out;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Stagger delay utilities (for list animations) */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+.stagger-7 { animation-delay: 0.35s; }
+.stagger-8 { animation-delay: 0.4s; }
+
+/* =====================================================
+   MOBILE-SPECIFIC RESPONSIVE UTILITIES
+   ===================================================== */
+
+/* Hide on mobile, show on desktop */
+.mobile-hide {
+    display: block;
+}
+
+/* Show on mobile, hide on desktop */
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-hide {
+        display: none !important;
+    }
+
+    .mobile-only {
+        display: block !important;
+    }
+
+    /* Reduce motion for mobile performance */
+    .reduce-motion {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    /* Full-width buttons on mobile */
+    .mobile-full-width {
+        width: 100%;
+    }
+
+    /* Stack horizontal layouts on mobile */
+    .mobile-stack {
+        flex-direction: column !important;
+    }
+
+    /* Mobile padding adjustments */
+    .mobile-p-4 {
+        padding: 1rem !important;
+    }
+
+    .mobile-px-4 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .mobile-py-4 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* =====================================================
+   BOTTOM NAVIGATION STYLES (for Phase 2)
+   ===================================================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 8px 16px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    display: none;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .bottom-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    /* Add padding to main content when bottom nav is present */
+    .has-bottom-nav .main-content {
+        padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: color 0.2s, transform 0.2s;
+    min-width: 64px;
+}
+
+.bottom-nav-item:active {
+    transform: scale(0.95);
+}
+
+.bottom-nav-item.active {
+    color: var(--accent-primary);
+}
+
+.bottom-nav-item svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.bottom-nav-item span {
+    line-height: 1;
 }

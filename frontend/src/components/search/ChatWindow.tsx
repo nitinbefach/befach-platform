@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Supplier, ChatMessage, getChatMessages, addChatMessage } from '@/lib/suppliers';
 import { Modal } from '@/components/ui';
+import { saveSupplierFromSearch } from '@/lib/savedSuppliers';
 
 interface ChatWindowProps {
   supplier: Supplier;
@@ -26,6 +27,18 @@ export default function ChatWindow({ supplier, isOpen, onClose }: ChatWindowProp
           text: `Chat started with ${supplier.companyName}`,
         });
         setMessages([welcomeMsg]);
+
+        // Auto-save supplier to Our Vendors when starting a new chat
+        saveSupplierFromSearch({
+          id: supplier.id,
+          companyName: supplier.companyName,
+          location: supplier.location,
+          contacts: supplier.contacts,
+          catalogue: supplier.catalogue,
+          metrics: supplier.metrics,
+          website: supplier.website,
+          description: supplier.description,
+        }, 'chat');
       } else {
         setMessages(storedMessages);
       }

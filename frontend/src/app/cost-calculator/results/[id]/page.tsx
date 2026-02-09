@@ -18,7 +18,6 @@ import {
 } from 'react-icons/fa';
 import { historyStorage, type CalculationRecord } from '@/lib/historyStorage';
 import calculatorService from '@/services/calculatorService';
-import { CalculationRecord as APICalculationRecord } from '@/types/calculator';
 import styles from './page.module.css';
 
 export default function ResultsPage() {
@@ -28,9 +27,10 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
 
   // Convert API record format to legacy format for backward compatibility
-  const convertAPIToLegacy = (apiRecord: APICalculationRecord): CalculationRecord => {
+  const convertAPIToLegacy = (apiRecord: any): CalculationRecord => {
     return {
       id: apiRecord.id,
+      version: apiRecord.version || 1,
       input: {
         productName: apiRecord.input.productDetails.productName,
         hsnCode: apiRecord.input.productDetails.hsnCode,
@@ -131,6 +131,7 @@ export default function ResultsPage() {
   };
 
   const handleDownload = () => {
+    if (!calculation?.result) return;
     // Generate CSV specific to this calculation
     const csvContent = `
 Product Details
@@ -201,7 +202,7 @@ Calculated on: ${new Date(calculation.metadata.calculatedAt).toLocaleString()}
         <Link href="/cost-calculator" className={styles.actionBtn}>
           <FaArrowLeft /> Back to Calculator
         </Link>
-        <Link href="/cost-calculator/new/step-1" className={styles.actionBtn}>
+        <Link href="/cost-calculator" className={styles.actionBtn}>
           <FaRedo /> New Calculation
         </Link>
         <button onClick={handlePrint} className={styles.actionBtn}>

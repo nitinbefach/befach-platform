@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/layout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { MarketProvider, useMarket } from '@/context/MarketContext';
 import { MarketOverviewCard } from '@/components/market/MarketOverviewCard';
 import { TrendingCommoditiesTable } from '@/components/market/TrendingCommoditiesTable';
@@ -24,10 +25,15 @@ function MarketInsightsContent() {
     toggleCommoditySelection
   } = useMarket();
 
+  const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
   const [commodities, setCommodities] = useState<Commodity[]>([]);
   const [marketOverview, setMarketOverview] = useState<MarketOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState('overview');
+
+  useEffect(() => {
+    triggerTimeBasedFeedback('market-insights', 30000);
+  }, [triggerTimeBasedFeedback]);
 
   // Fetch market data
   useEffect(() => {
@@ -204,6 +210,7 @@ function MarketInsightsContent() {
           />
         </div>
       </div>
+      {promptElement}
     </AppLayout>
   );
 }

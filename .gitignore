@@ -17,15 +17,21 @@ dist/
 .env.production.local
 *.env
 
-# Sensitive data - Keep structure, exclude content
-SECURITY_LOGS/AUDIT_LOGS/*.md
-!SECURITY_LOGS/AUDIT_LOGS/.gitkeep
-SECURITY_LOGS/VULNERABILITY_TRACKING/*.md
-!SECURITY_LOGS/VULNERABILITY_TRACKING/.gitkeep
+# Claude Code
+.claude/
 
-# Budget and financial data
-RESOURCES/BUDGET/*.md
-!RESOURCES/BUDGET/.gitkeep
+# Prototypes
+prototype/
+prototype-hybrid-ai/
+
+# Windows artifacts
+nul
+
+# Backend runtime data
+backend/data/
+
+# Frontend mockups
+frontend/mockups/
 
 # Secrets and credentials
 config/secrets.json

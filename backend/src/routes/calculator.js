@@ -1,3 +1,4 @@
+// TODO: Migrate to Prisma. Currently uses file-based JSON storage (data/calculations.json).
 const express = require('express');
 const router = express.Router();
 const fs = require('fs').promises;

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Supplier } from '@/lib/suppliers';
 import { Modal } from '@/components/ui';
+import { saveSupplierFromSearch } from '@/lib/savedSuppliers';
 
 interface ContactModalProps {
   supplier: Supplier;
@@ -43,6 +44,18 @@ export default function ContactModal({
       sentAt: new Date().toISOString(),
     });
     localStorage.setItem('befach-contacted-suppliers', JSON.stringify(contacts));
+
+    // Auto-save supplier to Our Vendors
+    saveSupplierFromSearch({
+      id: supplier.id,
+      companyName: supplier.companyName,
+      location: supplier.location,
+      contacts: supplier.contacts,
+      catalogue: supplier.catalogue,
+      metrics: supplier.metrics,
+      website: supplier.website,
+      description: supplier.description,
+    }, 'contact');
 
     setIsSubmitting(false);
     alert(`Message sent to ${supplier.companyName}!`);

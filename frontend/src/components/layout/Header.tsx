@@ -126,12 +126,12 @@ export default function Header() {
                         </div>
                         <ArrowRight size={18} className="dropdown-arrow" />
                       </Link>
-                      <Link href="/logistics-tracking" className="dropdown-item">
+                      <Link href="/track-shipment" className="dropdown-item">
                         <div className="dropdown-icon-box">
                           <Truck size={22} />
                         </div>
                         <div className="dropdown-item-content">
-                          <h4>Logistics Tracking</h4>
+                          <h4>Track Shipments</h4>
                           <p>Real-time shipment visibility.</p>
                         </div>
                         <ArrowRight size={18} className="dropdown-arrow" />

@@ -1,3 +1,4 @@
+// TODO: Connect to actual AI service. Currently returns mock responses.
 const express = require('express');
 const router = express.Router();
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, ChatWindow, EmptyState } from '@/components/search';
 import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats } from '@/lib/suppliers';
 
@@ -20,6 +21,7 @@ const EXTERNAL_SUPPLIERS = [
 ];
 
 export default function SmartSourcingPage() {
+  const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const [activeTab, setActiveTab] = useState<SourceTab>('befach');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -82,6 +84,7 @@ export default function SmartSourcingPage() {
       setHasSearched(true);
       setIsSearching(false);
       if (query) addToSearchHistory(query, results.length);
+      triggerFeedback('supplier-search');
     }, 300);
   };
 
@@ -316,6 +319,7 @@ export default function SmartSourcingPage() {
           .secondary-bar { flex-direction: column; gap: 10px; }
         }
       `}</style>
+      {promptElement}
     </AppLayout>
   );
 }

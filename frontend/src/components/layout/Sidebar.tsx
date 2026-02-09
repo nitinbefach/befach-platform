@@ -22,8 +22,8 @@ const navigationConfig = {
         { id: 'submit-requirement', href: '/submit-requirement', icon: 'add', label: 'Share Requirement', section: 'actions' },
         { id: 'smart-sourcing', href: '/smart-sourcing', icon: 'ai', label: 'AI Supplier Search', section: 'actions' },
         { id: 'invite-supplier', href: '/invite-supplier', icon: 'invite', label: 'Invite Supplier', section: 'actions' },
+        { id: 'our-vendors', href: '/our-vendors', icon: 'building', label: 'Our Vendors', section: 'manage' },
         { id: 'supplier-inbox', href: '/supplier-matches', icon: 'mail', label: 'Supplier Inbox', section: 'manage', badge: '3' },
-        { id: 'our-vendors', href: '/our-vendors', icon: 'building', label: 'Our Vendors', section: 'manage', badge: '8' },
       ],
     },
     tools: {
@@ -32,6 +32,7 @@ const navigationConfig = {
       icon: 'tools',
       features: [
         { id: 'market-insights', href: '/market-insights', icon: 'insights', label: 'Market Insights', section: 'analytics' },
+        { id: 'exim-data', href: '/exim-data', icon: 'globe', label: 'EX-IM Data', section: 'analytics' },
         { id: 'cost-calculator', href: '/cost-calculator', icon: 'dollar', label: 'Cost Calculator', section: 'utilities' },
         { id: 'compliance-tools', href: '/compliance-tools', icon: 'shield', label: 'Compliance', section: 'utilities' },
         { id: 'ai-assistant', href: '/ai-assistant', icon: 'chat', label: 'AI Assistant', section: 'utilities' },
@@ -42,8 +43,20 @@ const navigationConfig = {
       label: 'Logistics',
       icon: 'truck',
       features: [
-        { id: 'logistics-tracking', href: '/logistics-tracking', icon: 'location', label: 'Track Shipments', section: 'tracking' },
+        { id: 'book-shipment', href: '/book-shipment', icon: 'package', label: 'Book Shipment', section: 'tracking' },
+        { id: 'track-shipment', href: '/track-shipment', icon: 'location', label: 'Track Shipments', section: 'tracking' },
         { id: 'documents', href: '/documents', icon: 'document', label: 'Documents', section: 'tracking' },
+      ],
+    },
+    payments: {
+      id: 'payments',
+      label: 'Payments',
+      icon: 'wallet',
+      features: [
+        { id: 'make-payment', href: '/payments/new', icon: 'send', label: 'Make Payment', section: 'actions' },
+        { id: 'payment-history', href: '/payments/history', icon: 'dollar', label: 'Payment History', section: 'history' },
+        { id: 'payment-methods', href: '/payments/methods', icon: 'card', label: 'Payment Methods', section: 'manage' },
+        { id: 'fx-rates', href: '/payments/fx-rates', icon: 'exchange', label: 'FX & Rates', section: 'tools' },
       ],
     },
     team: {
@@ -53,6 +66,7 @@ const navigationConfig = {
       features: [
         { id: 'team-management', href: '/team-management', icon: 'users', label: 'Team Members', section: 'members' },
         { id: 'reports', href: '/reports', icon: 'report', label: 'Reports', section: 'analytics' },
+        { id: 'feedback', href: '/feedback', icon: 'star', label: 'Feedback', section: 'analytics' },
         { id: 'api-settings', href: '/api-settings', icon: 'api', label: 'API Settings', section: 'settings' },
       ],
     },
@@ -75,6 +89,8 @@ const sectionTitles: Record<string, string> = {
   analytics: 'Analytics',
   utilities: 'Utilities',
   tracking: 'Tracking',
+  history: 'History',
+  tools: 'Tools',
   members: 'Members',
   settings: 'Settings',
   account: 'Account',
@@ -176,6 +192,13 @@ const icons: { [key: string]: JSX.Element } = {
       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
     </svg>
   ),
+  globe: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+  ),
   dollar: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
       <line x1="12" y1="1" x2="12" y2="23" />
@@ -210,6 +233,13 @@ const icons: { [key: string]: JSX.Element } = {
       <polyline points="14 2 14 8 20 8" />
       <line x1="16" y1="13" x2="8" y2="13" />
       <line x1="16" y1="17" x2="8" y2="17" />
+    </svg>
+  ),
+  package: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+      <line x1="12" y1="22.08" x2="12" y2="12" />
     </svg>
   ),
   users: (
@@ -263,6 +293,33 @@ const icons: { [key: string]: JSX.Element } = {
       <path d="M9 12v.01" />
       <path d="M9 15v.01" />
       <path d="M9 18v.01" />
+    </svg>
+  ),
+  wallet: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+      <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+      <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z" />
+    </svg>
+  ),
+  send: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <line x1="22" y1="2" x2="11" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  ),
+  card: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+      <line x1="1" y1="10" x2="23" y2="10" />
+    </svg>
+  ),
+  exchange: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+      <polyline points="17 1 21 5 17 9" />
+      <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+      <polyline points="7 23 3 19 7 15" />
+      <path d="M21 13v2a4 4 0 0 1-4 4H3" />
     </svg>
   ),
 };

@@ -583,7 +583,7 @@ export default function HomePage() {
             <div className="footer-col">
               <h4>Solutions</h4>
               <Link href="/smart-sourcing">Smart Sourcing</Link>
-              <Link href="/logistics-tracking">Logistics Tracking</Link>
+              <Link href="/track-shipment">Track Shipments</Link>
               <Link href="/compliance-tools">Compliance Tools</Link>
               <Link href="/ai-assistant">AI Assistant</Link>
             </div>

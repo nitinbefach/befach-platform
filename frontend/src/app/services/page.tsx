@@ -9,50 +9,50 @@ const services = [
   {
     icon: Calculator,
     title: 'Landing Cost Calculator',
-    description: 'Calculate exact import costs including duties, taxes, freight, and handling charges before you commit to any order.',
+    description: 'Get accurate import costs with duties, taxes, and freight.',
     link: '/cost-calculator',
     linkText: 'Calculate Now',
-    features: ['Instant cost breakdown', 'Multiple currency support', 'Duty & tax estimation']
+    features: ['Cost breakdown', 'Multi-currency', 'Duty estimation']
   },
   {
     icon: Search,
     title: 'Supplier Discovery',
-    description: 'Access our network of 850+ verified suppliers across 50+ countries. Find the right partner for your products.',
+    description: '850+ verified suppliers across 50+ countries.',
     link: '/smart-sourcing',
     linkText: 'Find Suppliers',
-    features: ['Verified suppliers', 'Quality ratings', 'Direct communication']
+    features: ['Verified suppliers', 'Ratings', 'Direct chat']
   },
   {
     icon: BarChart3,
     title: 'Market Intelligence',
-    description: 'Real-time trade data, market trends, and insights to help you make informed sourcing decisions.',
+    description: 'Real-time trade data, trends, and sourcing insights.',
     link: '/market-insights',
     linkText: 'View Insights',
-    features: ['EX-IM data analysis', 'Trend forecasting', 'Competitor insights']
+    features: ['EX-IM data', 'Forecasting', 'Competitor insights']
   },
   {
     icon: FileCheck,
-    title: 'Compliance & Documentation',
-    description: 'Navigate complex import regulations with our compliance tools. Get document checklists and expert guidance.',
+    title: 'Compliance',
+    description: 'Document checklists and regulatory guidance.',
     link: '/compliance-tools',
     linkText: 'Check Compliance',
-    features: ['Document checklists', 'Regulation updates', 'Expert guidance']
+    features: ['Checklists', 'Regulation updates', 'Expert guidance']
   },
   {
     icon: Truck,
-    title: 'Logistics Management',
-    description: 'End-to-end shipment tracking from factory to your warehouse. Real-time updates and delivery estimates.',
-    link: '/logistics-tracking',
+    title: 'Logistics',
+    description: 'Track shipments from factory to warehouse.',
+    link: '/track-shipment',
     linkText: 'Track Shipment',
-    features: ['Real-time tracking', 'Carrier comparison', 'Delivery alerts']
+    features: ['Real-time tracking', 'Carrier comparison', 'Alerts']
   },
   {
     icon: Bot,
     title: 'AI Trade Assistant',
-    description: 'Get instant answers to your import questions. Our AI assistant is trained on trade regulations and best practices.',
+    description: 'Instant answers to your import questions.',
     link: '/ai-assistant',
     linkText: 'Ask AI',
-    features: ['24/7 availability', 'Regulation expertise', 'Best practices']
+    features: ['24/7 available', 'Regulations', 'Best practices']
   },
 ];
 
@@ -72,9 +72,8 @@ export default function ServicesPage() {
           <div className="hero-bg"></div>
           <div className="hero-overlay"></div>
           <div className="hero-content">
-            <span className="hero-badge">Comprehensive Solutions</span>
             <h1>Our Services</h1>
-            <p>Everything you need to import with confidence. From cost calculation to delivery tracking.</p>
+            <p>Import with confidence, from sourcing to delivery.</p>
           </div>
         </section>
 
@@ -112,28 +111,23 @@ export default function ServicesPage() {
           <div className="container">
             <div className="section-header">
               <h2>How It Works</h2>
-              <p>Start your import journey in 4 simple steps</p>
             </div>
             <div className="process-grid">
               <div className="process-step">
                 <div className="step-number">1</div>
                 <h4>Discover Suppliers</h4>
-                <p>Search our verified supplier network to find the right products and partners.</p>
               </div>
               <div className="process-step">
                 <div className="step-number">2</div>
                 <h4>Calculate Costs</h4>
-                <p>Use our calculators to get accurate landed costs before placing orders.</p>
               </div>
               <div className="process-step">
                 <div className="step-number">3</div>
                 <h4>Ensure Compliance</h4>
-                <p>Get guidance on documentation and regulatory requirements.</p>
               </div>
               <div className="process-step">
                 <div className="step-number">4</div>
                 <h4>Track Shipments</h4>
-                <p>Monitor your orders from factory to delivery with real-time updates.</p>
               </div>
             </div>
           </div>
@@ -144,7 +138,7 @@ export default function ServicesPage() {
           <div className="container">
             <div className="cta-card">
               <h2>Need a Custom Solution?</h2>
-              <p>Talk to our team about your specific import requirements. We're here to help you succeed.</p>
+              <p>Talk to our team about your requirements.</p>
               <div className="cta-buttons">
                 <Link href="/contact" className="cta-btn primary">Contact Us</Link>
                 <Link href="/onboarding" className="cta-btn secondary">Get Started Free</Link>
@@ -540,29 +534,97 @@ export default function ServicesPage() {
           }
 
           @media (max-width: 768px) {
+            .hero-section {
+              padding: 60px 16px 50px;
+            }
+
             .hero-section h1 {
-              font-size: 2.25rem;
+              font-size: 1.75rem;
+            }
+
+            .hero-section p {
+              font-size: 1rem;
             }
 
             .section {
-              padding: 60px 0;
+              padding: 40px 0;
             }
 
-            .services-grid,
-            .process-grid {
+            .section-header h2 {
+              font-size: 1.5rem;
+            }
+
+            .services-grid {
               grid-template-columns: 1fr;
+              gap: 12px;
+            }
+
+            .service-card {
+              padding: 20px;
+              border-radius: 14px;
+            }
+
+            .service-icon {
+              width: 48px;
+              height: 48px;
+              border-radius: 12px;
+              margin-bottom: 12px;
+            }
+
+            .service-card h3 {
+              font-size: 1.05rem;
+              margin-bottom: 6px;
+            }
+
+            .service-card p {
+              font-size: 0.85rem;
+              margin-bottom: 12px;
+            }
+
+            /* Hide feature lists on mobile */
+            .service-features {
+              display: none;
+            }
+
+            .process-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 16px;
+            }
+
+            .step-number {
+              width: 40px;
+              height: 40px;
+              font-size: 1.1rem;
+              margin-bottom: 12px;
+            }
+
+            .process-step h4 {
+              font-size: 0.9rem;
             }
 
             .cta-card {
-              padding: 40px 24px;
+              padding: 32px 20px;
+              border-radius: 16px;
+            }
+
+            .cta-card h2 {
+              font-size: 1.5rem;
+            }
+
+            .cta-card p {
+              font-size: 0.95rem;
+              margin-bottom: 20px;
             }
 
             .cta-buttons {
               flex-direction: column;
+              gap: 10px;
             }
 
             .cta-btn {
               text-align: center;
+              padding: 14px 28px;
+              font-size: 0.9rem;
             }
           }
         `}</style>

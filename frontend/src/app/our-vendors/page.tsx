@@ -3,22 +3,18 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { Modal } from '@/components/ui';
 import {
-  Vendor,
-  initializeVendors,
-  getVendors,
-  updateVendor,
-  transitionVendorStage,
-  addActivity,
-  saveVendorsToStorage
-} from '@/lib/vendors';
-import {
+  SavedSupplier,
   RelationshipStage,
+  getSavedSuppliers,
+  initializeDemoSuppliers,
   filterSuppliers,
   sortSuppliers,
   getPipelineStats,
   saveSupplier,
+  updateSupplier,
   removeSupplier,
   addTag,
   removeTag,
@@ -30,6 +26,7 @@ import {
   formatCurrency,
   formatDate,
   getRelativeTime,
+  transitionSupplierStage,
   SUGGESTED_TAGS,
   RELATIONSHIP_STAGE_CONFIG,
   FilterOptions,
@@ -43,38 +40,23 @@ import {
   SupplierPipelineStats,
   SupplierFilters
 } from '@/components/suppliers';
-import {
-  HealthScoreBadge,
-  HealthScoreInline,
-  VendorDetailDrawer,
-  PipelineKanban
-} from '@/components/vendors';
-import { getScoreColor } from '@/lib/healthScore';
-
-type ViewMode = 'kanban' | 'table';
 
 export default function OurVendorsPage() {
   const router = useRouter();
-  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const { triggerFeedback, promptElement } = useFeedbackTrigger();
+  const [suppliers, setSuppliers] = useState<SavedSupplier[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // View mode state - Kanban is the default
-  const [viewMode, setViewMode] = useState<ViewMode>('kanban');
-
-  // Drawer state
-  const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   // Modals
   const [addSupplierModal, setAddSupplierModal] = useState(false);
-  const [rfqModal, setRfqModal] = useState<Vendor | null>(null);
-  const [editNotesModal, setEditNotesModal] = useState<Vendor | null>(null);
-  const [addTagModal, setAddTagModal] = useState<Vendor | null>(null);
-  const [confirmRemoveModal, setConfirmRemoveModal] = useState<Vendor | null>(null);
-  const [stageTransitionModal, setStageTransitionModal] = useState<Vendor | null>(null);
+  const [rfqModal, setRfqModal] = useState<SavedSupplier | null>(null);
+  const [editNotesModal, setEditNotesModal] = useState<SavedSupplier | null>(null);
+  const [addTagModal, setAddTagModal] = useState<SavedSupplier | null>(null);
+  const [confirmRemoveModal, setConfirmRemoveModal] = useState<SavedSupplier | null>(null);
+  const [stageTransitionModal, setStageTransitionModal] = useState<SavedSupplier | null>(null);
 
-  // Filters
+  // Filters - using new FilterOptions
   const [filters, setFilters] = useState<FilterOptions>(DEFAULT_FILTERS);
   const [sortBy, setSortBy] = useState<SortOption>('recent');
 
@@ -101,25 +83,20 @@ export default function OurVendorsPage() {
 
   // Initialize data
   useEffect(() => {
-    const data = initializeVendors();
-    setVendors(data);
+    const data = initializeDemoSuppliers();
+    setSuppliers(data);
     setIsLoading(false);
   }, []);
 
-  // Computed values - cast to SavedSupplier for compatibility with existing functions
-  const filteredVendors = useMemo(() => {
-    const filtered = filterSuppliers(vendors as any, filters);
-    return sortSuppliers(filtered, sortBy) as Vendor[];
-  }, [vendors, filters, sortBy]);
+  // Computed values
+  const filteredSuppliers = useMemo(() => {
+    const filtered = filterSuppliers(suppliers, filters);
+    return sortSuppliers(filtered, sortBy);
+  }, [suppliers, filters, sortBy]);
 
-  const pipelineStats = useMemo(() => getPipelineStats(vendors as any), [vendors]);
-  const allTags = useMemo(() => getAllTags(vendors as any), [vendors]);
-  const allCategories = useMemo(() => getAllCategories(vendors as any), [vendors]);
-
-  // Refresh vendors from storage
-  const refreshVendors = () => {
-    setVendors(getVendors());
-  };
+  const pipelineStats = useMemo(() => getPipelineStats(suppliers), [suppliers]);
+  const allTags = useMemo(() => getAllTags(suppliers), [suppliers]);
+  const allCategories = useMemo(() => getAllCategories(suppliers), [suppliers]);
 
   // Handle stage click from pipeline stats
   const handleStageClick = (stage: RelationshipStage) => {
@@ -131,19 +108,14 @@ export default function OurVendorsPage() {
   };
 
   // Handle stage transition
-  const handleStageTransition = (vendorId: string, newStage: RelationshipStage, reason?: string) => {
+  const handleStageTransition = (supplierId: string, newStage: RelationshipStage, reason?: string) => {
     try {
-      transitionVendorStage(vendorId, newStage, reason);
-      refreshVendors();
+      transitionSupplierStage(supplierId, newStage, reason);
+      setSuppliers(getSavedSuppliers());
+      triggerFeedback('vendor-management');
     } catch (error) {
       console.error('Failed to transition stage:', error);
     }
-  };
-
-  // Open vendor detail drawer
-  const handleOpenDrawer = (vendor: Vendor) => {
-    setSelectedVendor(vendor);
-    setIsDrawerOpen(true);
   };
 
   // Handlers
@@ -151,26 +123,28 @@ export default function OurVendorsPage() {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const handleMessage = (vendor: Vendor) => {
-    const existingConversation = getConversationBySupplier(vendor.id);
+  const handleMessage = (supplier: SavedSupplier) => {
+    // Check if conversation exists
+    const existingConversation = getConversationBySupplier(supplier.id);
     if (existingConversation) {
       router.push(`/supplier-matches?conversation=${existingConversation.id}`);
     } else {
+      // Create new conversation
       const conversation = createConversation({
-        supplierId: vendor.id,
-        supplierName: vendor.name,
-        supplierCountry: vendor.country,
-        supplierCategory: vendor.category,
-        supplierVerified: vendor.verified,
-        supplierRating: vendor.rating,
-        source: 'saved_suppliers'
+        supplierId: supplier.id,
+        supplierName: supplier.name,
+        supplierCountry: supplier.country,
+        supplierCategory: supplier.category,
+        supplierVerified: supplier.verified,
+        supplierRating: supplier.rating,
+        source: 'saved_suppliers' as any
       });
       router.push(`/supplier-matches?conversation=${conversation.id}`);
     }
   };
 
-  const handleSendRFQ = (vendor: Vendor) => {
-    setRfqModal(vendor);
+  const handleSendRFQ = (supplier: SavedSupplier) => {
+    setRfqModal(supplier);
     setRfqForm({
       productName: '',
       quantity: '',
@@ -184,6 +158,7 @@ export default function OurVendorsPage() {
   const handleSubmitRFQ = () => {
     if (!rfqModal) return;
 
+    // Get or create conversation
     let conversation = getConversationBySupplier(rfqModal.id);
     if (!conversation) {
       conversation = createConversation({
@@ -193,32 +168,25 @@ export default function OurVendorsPage() {
         supplierCategory: rfqModal.category,
         supplierVerified: rfqModal.verified,
         supplierRating: rfqModal.rating,
-        source: 'saved_suppliers'
+        source: 'saved_suppliers' as any
       });
     }
 
-    updateVendor(rfqModal.id, {
+    // Update last contacted
+    updateSupplier(rfqModal.id, {
       lastContactedDate: new Date().toISOString()
     });
+    setSuppliers(getSavedSuppliers());
 
-    // Log activity
-    addActivity(rfqModal.id, {
-      type: 'rfq',
-      title: `RFQ sent: ${rfqForm.productName}`,
-      description: `Quantity: ${rfqForm.quantity} ${rfqForm.unit}`,
-      metadata: { ...rfqForm }
-    });
-
-    refreshVendors();
     setRfqModal(null);
+    triggerFeedback('vendor-management');
     router.push(`/supplier-matches?conversation=${conversation.id}&rfq=true`);
   };
 
   const handleAddSupplier = () => {
     const category = detectCategory(newSupplierForm.specialization);
     const now = new Date().toISOString();
-
-    saveSupplier({
+    const newSupplier = saveSupplier({
       name: newSupplierForm.name,
       country: newSupplierForm.location.split(',').pop()?.trim() || 'Unknown',
       countryFlag: '🌍',
@@ -246,10 +214,9 @@ export default function OurVendorsPage() {
       pendingQuotes: 0
     });
 
-    // Re-initialize vendors to include the new one with SRM data
-    setVendors(initializeVendors());
-
+    setSuppliers(getSavedSuppliers());
     setAddSupplierModal(false);
+    triggerFeedback('vendor-management');
     setNewSupplierForm({
       name: '',
       contactPerson: '',
@@ -259,12 +226,13 @@ export default function OurVendorsPage() {
       specialization: '',
       website: ''
     });
+    setExpandedId(newSupplier.id);
   };
 
   const handleRemoveSupplier = () => {
     if (!confirmRemoveModal) return;
     removeSupplier(confirmRemoveModal.id);
-    refreshVendors();
+    setSuppliers(getSavedSuppliers());
     setConfirmRemoveModal(null);
     if (expandedId === confirmRemoveModal.id) {
       setExpandedId(null);
@@ -274,44 +242,38 @@ export default function OurVendorsPage() {
   const handleSaveNotes = () => {
     if (!editNotesModal) return;
     updateNotes(editNotesModal.id, editingNotes);
-    refreshVendors();
+    setSuppliers(getSavedSuppliers());
     setEditNotesModal(null);
   };
 
   const handleAddTag = (tag: string) => {
     if (!addTagModal || !tag.trim()) return;
     addTag(addTagModal.id, tag.trim());
-    refreshVendors();
+    setSuppliers(getSavedSuppliers());
     setNewTag('');
   };
 
-  const handleRemoveTag = (vendorId: string, tag: string) => {
-    removeTag(vendorId, tag);
-    refreshVendors();
+  const handleRemoveTag = (supplierId: string, tag: string) => {
+    removeTag(supplierId, tag);
+    setSuppliers(getSavedSuppliers());
   };
 
   const handleExport = () => {
-    downloadCSV(filteredVendors as any, `our-vendors-${new Date().toISOString().split('T')[0]}.csv`);
-  };
-
-  const handleVendorUpdate = (updatedVendor: Vendor) => {
-    refreshVendors();
-    setSelectedVendor(updatedVendor);
+    downloadCSV(filteredSuppliers, `saved-suppliers-${new Date().toISOString().split('T')[0]}.csv`);
   };
 
   if (isLoading) {
     return (
-      <AppLayout searchPlaceholder="Search vendors...">
-        <div className="loading-state">Loading vendors...</div>
+      <AppLayout searchPlaceholder="Search suppliers...">
+        <div className="loading-state">Loading suppliers...</div>
       </AppLayout>
     );
   }
 
   return (
-    <AppLayout searchPlaceholder="Search vendors...">
+    <AppLayout searchPlaceholder="Search suppliers...">
       <div className="content-header">
         <h1>Our Vendors</h1>
-        <p>Manage your supplier network with health scores, performance tracking, and relationship stages</p>
       </div>
 
       {/* PIPELINE STATS */}
@@ -323,15 +285,13 @@ export default function OurVendorsPage() {
 
       {/* ACTIONS */}
       <div className="quick-actions">
-        <h2>Vendor Management</h2>
-        <p>Add vendors, track relationships, and maintain your trusted network</p>
         <div className="action-buttons">
           <button className="btn-white" onClick={() => setAddSupplierModal(true)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Add New Vendor
+            Add New Supplier
           </button>
           <button className="btn-outline" onClick={() => router.push('/smart-sourcing')}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -362,137 +322,95 @@ export default function OurVendorsPage() {
       {/* SORT & RESULTS */}
       <div className="sort-bar">
         <div className="results-count">
-          Showing {filteredVendors.length} of {vendors.length} vendors
+          {filteredSuppliers.length} of {suppliers.length}
         </div>
-        <div className="sort-bar-right">
-          {/* View Mode Toggle */}
-          <div className="view-toggle">
-            <button
-              className={`view-btn ${viewMode === 'kanban' ? 'active' : ''}`}
-              onClick={() => setViewMode('kanban')}
-              title="Kanban View"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
-                <rect x="3" y="3" width="7" height="18" rx="1" />
-                <rect x="14" y="3" width="7" height="12" rx="1" />
-              </svg>
-            </button>
-            <button
-              className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
-              onClick={() => setViewMode('table')}
-              title="Table View"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
-          </div>
-          {viewMode === 'table' && (
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="sort-select"
-            >
-              <option value="recent">Recently Added</option>
-              <option value="name">Name A-Z</option>
-              <option value="rating">Highest Rated</option>
-              <option value="orders">Most Orders</option>
-              <option value="lastContacted">Last Contacted</option>
-              <option value="orderValue">Order Value</option>
-              <option value="stage">By Stage</option>
-            </select>
-          )}
-        </div>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as SortOption)}
+          className="sort-select"
+        >
+          <option value="recent">Recently Saved</option>
+          <option value="name">Name A-Z</option>
+          <option value="rating">Highest Rated</option>
+          <option value="orders">Most Orders</option>
+          <option value="lastContacted">Last Contacted</option>
+          <option value="orderValue">Order Value</option>
+          <option value="stage">By Stage</option>
+        </select>
       </div>
 
-      {/* KANBAN VIEW */}
-      {viewMode === 'kanban' && (
-        <PipelineKanban
-          vendors={filteredVendors}
-          onVendorClick={handleOpenDrawer}
-          onStageTransition={handleStageTransition}
-        />
-      )}
-
-      {/* TABLE VIEW */}
-      {viewMode === 'table' && (
-      <div className="vendors-table">
+      {/* SUPPLIER TABLE */}
+      <div className="suppliers-table">
         <div className="table-header">
           <div className="col-expand"></div>
-          <div className="col-name">Vendor Name</div>
+          <div className="col-name">Supplier Name</div>
           <div className="col-location">Location</div>
-          <div className="col-health">Health</div>
+          <div className="col-category">Category</div>
           <div className="col-rating">Rating</div>
           <div className="col-orders">Orders</div>
           <div className="col-status">Stage</div>
         </div>
 
-        {filteredVendors.length === 0 ? (
+        {filteredSuppliers.length === 0 ? (
           <div className="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M3 21h18" />
-              <path d="M5 21V7l8-4v18" />
-              <path d="M19 21V11l-6-4" />
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
             </svg>
-            <h3>No vendors found</h3>
-            <p>Try adjusting your filters or add a new vendor</p>
-            <button onClick={() => setAddSupplierModal(true)}>Add Vendor</button>
+            <h3>No suppliers found</h3>
+            <p>Try adjusting your filters or add a new supplier</p>
+            <button onClick={() => setAddSupplierModal(true)}>Add Supplier</button>
           </div>
         ) : (
-          filteredVendors.map(vendor => (
-            <div key={vendor.id} className={`vendor-row ${expandedId === vendor.id ? 'expanded' : ''}`}>
-              <div className="row-main">
-                <div className="col-expand" onClick={() => handleToggleExpand(vendor.id)}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={expandedId === vendor.id ? 'rotated' : ''}>
+          filteredSuppliers.map(supplier => (
+            <div key={supplier.id} className={`supplier-row ${expandedId === supplier.id ? 'expanded' : ''}`}>
+              <div className="row-main" onClick={() => handleToggleExpand(supplier.id)}>
+                <div className="col-expand">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={expandedId === supplier.id ? 'rotated' : ''}>
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </div>
-                <div className="col-name" onClick={() => handleOpenDrawer(vendor)}>
-                  <strong>{vendor.name}</strong>
+                <div className="col-name">
+                  <strong>{supplier.name}</strong>
                   <span className="sub-info">
-                    {vendor.verified && <span className="verified-badge">✓ Verified</span>}
-                    {vendor.tags.length > 0 && <span className="tag-count">{vendor.tags.length} tags</span>}
+                    {supplier.verified && <span className="verified-badge">✓ Verified</span>}
+                    {supplier.tags.length > 0 && <span className="tag-count">{supplier.tags.length} tags</span>}
                   </span>
                 </div>
                 <div className="col-location">
-                  <span className="flag">{vendor.countryFlag}</span>
-                  {vendor.location}
+                  <span className="flag">{supplier.countryFlag}</span>
+                  {supplier.location}
                 </div>
-                <div className="col-health" onClick={() => handleOpenDrawer(vendor)}>
-                  <HealthScoreBadge
-                    score={vendor.healthScore}
-                    breakdown={vendor.healthScoreBreakdown}
-                    size="sm"
-                  />
-                </div>
+                <div className="col-category">{supplier.category}</div>
                 <div className="col-rating">
                   <span className="rating-star">⭐</span>
-                  <strong>{vendor.rating > 0 ? vendor.rating : '—'}</strong>
+                  <strong>{supplier.rating > 0 ? supplier.rating : '—'}</strong>
                 </div>
-                <div className="col-orders">{vendor.totalOrders}</div>
-                <div className="col-status" onClick={(e) => { e.stopPropagation(); setStageTransitionModal(vendor); }}>
+                <div className="col-orders">{supplier.totalOrders}</div>
+                <div className="col-status">
                   <RelationshipStageBadge
-                    stage={vendor.relationshipStage}
+                    stage={supplier.relationshipStage}
                     size="sm"
                     clickable
+                    onClick={() => { setStageTransitionModal(supplier); }}
                   />
                 </div>
               </div>
 
-              {expandedId === vendor.id && (
+              {expandedId === supplier.id && (
                 <div className="row-expanded">
                   <div className="expanded-grid">
                     {/* Contact Info */}
                     <div className="info-section">
                       <h4>📧 Contact Info</h4>
                       <div className="info-content">
-                        {vendor.contactPerson && <p><strong>Contact:</strong> {vendor.contactPerson}</p>}
-                        {vendor.email && <p><strong>Email:</strong> <a href={`mailto:${vendor.email}`}>{vendor.email}</a></p>}
-                        {vendor.phone && <p><strong>Phone:</strong> {vendor.phone}</p>}
-                        {vendor.website && <p><strong>Website:</strong> <a href={`https://${vendor.website}`} target="_blank" rel="noopener noreferrer">{vendor.website}</a></p>}
-                        {!vendor.contactPerson && !vendor.email && !vendor.phone && (
+                        {supplier.contactPerson && <p><strong>Contact:</strong> {supplier.contactPerson}</p>}
+                        {supplier.email && <p><strong>Email:</strong> <a href={`mailto:${supplier.email}`}>{supplier.email}</a></p>}
+                        {supplier.phone && <p><strong>Phone:</strong> {supplier.phone}</p>}
+                        {supplier.website && <p><strong>Website:</strong> <a href={`https://${supplier.website}`} target="_blank" rel="noopener noreferrer">{supplier.website}</a></p>}
+                        {!supplier.contactPerson && !supplier.email && !supplier.phone && (
                           <p className="no-data">No contact info available</p>
                         )}
                       </div>
@@ -502,11 +420,11 @@ export default function OurVendorsPage() {
                     <div className="info-section">
                       <h4>📊 Statistics</h4>
                       <div className="info-content">
-                        <p><strong>Orders:</strong> {vendor.totalOrders}</p>
-                        <p><strong>Total Value:</strong> {formatCurrency(vendor.totalOrderValue)}</p>
-                        <p><strong>Last Order:</strong> {formatDate(vendor.lastOrderDate)}</p>
-                        <p><strong>Last Contact:</strong> {getRelativeTime(vendor.lastContactedDate)}</p>
-                        <p><strong>Health Score:</strong> <span style={{ color: getScoreColor(vendor.healthScore), fontWeight: 600 }}>{vendor.healthScore}</span></p>
+                        <p><strong>Orders:</strong> {supplier.totalOrders}</p>
+                        <p><strong>Total Value:</strong> {formatCurrency(supplier.totalOrderValue)}</p>
+                        <p><strong>Last Order:</strong> {formatDate(supplier.lastOrderDate)}</p>
+                        <p><strong>Last Contact:</strong> {getRelativeTime(supplier.lastContactedDate)}</p>
+                        <p><strong>Source:</strong> <span className="source-badge">{supplier.source}</span></p>
                       </div>
                     </div>
 
@@ -514,13 +432,13 @@ export default function OurVendorsPage() {
                     <div className="info-section tags-section">
                       <h4>🏷️ Tags</h4>
                       <div className="tags-list">
-                        {vendor.tags.map(tag => (
+                        {supplier.tags.map(tag => (
                           <span key={tag} className="tag">
                             {tag}
-                            <button onClick={(e) => { e.stopPropagation(); handleRemoveTag(vendor.id, tag); }}>×</button>
+                            <button onClick={(e) => { e.stopPropagation(); handleRemoveTag(supplier.id, tag); }}>×</button>
                           </span>
                         ))}
-                        <button className="add-tag-btn" onClick={(e) => { e.stopPropagation(); setAddTagModal(vendor); setNewTag(''); }}>
+                        <button className="add-tag-btn" onClick={(e) => { e.stopPropagation(); setAddTagModal(supplier); setNewTag(''); }}>
                           + Add Tag
                         </button>
                       </div>
@@ -529,46 +447,49 @@ export default function OurVendorsPage() {
 
                   {/* Specialization */}
                   <div className="specialization-row">
-                    <strong>Specialization:</strong> {vendor.specialization}
+                    <strong>Specialization:</strong> {supplier.specialization}
                   </div>
 
                   {/* Notes */}
                   <div className="notes-section">
                     <div className="notes-header">
                       <h4>📝 Notes</h4>
-                      <button onClick={(e) => { e.stopPropagation(); setEditNotesModal(vendor); setEditingNotes(vendor.notes || ''); }}>
+                      <button onClick={(e) => { e.stopPropagation(); setEditNotesModal(supplier); setEditingNotes(supplier.notes || ''); }}>
                         Edit Notes
                       </button>
                     </div>
                     <p className="notes-content">
-                      {vendor.notes || 'No notes yet. Click "Edit Notes" to add some.'}
+                      {supplier.notes || 'No notes yet. Click "Edit Notes" to add some.'}
                     </p>
                   </div>
 
                   {/* Action Buttons */}
                   <div className="action-buttons-row">
-                    <button className="btn-action details" onClick={(e) => { e.stopPropagation(); handleOpenDrawer(vendor); }}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="16" x2="12" y2="12" />
-                        <line x1="12" y1="8" x2="12.01" y2="8" />
-                      </svg>
-                      View Details
-                    </button>
-                    <button className="btn-action message" onClick={(e) => { e.stopPropagation(); handleMessage(vendor); }}>
+                    <button className="btn-action message" onClick={(e) => { e.stopPropagation(); handleMessage(supplier); }}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                       </svg>
                       Message
                     </button>
-                    <button className="btn-action rfq" onClick={(e) => { e.stopPropagation(); handleSendRFQ(vendor); }}>
+                    <button className="btn-action rfq" onClick={(e) => { e.stopPropagation(); handleSendRFQ(supplier); }}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
                       </svg>
                       Send RFQ
                     </button>
-                    <button className="btn-action remove" onClick={(e) => { e.stopPropagation(); setConfirmRemoveModal(vendor); }}>
+                    <button className="btn-action orders" onClick={(e) => { e.stopPropagation(); router.push('/my-orders'); }}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                      </svg>
+                      View Orders
+                    </button>
+                    <button className="btn-action remove" onClick={(e) => { e.stopPropagation(); setConfirmRemoveModal(supplier); }}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <polyline points="3 6 5 6 21 6"></polyline>
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -582,25 +503,16 @@ export default function OurVendorsPage() {
           ))
         )}
       </div>
-      )}
-
-      {/* VENDOR DETAIL DRAWER */}
-      <VendorDetailDrawer
-        vendor={selectedVendor}
-        isOpen={isDrawerOpen}
-        onClose={() => { setIsDrawerOpen(false); setSelectedVendor(null); }}
-        onUpdate={handleVendorUpdate}
-      />
 
       {/* ADD SUPPLIER MODAL */}
-      <Modal isOpen={addSupplierModal} onClose={() => setAddSupplierModal(false)} title="Add New Vendor">
-        <p className="modal-desc">Add a vendor to your network</p>
+      <Modal isOpen={addSupplierModal} onClose={() => setAddSupplierModal(false)} title="Add New Supplier">
+        <p className="modal-desc">Add a supplier to your network</p>
         <form onSubmit={(e) => { e.preventDefault(); handleAddSupplier(); }}>
           <div className="form-group">
-            <label>Vendor Name *</label>
+            <label>Supplier Name *</label>
             <input
               type="text"
-              placeholder="Enter vendor company name"
+              placeholder="Enter supplier company name"
               value={newSupplierForm.name}
               onChange={(e) => setNewSupplierForm({ ...newSupplierForm, name: e.target.value })}
               required
@@ -620,7 +532,7 @@ export default function OurVendorsPage() {
               <label>Email</label>
               <input
                 type="email"
-                placeholder="vendor@company.com"
+                placeholder="supplier@company.com"
                 value={newSupplierForm.email}
                 onChange={(e) => setNewSupplierForm({ ...newSupplierForm, email: e.target.value })}
               />
@@ -659,21 +571,21 @@ export default function OurVendorsPage() {
             <label>Website</label>
             <input
               type="text"
-              placeholder="www.vendor.com"
+              placeholder="www.supplier.com"
               value={newSupplierForm.website}
               onChange={(e) => setNewSupplierForm({ ...newSupplierForm, website: e.target.value })}
             />
           </div>
           <div className="modal-actions">
             <button type="button" className="btn-cancel" onClick={() => setAddSupplierModal(false)}>Cancel</button>
-            <button type="submit" className="btn-submit">Add Vendor</button>
+            <button type="submit" className="btn-submit">Add Supplier</button>
           </div>
         </form>
       </Modal>
 
       {/* RFQ MODAL */}
       <Modal isOpen={!!rfqModal} onClose={() => setRfqModal(null)} title={`Send RFQ to ${rfqModal?.name}`}>
-        <p className="modal-desc">Request a quote from this vendor</p>
+        <p className="modal-desc">Request a quote from this supplier</p>
         <form onSubmit={(e) => { e.preventDefault(); handleSubmitRFQ(); }}>
           <div className="form-group">
             <label>Product Name *</label>
@@ -747,7 +659,7 @@ export default function OurVendorsPage() {
           <label>Your Notes</label>
           <textarea
             rows={5}
-            placeholder="Add notes about this vendor..."
+            placeholder="Add notes about this supplier..."
             value={editingNotes}
             onChange={(e) => setEditingNotes(e.target.value)}
           />
@@ -786,14 +698,14 @@ export default function OurVendorsPage() {
       </Modal>
 
       {/* CONFIRM REMOVE MODAL */}
-      <Modal isOpen={!!confirmRemoveModal} onClose={() => setConfirmRemoveModal(null)} title="Remove Vendor">
+      <Modal isOpen={!!confirmRemoveModal} onClose={() => setConfirmRemoveModal(null)} title="Remove Supplier">
         <div className="confirm-content">
-          <p>Are you sure you want to remove <strong>{confirmRemoveModal?.name}</strong> from your vendors?</p>
+          <p>Are you sure you want to remove <strong>{confirmRemoveModal?.name}</strong> from your saved suppliers?</p>
           <p className="warning">This will remove them from your list. Any existing conversations will be preserved in your Inbox.</p>
         </div>
         <div className="modal-actions">
           <button type="button" className="btn-cancel" onClick={() => setConfirmRemoveModal(null)}>Cancel</button>
-          <button type="button" className="btn-remove" onClick={handleRemoveSupplier}>Remove Vendor</button>
+          <button type="button" className="btn-remove" onClick={handleRemoveSupplier}>Remove Supplier</button>
         </div>
       </Modal>
 
@@ -814,12 +726,61 @@ export default function OurVendorsPage() {
           color: var(--text-secondary);
         }
 
-        .sort-bar {
+        .filter-bar {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          margin-bottom: 16px;
-          padding: 0 4px;
+          gap: 16px;
+          padding: 16px 20px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+        }
+
+        .search-box {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex: 1;
+          min-width: 200px;
+          background: var(--bg-tertiary);
+          padding: 10px 14px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+        }
+
+        .search-box svg {
+          width: 18px;
+          height: 18px;
+          color: var(--text-secondary);
+        }
+
+        .search-box input {
+          flex: 1;
+          background: transparent;
+          border: none;
+          color: var(--text-primary);
+          font-size: 0.95rem;
+        }
+
+        .search-box input:focus {
+          outline: none;
+        }
+
+        .filter-dropdowns {
+          display: flex;
+          gap: 12px;
+        }
+
+        .filter-dropdowns select {
+          padding: 10px 14px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          color: var(--text-primary);
+          font-size: 0.9rem;
+          cursor: pointer;
         }
 
         .results-count {
@@ -827,44 +788,12 @@ export default function OurVendorsPage() {
           font-size: 0.85rem;
         }
 
-        .sort-bar-right {
+        .sort-bar {
           display: flex;
           align-items: center;
-          gap: 12px;
-        }
-
-        .view-toggle {
-          display: flex;
-          background: var(--bg-secondary);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          overflow: hidden;
-        }
-
-        .view-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 8px 12px;
-          background: transparent;
-          border: none;
-          color: var(--text-secondary);
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .view-btn:hover {
-          background: var(--bg-tertiary);
-          color: var(--text-primary);
-        }
-
-        .view-btn.active {
-          background: var(--accent-primary);
-          color: white;
-        }
-
-        .view-btn + .view-btn {
-          border-left: 1px solid var(--border-color);
+          justify-content: space-between;
+          margin-bottom: 16px;
+          padding: 0 4px;
         }
 
         .sort-select {
@@ -877,7 +806,7 @@ export default function OurVendorsPage() {
           cursor: pointer;
         }
 
-        .vendors-table {
+        .suppliers-table {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 12px;
@@ -886,7 +815,7 @@ export default function OurVendorsPage() {
 
         .table-header {
           display: grid;
-          grid-template-columns: 40px 2fr 1.2fr 0.8fr 0.6fr 0.6fr 0.9fr;
+          grid-template-columns: 40px 2fr 1.5fr 1fr 0.8fr 0.8fr 0.8fr;
           gap: 12px;
           padding: 14px 20px;
           background: var(--bg-tertiary);
@@ -898,29 +827,26 @@ export default function OurVendorsPage() {
           letter-spacing: 0.5px;
         }
 
-        .vendor-row {
+        .supplier-row {
           border-bottom: 1px solid var(--border-color);
         }
 
-        .vendor-row:last-child {
+        .supplier-row:last-child {
           border-bottom: none;
         }
 
         .row-main {
           display: grid;
-          grid-template-columns: 40px 2fr 1.2fr 0.8fr 0.6fr 0.6fr 0.9fr;
+          grid-template-columns: 40px 2fr 1.5fr 1fr 0.8fr 0.8fr 0.8fr;
           gap: 12px;
           padding: 16px 20px;
-          align-items: center;
+          cursor: pointer;
           transition: background 0.2s;
+          align-items: center;
         }
 
         .row-main:hover {
           background: var(--bg-tertiary);
-        }
-
-        .col-expand {
-          cursor: pointer;
         }
 
         .col-expand svg {
@@ -934,17 +860,9 @@ export default function OurVendorsPage() {
           transform: rotate(90deg);
         }
 
-        .col-name {
-          cursor: pointer;
-        }
-
         .col-name strong {
           display: block;
           color: var(--text-primary);
-        }
-
-        .col-name:hover strong {
-          color: var(--accent-primary);
         }
 
         .sub-info {
@@ -975,8 +893,9 @@ export default function OurVendorsPage() {
           font-size: 1.1rem;
         }
 
-        .col-health {
-          cursor: pointer;
+        .col-category {
+          color: var(--text-secondary);
+          font-size: 0.9rem;
         }
 
         .col-rating {
@@ -997,8 +916,32 @@ export default function OurVendorsPage() {
           color: var(--text-secondary);
         }
 
-        .col-status {
-          cursor: pointer;
+        .status-badge {
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          text-transform: capitalize;
+        }
+
+        .status-badge.active {
+          background: rgba(16, 185, 129, 0.15);
+          color: #10b981;
+        }
+
+        .status-badge.pending {
+          background: rgba(59, 130, 246, 0.15);
+          color: #3b82f6;
+        }
+
+        .status-badge.inactive {
+          background: rgba(156, 163, 175, 0.15);
+          color: #9ca3af;
+        }
+
+        .status-badge.blocked {
+          background: rgba(239, 68, 68, 0.15);
+          color: #ef4444;
         }
 
         /* Expanded Row */
@@ -1047,6 +990,15 @@ export default function OurVendorsPage() {
         .no-data {
           font-style: italic;
           color: var(--text-muted) !important;
+        }
+
+        .source-badge {
+          background: rgba(249, 115, 22, 0.15);
+          color: #f97316;
+          padding: 2px 8px;
+          border-radius: 4px;
+          font-size: 0.8rem;
+          text-transform: capitalize;
         }
 
         .tags-list {
@@ -1162,12 +1114,6 @@ export default function OurVendorsPage() {
           height: 16px;
         }
 
-        .btn-action.details {
-          background: linear-gradient(135deg, #8B5CF6, #7C3AED);
-          border: none;
-          color: white;
-        }
-
         .btn-action.message {
           background: linear-gradient(135deg, #3b82f6, #2563eb);
           border: none;
@@ -1178,6 +1124,12 @@ export default function OurVendorsPage() {
           background: linear-gradient(135deg, #f97316, #ea580c);
           border: none;
           color: white;
+        }
+
+        .btn-action.orders {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          color: var(--text-primary);
         }
 
         .btn-action.remove {
@@ -1348,7 +1300,7 @@ export default function OurVendorsPage() {
           color: var(--text-muted);
         }
 
-        /* Quick Actions */
+        /* Quick Actions Update */
         .quick-actions .action-buttons button,
         .quick-actions .action-buttons a {
           display: inline-flex;
@@ -1361,14 +1313,14 @@ export default function OurVendorsPage() {
           height: 16px;
         }
 
-        /* Mobile Responsive */
+        /* Tablet Responsive */
         @media (max-width: 1024px) {
           .table-header,
           .row-main {
             grid-template-columns: 30px 1.5fr 1fr 0.8fr;
           }
 
-          .col-rating,
+          .col-category,
           .col-orders,
           .col-status {
             display: none;
@@ -1379,56 +1331,162 @@ export default function OurVendorsPage() {
           }
         }
 
+        /* Mobile Responsive - Card Layout */
         @media (max-width: 768px) {
+          .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .filter-dropdowns {
+            flex-wrap: wrap;
+          }
+
+          .sort-bar {
+            flex-direction: column;
+            gap: 8px;
+            align-items: stretch;
+          }
+
+          .results-count {
+            text-align: left;
+            font-size: 0.8rem;
+          }
+
+          .sort-select {
+            width: 100%;
+          }
+
+          /* Hide desktop table header */
           .table-header {
             display: none;
           }
 
+          /* Card-based supplier rows */
           .row-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto;
+            gap: 6px 12px;
+            padding: 14px 16px;
+            align-items: center;
           }
 
           .col-expand {
-            order: 1;
+            display: none;
           }
 
           .col-name {
-            order: 2;
-            flex: 1;
+            grid-column: 1;
+            grid-row: 1;
+          }
+
+          .col-name strong {
+            font-size: 0.9rem;
+          }
+
+          .sub-info {
+            margin-top: 2px;
+            font-size: 0.75rem;
+          }
+
+          .col-rating {
+            grid-column: 2;
+            grid-row: 1;
+            justify-self: end;
+            font-size: 0.85rem;
           }
 
           .col-location {
-            order: 3;
-            width: 100%;
-            padding-left: 28px;
+            grid-column: 1;
+            grid-row: 2;
+            font-size: 0.8rem;
           }
 
-          .col-health {
-            order: 4;
-            margin-left: 28px;
+          .col-status {
+            grid-column: 2;
+            grid-row: 2;
+            justify-self: end;
+            display: block !important;
+          }
+
+          .col-category,
+          .col-orders {
+            display: none;
+          }
+
+          /* Expanded section - clean vertical stack */
+          .row-expanded {
+            padding: 14px 16px;
           }
 
           .expanded-grid {
             grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
           }
 
+          .info-section {
+            padding: 12px;
+          }
+
+          .info-section h4 {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+          }
+
+          .info-content p {
+            font-size: 0.8125rem;
+            margin-bottom: 4px;
+          }
+
+          .specialization-row {
+            font-size: 0.8125rem;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+          }
+
+          .notes-section {
+            padding: 12px;
+            margin-bottom: 12px;
+          }
+
+          /* Icon-only action buttons on mobile */
           .action-buttons-row {
-            flex-wrap: wrap;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
           }
 
           .btn-action {
-            flex: 1;
-            min-width: calc(50% - 6px);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0;
+            min-width: 44px;
             justify-content: center;
+          }
+
+          .btn-action svg {
+            width: 18px;
+            height: 18px;
           }
 
           .form-row {
             grid-template-columns: 1fr;
           }
+
+          .tags-list {
+            gap: 6px;
+          }
+
+          .tag {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+          }
         }
       `}</style>
+      {promptElement}
     </AppLayout>
   );
 }

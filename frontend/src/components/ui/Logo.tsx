@@ -24,13 +24,21 @@ export default function Logo({
   const { icon, textSize, taglineSize } = sizes[size];
 
   const logoContent = (
-    <div className={`logo-container ${className}`}>
+    <div
+      className={className}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        textDecoration: 'none'
+      }}
+    >
       <svg
         width={icon}
         height={icon}
         viewBox="0 0 60 60"
         xmlns="http://www.w3.org/2000/svg"
-        className="logo-icon"
+        style={{ flexShrink: 0 }}
       >
         {/* 3D Box Logo */}
         <polygon points="30,5 55,17 30,29 5,17" fill="#8B5A2B"/>
@@ -39,45 +47,28 @@ export default function Logo({
       </svg>
 
       {showText && (
-        <div className="logo-text">
-          <span className="logo-name" style={{ fontSize: textSize }}>BEFACH</span>
-          <span className="logo-tagline" style={{ fontSize: taglineSize }}>INTERNATIONAL</span>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          lineHeight: 1.1
+        }}>
+          <span style={{
+            fontSize: textSize,
+            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontWeight: 700,
+            color: '#F57C00',
+            letterSpacing: '0.5px'
+          }}>BEFACH</span>
+          <span style={{
+            fontSize: taglineSize,
+            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontWeight: 500,
+            color: 'var(--text-secondary, #78716c)',
+            letterSpacing: '2px',
+            textTransform: 'uppercase'
+          }}>INTERNATIONAL</span>
         </div>
       )}
-
-      <style jsx>{`
-        .logo-container {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          text-decoration: none;
-        }
-
-        .logo-icon {
-          flex-shrink: 0;
-        }
-
-        .logo-text {
-          display: flex;
-          flex-direction: column;
-          line-height: 1.1;
-        }
-
-        .logo-name {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 700;
-          color: #F57C00;
-          letter-spacing: 0.5px;
-        }
-
-        .logo-tagline {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 500;
-          color: var(--text-secondary, #78716c);
-          letter-spacing: 2px;
-          text-transform: uppercase;
-        }
-      `}</style>
     </div>
   );
 

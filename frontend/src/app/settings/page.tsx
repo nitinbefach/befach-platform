@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useUser } from '@/context/UserModeContext';
 
 const allSidebarItems = [
@@ -15,7 +16,7 @@ const allSidebarItems = [
   { id: 'cost-calculator', label: 'Cost Calculator' },
   { id: 'compliance-tools', label: 'Compliance Tools' },
   { id: 'ai-assistant', label: 'AI Assistant' },
-  { id: 'logistics-tracking', label: 'Logistics Tracking' },
+  { id: 'track-shipment', label: 'Track Shipments' },
   { id: 'documents', label: 'Documents' },
   { id: 'team-management', label: 'Team Members' },
   { id: 'reports', label: 'Reports' },
@@ -24,6 +25,11 @@ const allSidebarItems = [
 
 export default function SettingsPage() {
   const { organization, subscription, sidebarPreferences, updateSidebarPreferences, logout } = useUser();
+  const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
+
+  useEffect(() => {
+    triggerTimeBasedFeedback('settings', 25000);
+  }, [triggerTimeBasedFeedback]);
   const [notifications, setNotifications] = useState({
     orderUpdates: true,
     shipmentTracking: true,
@@ -57,7 +63,6 @@ export default function SettingsPage() {
     <AppLayout searchPlaceholder="Search settings...">
       <div className="content-header">
         <h1>Settings</h1>
-        <p>Manage your account, preferences, and customization</p>
       </div>
 
       {/* Account Overview */}
@@ -186,17 +191,16 @@ export default function SettingsPage() {
         <h2>Notifications</h2>
         <div className="notifications-grid">
           {[
-            { key: 'orderUpdates', title: 'Order Updates', desc: 'Get notified about order status changes' },
-            { key: 'shipmentTracking', title: 'Shipment Tracking', desc: 'Receive updates on shipment locations' },
-            { key: 'priceAlerts', title: 'Price Alerts', desc: 'Notify when prices drop for saved products' },
-            { key: 'supplierMessages', title: 'Supplier Messages', desc: 'Get alerts for new supplier messages' },
-            { key: 'regulatoryUpdates', title: 'Regulatory Updates', desc: 'Important changes to import regulations' },
-            { key: 'marketingEmails', title: 'Marketing Emails', desc: 'Product updates and special offers' },
+            { key: 'orderUpdates', title: 'Order Updates' },
+            { key: 'shipmentTracking', title: 'Shipment Tracking' },
+            { key: 'priceAlerts', title: 'Price Alerts' },
+            { key: 'supplierMessages', title: 'Supplier Messages' },
+            { key: 'regulatoryUpdates', title: 'Regulatory Updates' },
+            { key: 'marketingEmails', title: 'Marketing Emails' },
           ].map((item) => (
             <div key={item.key} className="notification-item">
               <div className="notification-info">
                 <h4>{item.title}</h4>
-                <p>{item.desc}</p>
               </div>
               <label className="toggle">
                 <input 
@@ -229,7 +233,6 @@ export default function SettingsPage() {
             </div>
             <div>
               <h4>Team Management</h4>
-              <p>Manage team members and roles</p>
             </div>
             <span className="link-arrow">→</span>
           </Link>
@@ -242,7 +245,6 @@ export default function SettingsPage() {
             </div>
             <div>
               <h4>API Settings</h4>
-              <p>Manage API keys and webhooks</p>
             </div>
             <span className="link-arrow">→</span>
           </Link>
@@ -255,7 +257,6 @@ export default function SettingsPage() {
             </div>
             <div>
               <h4>Billing</h4>
-              <p>View transactions and invoices</p>
             </div>
             <span className="link-arrow">→</span>
           </Link>
@@ -269,14 +270,12 @@ export default function SettingsPage() {
           <div className="security-item">
             <div className="security-info">
               <h4>Change Password</h4>
-              <p>Update your account password</p>
             </div>
             <button className="btn-outline">Change</button>
           </div>
           <div className="security-item">
             <div className="security-info">
               <h4>Two-Factor Authentication</h4>
-              <p>Add an extra layer of security</p>
             </div>
             <button className="btn-outline">Enable</button>
           </div>
@@ -665,6 +664,35 @@ export default function SettingsPage() {
             grid-template-columns: 1fr;
           }
         }
+        @media (max-width: 768px) {
+          .settings-section {
+            padding: 16px;
+            margin-bottom: 16px;
+          }
+          .settings-section h2 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+          }
+          .quick-links {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+          }
+          .quick-link-card {
+            padding: 12px;
+          }
+          .quick-link-card p {
+            display: none;
+          }
+          .notification-item {
+            padding: 10px 0;
+          }
+          .notification-info p {
+            display: none;
+          }
+          .security-info p {
+            display: none;
+          }
+        }
         @media (max-width: 600px) {
           .form-row {
             grid-template-columns: 1fr;
@@ -672,8 +700,12 @@ export default function SettingsPage() {
           .items-grid {
             grid-template-columns: 1fr;
           }
+          .quick-links {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
+      {promptElement}
     </AppLayout>
   );
 }

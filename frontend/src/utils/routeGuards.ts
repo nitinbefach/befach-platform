@@ -12,6 +12,7 @@ export const serviceOnlyRoutes = [
 // Routes only accessible in Platform mode
 export const platformOnlyRoutes = [
   '/market-insights',
+  '/exim-data',
   '/smart-sourcing',
   '/cost-calculator',
   '/compliance-tools',
@@ -20,6 +21,7 @@ export const platformOnlyRoutes = [
   '/team-management',
   '/reports',
   '/api-settings',
+  '/payments',
 ];
 
 // Routes accessible in both modes
@@ -29,7 +31,7 @@ export const sharedRoutes = [
   '/my-orders',
   '/settings',
   '/documents',
-  '/logistics-tracking',
+  '/track-shipment',
   '/mode-selection',
 ];
 
@@ -84,6 +86,7 @@ export function getRedirectPath(pathname: string, userMode: UserMode): string | 
     // Map platform routes to service equivalents
     const redirectMap: Record<string, string> = {
       '/market-insights': '/dashboard-service',
+      '/exim-data': '/dashboard-service',
       '/smart-sourcing': '/submit-requirement',
       '/cost-calculator': '/chat-support',
       '/compliance-tools': '/documents',
@@ -92,6 +95,7 @@ export function getRedirectPath(pathname: string, userMode: UserMode): string | 
       '/team-management': '/settings',
       '/reports': '/billing-history',
       '/api-settings': '/settings',
+      '/payments': '/billing-history',
     };
     
     return redirectMap[pathname] || '/dashboard-service';
@@ -102,7 +106,7 @@ export function getRedirectPath(pathname: string, userMode: UserMode): string | 
     const redirectMap: Record<string, string> = {
       '/submit-requirement': '/smart-sourcing',
       '/chat-support': '/ai-assistant',
-      '/track-simple': '/logistics-tracking',
+      '/track-simple': '/track-shipment',
       '/dashboard-service': '/dashboard',
       '/billing-history': '/settings',
     };

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
+import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import {
   createRequirement,
   addRequirementToStorage,
@@ -80,6 +81,7 @@ const units = [
 
 export default function SubmitRequirementPage() {
   const router = useRouter();
+  const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [activeTab, setActiveTab] = useState<TabType>('single');
@@ -185,6 +187,7 @@ export default function SubmitRequirementPage() {
     setSubmittedRequirement(requirement);
     setRedirectCountdown(5);
     setSubmitted(true);
+    triggerFeedback('submit-requirement');
   };
 
   const handleSubmitBulk = async () => {
@@ -213,6 +216,7 @@ export default function SubmitRequirementPage() {
     setSubmittedRequirement(requirement);
     setRedirectCountdown(5);
     setSubmitted(true);
+    triggerFeedback('submit-requirement');
   };
 
 
@@ -1588,6 +1592,7 @@ export default function SubmitRequirementPage() {
           }
         }
       `}</style>
+      {promptElement}
     </AppLayout>
   );
 }
