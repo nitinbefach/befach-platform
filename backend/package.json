@@ -4,6 +4,7 @@
   "description": "BEFACH International - Backend API Server",
   "main": "src/index.js",
   "scripts": {
+    "build": "prisma generate",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
