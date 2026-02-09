@@ -233,7 +233,7 @@ export default function LandedCostForm({ onCalculate, initialValues }: LandedCos
           <div className={styles.formGroup}>
             <label className={`${styles.label} ${styles.labelWithIcon}`}>
               Total FOB Value
-              <Info className={styles.iconSm} title="Free on Board value" />
+              <span title="Free on Board value"><Info className={styles.iconSm} /></span>
             </label>
             <div className={styles.inputGroup}>
               <div className={styles.inputAddon}>{formData.currency}</div>
@@ -378,7 +378,7 @@ export default function LandedCostForm({ onCalculate, initialValues }: LandedCos
             <div className={styles.costRow}>
               <label className={`${styles.costLabel} ${styles.labelWithIcon}`}>
                 Custom Freight (₹)
-                <Info className={styles.iconSm} title="Override auto calculation" />
+                <span title="Override auto calculation"><Info className={styles.iconSm} /></span>
               </label>
               <input
                 type="number"
