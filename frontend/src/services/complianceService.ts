@@ -28,6 +28,8 @@ import {
   getAllHSNCodes
 } from '@/data/complianceDatabase';
 
+const isBrowser = typeof window !== 'undefined';
+
 // LocalStorage keys
 const STORAGE_KEYS = {
   BOE_RECORDS: 'befach-boe-records',
@@ -120,7 +122,7 @@ export async function createBOE(boeData: Partial<BOERecord>): Promise<BOERecord>
     // Save to localStorage
     const existingBOEs = getBOERecords();
     existingBOEs.unshift(newBOE);
-    localStorage.setItem(STORAGE_KEYS.BOE_RECORDS, JSON.stringify(existingBOEs));
+    if (isBrowser) localStorage.setItem(STORAGE_KEYS.BOE_RECORDS, JSON.stringify(existingBOEs));
 
     // Create notification
     createNotification({
@@ -159,7 +161,7 @@ export async function updateBOE(id: string, updates: Partial<BOERecord>): Promis
     };
 
     boeRecords[index] = updatedBOE;
-    localStorage.setItem(STORAGE_KEYS.BOE_RECORDS, JSON.stringify(boeRecords));
+    if (isBrowser) localStorage.setItem(STORAGE_KEYS.BOE_RECORDS, JSON.stringify(boeRecords));
 
     // Create notification for status changes
     if (updates.status && updates.status !== boeRecords[index].status) {
@@ -184,6 +186,7 @@ export async function updateBOE(id: string, updates: Partial<BOERecord>): Promis
  * Get all BOE records
  */
 export function getBOERecords(): BOERecord[] {
+  if (!isBrowser) return [];
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.BOE_RECORDS);
     return stored ? JSON.parse(stored) : [];
@@ -212,7 +215,7 @@ export async function getBOEById(id: string): Promise<BOERecord | null> {
  */
 export function getLicenses(): License[] {
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.LICENSES);
+    const stored = isBrowser ? localStorage.getItem(STORAGE_KEYS.LICENSES) : null;
     if (stored) {
       return JSON.parse(stored);
     }
@@ -361,6 +364,7 @@ export async function getComplianceStats(): Promise<ComplianceStats> {
  * Get notifications
  */
 export function getNotifications(): ComplianceNotification[] {
+  if (!isBrowser) return [];
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
     return stored ? JSON.parse(stored) : [];
@@ -384,7 +388,7 @@ export function createNotification(
 
   const notifications = getNotifications();
   notifications.unshift(newNotification);
-  localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications.slice(0, 50)));
+  if (isBrowser) localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications.slice(0, 50)));
 
   return newNotification;
 }
@@ -398,7 +402,7 @@ export function dismissNotification(id: string): void {
 
   if (index !== -1) {
     notifications[index].dismissedAt = new Date();
-    localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
+    if (isBrowser) localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
   }
 }
 
@@ -411,7 +415,7 @@ export function markNotificationAsRead(id: string): void {
 
   if (index !== -1) {
     notifications[index].readAt = new Date();
-    localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
+    if (isBrowser) localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
   }
 }
 
@@ -424,6 +428,7 @@ function generateBOENumber(): string {
 }
 
 function saveSearchToHistory(params: ComplianceSearchParams): void {
+  if (!isBrowser) return;
   try {
     const history = localStorage.getItem(STORAGE_KEYS.SEARCH_HISTORY);
     const searches = history ? JSON.parse(history) : [];

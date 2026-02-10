@@ -35,6 +35,7 @@ class BookingStorage {
   }
 
   private saveRawData(data: BookingRecord[]): void {
+    if (typeof window === 'undefined') return;
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (error) {

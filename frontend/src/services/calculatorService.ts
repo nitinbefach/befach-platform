@@ -262,7 +262,12 @@ class CalculatorService {
   }
 
   // Local Storage Helper Methods
+  private get isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
+
   private saveToLocalStorage(record: CalculationRecord): void {
+    if (!this.isBrowser) return;
     const key = 'befach-calculations-v2';
     const existing = this.getAllFromLocalStorage();
     existing.unshift(record);
@@ -270,6 +275,7 @@ class CalculatorService {
   }
 
   private getAllFromLocalStorage(): CalculationRecord[] {
+    if (!this.isBrowser) return [];
     const key = 'befach-calculations-v2';
     try {
       const data = localStorage.getItem(key);
@@ -323,12 +329,14 @@ class CalculatorService {
   }
 
   private removeFromLocalStorage(id: string): void {
+    if (!this.isBrowser) return;
     const data = this.getAllFromLocalStorage();
     const filtered = data.filter(record => record.id !== id);
     localStorage.setItem('befach-calculations-v2', JSON.stringify(filtered));
   }
 
   private updateInLocalStorage(id: string, updates: Partial<CalculationRecord>): CalculationRecord | null {
+    if (!this.isBrowser) return null;
     const data = this.getAllFromLocalStorage();
     const index = data.findIndex(record => record.id === id);
 

@@ -107,12 +107,19 @@ const LEGACY_KEYS = [
   'calculationHistory'
 ];
 
+const isBrowser = typeof window !== 'undefined';
+
 class HistoryStorage {
   private storageKey: string;
+  private migrated = false;
 
   constructor() {
     this.storageKey = STORAGE_KEY;
-    // Run migration on initialization
+  }
+
+  private ensureMigrated(): void {
+    if (!isBrowser || this.migrated) return;
+    this.migrated = true;
     this.migrateFromLegacyStorage();
   }
 
@@ -120,6 +127,7 @@ class HistoryStorage {
    * Migrate data from old localStorage keys to new unified key
    */
   private migrateFromLegacyStorage(): void {
+    if (!isBrowser) return;
     try {
       const existingData = this.getRawData();
 
@@ -235,6 +243,7 @@ class HistoryStorage {
    * Get raw data from localStorage
    */
   private getRawData(): CalculationRecord[] {
+    if (!isBrowser) return [];
     try {
       const data = localStorage.getItem(this.storageKey);
       return data ? JSON.parse(data) : [];
@@ -248,6 +257,7 @@ class HistoryStorage {
    * Save raw data to localStorage
    */
   private saveRawData(data: CalculationRecord[]): void {
+    if (!isBrowser) return;
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (error) {
@@ -267,6 +277,7 @@ class HistoryStorage {
    * Save a new calculation
    */
   save(calculation: Omit<CalculationRecord, 'id' | 'version'>): CalculationRecord {
+    this.ensureMigrated();
     const data = this.getRawData();
     const newRecord: CalculationRecord = {
       ...calculation,
@@ -290,6 +301,7 @@ class HistoryStorage {
    * Get a calculation by ID
    */
   get(id: string): CalculationRecord | null {
+    this.ensureMigrated();
     const data = this.getRawData();
     return data.find(record => record.id === id) || null;
   }
@@ -298,6 +310,7 @@ class HistoryStorage {
    * Get all calculations with optional query options
    */
   getAll(options?: QueryOptions): CalculationRecord[] {
+    this.ensureMigrated();
     let data = this.getRawData();
 
     // Apply filters
@@ -483,6 +496,7 @@ class HistoryStorage {
    * Get statistics from all calculations
    */
   getStats(): HistoryStats {
+    this.ensureMigrated();
     const data = this.getRawData();
 
     if (data.length === 0) {
@@ -687,6 +701,7 @@ class HistoryStorage {
    * Clear all data (use with caution!)
    */
   clearAll(): void {
+    if (!isBrowser) return;
     if (confirm('Are you sure you want to delete all calculation history? This cannot be undone.')) {
       localStorage.removeItem(this.storageKey);
     }
@@ -696,6 +711,7 @@ class HistoryStorage {
    * Get storage size in bytes
    */
   getStorageSize(): number {
+    if (!isBrowser) return 0;
     const data = localStorage.getItem(this.storageKey) || '';
     return new Blob([data]).size;
   }
