@@ -1,3 +1,4 @@
+import { safeStorage } from '@/lib/safeStorage';
 // Conversations Management - Types, Helper Functions, Demo Data
 // This module handles all supplier communication/inbox functionality
 
@@ -123,7 +124,7 @@ export function getStoredConversations(): Conversation[] {
   if (typeof window === 'undefined') return [];
 
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    const data = safeStorage.getItem(STORAGE_KEY);
     if (!data) return [];
     return JSON.parse(data);
   } catch {
@@ -133,7 +134,7 @@ export function getStoredConversations(): Conversation[] {
 
 export function saveConversations(conversations: Conversation[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
 }
 
 export function getConversationById(id: string): Conversation | undefined {

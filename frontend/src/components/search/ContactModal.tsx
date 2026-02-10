@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Supplier } from '@/lib/suppliers';
 import { Modal } from '@/components/ui';
 import { saveSupplierFromSearch } from '@/lib/savedSuppliers';
+import { safeStorage } from '@/lib/safeStorage';
 
 interface ContactModalProps {
   supplier: Supplier;
@@ -36,14 +37,14 @@ export default function ContactModal({
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Store in localStorage for demo
-    const contacts = JSON.parse(localStorage.getItem('befach-contacted-suppliers') || '[]');
+    const contacts = JSON.parse(safeStorage.getItem('befach-contacted-suppliers') || '[]');
     contacts.push({
       supplierId: supplier.id,
       supplierName: supplier.companyName,
       ...formData,
       sentAt: new Date().toISOString(),
     });
-    localStorage.setItem('befach-contacted-suppliers', JSON.stringify(contacts));
+    safeStorage.setItem('befach-contacted-suppliers', JSON.stringify(contacts));
 
     // Auto-save supplier to Our Vendors
     saveSupplierFromSearch({

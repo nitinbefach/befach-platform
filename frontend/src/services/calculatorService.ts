@@ -1,4 +1,5 @@
 import { CalculationInput, CalculationResult, CalculationRecord } from '@/types/calculator';
+import { safeStorage } from '@/lib/safeStorage';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -262,23 +263,17 @@ class CalculatorService {
   }
 
   // Local Storage Helper Methods
-  private get isBrowser(): boolean {
-    return typeof window !== 'undefined';
-  }
-
   private saveToLocalStorage(record: CalculationRecord): void {
-    if (!this.isBrowser) return;
     const key = 'befach-calculations-v2';
     const existing = this.getAllFromLocalStorage();
     existing.unshift(record);
-    localStorage.setItem(key, JSON.stringify(existing));
+    safeStorage.setItem(key, JSON.stringify(existing));
   }
 
   private getAllFromLocalStorage(): CalculationRecord[] {
-    if (!this.isBrowser) return [];
     const key = 'befach-calculations-v2';
     try {
-      const data = localStorage.getItem(key);
+      const data = safeStorage.getItem(key);
       return data ? JSON.parse(data) : [];
     } catch {
       return [];
@@ -329,21 +324,19 @@ class CalculatorService {
   }
 
   private removeFromLocalStorage(id: string): void {
-    if (!this.isBrowser) return;
     const data = this.getAllFromLocalStorage();
     const filtered = data.filter(record => record.id !== id);
-    localStorage.setItem('befach-calculations-v2', JSON.stringify(filtered));
+    safeStorage.setItem('befach-calculations-v2', JSON.stringify(filtered));
   }
 
   private updateInLocalStorage(id: string, updates: Partial<CalculationRecord>): CalculationRecord | null {
-    if (!this.isBrowser) return null;
     const data = this.getAllFromLocalStorage();
     const index = data.findIndex(record => record.id === id);
 
     if (index === -1) return null;
 
     data[index] = { ...data[index], ...updates };
-    localStorage.setItem('befach-calculations-v2', JSON.stringify(data));
+    safeStorage.setItem('befach-calculations-v2', JSON.stringify(data));
 
     return data[index];
   }

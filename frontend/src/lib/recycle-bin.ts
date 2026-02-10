@@ -1,3 +1,4 @@
+import { safeStorage } from '@/lib/safeStorage';
 // Recycle Bin - Storage Helpers and Types
 // All deleted items from the platform are stored here for recovery
 
@@ -48,7 +49,7 @@ export function getRecycleBinItems(): DeletedItem[] {
   if (typeof window === 'undefined') return [];
 
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    const data = safeStorage.getItem(STORAGE_KEY);
     if (!data) return [];
 
     const items: DeletedItem[] = JSON.parse(data);
@@ -70,7 +71,7 @@ export function getRecycleBinItems(): DeletedItem[] {
 
 export function saveRecycleBinItems(items: DeletedItem[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
 export function addToRecycleBin(

@@ -12,6 +12,7 @@ import {
   LocalBookingData,
   BookingQuote,
 } from '@/types/booking';
+import { safeStorage } from '@/lib/safeStorage';
 
 const STORAGE_KEY = 'befach-bookings-v1';
 
@@ -26,8 +27,7 @@ class BookingStorage {
 
   private getRawData(): BookingRecord[] {
     try {
-      if (typeof window === 'undefined') return [];
-      const data = localStorage.getItem(this.storageKey);
+      const data = safeStorage.getItem(this.storageKey);
       return data ? JSON.parse(data) : [];
     } catch {
       return [];
@@ -35,13 +35,12 @@ class BookingStorage {
   }
 
   private saveRawData(data: BookingRecord[]): void {
-    if (typeof window === 'undefined') return;
     try {
-      localStorage.setItem(this.storageKey, JSON.stringify(data));
+      safeStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (error) {
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
         const trimmed = data.slice(-500);
-        localStorage.setItem(this.storageKey, JSON.stringify(trimmed));
+        safeStorage.setItem(this.storageKey, JSON.stringify(trimmed));
       }
     }
   }

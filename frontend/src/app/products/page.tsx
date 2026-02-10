@@ -8,6 +8,7 @@ import {
   Grid3X3, List, ChevronLeft, ChevronRight, Package,
   MessageCircle, Shield, Truck, Menu, SlidersHorizontal
 } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 // Dummy product data
 const products = [
@@ -55,7 +56,7 @@ export default function ProductsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeStorage.getItem('theme');
     setDarkMode(savedTheme === 'dark');
   }, []);
 

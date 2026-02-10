@@ -19,6 +19,7 @@ import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { trackShipment, ShipmentTracking, formatShipmentNumber, getTimelineStatusColor } from '@/lib/tracking';
 import { usePrefersReducedMotion, useMobile } from '@/hooks/useMobile';
 import { Package, Ship, MapPin, Clock, ChevronRight, Bookmark } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 // Types for tracked shipments
 interface TrackedShipment {
@@ -191,7 +192,7 @@ export default function TrackShipmentPage() {
 
   // Load tracked shipments from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('tracked_shipments');
+    const saved = safeStorage.getItem('tracked_shipments');
     if (saved) {
       try {
         setTrackedShipments(JSON.parse(saved));
@@ -279,7 +280,7 @@ export default function TrackShipmentPage() {
 
     const updated = [newShipment, ...trackedShipments.filter(s => s.trackingNumber !== newShipment.trackingNumber)];
     setTrackedShipments(updated);
-    localStorage.setItem('tracked_shipments', JSON.stringify(updated));
+    safeStorage.setItem('tracked_shipments', JSON.stringify(updated));
     setIsSaved(true);
   };
 

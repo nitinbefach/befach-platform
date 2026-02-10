@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PublicLayout from '@/components/layout/PublicLayout';
 import { Users, Globe, TrendingUp, Shield, Package, DollarSign, FileCheck, Truck } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 export default function AboutPage() {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeStorage.getItem('theme');
     setDarkMode(savedTheme === 'dark');
   }, []);
 

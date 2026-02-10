@@ -1,3 +1,4 @@
+import { safeStorage } from '@/lib/safeStorage';
 // Requirements Management - Types, Status Logic, Time Calculation, Demo Simulation
 
 // ============================================
@@ -423,7 +424,7 @@ export function getStoredRequirements(): Requirement[] {
   if (typeof window === 'undefined') return [];
 
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    const data = safeStorage.getItem(STORAGE_KEY);
     if (!data) return [];
     return JSON.parse(data);
   } catch {
@@ -433,7 +434,7 @@ export function getStoredRequirements(): Requirement[] {
 
 export function saveRequirements(requirements: Requirement[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(requirements));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(requirements));
 }
 
 export function addRequirementToStorage(requirement: Requirement): void {

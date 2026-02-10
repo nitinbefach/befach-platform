@@ -1,3 +1,4 @@
+import { safeStorage, safeSessionStorage } from '@/lib/safeStorage';
 // Contextual Feedback Trigger System
 // Manages when/where to show feedback prompts with anti-annoyance rules
 
@@ -140,12 +141,12 @@ const NPS_COOLDOWN_DAYS = 30;
 
 function getTriggerRecords(): Record<string, TriggerRecord> {
   if (typeof window === 'undefined') return {};
-  const data = localStorage.getItem(TRIGGERS_STORAGE_KEY);
+  const data = safeStorage.getItem(TRIGGERS_STORAGE_KEY);
   return data ? JSON.parse(data) : {};
 }
 
 function saveTriggerRecords(records: Record<string, TriggerRecord>) {
-  localStorage.setItem(TRIGGERS_STORAGE_KEY, JSON.stringify(records));
+  safeStorage.setItem(TRIGGERS_STORAGE_KEY, JSON.stringify(records));
 }
 
 // ============================================================================
@@ -154,12 +155,12 @@ function saveTriggerRecords(records: Record<string, TriggerRecord>) {
 
 function getSessionState(): SessionState {
   if (typeof window === 'undefined') return { promptCount: 0, dismissCount: 0 };
-  const data = sessionStorage.getItem(SESSION_STORAGE_KEY);
+  const data = safeSessionStorage.getItem(SESSION_STORAGE_KEY);
   return data ? JSON.parse(data) : { promptCount: 0, dismissCount: 0 };
 }
 
 function saveSessionState(state: SessionState) {
-  sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
+  safeSessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
 }
 
 // ============================================================================
@@ -272,7 +273,7 @@ interface NPSTracking {
 
 function getNPSTracking(): NPSTracking {
   if (typeof window === 'undefined') return { sessionCount: 0, lastNPSDate: null };
-  const data = localStorage.getItem(NPS_STORAGE_KEY);
+  const data = safeStorage.getItem(NPS_STORAGE_KEY);
   return data ? JSON.parse(data) : { sessionCount: 0, lastNPSDate: null };
 }
 
@@ -281,14 +282,14 @@ export function incrementSessionCount() {
   if (typeof window === 'undefined') return;
   const tracking = getNPSTracking();
   tracking.sessionCount++;
-  localStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(tracking));
+  safeStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(tracking));
 }
 
 /** Record NPS completion */
 export function recordNPSComplete() {
   const tracking = getNPSTracking();
   tracking.lastNPSDate = new Date().toISOString();
-  localStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(tracking));
+  safeStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(tracking));
 }
 
 /** Check if NPS should be shown (milestone + cooldown) */

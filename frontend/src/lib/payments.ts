@@ -14,6 +14,7 @@ import type {
   PaymentTimelineEvent,
 } from '@/types/payments';
 import { calculateFees, getMethodConfig, MOCK_FX_RATES } from './paymentConstants';
+import { safeStorage } from '@/lib/safeStorage';
 
 // ─── Storage Keys ───────────────────────────────────────────────────────
 
@@ -485,7 +486,7 @@ DEMO_PAYMENTS.forEach(p => {
 function getFromStorage<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
   try {
-    const raw = localStorage.getItem(key);
+    const raw = safeStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
   } catch {
     return fallback;
@@ -494,22 +495,22 @@ function getFromStorage<T>(key: string, fallback: T): T {
 
 function saveToStorage<T>(key: string, data: T): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(key, JSON.stringify(data));
+  safeStorage.setItem(key, JSON.stringify(data));
 }
 
 // ─── Payments CRUD ──────────────────────────────────────────────────────
 
 export function initializeDemoPayments(): void {
   if (typeof window === 'undefined') return;
-  const existing = localStorage.getItem(PAYMENTS_KEY);
+  const existing = safeStorage.getItem(PAYMENTS_KEY);
   if (!existing) {
     saveToStorage(PAYMENTS_KEY, DEMO_PAYMENTS);
   }
-  const existingSources = localStorage.getItem(SOURCES_KEY);
+  const existingSources = safeStorage.getItem(SOURCES_KEY);
   if (!existingSources) {
     saveToStorage(SOURCES_KEY, DEMO_SOURCES);
   }
-  const existingGateways = localStorage.getItem(GATEWAYS_KEY);
+  const existingGateways = safeStorage.getItem(GATEWAYS_KEY);
   if (!existingGateways) {
     saveToStorage(GATEWAYS_KEY, DEMO_GATEWAYS);
   }

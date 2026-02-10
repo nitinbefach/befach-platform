@@ -9,6 +9,7 @@ import {
   MarketOverview,
   TimeRange
 } from '@/types/market';
+import { safeStorage } from '@/lib/safeStorage';
 
 interface MarketContextType {
   // Market Data
@@ -74,25 +75,25 @@ export function MarketProvider({ children }: { children: ReactNode }) {
     const loadSavedData = () => {
       try {
         // Load watchlist
-        const savedWatchlist = localStorage.getItem('market_watchlist');
+        const savedWatchlist = safeStorage.getItem('market_watchlist');
         if (savedWatchlist) {
           setWatchlist(JSON.parse(savedWatchlist));
         }
 
         // Load alerts
-        const savedAlerts = localStorage.getItem('market_alerts');
+        const savedAlerts = safeStorage.getItem('market_alerts');
         if (savedAlerts) {
           setAlerts(JSON.parse(savedAlerts));
         }
 
         // Load filters
-        const savedFilters = localStorage.getItem('market_filters');
+        const savedFilters = safeStorage.getItem('market_filters');
         if (savedFilters) {
           setFilters({ ...defaultFilters, ...JSON.parse(savedFilters) });
         }
 
         // Load time range
-        const savedTimeRange = localStorage.getItem('market_timerange');
+        const savedTimeRange = safeStorage.getItem('market_timerange');
         if (savedTimeRange) {
           setTimeRange(savedTimeRange as TimeRange);
         }
@@ -106,22 +107,22 @@ export function MarketProvider({ children }: { children: ReactNode }) {
 
   // Save watchlist to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('market_watchlist', JSON.stringify(watchlist));
+    safeStorage.setItem('market_watchlist', JSON.stringify(watchlist));
   }, [watchlist]);
 
   // Save alerts to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('market_alerts', JSON.stringify(alerts));
+    safeStorage.setItem('market_alerts', JSON.stringify(alerts));
   }, [alerts]);
 
   // Save filters to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('market_filters', JSON.stringify(filters));
+    safeStorage.setItem('market_filters', JSON.stringify(filters));
   }, [filters]);
 
   // Save time range to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('market_timerange', timeRange);
+    safeStorage.setItem('market_timerange', timeRange);
   }, [timeRange]);
 
   // Filter Management

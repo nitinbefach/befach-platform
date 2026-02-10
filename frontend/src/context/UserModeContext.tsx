@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { safeStorage } from '@/lib/safeStorage';
 
 export type UserRole = 'owner' | 'admin' | 'member' | 'viewer';
 
@@ -84,7 +85,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     try {
-      const savedPrefs = localStorage.getItem(SIDEBAR_PREFS_KEY);
+      const savedPrefs = safeStorage.getItem(SIDEBAR_PREFS_KEY);
       if (savedPrefs) {
         setSidebarPreferences(JSON.parse(savedPrefs));
       }
@@ -102,7 +103,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       validUntil: null
     });
     
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    safeStorage.setItem(STORAGE_KEY, JSON.stringify({
       organization: org,
       subscription: { plan: 'free', seats: 1, validUntil: null }
     }));
@@ -116,10 +117,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setHasCompletedTour(false);
     setSidebarPreferences(defaultSidebarPreferences);
     
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(SIDEBAR_PREFS_KEY);
-    localStorage.removeItem(ONBOARDING_KEY);
-    localStorage.removeItem(TOUR_KEY);
+    safeStorage.removeItem(STORAGE_KEY);
+    safeStorage.removeItem(SIDEBAR_PREFS_KEY);
+    safeStorage.removeItem(ONBOARDING_KEY);
+    safeStorage.removeItem(TOUR_KEY);
     
     router.push('/');
   }, [router]);
@@ -127,8 +128,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const updateOrganization = useCallback((org: Partial<Organization>) => {
     setOrganization(prev => {
       const updated = { ...prev, ...org } as Organization;
-      const currentData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      const currentData = JSON.parse(safeStorage.getItem(STORAGE_KEY) || '{}');
+      safeStorage.setItem(STORAGE_KEY, JSON.stringify({
         ...currentData,
         organization: updated
       }));
@@ -139,24 +140,24 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const updateSidebarPreferences = useCallback((prefs: Partial<SidebarPreferences>) => {
     setSidebarPreferences(prev => {
       const updated = { ...prev, ...prefs };
-      localStorage.setItem(SIDEBAR_PREFS_KEY, JSON.stringify(updated));
+      safeStorage.setItem(SIDEBAR_PREFS_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
 
   const completeOnboarding = useCallback(() => {
     setHasCompletedOnboarding(true);
-    localStorage.setItem(ONBOARDING_KEY, 'true');
+    safeStorage.setItem(ONBOARDING_KEY, 'true');
   }, []);
 
   const completeTour = useCallback(() => {
     setHasCompletedTour(true);
-    localStorage.setItem(TOUR_KEY, 'true');
+    safeStorage.setItem(TOUR_KEY, 'true');
   }, []);
 
   const skipTour = useCallback(() => {
     setHasCompletedTour(true);
-    localStorage.setItem(TOUR_KEY, 'true');
+    safeStorage.setItem(TOUR_KEY, 'true');
   }, []);
 
   if (!mounted) {

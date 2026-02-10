@@ -1,3 +1,4 @@
+import { safeStorage } from '@/lib/safeStorage';
 // Landed Cost Calculator Utility Functions
 
 export interface CalculationInput {
@@ -286,8 +287,7 @@ export function getShippingMethods(): { value: string; label: string; descriptio
 
 // Save calculation to localStorage
 export function saveCalculation(calculation: CalculationResult & { input: CalculationInput }): void {
-  if (typeof window === 'undefined') return;
-  const saved = localStorage.getItem('landedCostCalculations');
+  const saved = safeStorage.getItem('landedCostCalculations');
   const calculations = saved ? JSON.parse(saved) : [];
 
   const newCalculation = {
@@ -303,20 +303,18 @@ export function saveCalculation(calculation: CalculationResult & { input: Calcul
     calculations.pop();
   }
 
-  localStorage.setItem('landedCostCalculations', JSON.stringify(calculations));
+  safeStorage.setItem('landedCostCalculations', JSON.stringify(calculations));
 }
 
 // Get saved calculations from localStorage
 export function getSavedCalculations(): any[] {
-  if (typeof window === 'undefined') return [];
-  const saved = localStorage.getItem('landedCostCalculations');
+  const saved = safeStorage.getItem('landedCostCalculations');
   return saved ? JSON.parse(saved) : [];
 }
 
 // Clear calculation history
 export function clearCalculationHistory(): void {
-  if (typeof window === 'undefined') return;
-  localStorage.removeItem('landedCostCalculations');
+  safeStorage.removeItem('landedCostCalculations');
 }
 
 // Search HSN codes (simplified version)

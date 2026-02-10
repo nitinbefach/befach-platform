@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PublicLayout from '@/components/layout/PublicLayout';
 import { Calculator, Search, BarChart3, FileCheck, Truck, Bot, ArrowRight, CheckCircle } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 const services = [
   {
@@ -60,7 +61,7 @@ export default function ServicesPage() {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeStorage.getItem('theme');
     setDarkMode(savedTheme === 'dark');
   }, []);
 

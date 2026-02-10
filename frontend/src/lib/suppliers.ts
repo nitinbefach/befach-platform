@@ -1,3 +1,4 @@
+import { safeStorage } from '@/lib/safeStorage';
 // Befach Partner Suppliers - Types, Mock Data, Search Algorithm
 // This module manages the 100 verified partner suppliers with full catalogues
 
@@ -1086,7 +1087,7 @@ export interface SearchHistoryItem {
 export function getSearchHistory(): SearchHistoryItem[] {
   if (typeof window === 'undefined') return [];
   try {
-    const data = localStorage.getItem(STORAGE_KEYS.searchHistory);
+    const data = safeStorage.getItem(STORAGE_KEYS.searchHistory);
     return data ? JSON.parse(data) : [];
   } catch {
     return [];
@@ -1104,14 +1105,14 @@ export function addToSearchHistory(query: string, resultCount: number): void {
   // Remove duplicates and add new
   const filtered = history.filter(h => h.query.toLowerCase() !== query.toLowerCase());
   const updated = [newItem, ...filtered].slice(0, 20); // Keep last 20
-  localStorage.setItem(STORAGE_KEYS.searchHistory, JSON.stringify(updated));
+  safeStorage.setItem(STORAGE_KEYS.searchHistory, JSON.stringify(updated));
 }
 
 // Saved Suppliers
 export function getSavedSuppliers(): string[] {
   if (typeof window === 'undefined') return [];
   try {
-    const data = localStorage.getItem(STORAGE_KEYS.savedSuppliers);
+    const data = safeStorage.getItem(STORAGE_KEYS.savedSuppliers);
     return data ? JSON.parse(data) : [];
   } catch {
     return [];
@@ -1122,14 +1123,14 @@ export function saveSupplier(supplierId: string): void {
   if (typeof window === 'undefined') return;
   const saved = getSavedSuppliers();
   if (!saved.includes(supplierId)) {
-    localStorage.setItem(STORAGE_KEYS.savedSuppliers, JSON.stringify([...saved, supplierId]));
+    safeStorage.setItem(STORAGE_KEYS.savedSuppliers, JSON.stringify([...saved, supplierId]));
   }
 }
 
 export function unsaveSupplier(supplierId: string): void {
   if (typeof window === 'undefined') return;
   const saved = getSavedSuppliers();
-  localStorage.setItem(STORAGE_KEYS.savedSuppliers, JSON.stringify(saved.filter(id => id !== supplierId)));
+  safeStorage.setItem(STORAGE_KEYS.savedSuppliers, JSON.stringify(saved.filter(id => id !== supplierId)));
 }
 
 export function isSupplierSaved(supplierId: string): boolean {
@@ -1140,7 +1141,7 @@ export function isSupplierSaved(supplierId: string): boolean {
 export function getChatMessages(supplierId: string): ChatMessage[] {
   if (typeof window === 'undefined') return [];
   try {
-    const data = localStorage.getItem(STORAGE_KEYS.chatMessages);
+    const data = safeStorage.getItem(STORAGE_KEYS.chatMessages);
     const allChats: Record<string, ChatMessage[]> = data ? JSON.parse(data) : {};
     return allChats[supplierId] || [];
   } catch {
@@ -1160,10 +1161,10 @@ export function addChatMessage(supplierId: string, message: Omit<ChatMessage, 'i
     timestamp: new Date().toISOString(),
   };
 
-  const data = localStorage.getItem(STORAGE_KEYS.chatMessages);
+  const data = safeStorage.getItem(STORAGE_KEYS.chatMessages);
   const allChats: Record<string, ChatMessage[]> = data ? JSON.parse(data) : {};
   allChats[supplierId] = [...(allChats[supplierId] || []), newMessage];
-  localStorage.setItem(STORAGE_KEYS.chatMessages, JSON.stringify(allChats));
+  safeStorage.setItem(STORAGE_KEYS.chatMessages, JSON.stringify(allChats));
 
   return newMessage;
 }
@@ -1198,7 +1199,7 @@ function checkAndUpdateExpiredInvitations(invitations: SupplierInvitation[]): Su
   });
 
   if (updated && typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify(result));
+    safeStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify(result));
   }
 
   return result;
@@ -1208,7 +1209,7 @@ function checkAndUpdateExpiredInvitations(invitations: SupplierInvitation[]): Su
 export function getInvitations(): SupplierInvitation[] {
   if (typeof window === 'undefined') return [];
   try {
-    const data = localStorage.getItem(STORAGE_KEYS.invitations);
+    const data = safeStorage.getItem(STORAGE_KEYS.invitations);
     const invitations: SupplierInvitation[] = data ? JSON.parse(data) : [];
     return checkAndUpdateExpiredInvitations(invitations);
   } catch {
@@ -1258,7 +1259,7 @@ export function createInvitation(input: CreateInvitationInput): SupplierInvitati
   };
 
   const invitations = getInvitations();
-  localStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify([newInvitation, ...invitations]));
+  safeStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify([newInvitation, ...invitations]));
 
   return newInvitation;
 }
@@ -1286,7 +1287,7 @@ export function resendInvitation(id: string): SupplierInvitation | null {
   };
 
   invitations[index] = updated;
-  localStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify(invitations));
+  safeStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify(invitations));
 
   return updated;
 }
@@ -1306,7 +1307,7 @@ export function cancelInvitation(id: string): boolean {
     cancelledAt: new Date().toISOString(),
   };
 
-  localStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify(invitations));
+  safeStorage.setItem(STORAGE_KEYS.invitations, JSON.stringify(invitations));
   return true;
 }
 

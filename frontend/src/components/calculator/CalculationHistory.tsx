@@ -15,6 +15,7 @@ import {
   X,
   AlertCircle
 } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 interface CalculationHistoryProps {
   onLoadCalculation?: (calculation: any) => void;
@@ -76,7 +77,7 @@ export default function CalculationHistory({ onLoadCalculation, onRefresh }: Cal
   const handleDeleteCalculation = (id: string) => {
     if (window.confirm('Are you sure you want to delete this calculation?')) {
       const updated = calculations.filter(calc => calc.id !== id);
-      localStorage.setItem('landedCostCalculations', JSON.stringify(updated));
+      safeStorage.setItem('landedCostCalculations', JSON.stringify(updated));
       loadCalculations();
       if (onRefresh) onRefresh();
     }

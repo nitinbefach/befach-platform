@@ -11,6 +11,7 @@ import {
   Star, FileText, ShoppingCart, DollarSign,
   Clock, AlertCircle, CheckCircle
 } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 // ============ TYPES ============
 
@@ -235,7 +236,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   // Load requirements from localStorage
   useEffect(() => {
     const loadRequirements = () => {
-      const saved = localStorage.getItem('befach-requirements');
+      const saved = safeStorage.getItem('befach-requirements');
       if (saved) {
         try {
           const allRequirements = JSON.parse(saved);

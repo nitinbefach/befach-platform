@@ -29,6 +29,7 @@ import { historyStorage, type CalculationRecord, type FilterCriteria } from '@/l
 import calculatorService from '@/services/calculatorService';
 import { CalculationRecord as APICalculationRecord } from '@/types/calculator';
 import styles from './page.module.css';
+import { safeStorage } from '@/lib/safeStorage';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -224,7 +225,7 @@ export default function HistoryPage() {
 
   const handleDuplicate = (calc: CalculationRecord) => {
     // Save to context and navigate to wizard
-    localStorage.setItem('duplicateCalculation', JSON.stringify(calc.input));
+    safeStorage.setItem('duplicateCalculation', JSON.stringify(calc.input));
     router.push('/cost-calculator');
   };
 

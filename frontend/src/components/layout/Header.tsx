@@ -8,6 +8,7 @@ import {
   Bot, FileText, Database, ChevronDown, Search, Moon, Sun, ArrowRight
 } from 'lucide-react';
 import { Logo } from '../ui';
+import { safeStorage } from '@/lib/safeStorage';
 
 export default function Header() {
   const pathname = usePathname();
@@ -16,7 +17,7 @@ export default function Header() {
   const [activeTab, setActiveTab] = useState('trade');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeStorage.getItem('theme');
     if (savedTheme === 'dark') {
       setDarkMode(true);
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -27,10 +28,10 @@ export default function Header() {
     setDarkMode(!darkMode);
     if (!darkMode) {
       document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
+      safeStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
+      safeStorage.setItem('theme', 'light');
     }
   };
 

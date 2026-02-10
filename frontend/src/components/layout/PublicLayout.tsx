@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import { safeStorage } from '@/lib/safeStorage';
 
 interface PublicLayoutProps {
   children: React.ReactNode;
@@ -13,14 +14,14 @@ export default function PublicLayout({ children, showFooter = true }: PublicLayo
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeStorage.getItem('theme');
     if (savedTheme === 'dark') {
       setDarkMode(true);
     }
 
     // Listen for theme changes
     const handleStorage = () => {
-      const theme = localStorage.getItem('theme');
+      const theme = safeStorage.getItem('theme');
       setDarkMode(theme === 'dark');
     };
 
@@ -28,7 +29,7 @@ export default function PublicLayout({ children, showFooter = true }: PublicLayo
 
     // Also listen for custom theme change events
     const handleThemeChange = () => {
-      const theme = localStorage.getItem('theme');
+      const theme = safeStorage.getItem('theme');
       setDarkMode(theme === 'dark');
     };
 

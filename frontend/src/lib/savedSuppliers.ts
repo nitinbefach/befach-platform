@@ -11,6 +11,7 @@ import {
   Ban,
   type LucideIcon
 } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -257,7 +258,7 @@ const STORAGE_KEY = 'befach-saved-suppliers';
 
 export function getSavedSuppliers(): SavedSupplier[] {
   if (typeof window === 'undefined') return [];
-  const data = localStorage.getItem(STORAGE_KEY);
+  const data = safeStorage.getItem(STORAGE_KEY);
   if (!data) return [];
 
   const suppliers = JSON.parse(data);
@@ -296,7 +297,7 @@ export function getSavedSuppliers(): SavedSupplier[] {
 
 function saveSuppliersToStorage(suppliers: SavedSupplier[]): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(suppliers));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(suppliers));
 }
 
 // ============================================================================
@@ -642,10 +643,10 @@ const PRESETS_STORAGE_KEY = 'befach-supplier-filter-presets';
 
 export function getFilterPresets(): FilterPreset[] {
   if (typeof window === 'undefined') return getDefaultPresets();
-  const data = localStorage.getItem(PRESETS_STORAGE_KEY);
+  const data = safeStorage.getItem(PRESETS_STORAGE_KEY);
   if (!data) {
     const defaults = getDefaultPresets();
-    localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(defaults));
+    safeStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(defaults));
     return defaults;
   }
   return JSON.parse(data);
@@ -660,7 +661,7 @@ export function saveFilterPreset(name: string, filters: FilterOptions): FilterPr
     createdAt: new Date().toISOString()
   };
   presets.push(newPreset);
-  localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(presets));
+  safeStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(presets));
   return newPreset;
 }
 
@@ -668,7 +669,7 @@ export function deleteFilterPreset(presetId: string): boolean {
   const presets = getFilterPresets();
   const filtered = presets.filter(p => p.id !== presetId && !p.isDefault);
   if (filtered.length === presets.length) return false;
-  localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(filtered));
+  safeStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(filtered));
   return true;
 }
 

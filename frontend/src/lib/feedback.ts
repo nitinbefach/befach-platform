@@ -1,3 +1,4 @@
+import { safeStorage, safeSessionStorage } from '@/lib/safeStorage';
 // Feedback & Review Management System
 // localStorage-based data layer (designed for easy Supabase migration)
 
@@ -214,7 +215,7 @@ export const SURVEY_DEFINITIONS: Record<string, SurveyDefinition> = {
 export function getFeedbackList(filters?: FeedbackFilters): FeedbackEntry[] {
   if (typeof window === 'undefined') return [];
 
-  const data = localStorage.getItem(STORAGE_KEY);
+  const data = safeStorage.getItem(STORAGE_KEY);
   let entries: FeedbackEntry[] = data ? JSON.parse(data) : [];
 
   if (filters) {
@@ -245,7 +246,7 @@ export function submitFeedback(entry: Omit<FeedbackEntry, 'id' | 'timestamp'>): 
 
   // Keep max 1000 entries
   const trimmed = updated.slice(0, 1000);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
 
   return newEntry;
 }
@@ -254,7 +255,7 @@ export function deleteFeedback(id: string): boolean {
   const existing = getFeedbackList();
   const filtered = existing.filter(e => e.id !== id);
   if (filtered.length === existing.length) return false;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   return true;
 }
 
@@ -359,10 +360,10 @@ export function getFeedbackStats(): FeedbackStats {
 export function getSessionId(): string {
   if (typeof window === 'undefined') return 'server';
 
-  let sessionId = sessionStorage.getItem('befach_session_id');
+  let sessionId = safeSessionStorage.getItem('befach_session_id');
   if (!sessionId) {
     sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    sessionStorage.setItem('befach_session_id', sessionId);
+    safeSessionStorage.setItem('befach_session_id', sessionId);
   }
   return sessionId;
 }
@@ -522,7 +523,7 @@ export function generateDemoFeedback(): FeedbackEntry[] {
     }
   ];
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(demoEntries));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(demoEntries));
   return demoEntries;
 }
 

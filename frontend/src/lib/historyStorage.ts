@@ -1,3 +1,4 @@
+import { safeStorage } from '@/lib/safeStorage';
 /**
  * Unified History Storage Layer
  * Consolidates all localStorage operations for calculation history
@@ -107,8 +108,6 @@ const LEGACY_KEYS = [
   'calculationHistory'
 ];
 
-const isBrowser = typeof window !== 'undefined';
-
 class HistoryStorage {
   private storageKey: string;
   private migrated = false;
@@ -118,7 +117,7 @@ class HistoryStorage {
   }
 
   private ensureMigrated(): void {
-    if (!isBrowser || this.migrated) return;
+    if (this.migrated) return;
     this.migrated = true;
     this.migrateFromLegacyStorage();
   }
@@ -127,7 +126,6 @@ class HistoryStorage {
    * Migrate data from old localStorage keys to new unified key
    */
   private migrateFromLegacyStorage(): void {
-    if (!isBrowser) return;
     try {
       const existingData = this.getRawData();
 
@@ -141,7 +139,7 @@ class HistoryStorage {
 
       // Process each legacy key
       LEGACY_KEYS.forEach((key) => {
-        const rawData = localStorage.getItem(key);
+        const rawData = safeStorage.getItem(key);
         if (!rawData) return;
 
         try {
@@ -166,7 +164,7 @@ class HistoryStorage {
         console.log(`Migrated ${migratedData.length} calculations to new storage format`);
 
         // Clean up old keys after successful migration
-        LEGACY_KEYS.forEach(key => localStorage.removeItem(key));
+        LEGACY_KEYS.forEach(key => safeStorage.removeItem(key));
       }
     } catch (error) {
       console.error('Migration failed:', error);
@@ -243,9 +241,8 @@ class HistoryStorage {
    * Get raw data from localStorage
    */
   private getRawData(): CalculationRecord[] {
-    if (!isBrowser) return [];
     try {
-      const data = localStorage.getItem(this.storageKey);
+      const data = safeStorage.getItem(this.storageKey);
       return data ? JSON.parse(data) : [];
     } catch (error) {
       console.error('Failed to get data from storage:', error);
@@ -257,9 +254,8 @@ class HistoryStorage {
    * Save raw data to localStorage
    */
   private saveRawData(data: CalculationRecord[]): void {
-    if (!isBrowser) return;
     try {
-      localStorage.setItem(this.storageKey, JSON.stringify(data));
+      safeStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (error) {
       console.error('Failed to save data to storage:', error);
 
@@ -267,7 +263,7 @@ class HistoryStorage {
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
         // Remove oldest calculations if storage is full
         const trimmedData = data.slice(-1000); // Keep last 1000 calculations
-        localStorage.setItem(this.storageKey, JSON.stringify(trimmedData));
+        safeStorage.setItem(this.storageKey, JSON.stringify(trimmedData));
         console.warn('Storage quota exceeded. Kept only last 1000 calculations.');
       }
     }
@@ -701,9 +697,8 @@ class HistoryStorage {
    * Clear all data (use with caution!)
    */
   clearAll(): void {
-    if (!isBrowser) return;
     if (confirm('Are you sure you want to delete all calculation history? This cannot be undone.')) {
-      localStorage.removeItem(this.storageKey);
+      safeStorage.removeItem(this.storageKey);
     }
   }
 
@@ -711,8 +706,7 @@ class HistoryStorage {
    * Get storage size in bytes
    */
   getStorageSize(): number {
-    if (!isBrowser) return 0;
-    const data = localStorage.getItem(this.storageKey) || '';
+    const data = safeStorage.getItem(this.storageKey) || '';
     return new Blob([data]).size;
   }
 

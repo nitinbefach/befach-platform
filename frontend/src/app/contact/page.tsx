@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PublicLayout from '@/components/layout/PublicLayout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
+import { safeStorage } from '@/lib/safeStorage';
 
 export default function ContactPage() {
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
@@ -19,7 +20,7 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeStorage.getItem('theme');
     setDarkMode(savedTheme === 'dark');
   }, []);
 

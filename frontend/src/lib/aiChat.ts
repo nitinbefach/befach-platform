@@ -1,4 +1,5 @@
 import { AIMessage, AIConversation, AIResponseMatch, SuggestionChip } from '@/types/chat';
+import { safeStorage } from '@/lib/safeStorage';
 
 // ============ CONSTANTS ============
 
@@ -248,7 +249,7 @@ export function getSuggestionsForPage(pathname: string): SuggestionChip[] {
 function loadConversations(): AIConversation[] {
   if (typeof window === 'undefined') return [];
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    const data = safeStorage.getItem(STORAGE_KEY);
     if (!data) return [];
     const conversations: AIConversation[] = JSON.parse(data);
     return conversations.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
@@ -263,7 +264,7 @@ function saveConversations(conversations: AIConversation[]): void {
   const trimmed = conversations
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, MAX_CONVERSATIONS);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
 }
 
 export function getConversations(): AIConversation[] {
@@ -349,5 +350,5 @@ export function deleteConversation(id: string): boolean {
 
 export function clearAllConversations(): void {
   if (typeof window === 'undefined') return;
-  localStorage.removeItem(STORAGE_KEY);
+  safeStorage.removeItem(STORAGE_KEY);
 }

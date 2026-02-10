@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
+import { safeStorage } from '@/lib/safeStorage';
 
 type Theme = 'light' | 'dark';
 
@@ -18,7 +19,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     // Check localStorage first, then system preference
-    const savedTheme = localStorage.getItem('befach-theme') as Theme;
+    const savedTheme = safeStorage.getItem('befach-theme') as Theme;
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
@@ -31,7 +32,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('befach-theme', newTheme);
+    safeStorage.setItem('befach-theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ui/ThemeProvider'
 import { UserProvider } from '@/context/UserModeContext'
+import { safeStorage } from '@/lib/safeStorage';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -29,7 +30,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('befach-theme');
+                  var theme = safeStorage.getItem('befach-theme');
                   if (theme) {
                     document.documentElement.setAttribute('data-theme', theme);
                   } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
