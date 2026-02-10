@@ -142,7 +142,7 @@ export default function HomePage() {
           </div>
 
           <div className="nav-actions">
-            <Link href="/login" className="nav-login">Log in</Link>
+            <Link href="/onboarding" className="nav-login">Log in</Link>
             <Link href="/onboarding" className="nav-cta">Get Started Free</Link>
           </div>
 
@@ -159,7 +159,7 @@ export default function HomePage() {
             <Link href="/market-insights">EXIM Data</Link>
             <Link href="/smart-sourcing">Sourcing</Link>
             <div className="mobile-divider"></div>
-            <Link href="/login">Log in</Link>
+            <Link href="/onboarding">Log in</Link>
             <Link href="/onboarding" className="mobile-cta">Get Started Free</Link>
           </div>
         )}
@@ -591,7 +591,7 @@ export default function HomePage() {
               <h4>Company</h4>
               <Link href="/about">About Us</Link>
               <Link href="/contact">Contact</Link>
-              <Link href="/login">Login</Link>
+              <Link href="/onboarding">Login</Link>
               <Link href="/onboarding">Sign Up</Link>
             </div>
           </div>

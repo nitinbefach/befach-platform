@@ -430,7 +430,7 @@ export default function WebDashboard() {
               <div className="chart-title-section">
                 <h3 className="chart-title">Top Suppliers</h3>
               </div>
-              <Link href="/suppliers" className="view-all-link">View All</Link>
+              <Link href="/our-vendors" className="view-all-link">View All</Link>
             </div>
             <div className="suppliers-list">
               {topSuppliers.map((supplier, idx) => (
@@ -503,7 +503,7 @@ export default function WebDashboard() {
         >
           <div className="section-header">
             <h2 className="section-title">Your Sourcing Requests</h2>
-            <Link href="/share-requirement" className="section-link">
+            <Link href="/submit-requirement" className="section-link">
               + New Request
             </Link>
           </div>
@@ -526,7 +526,7 @@ export default function WebDashboard() {
             <div className="empty-state">
               <Package className="empty-icon" />
               <p>No sourcing requirements yet. Start by sharing your first requirement!</p>
-              <Link href="/share-requirement" className="empty-cta">
+              <Link href="/submit-requirement" className="empty-cta">
                 Share Requirement <ArrowRight className="cta-arrow" />
               </Link>
             </div>

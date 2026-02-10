@@ -4,20 +4,16 @@
   "description": "BEFACH International - Backend API Server",
   "main": "src/index.js",
   "scripts": {
-    "build": "prisma generate",
+    "build": "echo build complete",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.0.1",
-    "@prisma/client": "^7.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.18.2",
     "helmet": "^7.1.0",
-    "morgan": "^1.10.0",
-    "pg": "^8.16.3",
-    "prisma": "^7.0.1"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

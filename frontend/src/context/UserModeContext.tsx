@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export type UserRole = 'owner' | 'admin' | 'member' | 'viewer';
 
@@ -55,71 +55,43 @@ const defaultSidebarPreferences: SidebarPreferences = {
   hiddenItems: []
 };
 
+const defaultOrganization: Organization = {
+  name: 'Befach Demo',
+  type: 'company',
+  teamSize: '2-5',
+  primaryGoals: ['source-products', 'track-shipments', 'calculate-costs'],
+};
+
+const defaultSubscription: Subscription = {
+  plan: 'free',
+  seats: 5,
+  validUntil: null,
+};
+
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [organization, setOrganization] = useState<Organization | null>(null);
-  const [userRole, setUserRole] = useState<UserRole>('owner');
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [organization, setOrganization] = useState<Organization | null>(defaultOrganization);
+  const [userRole] = useState<UserRole>('owner');
+  const [subscription, setSubscription] = useState<Subscription | null>(defaultSubscription);
   const [sidebarPreferences, setSidebarPreferences] = useState<SidebarPreferences>(defaultSidebarPreferences);
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
-  const [hasCompletedTour, setHasCompletedTour] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(true);
+  const [hasCompletedTour, setHasCompletedTour] = useState(true);
+  const [isLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
 
-  // Load saved state from localStorage
+  // Load saved sidebar preferences from localStorage
   useEffect(() => {
     setMounted(true);
     try {
-      const savedUser = localStorage.getItem(STORAGE_KEY);
       const savedPrefs = localStorage.getItem(SIDEBAR_PREFS_KEY);
-      const savedOnboarding = localStorage.getItem(ONBOARDING_KEY);
-      const savedTour = localStorage.getItem(TOUR_KEY);
-      
-      if (savedUser) {
-        const userData = JSON.parse(savedUser);
-        setIsAuthenticated(true);
-        setOrganization(userData.organization);
-        setSubscription(userData.subscription || {
-          plan: 'free',
-          seats: 1,
-          validUntil: null
-        });
-      }
-      
       if (savedPrefs) {
         setSidebarPreferences(JSON.parse(savedPrefs));
       }
-
-      if (savedOnboarding === 'true') {
-        setHasCompletedOnboarding(true);
-      }
-
-      if (savedTour === 'true') {
-        setHasCompletedTour(true);
-      }
     } catch (e) {
       console.error('Error loading user data:', e);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
-
-  // Redirect unauthenticated users to home (except public routes)
-  useEffect(() => {
-    const publicRoutes = ['/', '/onboarding'];
-    if (!isLoading && mounted && !isAuthenticated && !publicRoutes.includes(pathname)) {
-      router.push('/');
-    }
-  }, [isAuthenticated, isLoading, mounted, pathname, router]);
-
-  // Redirect authenticated users who haven't completed onboarding
-  useEffect(() => {
-    if (!isLoading && mounted && isAuthenticated && !hasCompletedOnboarding && pathname !== '/onboarding') {
-      router.push('/onboarding');
-    }
-  }, [isAuthenticated, hasCompletedOnboarding, isLoading, mounted, pathname, router]);
 
   const login = useCallback((org: Organization) => {
     setIsAuthenticated(true);

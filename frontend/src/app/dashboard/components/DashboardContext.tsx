@@ -321,7 +321,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       icon: FileText,
       title: 'Share Requirement',
       count: requirements.length > 0 ? `${requirements.length} active` : 'Start now',
-      href: '/share-requirement',
+      href: '/submit-requirement',
       color: '#3b82f6'
     },
     {
@@ -335,7 +335,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       icon: Users,
       title: 'Find Suppliers',
       count: '12 saved',
-      href: '/suppliers',
+      href: '/our-vendors',
       color: '#f59e0b'
     },
     {
