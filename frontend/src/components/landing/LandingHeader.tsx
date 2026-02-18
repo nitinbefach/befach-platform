@@ -298,10 +298,16 @@ export default function LandingHeader() {
 
         .mobile-cta {
           margin-top: 8px;
-          justify-content: center;
+          display: block;
           width: 100%;
           padding: 14px;
           font-size: 1rem;
+          text-align: center;
+          background: var(--landing-primary-end);
+          color: #ffffff;
+          border-radius: 10px;
+          text-decoration: none;
+          font-weight: 600;
         }
 
         @media (max-width: 768px) {
