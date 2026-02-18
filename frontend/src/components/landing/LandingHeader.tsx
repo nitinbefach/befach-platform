@@ -281,33 +281,25 @@ export default function LandingHeader() {
         }
 
         .mobile-login {
-          margin-top: auto;
-          padding-top: 24px;
-          justify-content: center;
+          margin-top: 20px;
           width: 100%;
-          padding: 15px;
-          font-size: 0.95rem;
+          padding: 14px;
+          font-size: 1rem;
           font-weight: 600;
           font-family: inherit;
+          text-align: center;
           border: 1.5px solid #d1d5db;
-          border-radius: 12px;
+          border-radius: 10px;
           color: #1f2937;
           background: #ffffff;
           cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .mobile-login:hover {
-          border-color: #f97316;
-          color: #f97316;
-          background: #fff7ed;
         }
 
         .mobile-cta {
           margin-top: 10px;
           display: block;
           width: 100%;
-          padding: 16px;
+          padding: 14px;
           font-size: 1rem;
           font-weight: 700;
           font-family: inherit;
@@ -316,16 +308,7 @@ export default function LandingHeader() {
           background: #f97316;
           color: #ffffff !important;
           border: none;
-          border-radius: 12px;
-          letter-spacing: 0.01em;
-          box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
-          transition: all 0.2s ease;
-        }
-
-        .mobile-cta:hover {
-          background: #ea580c;
-          box-shadow: 0 6px 20px rgba(249, 115, 22, 0.45);
-          transform: translateY(-1px);
+          border-radius: 10px;
         }
 
         @media (max-width: 768px) {
