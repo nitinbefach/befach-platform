@@ -88,8 +88,8 @@ export default function LandingHeader() {
           {isReturningUser ? 'Go to Dashboard' : 'Login'}
         </button>
         {!isReturningUser && (
-          <Link href="/onboarding" className="btn btn-primary mobile-cta" onClick={closeMenu}>
-            <span className="mobile-cta-arrow">→</span> Start Free Trial
+          <Link href="/onboarding" className="mobile-cta" onClick={closeMenu}>
+            Start Free Trial
           </Link>
         )}
       </div>
@@ -281,38 +281,51 @@ export default function LandingHeader() {
         }
 
         .mobile-login {
-          margin-top: 16px;
+          margin-top: auto;
+          padding-top: 24px;
           justify-content: center;
           width: 100%;
-          padding: 14px;
-          font-size: 1rem;
-          border: 1.5px solid var(--landing-border);
-          color: var(--landing-text-heading);
-          background: transparent;
+          padding: 15px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          font-family: inherit;
+          border: 1.5px solid #d1d5db;
+          border-radius: 12px;
+          color: #1f2937;
+          background: #ffffff;
+          cursor: pointer;
+          transition: all 0.2s ease;
         }
 
         .mobile-login:hover {
-          border-color: var(--landing-primary-end);
-          color: var(--landing-primary-end);
+          border-color: #f97316;
+          color: #f97316;
+          background: #fff7ed;
         }
 
         .mobile-cta {
-          margin-top: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
+          margin-top: 10px;
+          display: block;
           width: 100%;
           padding: 16px;
           font-size: 1rem;
-          background: #d97706;
-          color: #ffffff !important;
-          border-radius: 12px;
+          font-weight: 700;
+          font-family: inherit;
+          text-align: center;
           text-decoration: none;
-          font-weight: 600;
+          background: #f97316;
+          color: #ffffff !important;
+          border: none;
+          border-radius: 12px;
+          letter-spacing: 0.01em;
+          box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+          transition: all 0.2s ease;
         }
-        .mobile-cta-arrow {
-          font-size: 1.1rem;
+
+        .mobile-cta:hover {
+          background: #ea580c;
+          box-shadow: 0 6px 20px rgba(249, 115, 22, 0.45);
+          transform: translateY(-1px);
         }
 
         @media (max-width: 768px) {
