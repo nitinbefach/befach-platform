@@ -88,9 +88,9 @@ export default function LandingHeader() {
           {isReturningUser ? 'Go to Dashboard' : 'Login'}
         </button>
         {!isReturningUser && (
-          <Link href="/onboarding" className="mobile-cta" onClick={closeMenu}>
-            Start Free Trial
-          </Link>
+          <button className="mobile-cta" onClick={() => { closeMenu(); router.push('/onboarding'); }}>
+            <span className="cta-arrow">→</span> Start Free Trial
+          </button>
         )}
       </div>
 
@@ -297,18 +297,23 @@ export default function LandingHeader() {
 
         .mobile-cta {
           margin-top: 10px;
-          display: block;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
           width: 100%;
-          padding: 14px;
+          padding: 16px;
           font-size: 1rem;
           font-weight: 700;
           font-family: inherit;
-          text-align: center;
-          text-decoration: none;
           background: #f97316;
-          color: #ffffff !important;
+          color: #ffffff;
           border: none;
           border-radius: 10px;
+          cursor: pointer;
+        }
+        .cta-arrow {
+          font-size: 1.15rem;
         }
 
         @media (max-width: 768px) {
