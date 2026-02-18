@@ -500,8 +500,8 @@ export default function MyOrdersPage() {
           min-height: 38px;
         }
         .btn-primary {
-          background: var(--accent);
-          color: white;
+          background: #f97316 !important;
+          color: white !important;
         }
         .btn-primary:hover { opacity: 0.9; }
         .btn-ghost {

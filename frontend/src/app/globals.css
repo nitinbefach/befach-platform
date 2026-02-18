@@ -1503,6 +1503,8 @@ body {
         padding: 20px;
         margin: 12px;
         border-radius: var(--radius-lg);
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
     }
 
     .modal-actions {
