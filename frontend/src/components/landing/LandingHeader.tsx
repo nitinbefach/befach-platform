@@ -282,12 +282,14 @@ export default function LandingHeader() {
 
         .mobile-login {
           margin-top: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 100%;
           padding: 14px;
           font-size: 1rem;
           font-weight: 600;
           font-family: inherit;
-          text-align: center;
           border: 1.5px solid #d1d5db;
           border-radius: 10px;
           color: #1f2937;
