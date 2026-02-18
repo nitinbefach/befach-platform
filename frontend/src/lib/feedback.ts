@@ -248,6 +248,18 @@ export function submitFeedback(entry: Omit<FeedbackEntry, 'id' | 'timestamp'>): 
   const trimmed = updated.slice(0, 1000);
   safeStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
 
+  // Sync to backend (Google Sheets + JSON backup) — fire-and-forget
+  if (typeof window !== 'undefined') {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+    fetch(`${apiUrl}/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newEntry),
+    }).catch(() => {
+      // Silent fail — localStorage is the primary store
+    });
+  }
+
   return newEntry;
 }
 
@@ -401,136 +413,3 @@ export function downloadFeedbackCSV(): void {
   URL.revokeObjectURL(url);
 }
 
-// ============================================================================
-// DEMO DATA GENERATION
-// ============================================================================
-
-export function generateDemoFeedback(): FeedbackEntry[] {
-  const now = new Date();
-  const demoEntries: FeedbackEntry[] = [
-    {
-      id: 'fb_demo_001', type: 'stars', feature: 'vendor-management', response: 5,
-      sentiment: 'positive', comments: 'The kanban board view makes it very easy to track vendor relationships at a glance.',
-      timestamp: new Date(now.getTime() - 5 * 86400000).toISOString(), sessionId: 'session_demo_001'
-    },
-    {
-      id: 'fb_demo_002', type: 'thumbs', feature: 'cost-calculator', response: 'up',
-      sentiment: 'positive', timestamp: new Date(now.getTime() - 5 * 86400000).toISOString(), sessionId: 'session_demo_001'
-    },
-    {
-      id: 'fb_demo_003', type: 'scale', feature: 'cost-calculator', response: 4,
-      sentiment: 'positive', comments: 'Calculation seems accurate but would like more transparency on duty rates.',
-      timestamp: new Date(now.getTime() - 4 * 86400000).toISOString(), sessionId: 'session_demo_002'
-    },
-    {
-      id: 'fb_demo_004', type: 'nps', feature: 'overall-satisfaction', response: 8,
-      sentiment: 'neutral', timestamp: new Date(now.getTime() - 4 * 86400000).toISOString(), sessionId: 'session_demo_002'
-    },
-    {
-      id: 'fb_demo_005', type: 'emoji', feature: 'performance-review', response: 'happy',
-      sentiment: 'positive', timestamp: new Date(now.getTime() - 4 * 86400000).toISOString(), sessionId: 'session_demo_003'
-    },
-    {
-      id: 'fb_demo_006', type: 'survey', feature: 'vendor-management', response: { vm_usage: 'Daily', vm_pipeline: 5, vm_health_scores: 'Overall Score', vm_missing: 'Automated vendor onboarding would be helpful', vm_recommend: 'Yes' },
-      sentiment: 'positive', surveyType: 'vendor_management', completionTime: 125000, completionRate: 100,
-      timestamp: new Date(now.getTime() - 3 * 86400000).toISOString(), sessionId: 'session_demo_004'
-    },
-    {
-      id: 'fb_demo_007', type: 'thumbs', feature: 'document-management', response: 'down',
-      sentiment: 'negative', comments: 'Upload process is slow for large files',
-      timestamp: new Date(now.getTime() - 3 * 86400000).toISOString(), sessionId: 'session_demo_005'
-    },
-    {
-      id: 'fb_demo_008', type: 'stars', feature: 'cost-calculator', response: 3,
-      sentiment: 'neutral', timestamp: new Date(now.getTime() - 3 * 86400000).toISOString(), sessionId: 'session_demo_005'
-    },
-    {
-      id: 'fb_demo_009', type: 'scale', feature: 'performance-review', response: 5,
-      sentiment: 'positive', comments: 'Charts are clear and informative',
-      timestamp: new Date(now.getTime() - 2 * 86400000).toISOString(), sessionId: 'session_demo_006'
-    },
-    {
-      id: 'fb_demo_010', type: 'nps', feature: 'overall-satisfaction', response: 9,
-      sentiment: 'positive', timestamp: new Date(now.getTime() - 2 * 86400000).toISOString(), sessionId: 'session_demo_006'
-    },
-    {
-      id: 'fb_demo_011', type: 'emoji', feature: 'vendor-management', response: 'neutral',
-      sentiment: 'neutral', timestamp: new Date(now.getTime() - 2 * 86400000).toISOString(), sessionId: 'session_demo_007'
-    },
-    {
-      id: 'fb_demo_012', type: 'stars', feature: 'vendor-management', response: 4,
-      sentiment: 'positive', timestamp: new Date(now.getTime() - 2 * 86400000).toISOString(), sessionId: 'session_demo_008'
-    },
-    {
-      id: 'fb_demo_013', type: 'survey', feature: 'cost-calculator', response: { cc_accuracy: 4, cc_wizard: 'Just right', cc_missing_costs: ['Insurance', 'Currency conversion'], cc_export: 'Yes', cc_improvements: 'Add support for multiple currency calculations' },
-      sentiment: 'positive', surveyType: 'cost_calculator', completionTime: 95000, completionRate: 100,
-      timestamp: new Date(now.getTime() - 1 * 86400000).toISOString(), sessionId: 'session_demo_009'
-    },
-    {
-      id: 'fb_demo_014', type: 'thumbs', feature: 'supplier-search', response: 'up',
-      sentiment: 'positive', timestamp: new Date(now.getTime() - 1 * 86400000).toISOString(), sessionId: 'session_demo_010'
-    },
-    {
-      id: 'fb_demo_015', type: 'scale', feature: 'market-insights', response: 4,
-      sentiment: 'positive', timestamp: new Date(now.getTime() - 1 * 86400000).toISOString(), sessionId: 'session_demo_011'
-    },
-    {
-      id: 'fb_demo_016', type: 'nps', feature: 'overall-satisfaction', response: 7,
-      sentiment: 'neutral', timestamp: new Date(now.getTime() - 1 * 86400000).toISOString(), sessionId: 'session_demo_011'
-    },
-    {
-      id: 'fb_demo_017', type: 'emoji', feature: 'cost-calculator', response: 'sad',
-      sentiment: 'negative', comments: 'Too many steps in the wizard',
-      timestamp: new Date(now.getTime() - 0.5 * 86400000).toISOString(), sessionId: 'session_demo_012'
-    },
-    {
-      id: 'fb_demo_018', type: 'stars', feature: 'performance-review', response: 5,
-      sentiment: 'positive', comments: 'Excellent visualization of vendor performance metrics',
-      timestamp: new Date(now.getTime() - 0.5 * 86400000).toISOString(), sessionId: 'session_demo_013'
-    },
-    {
-      id: 'fb_demo_019', type: 'nps', feature: 'overall-satisfaction', response: 10,
-      sentiment: 'positive', comments: 'Would definitely recommend to other procurement teams',
-      timestamp: new Date(now.getTime() - 0.25 * 86400000).toISOString(), sessionId: 'session_demo_015'
-    },
-    {
-      id: 'fb_demo_020', type: 'survey', feature: 'general', response: { g_first_impression: 4, g_pain_points: ['Navigation confusion', 'Unclear terminology'], g_most_valuable: 'Vendor Management', g_adoption: 'Probably will', g_final_thoughts: 'Overall a solid platform, needs some UX improvements' },
-      sentiment: 'neutral', surveyType: 'general', completionTime: 180000, completionRate: 100,
-      timestamp: new Date(now.getTime() - 0.1 * 86400000).toISOString(), sessionId: 'session_demo_014'
-    },
-    {
-      id: 'fb_demo_021', type: 'stars', feature: 'supplier-search', response: 4,
-      sentiment: 'positive', comments: 'AI search is impressive, found exactly what I needed',
-      timestamp: new Date(now.getTime() - 0.05 * 86400000).toISOString(), sessionId: 'session_demo_016'
-    },
-    {
-      id: 'fb_demo_022', type: 'scale', feature: 'vendor-management', response: 3,
-      sentiment: 'neutral', timestamp: new Date(now.getTime() - 0.02 * 86400000).toISOString(), sessionId: 'session_demo_015'
-    },
-    {
-      id: 'fb_demo_023', type: 'thumbs', feature: 'shipment-tracking', response: 'up',
-      sentiment: 'positive', comments: 'Real-time tracking is very useful',
-      timestamp: new Date(now.getTime() - 0.01 * 86400000).toISOString(), sessionId: 'session_demo_016'
-    },
-    {
-      id: 'fb_demo_024', type: 'stars', feature: 'market-insights', response: 5,
-      sentiment: 'positive', comments: 'Market data helps with pricing decisions',
-      timestamp: new Date(now.getTime() - 0.005 * 86400000).toISOString(), sessionId: 'session_demo_017'
-    },
-    {
-      id: 'fb_demo_025', type: 'emoji', feature: 'general', response: 'happy',
-      sentiment: 'positive', timestamp: new Date().toISOString(), sessionId: 'session_demo_017'
-    }
-  ];
-
-  safeStorage.setItem(STORAGE_KEY, JSON.stringify(demoEntries));
-  return demoEntries;
-}
-
-export function initializeFeedback(): FeedbackEntry[] {
-  const existing = getFeedbackList();
-  if (existing.length === 0) {
-    return generateDemoFeedback();
-  }
-  return existing;
-}

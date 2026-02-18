@@ -5,7 +5,7 @@
  *
  * Features:
  * - Horizontal scroll metrics strip
- * - Quick Actions via BottomSheet
+ * - Quick Actions via centered popup modal
  * - Collapsible chart sections
  * - Card-based data displays
  * - 44px+ touch targets
@@ -21,13 +21,12 @@ import {
   Zap, BarChart3, Calculator, ArrowRight,
   Sparkles
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AppLayout from '@/components/layout/AppLayout';
-import { BottomSheet } from '@/components/ui/BottomSheet';
 import { useDashboard, timeAgo } from './DashboardContext';
 
 // Import shared components
 import {
-  CollapsibleSection,
   OrderCard,
   CalculationCard,
   InsightCard,
@@ -80,35 +79,60 @@ function MobileQuickActions() {
         <ChevronRight size={18} />
       </button>
 
-      <BottomSheet
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="Quick Actions"
-        snapPoints={[0.45]}
-      >
-        <div className="actions-grid">
-          {quickActions.map((action, idx) => {
-            const Icon = action.icon;
-            return (
-              <Link
-                key={idx}
-                href={action.href}
-                className="action-card"
-                onClick={() => setIsOpen(false)}
-              >
-                <div
-                  className="action-icon"
-                  style={{ backgroundColor: `${action.color}15` }}
-                >
-                  <Icon size={22} style={{ color: action.color }} />
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="qa-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="qa-backdrop" onClick={() => setIsOpen(false)} />
+            <motion.div
+              className="qa-modal"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+            >
+              <div className="qa-modal-header">
+                <div className="qa-modal-title">
+                  <Zap size={18} />
+                  <h3>Quick Actions</h3>
                 </div>
-                <span className="action-title">{action.title}</span>
-                <span className="action-count">{action.count}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </BottomSheet>
+                <button className="qa-close-btn" onClick={() => setIsOpen(false)}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+              <div className="actions-grid">
+                {quickActions.map((action, idx) => {
+                  const Icon = action.icon;
+                  return (
+                    <Link
+                      key={idx}
+                      href={action.href}
+                      className="action-card"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <div
+                        className="action-icon"
+                        style={{ backgroundColor: `${action.color}15` }}
+                      >
+                        <Icon size={22} style={{ color: action.color }} />
+                      </div>
+                      <span className="action-title">{action.title}</span>
+                      <span className="action-count">{action.count}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
@@ -145,18 +169,14 @@ export default function MobileDashboard() {
     marketInsights,
     calculationsLoading,
   } = useDashboard();
-
   return (
     <AppLayout searchPlaceholder="Search...">
       <div className="mobile-dashboard">
         {/* Compact Welcome */}
         <div className="mobile-welcome">
           <div className="welcome-text">
-            <h1>Hi, {organization?.name || 'there'}! <span className="wave">👋</span></h1>
+            <h1>Hi, {organization?.name || 'there'}! <span className="wave"></span></h1>
           </div>
-          <Link href="/ai-assistant" className="ai-fab">
-            <Sparkles size={20} />
-          </Link>
         </div>
 
         {/* Horizontal Scroll Metrics */}
@@ -165,15 +185,14 @@ export default function MobileDashboard() {
         {/* Quick Actions Button */}
         <MobileQuickActions />
 
-        {/* Collapsible Analytics Section - Using shared component */}
-        <CollapsibleSection
-          title="Analytics"
-          icon={BarChart3}
-          defaultOpen={false}
-          summary={<ChartSummaryStats />}
-        >
+        {/* Analytics Section */}
+        <section className="analytics-section">
+          <h2 className="section-title-text">
+            <BarChart3 size={20} />
+            Analytics
+          </h2>
           <ChartSummaryStats />
-        </CollapsibleSection>
+        </section>
 
         {/* Active Orders - Using shared OrderCard */}
         <section className="mobile-section">
@@ -321,18 +340,6 @@ export default function MobileDashboard() {
           margin: 4px 0 0 0;
         }
 
-        .ai-fab {
-          width: 44px;
-          height: 44px;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #8b5cf6, #6366f1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
         /* ============ METRICS STRIP ============ */
         .metrics-strip {
           display: flex;
@@ -432,7 +439,67 @@ export default function MobileDashboard() {
           margin-left: 12px;
         }
 
-        /* ============ ACTIONS GRID (BOTTOM SHEET) ============ */
+        /* ============ QUICK ACTIONS MODAL ============ */
+        .qa-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 1100;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .qa-backdrop {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.4);
+        }
+
+        .qa-modal {
+          position: relative;
+          width: calc(100% - 40px);
+          max-width: 360px;
+          background: var(--bg-secondary);
+          border-radius: 20px;
+          padding: 20px;
+          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+        }
+
+        .qa-modal-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 16px;
+        }
+
+        .qa-modal-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #f97316;
+        }
+
+        .qa-modal-title h3 {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+
+        .qa-close-btn {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-tertiary);
+          border: none;
+          border-radius: 8px;
+          color: var(--text-secondary);
+          cursor: pointer;
+        }
+
+        /* ============ ACTIONS GRID ============ */
         .actions-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -470,6 +537,17 @@ export default function MobileDashboard() {
         .action-count {
           font-size: 0.75rem;
           color: var(--text-secondary);
+        }
+
+        /* ============ ANALYTICS SECTION ============ */
+        .analytics-section {
+          background: var(--bg-secondary);
+          border-radius: 14px;
+          border: 1px solid var(--border-color);
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
         }
 
         /* ============ CHART SUMMARY STATS ============ */
@@ -514,6 +592,10 @@ export default function MobileDashboard() {
 
         /* ============ MOBILE SECTIONS ============ */
         .mobile-section {
+          background: var(--bg-secondary);
+          border-radius: 14px;
+          border: 1px solid var(--border-color);
+          padding: 16px;
           display: flex;
           flex-direction: column;
           gap: 12px;
@@ -523,6 +605,7 @@ export default function MobileDashboard() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          padding-bottom: 4px;
         }
 
         .section-title-text {
@@ -575,7 +658,16 @@ export default function MobileDashboard() {
         .reqs-stack {
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 8px;
+        }
+
+        /* Remove double borders on inner cards within section containers */
+        .mobile-section .orders-stack :global(.mobile-order-card),
+        .mobile-section .calcs-stack :global(.mobile-calc-card),
+        .mobile-section .reqs-stack :global(.mobile-req-card) {
+          border: none;
+          background: var(--bg-primary);
+          border-radius: 10px;
         }
 
         /* ============ INSIGHTS SCROLL ============ */

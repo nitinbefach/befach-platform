@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface LogoProps {
   size?: 'small' | 'medium' | 'large';
@@ -15,13 +16,17 @@ export default function Logo({
   linkTo = '/',
   className = ''
 }: LogoProps) {
-  const sizes = {
-    small: { icon: 32, textSize: '1rem', taglineSize: '0.5rem' },
-    medium: { icon: 40, textSize: '1.25rem', taglineSize: '0.6rem' },
-    large: { icon: 48, textSize: '1.5rem', taglineSize: '0.7rem' },
+  // Height of the logo image based on size prop
+  const heights = {
+    small: 28,
+    medium: 36,
+    large: 44,
   };
 
-  const { icon, textSize, taglineSize } = sizes[size];
+  const h = heights[size];
+  // The logo.png aspect ratio is roughly 3.2:1 (wide with text), icon-only ~1:1
+  // When showText=false, show just the icon portion (square crop via object-fit)
+  const w = showText ? Math.round(h * 3.2) : h;
 
   const logoContent = (
     <div
@@ -29,44 +34,44 @@ export default function Logo({
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '12px',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        flexShrink: 0,
       }}
     >
-      <svg
-        width={icon}
-        height={icon}
-        viewBox="0 0 60 60"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{ flexShrink: 0 }}
-      >
-        {/* 3D Box Logo */}
-        <polygon points="30,5 55,17 30,29 5,17" fill="#8B5A2B"/>
-        <polygon points="30,29 55,17 55,43 30,55" fill="#F57C00"/>
-        <polygon points="5,17 30,29 30,55 5,43" fill="#A0522D"/>
-      </svg>
-
-      {showText && (
+      {showText ? (
+        <Image
+          src="/logo.png"
+          alt="Befach International"
+          width={w}
+          height={h}
+          style={{
+            height: h,
+            width: 'auto',
+            objectFit: 'contain',
+          }}
+          priority
+        />
+      ) : (
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          lineHeight: 1.1
+          width: h,
+          height: h,
+          overflow: 'hidden',
+          position: 'relative',
+          flexShrink: 0,
         }}>
-          <span style={{
-            fontSize: textSize,
-            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-            fontWeight: 700,
-            color: '#F57C00',
-            letterSpacing: '0.5px'
-          }}>BEFACH</span>
-          <span style={{
-            fontSize: taglineSize,
-            fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-            fontWeight: 500,
-            color: 'var(--text-secondary, #78716c)',
-            letterSpacing: '2px',
-            textTransform: 'uppercase'
-          }}>INTERNATIONAL</span>
+          <Image
+            src="/logo.png"
+            alt="Befach"
+            width={200}
+            height={60}
+            style={{
+              height: h,
+              width: 'auto',
+              objectFit: 'cover',
+              objectPosition: 'left center',
+            }}
+            priority
+          />
         </div>
       )}
     </div>

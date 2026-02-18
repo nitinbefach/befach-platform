@@ -312,7 +312,230 @@
   color: white;
 }
 
-/* Mobile */
+/* ─── Expanded Desktop Sidebar ─── */
+
+/* Wider sidebar when expanded */
+.iconSidebarExpanded {
+  width: 240px;
+  min-width: 240px;
+}
+
+.iconSidebarExpanded .sidebarLogo {
+  justify-content: flex-start;
+  padding: 0 16px;
+  gap: 10px;
+}
+
+.orgName {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--sidebar-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nav item with inline label */
+.navItemExpanded {
+  justify-content: flex-start;
+  padding: 0 12px;
+  gap: 0;
+}
+
+.navItemExpanded .iconWrapper {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.navItemExpanded .iconWrapper svg {
+  width: 18px;
+  height: 18px;
+}
+
+.navLabel {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--sidebar-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  margin-left: 10px;
+  transition: color 0.15s ease;
+}
+
+.navItemExpanded:hover .navLabel {
+  color: var(--sidebar-text);
+}
+
+.navItemExpanded.active .navLabel {
+  color: white;
+}
+
+/* Section chevron */
+.sectionChevron {
+  width: 16px;
+  height: 16px;
+  color: var(--sidebar-text-muted);
+  transition: transform 0.2s ease, color 0.15s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.sectionChevron svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sectionChevronOpen {
+  transform: rotate(90deg);
+}
+
+.navItemExpanded:hover .sectionChevron {
+  color: var(--sidebar-text);
+}
+
+/* ─── Inline Accordion Children ─── */
+
+.inlineChildren {
+  padding: 2px 0 6px 0;
+  overflow: hidden;
+}
+
+.inlineSectionTitle {
+  color: var(--sidebar-text-muted);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 16px 4px 54px;
+  font-weight: 600;
+}
+
+.inlineChildItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px 7px 54px;
+  color: var(--sidebar-text-muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 450;
+  border-radius: 6px;
+  margin: 1px 8px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.inlineChildItem:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
+}
+
+.inlineChildItem.active {
+  background: var(--accent-gradient);
+  color: white;
+}
+
+.childIcon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+.childIcon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.inlineChildItem:hover .childIcon {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.inlineChildItem.active .childIcon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.inlineChildItem.active .childIcon svg {
+  color: white;
+}
+
+.childLabel {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inlineChildBadge {
+  background: rgba(249, 115, 22, 0.2);
+  color: var(--accent-primary);
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.inlineChildItem.active .inlineChildBadge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Expanded footer with label */
+.logoutExpanded {
+  justify-content: flex-start;
+  padding: 0 12px;
+  gap: 0;
+}
+
+.logoutExpanded .iconWrapper {
+  width: 36px;
+  height: 36px;
+}
+
+.logoutLabel {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--sidebar-text-muted);
+  margin-left: 10px;
+  transition: color 0.15s ease;
+}
+
+.logoutExpanded:hover .logoutLabel {
+  color: #ef4444;
+}
+
+/* Nav overflow scroll for expanded sidebar */
+.navIconsExpanded {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sidebar-border) transparent;
+}
+
+/* ─── Desktop: hide flyout panels when sidebar expanded ─── */
+@media (min-width: 1025px) {
+  .expandPanel {
+    display: none !important;
+  }
+
+  .navItemExpanded .tooltip {
+    display: none;
+  }
+
+  /* Active indicator adjusted for expanded sidebar */
+  .navItemExpanded.active::before {
+    width: 3px;
+    height: 24px;
+  }
+}
+
+/* ─── Mobile ─── */
 @media (max-width: 1024px) {
   .sidebarWrapper {
     display: none;

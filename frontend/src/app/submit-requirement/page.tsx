@@ -11,6 +11,7 @@ import {
   STATUS_CONFIG,
   UrgencyLevel,
 } from '@/lib/requirements';
+import { Package, ClipboardList, Search, CheckCircle, FolderOpen, Clock, Zap, Flame, Lightbulb, FileText, Download, BarChart3 } from 'lucide-react';
 
 type TabType = 'single' | 'bulk';
 
@@ -285,7 +286,7 @@ export default function SubmitRequirementPage() {
 
             {/* Product Summary */}
             <div className="product-summary">
-              <div className="summary-icon">{isBulk ? '📦' : '📋'}</div>
+              <div className="summary-icon">{isBulk ? <Package size={20} /> : <ClipboardList size={20} />}</div>
               <div className="summary-text">
                 <span className="product-name">{submittedRequirement.title}</span>
                 {productCount > 1 && (
@@ -320,7 +321,7 @@ export default function SubmitRequirementPage() {
                 </div>
                 <div className="timeline-connector"></div>
                 <div className="timeline-item upcoming">
-                  <div className="timeline-dot">🔍</div>
+                  <div className="timeline-dot"><Search size={16} /></div>
                   <div className="timeline-content">
                     <span className="timeline-time">~24 hours</span>
                     <span className="timeline-label">Supplier Matching</span>
@@ -328,7 +329,7 @@ export default function SubmitRequirementPage() {
                 </div>
                 <div className="timeline-connector"></div>
                 <div className="timeline-item upcoming">
-                  <div className="timeline-dot">📋</div>
+                  <div className="timeline-dot"><ClipboardList size={16} /></div>
                   <div className="timeline-content">
                     <span className="timeline-time">~48 hours</span>
                     <span className="timeline-label">Quotes Received</span>
@@ -336,7 +337,7 @@ export default function SubmitRequirementPage() {
                 </div>
                 <div className="timeline-connector"></div>
                 <div className="timeline-item upcoming">
-                  <div className="timeline-dot">✅</div>
+                  <div className="timeline-dot"><CheckCircle size={16} /></div>
                   <div className="timeline-content">
                     <span className="timeline-time">~72 hours</span>
                     <span className="timeline-label">Deal Finalized</span>
@@ -763,13 +764,11 @@ export default function SubmitRequirementPage() {
   }
 
   return (
-    <AppLayout>
-      <div className="page-container">
+    <AppLayout>      <div className="page-container">
         {/* Header */}
         <div className="content-header">
           <h1>Share Your Requirement</h1>
-          <p>Tell us what you need and we&apos;ll find the best suppliers for you</p>
-        </div>
+          <p>Tell us what you need and we&apos;ll find the best suppliers for you</p>        </div>
 
         {/* Tabs */}
         <div className="tabs-container">
@@ -777,14 +776,14 @@ export default function SubmitRequirementPage() {
             className={`tab ${activeTab === 'single' ? 'active' : ''}`}
             onClick={() => setActiveTab('single')}
           >
-            <span className="tab-icon">🔍</span>
+            <span className="tab-icon"><Search size={16} /></span>
             <span className="tab-label">Single Product</span>
           </button>
           <button
             className={`tab ${activeTab === 'bulk' ? 'active' : ''}`}
             onClick={() => setActiveTab('bulk')}
           >
-            <span className="tab-icon">📁</span>
+            <span className="tab-icon"><FolderOpen size={16} /></span>
             <span className="tab-label">Bulk Upload</span>
           </button>
         </div>
@@ -924,7 +923,7 @@ export default function SubmitRequirementPage() {
                         className={`urgency-btn ${urgency === 'standard' ? 'active' : ''}`}
                         onClick={() => setUrgency('standard')}
                       >
-                        <span className="urgency-icon">🕐</span>
+                        <span className="urgency-icon"><Clock size={14} /></span>
                         <span className="urgency-label">Standard</span>
                         <span className="urgency-time">3-5 days</span>
                       </button>
@@ -933,7 +932,7 @@ export default function SubmitRequirementPage() {
                         className={`urgency-btn urgent ${urgency === 'urgent' ? 'active' : ''}`}
                         onClick={() => setUrgency('urgent')}
                       >
-                        <span className="urgency-icon">⚡</span>
+                        <span className="urgency-icon"><Zap size={14} /></span>
                         <span className="urgency-label">Urgent</span>
                         <span className="urgency-time">1-2 days</span>
                       </button>
@@ -942,7 +941,7 @@ export default function SubmitRequirementPage() {
                         className={`urgency-btn critical ${urgency === 'critical' ? 'active' : ''}`}
                         onClick={() => setUrgency('critical')}
                       >
-                        <span className="urgency-icon">🔥</span>
+                        <span className="urgency-icon"><Flame size={14} /></span>
                         <span className="urgency-label">Critical</span>
                         <span className="urgency-time">&lt;24 hours</span>
                       </button>
@@ -968,11 +967,11 @@ export default function SubmitRequirementPage() {
 
               <div className="form-sidebar">
                 <div className="sidebar-card highlight">
-                  <h4>⚡ Instant Matching</h4>
+                  <h4><Zap size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Instant Matching</h4>
                   <p>Our AI finds the best suppliers in <strong>seconds</strong>, not days.</p>
                 </div>
                 <div className="sidebar-card">
-                  <h4>💡 Tips</h4>
+                  <h4><Lightbulb size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Tips</h4>
                   <ul>
                     <li>Be specific about specs</li>
                     <li>Add HSN code for better matches</li>
@@ -1009,7 +1008,7 @@ export default function SubmitRequirementPage() {
                     />
                     {uploadedFile ? (
                       <div className="file-info">
-                        <span className="file-icon">📄</span>
+                        <span className="file-icon"><FileText size={14} /></span>
                         <span className="file-name">{uploadedFile.name}</span>
                         <button
                           type="button"
@@ -1025,7 +1024,7 @@ export default function SubmitRequirementPage() {
                       </div>
                     ) : (
                       <>
-                        <span className="upload-icon">📁</span>
+                        <span className="upload-icon"><FolderOpen size={20} /></span>
                         <p>Drag & drop your file here</p>
                         <p className="upload-hint">or click to browse</p>
                         <span className="file-types">Supports: .xlsx, .csv (max 5MB)</span>
@@ -1034,7 +1033,7 @@ export default function SubmitRequirementPage() {
                   </div>
 
                   <a href="#" className="download-template">
-                    📥 Download template file
+                    <Download size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Download template file
                   </a>
 
                   {parsedProducts.length > 0 && (
@@ -1070,7 +1069,7 @@ export default function SubmitRequirementPage() {
                             className={`urgency-btn ${urgency === 'standard' ? 'active' : ''}`}
                             onClick={() => setUrgency('standard')}
                           >
-                            <span className="urgency-icon">🕐</span>
+                            <span className="urgency-icon"><Clock size={14} /></span>
                             <span className="urgency-label">Standard</span>
                             <span className="urgency-time">3-5 days</span>
                           </button>
@@ -1079,7 +1078,7 @@ export default function SubmitRequirementPage() {
                             className={`urgency-btn urgent ${urgency === 'urgent' ? 'active' : ''}`}
                             onClick={() => setUrgency('urgent')}
                           >
-                            <span className="urgency-icon">⚡</span>
+                            <span className="urgency-icon"><Zap size={14} /></span>
                             <span className="urgency-label">Urgent</span>
                             <span className="urgency-time">1-2 days</span>
                           </button>
@@ -1088,7 +1087,7 @@ export default function SubmitRequirementPage() {
                             className={`urgency-btn critical ${urgency === 'critical' ? 'active' : ''}`}
                             onClick={() => setUrgency('critical')}
                           >
-                            <span className="urgency-icon">🔥</span>
+                            <span className="urgency-icon"><Flame size={14} /></span>
                             <span className="urgency-label">Critical</span>
                             <span className="urgency-time">&lt;24 hours</span>
                           </button>
@@ -1117,11 +1116,11 @@ export default function SubmitRequirementPage() {
 
               <div className="form-sidebar">
                 <div className="sidebar-card highlight">
-                  <h4>📊 Bulk Processing</h4>
+                  <h4><BarChart3 size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Bulk Processing</h4>
                   <p>Upload up to <strong>100 products</strong> at once. Save hours of manual work.</p>
                 </div>
                 <div className="sidebar-card">
-                  <h4>📋 Template Format</h4>
+                  <h4><ClipboardList size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Template Format</h4>
                   <p>Required columns:</p>
                   <ul>
                     <li>Product Name</li>

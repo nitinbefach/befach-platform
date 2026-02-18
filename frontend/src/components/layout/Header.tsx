@@ -1,44 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Calculator, Ship, BarChart3, Box, Truck, FileCheck,
-  Bot, FileText, Database, ChevronDown, Search, Moon, Sun, ArrowRight
+  Bot, FileText, Database, ChevronDown, Search, ArrowRight
 } from 'lucide-react';
 import { Logo } from '../ui';
-import { safeStorage } from '@/lib/safeStorage';
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState('trade');
-
-  useEffect(() => {
-    const savedTheme = safeStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setDarkMode(true);
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      safeStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      safeStorage.setItem('theme', 'light');
-    }
-  };
 
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className={`main-header ${darkMode ? 'dark' : ''}`}>
+    <header className="main-header">
       <div className="header-content">
         {/* Logo */}
         <Logo size="medium" />
@@ -197,9 +176,6 @@ export default function Header() {
           <button className="search-btn" aria-label="Search">
             <Search size={20} />
           </button>
-          <button className="theme-toggle" onClick={toggleDarkMode} aria-label="Toggle dark mode">
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
           <Link href="/onboarding" className="login-btn">
             Login
           </Link>
@@ -244,10 +220,6 @@ export default function Header() {
           z-index: 100;
         }
 
-        .main-header.dark {
-          background: #1a1a1a;
-          border-bottom-color: #2a2a2a;
-        }
 
         .header-content {
           max-width: 1280px;
@@ -313,14 +285,6 @@ export default function Header() {
           color: #f59e0b;
         }
 
-        .main-header.dark .nav-link {
-          color: #e5e5e5;
-        }
-
-        .main-header.dark .nav-link:hover,
-        .main-header.dark .nav-link.active {
-          color: #f59e0b;
-        }
 
         /* Dropdown */
         .nav-dropdown {
@@ -371,10 +335,6 @@ export default function Header() {
           border: 1px solid rgba(0,0,0,0.06);
         }
 
-        .main-header.dark .dropdown-content {
-          background: #1c1c1c;
-          border-color: #2a2a2a;
-        }
 
         .dropdown-sidebar {
           width: 35%;
@@ -386,10 +346,6 @@ export default function Header() {
           gap: 6px;
         }
 
-        .main-header.dark .dropdown-sidebar {
-          background: linear-gradient(180deg, #161616 0%, #1a1a1a 100%);
-          border-right-color: #2a2a2a;
-        }
 
         .dropdown-tab {
           width: 100%;
@@ -405,9 +361,6 @@ export default function Header() {
           color: #4b5563;
         }
 
-        .main-header.dark .dropdown-tab {
-          color: #a8a29e;
-        }
 
         .dropdown-tab:hover {
           background: rgba(245, 158, 11, 0.08);
@@ -426,9 +379,6 @@ export default function Header() {
           background: white;
         }
 
-        .main-header.dark .dropdown-main {
-          background: #1c1c1c;
-        }
 
         .dropdown-items {
           display: flex;
@@ -451,9 +401,6 @@ export default function Header() {
           border-color: rgba(245, 158, 11, 0.15);
         }
 
-        .main-header.dark .dropdown-item:hover {
-          background: rgba(245, 158, 11, 0.08);
-        }
 
         .dropdown-icon-box {
           width: 44px;
@@ -468,9 +415,6 @@ export default function Header() {
           transition: all 0.2s ease;
         }
 
-        .main-header.dark .dropdown-icon-box {
-          background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(217,119,6,0.1) 100%);
-        }
 
         .dropdown-item:hover .dropdown-icon-box {
           background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
@@ -482,9 +426,6 @@ export default function Header() {
           transition: color 0.2s ease;
         }
 
-        .main-header.dark .dropdown-icon-box :global(svg) {
-          color: #fbbf24;
-        }
 
         .dropdown-item:hover .dropdown-icon-box :global(svg) {
           color: white;
@@ -503,9 +444,6 @@ export default function Header() {
           transition: color 0.2s ease;
         }
 
-        .main-header.dark .dropdown-item-content h4 {
-          color: #f5f5f4;
-        }
 
         .dropdown-item:hover .dropdown-item-content h4 {
           color: #d97706;
@@ -553,39 +491,7 @@ export default function Header() {
           color: #f59e0b;
         }
 
-        .main-header.dark .search-btn {
-          color: #e5e5e5;
-        }
 
-        .main-header.dark .search-btn:hover {
-          background: #2a2a2a;
-        }
-
-        .theme-toggle {
-          background: none;
-          border: none;
-          color: #1c1917;
-          cursor: pointer;
-          padding: 8px;
-          border-radius: 8px;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .theme-toggle:hover {
-          background: #f5f5f4;
-          color: #f59e0b;
-        }
-
-        .main-header.dark .theme-toggle {
-          color: #e5e5e5;
-        }
-
-        .main-header.dark .theme-toggle:hover {
-          background: #2a2a2a;
-        }
 
         .login-btn {
           background: transparent;
@@ -613,9 +519,6 @@ export default function Header() {
           padding: 8px;
         }
 
-        .main-header.dark .mobile-menu-btn {
-          color: #e5e5e5;
-        }
 
         .mobile-nav {
           display: none;
@@ -625,10 +528,6 @@ export default function Header() {
           border-top: 1px solid #e7e5e4;
         }
 
-        .main-header.dark .mobile-nav {
-          background: #1a1a1a;
-          border-top-color: #2a2a2a;
-        }
 
         .mobile-nav-link {
           color: #1c1917;
@@ -638,10 +537,6 @@ export default function Header() {
           border-bottom: 1px solid #e7e5e4;
         }
 
-        .main-header.dark .mobile-nav-link {
-          color: #e5e5e5;
-          border-bottom-color: #2a2a2a;
-        }
 
         .mobile-login-btn {
           background: #f59e0b;

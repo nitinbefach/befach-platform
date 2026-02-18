@@ -105,8 +105,8 @@ function MobileTabPills() {
           min-height: 36px;
         }
         .m-tab-pill.active {
-          background: #2563eb;
-          border-color: #2563eb;
+          background: #f97316;
+          border-color: #f97316;
           color: white;
           font-weight: 600;
         }
@@ -190,7 +190,7 @@ function MobileFilterChips({ onOpenFilters }: { onOpenFilters: () => void }) {
           min-height: 38px;
         }
         .m-filter-badge {
-          background: #2563eb;
+          background: #f97316;
           color: white;
           font-size: 0.65rem;
           font-weight: 700;
@@ -205,8 +205,8 @@ function MobileFilterChips({ onOpenFilters }: { onOpenFilters: () => void }) {
           gap: 4px;
           padding: 6px 10px;
           border-radius: 16px;
-          background: rgba(37, 99, 235, 0.1);
-          color: #2563eb;
+          background: rgba(249, 115, 22, 0.1);
+          color: #f97316;
           font-size: 0.75rem;
           font-weight: 500;
           white-space: nowrap;
@@ -215,7 +215,7 @@ function MobileFilterChips({ onOpenFilters }: { onOpenFilters: () => void }) {
         .m-chip-x {
           background: none;
           border: none;
-          color: #2563eb;
+          color: #f97316;
           font-size: 1rem;
           cursor: pointer;
           padding: 0 2px;
@@ -289,7 +289,7 @@ function MobileFilterSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           flex-shrink: 0;
         }
         .m-toggle-switch.on {
-          background: #2563eb;
+          background: #f97316;
         }
         .m-toggle-knob {
           position: absolute;
@@ -406,7 +406,7 @@ function MobileShipmentCard({ shipment }: { shipment: ShipmentRecord }) {
           transition: box-shadow 0.15s;
         }
         .m-shipment-card:active {
-          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+          box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
         }
         .m-card-top {
           display: flex;
@@ -425,7 +425,7 @@ function MobileShipmentCard({ shipment }: { shipment: ShipmentRecord }) {
         }
         .m-card-hs {
           font-size: 0.75rem;
-          color: #2563eb;
+          color: #f97316;
           font-family: monospace;
           font-weight: 500;
           margin-bottom: 4px;
@@ -458,7 +458,7 @@ function MobileShipmentCard({ shipment }: { shipment: ShipmentRecord }) {
         }
         .m-party-name {
           font-size: 0.78rem;
-          color: #2563eb;
+          color: #f97316;
           font-weight: 500;
           background: none;
           border: none;
@@ -551,12 +551,12 @@ function MobileTraderCard({
           transition: box-shadow 0.15s;
         }
         .m-trader-card:active {
-          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+          box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
         }
         .m-trader-name {
           font-size: 0.875rem;
           font-weight: 600;
-          color: #2563eb;
+          color: #f97316;
           margin-bottom: 4px;
         }
         .m-trader-meta {
@@ -680,7 +680,7 @@ function MobileSummaryCharts() {
           color: var(--text-primary);
         }
         .m-bar-name.hs {
-          color: #2563eb;
+          color: #f97316;
           font-family: monospace;
         }
         .m-bar-meta {
@@ -704,7 +704,7 @@ function MobileSummaryCharts() {
           transition: width 0.3s;
         }
         .m-bar-fill.blue {
-          background: linear-gradient(90deg, #2563eb, #3b82f6);
+          background: linear-gradient(90deg, #f97316, #fb923c);
         }
         .m-bar-fill.green {
           background: linear-gradient(90deg, #059669, #10b981);
@@ -747,7 +747,8 @@ function MobileSearchSection() {
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
         title="Search EX-IM Data"
-        snapPoints={[0.75, 0.92]}
+        snapPoints={[0.92, 0.96]}
+        maxHeight={96}
       >
         <div className="m-search-sheet-inner">
           <EximSearchBar
@@ -766,16 +767,18 @@ function MobileSearchSection() {
           align-items: center;
           gap: 10px;
           width: 100%;
-          padding: 12px 14px;
-          border-radius: 10px;
+          padding: 12px 16px;
+          border-radius: 12px;
           border: 1.5px solid var(--border-color);
           background: var(--bg-primary);
           cursor: pointer;
-          min-height: 48px;
+          min-height: 50px;
           text-align: left;
+          transition: border-color 0.15s, box-shadow 0.15s;
         }
         .m-search-trigger:active {
-          border-color: #2563eb;
+          border-color: #f97316;
+          box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.08);
         }
         .m-search-text {
           flex: 1;
@@ -786,7 +789,7 @@ function MobileSearchSection() {
           text-overflow: ellipsis;
         }
         .m-search-sheet-inner {
-          padding: 4px 16px 20px;
+          padding: 4px 20px 28px;
         }
       `}</style>
     </>
@@ -901,16 +904,16 @@ function MobileShipmentsList() {
           padding: 14px;
           width: 100%;
           border-radius: 10px;
-          border: 1.5px solid #2563eb;
+          border: 1.5px solid #f97316;
           background: transparent;
-          color: #2563eb;
+          color: #f97316;
           font-size: 0.875rem;
           font-weight: 600;
           cursor: pointer;
           min-height: 48px;
         }
         .m-load-more:active {
-          background: rgba(37, 99, 235, 0.05);
+          background: rgba(249, 115, 22, 0.05);
         }
         .m-empty {
           text-align: center;
@@ -1071,7 +1074,7 @@ export default function MobileEximData() {
           width: 28px;
           height: 28px;
           border: 3px solid var(--border-color);
-          border-top-color: #2563eb;
+          border-top-color: #f97316;
           border-radius: 50%;
           animation: m-spin 0.8s linear infinite;
         }
@@ -1266,7 +1269,7 @@ function MobileTraderDetail() {
         }
         .m-td-bar-fill {
           height: 100%;
-          background: linear-gradient(90deg, #2563eb, #60a5fa);
+          background: linear-gradient(90deg, #f97316, #fb923c);
           border-radius: 3px;
           min-width: 3px;
         }
@@ -1291,7 +1294,7 @@ function MobileTraderDetail() {
           color: var(--text-primary);
         }
         .m-td-country-tag strong {
-          color: #2563eb;
+          color: #f97316;
         }
         .m-td-shipment-mini {
           padding: 10px;
@@ -1312,7 +1315,7 @@ function MobileTraderDetail() {
         }
         .m-td-mini-hs {
           font-size: 0.7rem;
-          color: #2563eb;
+          color: #f97316;
           font-family: monospace;
           margin-bottom: 2px;
         }
@@ -1324,7 +1327,7 @@ function MobileTraderDetail() {
         .m-td-view-all {
           width: 100%;
           padding: 14px;
-          background: #2563eb;
+          background: #f97316;
           color: white;
           border: none;
           border-radius: 10px;
@@ -1335,7 +1338,7 @@ function MobileTraderDetail() {
           margin-top: 8px;
         }
         .m-td-view-all:active {
-          background: #1d4ed8;
+          background: #ea580c;
         }
       `}</style>
     </div>

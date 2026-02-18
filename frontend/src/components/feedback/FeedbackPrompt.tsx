@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMobile } from '@/hooks/useMobile';
 import MicroFeedback from './MicroFeedback';
@@ -68,7 +68,7 @@ export default function FeedbackPrompt({
         >
           {completed ? (
             <div className="prompt-thanks">
-              <span className="thanks-check">✓</span>
+              <span className="thanks-check"><Check size={16} /></span>
               <span>Thanks for your feedback!</span>
             </div>
           ) : (

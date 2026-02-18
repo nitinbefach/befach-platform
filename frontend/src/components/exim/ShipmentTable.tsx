@@ -251,7 +251,7 @@ export default function ShipmentTable({
           border-collapse: collapse;
         }
         .shipment-table thead {
-          background: #2563eb;
+          background: #f97316;
           color: white;
         }
         .shipment-table th {
@@ -260,7 +260,7 @@ export default function ShipmentTable({
           font-size: 0.8rem;
           font-weight: 600;
           white-space: nowrap;
-          border-bottom: 2px solid #1d4ed8;
+          border-bottom: 2px solid #ea580c;
         }
         .shipment-table td {
           padding: 12px 14px;
@@ -284,9 +284,9 @@ export default function ShipmentTable({
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          border: 2px solid #2563eb;
+          border: 2px solid #f97316;
           background: white;
-          color: #2563eb;
+          color: #f97316;
           font-size: 1rem;
           font-weight: 700;
           cursor: pointer;
@@ -296,7 +296,7 @@ export default function ShipmentTable({
           line-height: 1;
         }
         .expand-btn:hover {
-          background: #2563eb;
+          background: #f97316;
           color: white;
         }
         .col-date {
@@ -307,7 +307,7 @@ export default function ShipmentTable({
           width: 90px;
         }
         .hs-link {
-          color: #2563eb;
+          color: #f97316;
           font-weight: 500;
           cursor: pointer;
         }
@@ -332,7 +332,7 @@ export default function ShipmentTable({
         .trader-link {
           background: none;
           border: none;
-          color: #2563eb;
+          color: #f97316;
           font-size: 0.8rem;
           cursor: pointer;
           text-align: left;
@@ -391,8 +391,8 @@ export default function ShipmentTable({
           border-radius: 4px;
           font-size: 0.7rem;
           font-weight: 700;
-          background: #dbeafe;
-          color: #1e40af;
+          background: rgba(249, 115, 22, 0.12);
+          color: #ea580c;
         }
         .pagination {
           display: flex;
@@ -414,9 +414,9 @@ export default function ShipmentTable({
           background: var(--bg-secondary);
         }
         .page-btn.active {
-          background: #2563eb;
+          background: #f97316;
           color: white;
-          border-color: #2563eb;
+          border-color: #f97316;
         }
         .page-btn:disabled {
           opacity: 0.4;

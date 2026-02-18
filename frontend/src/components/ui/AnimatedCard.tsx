@@ -11,6 +11,7 @@
  */
 
 import { ReactNode, useState } from 'react';
+import { Check, X } from 'lucide-react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
 import { usePrefersReducedMotion } from '@/hooks/useMobile';
@@ -141,8 +142,8 @@ export function AnimatedCard({
       <div className={`swipeable-card-container ${className}`}>
         {/* Background actions */}
         <motion.div className="swipe-actions" style={{ background }}>
-          <div className="swipe-action left">{swipeLeftContent || '✓'}</div>
-          <div className="swipe-action right">{swipeRightContent || '✕'}</div>
+          <div className="swipe-action left">{swipeLeftContent || <Check size={16} />}</div>
+          <div className="swipe-action right">{swipeRightContent || <X size={16} />}</div>
         </motion.div>
 
         {/* Card */}

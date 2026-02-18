@@ -9,7 +9,6 @@ import {
   SavedSupplier,
   RelationshipStage,
   getSavedSuppliers,
-  initializeDemoSuppliers,
   filterSuppliers,
   sortSuppliers,
   getPipelineStats,
@@ -40,6 +39,11 @@ import {
   SupplierPipelineStats,
   SupplierFilters
 } from '@/components/suppliers';
+import {
+  Check, Star, Mail, BarChart3, Tag, PenLine,
+  Plus, Search, Download, ChevronRight,
+  MessageCircle, FileText, ShoppingCart, Trash2, Users
+} from 'lucide-react';
 
 export default function OurVendorsPage() {
   const router = useRouter();
@@ -56,7 +60,7 @@ export default function OurVendorsPage() {
   const [confirmRemoveModal, setConfirmRemoveModal] = useState<SavedSupplier | null>(null);
   const [stageTransitionModal, setStageTransitionModal] = useState<SavedSupplier | null>(null);
 
-  // Filters - using new FilterOptions
+  // Filters
   const [filters, setFilters] = useState<FilterOptions>(DEFAULT_FILTERS);
   const [sortBy, setSortBy] = useState<SortOption>('recent');
 
@@ -81,14 +85,12 @@ export default function OurVendorsPage() {
     deliveryDate: ''
   });
 
-  // Initialize data
   useEffect(() => {
-    const data = initializeDemoSuppliers();
+    const data = getSavedSuppliers();
     setSuppliers(data);
     setIsLoading(false);
   }, []);
 
-  // Computed values
   const filteredSuppliers = useMemo(() => {
     const filtered = filterSuppliers(suppliers, filters);
     return sortSuppliers(filtered, sortBy);
@@ -98,7 +100,6 @@ export default function OurVendorsPage() {
   const allTags = useMemo(() => getAllTags(suppliers), [suppliers]);
   const allCategories = useMemo(() => getAllCategories(suppliers), [suppliers]);
 
-  // Handle stage click from pipeline stats
   const handleStageClick = (stage: RelationshipStage) => {
     const currentStages = filters.relationshipStages;
     const newStages = currentStages.includes(stage)
@@ -107,7 +108,6 @@ export default function OurVendorsPage() {
     setFilters({ ...filters, relationshipStages: newStages });
   };
 
-  // Handle stage transition
   const handleStageTransition = (supplierId: string, newStage: RelationshipStage, reason?: string) => {
     try {
       transitionSupplierStage(supplierId, newStage, reason);
@@ -118,18 +118,15 @@ export default function OurVendorsPage() {
     }
   };
 
-  // Handlers
   const handleToggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
   const handleMessage = (supplier: SavedSupplier) => {
-    // Check if conversation exists
     const existingConversation = getConversationBySupplier(supplier.id);
     if (existingConversation) {
       router.push(`/supplier-matches?conversation=${existingConversation.id}`);
     } else {
-      // Create new conversation
       const conversation = createConversation({
         supplierId: supplier.id,
         supplierName: supplier.name,
@@ -157,8 +154,6 @@ export default function OurVendorsPage() {
 
   const handleSubmitRFQ = () => {
     if (!rfqModal) return;
-
-    // Get or create conversation
     let conversation = getConversationBySupplier(rfqModal.id);
     if (!conversation) {
       conversation = createConversation({
@@ -171,13 +166,10 @@ export default function OurVendorsPage() {
         source: 'saved_suppliers' as any
       });
     }
-
-    // Update last contacted
     updateSupplier(rfqModal.id, {
       lastContactedDate: new Date().toISOString()
     });
     setSuppliers(getSavedSuppliers());
-
     setRfqModal(null);
     triggerFeedback('vendor-management');
     router.push(`/supplier-matches?conversation=${conversation.id}&rfq=true`);
@@ -189,7 +181,7 @@ export default function OurVendorsPage() {
     const newSupplier = saveSupplier({
       name: newSupplierForm.name,
       country: newSupplierForm.location.split(',').pop()?.trim() || 'Unknown',
-      countryFlag: '🌍',
+      countryFlag: '',
       location: newSupplierForm.location,
       category,
       specialization: newSupplierForm.specialization,
@@ -213,7 +205,6 @@ export default function OurVendorsPage() {
       completedDeals: 0,
       pendingQuotes: 0
     });
-
     setSuppliers(getSavedSuppliers());
     setAddSupplierModal(false);
     triggerFeedback('vendor-management');
@@ -274,6 +265,7 @@ export default function OurVendorsPage() {
     <AppLayout searchPlaceholder="Search suppliers...">
       <div className="content-header">
         <h1>Our Vendors</h1>
+        <p>Manage your supplier relationships and pipeline</p>
       </div>
 
       {/* PIPELINE STATS */}
@@ -283,35 +275,43 @@ export default function OurVendorsPage() {
         activeStages={filters.relationshipStages}
       />
 
-      {/* ACTIONS */}
-      <div className="quick-actions">
-        <div className="action-buttons">
-          <button className="btn-white" onClick={() => setAddSupplierModal(true)}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Add New Supplier
+      {/* TOOLBAR */}
+      <div className="toolbar">
+        <div className="toolbar-left">
+          <button className="btn-primary" onClick={() => setAddSupplierModal(true)}>
+            <Plus size={16} />
+            <span>Add Supplier</span>
           </button>
-          <button className="btn-outline" onClick={() => router.push('/smart-sourcing')}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            Find Suppliers
+          <button className="btn-secondary" onClick={() => router.push('/smart-sourcing')}>
+            <Search size={15} />
+            <span>Find Suppliers</span>
           </button>
-          <button className="btn-outline" onClick={handleExport}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Export List
+          <button className="btn-secondary" onClick={handleExport}>
+            <Download size={15} />
+            <span>Export</span>
           </button>
+        </div>
+        <div className="toolbar-right">
+          <span className="results-count">
+            {filteredSuppliers.length} of {suppliers.length} suppliers
+          </span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            className="sort-select"
+          >
+            <option value="recent">Recently Saved</option>
+            <option value="name">Name A-Z</option>
+            <option value="rating">Highest Rated</option>
+            <option value="orders">Most Orders</option>
+            <option value="lastContacted">Last Contacted</option>
+            <option value="orderValue">Order Value</option>
+            <option value="stage">By Stage</option>
+          </select>
         </div>
       </div>
 
-      {/* ADVANCED FILTERS */}
+      {/* FILTERS */}
       <SupplierFilters
         filters={filters}
         onFiltersChange={setFilters}
@@ -319,77 +319,63 @@ export default function OurVendorsPage() {
         allCategories={allCategories}
       />
 
-      {/* SORT & RESULTS */}
-      <div className="sort-bar">
-        <div className="results-count">
-          {filteredSuppliers.length} of {suppliers.length}
-        </div>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as SortOption)}
-          className="sort-select"
-        >
-          <option value="recent">Recently Saved</option>
-          <option value="name">Name A-Z</option>
-          <option value="rating">Highest Rated</option>
-          <option value="orders">Most Orders</option>
-          <option value="lastContacted">Last Contacted</option>
-          <option value="orderValue">Order Value</option>
-          <option value="stage">By Stage</option>
-        </select>
-      </div>
-
-      {/* SUPPLIER TABLE */}
-      <div className="suppliers-table">
+      {/* SUPPLIER LIST */}
+      <div className="suppliers-list">
+        {/* Desktop table header */}
         <div className="table-header">
           <div className="col-expand"></div>
-          <div className="col-name">Supplier Name</div>
+          <div className="col-name">Supplier</div>
           <div className="col-location">Location</div>
           <div className="col-category">Category</div>
           <div className="col-rating">Rating</div>
           <div className="col-orders">Orders</div>
-          <div className="col-status">Stage</div>
+          <div className="col-stage">Stage</div>
         </div>
 
         {filteredSuppliers.length === 0 ? (
           <div className="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
+            <div className="empty-icon">
+              <Users size={40} strokeWidth={1.5} />
+            </div>
             <h3>No suppliers found</h3>
-            <p>Try adjusting your filters or add a new supplier</p>
-            <button onClick={() => setAddSupplierModal(true)}>Add Supplier</button>
+            <p>Try adjusting your filters or add a new supplier to get started</p>
+            <button className="btn-primary" onClick={() => setAddSupplierModal(true)}>
+              <Plus size={16} /> Add Supplier
+            </button>
           </div>
         ) : (
           filteredSuppliers.map(supplier => (
             <div key={supplier.id} className={`supplier-row ${expandedId === supplier.id ? 'expanded' : ''}`}>
+              {/* Main row */}
               <div className="row-main" onClick={() => handleToggleExpand(supplier.id)}>
                 <div className="col-expand">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={expandedId === supplier.id ? 'rotated' : ''}>
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
+                  <ChevronRight
+                    size={16}
+                    className={expandedId === supplier.id ? 'chevron rotated' : 'chevron'}
+                  />
                 </div>
                 <div className="col-name">
-                  <strong>{supplier.name}</strong>
-                  <span className="sub-info">
-                    {supplier.verified && <span className="verified-badge">✓ Verified</span>}
-                    {supplier.tags.length > 0 && <span className="tag-count">{supplier.tags.length} tags</span>}
-                  </span>
+                  <div className="supplier-name">{supplier.name}</div>
+                  <div className="supplier-meta">
+                    {supplier.verified && (
+                      <span className="verified-chip"><Check size={11} /> Verified</span>
+                    )}
+                    {supplier.tags.length > 0 && (
+                      <span className="tag-chip">{supplier.tags.length} tags</span>
+                    )}
+                  </div>
                 </div>
                 <div className="col-location">
                   <span className="flag">{supplier.countryFlag}</span>
-                  {supplier.location}
+                  <span>{supplier.location}</span>
                 </div>
                 <div className="col-category">{supplier.category}</div>
                 <div className="col-rating">
-                  <span className="rating-star">⭐</span>
-                  <strong>{supplier.rating > 0 ? supplier.rating : '—'}</strong>
+                  <Star size={13} style={{ color: '#f59e0b', fill: '#f59e0b' }} />
+                  <span className="rating-value">{supplier.rating > 0 ? supplier.rating : '—'}</span>
                 </div>
                 <div className="col-orders">{supplier.totalOrders}</div>
-                <div className="col-status">
+                <div className="col-stage">
                   <RelationshipStageBadge
                     stage={supplier.relationshipStage}
                     size="sm"
@@ -399,102 +385,133 @@ export default function OurVendorsPage() {
                 </div>
               </div>
 
+              {/* Mobile summary row (visible < 768px) */}
+              <div className="mobile-row" onClick={() => handleToggleExpand(supplier.id)}>
+                <div className="mobile-row-top">
+                  <div className="mobile-supplier-info">
+                    <div className="supplier-name">{supplier.name}</div>
+                    <div className="supplier-meta">
+                      {supplier.verified && (
+                        <span className="verified-chip"><Check size={10} /> Verified</span>
+                      )}
+                      <span className="location-text">
+                        {supplier.countryFlag} {supplier.location}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mobile-rating">
+                    <Star size={12} style={{ color: '#f59e0b', fill: '#f59e0b' }} />
+                    <span>{supplier.rating > 0 ? supplier.rating : '—'}</span>
+                  </div>
+                </div>
+                <div className="mobile-row-bottom">
+                  <span className="mobile-category">{supplier.category}</span>
+                  <RelationshipStageBadge
+                    stage={supplier.relationshipStage}
+                    size="sm"
+                    clickable
+                    onClick={() => { setStageTransitionModal(supplier); }}
+                  />
+                </div>
+              </div>
+
+              {/* Expanded detail */}
               {expandedId === supplier.id && (
-                <div className="row-expanded">
-                  <div className="expanded-grid">
-                    {/* Contact Info */}
-                    <div className="info-section">
-                      <h4>📧 Contact Info</h4>
-                      <div className="info-content">
-                        {supplier.contactPerson && <p><strong>Contact:</strong> {supplier.contactPerson}</p>}
-                        {supplier.email && <p><strong>Email:</strong> <a href={`mailto:${supplier.email}`}>{supplier.email}</a></p>}
-                        {supplier.phone && <p><strong>Phone:</strong> {supplier.phone}</p>}
-                        {supplier.website && <p><strong>Website:</strong> <a href={`https://${supplier.website}`} target="_blank" rel="noopener noreferrer">{supplier.website}</a></p>}
+                <div className="row-detail">
+                  <div className="detail-grid">
+                    {/* Contact */}
+                    <div className="detail-card">
+                      <div className="detail-card-header">
+                        <Mail size={15} />
+                        <span>Contact</span>
+                      </div>
+                      <div className="detail-card-body">
+                        {supplier.contactPerson && <div className="detail-item"><span className="detail-label">Contact</span><span>{supplier.contactPerson}</span></div>}
+                        {supplier.email && <div className="detail-item"><span className="detail-label">Email</span><a href={`mailto:${supplier.email}`}>{supplier.email}</a></div>}
+                        {supplier.phone && <div className="detail-item"><span className="detail-label">Phone</span><span>{supplier.phone}</span></div>}
+                        {supplier.website && <div className="detail-item"><span className="detail-label">Web</span><a href={`https://${supplier.website}`} target="_blank" rel="noopener noreferrer">{supplier.website}</a></div>}
                         {!supplier.contactPerson && !supplier.email && !supplier.phone && (
-                          <p className="no-data">No contact info available</p>
+                          <div className="no-data">No contact info</div>
                         )}
                       </div>
                     </div>
 
-                    {/* Statistics */}
-                    <div className="info-section">
-                      <h4>📊 Statistics</h4>
-                      <div className="info-content">
-                        <p><strong>Orders:</strong> {supplier.totalOrders}</p>
-                        <p><strong>Total Value:</strong> {formatCurrency(supplier.totalOrderValue)}</p>
-                        <p><strong>Last Order:</strong> {formatDate(supplier.lastOrderDate)}</p>
-                        <p><strong>Last Contact:</strong> {getRelativeTime(supplier.lastContactedDate)}</p>
-                        <p><strong>Source:</strong> <span className="source-badge">{supplier.source}</span></p>
+                    {/* Stats */}
+                    <div className="detail-card">
+                      <div className="detail-card-header">
+                        <BarChart3 size={15} />
+                        <span>Statistics</span>
+                      </div>
+                      <div className="detail-card-body">
+                        <div className="detail-item"><span className="detail-label">Orders</span><span>{supplier.totalOrders}</span></div>
+                        <div className="detail-item"><span className="detail-label">Total Value</span><span>{formatCurrency(supplier.totalOrderValue)}</span></div>
+                        <div className="detail-item"><span className="detail-label">Last Order</span><span>{formatDate(supplier.lastOrderDate)}</span></div>
+                        <div className="detail-item"><span className="detail-label">Last Contact</span><span>{getRelativeTime(supplier.lastContactedDate)}</span></div>
+                        <div className="detail-item"><span className="detail-label">Source</span><span className="source-chip">{supplier.source}</span></div>
                       </div>
                     </div>
 
                     {/* Tags */}
-                    <div className="info-section tags-section">
-                      <h4>🏷️ Tags</h4>
-                      <div className="tags-list">
-                        {supplier.tags.map(tag => (
-                          <span key={tag} className="tag">
-                            {tag}
-                            <button onClick={(e) => { e.stopPropagation(); handleRemoveTag(supplier.id, tag); }}>×</button>
-                          </span>
-                        ))}
-                        <button className="add-tag-btn" onClick={(e) => { e.stopPropagation(); setAddTagModal(supplier); setNewTag(''); }}>
-                          + Add Tag
-                        </button>
+                    <div className="detail-card">
+                      <div className="detail-card-header">
+                        <Tag size={15} />
+                        <span>Tags</span>
+                      </div>
+                      <div className="detail-card-body">
+                        <div className="tags-wrap">
+                          {supplier.tags.map(tag => (
+                            <span key={tag} className="tag-pill">
+                              {tag}
+                              <button onClick={(e) => { e.stopPropagation(); handleRemoveTag(supplier.id, tag); }}>×</button>
+                            </span>
+                          ))}
+                          <button className="add-tag-btn" onClick={(e) => { e.stopPropagation(); setAddTagModal(supplier); setNewTag(''); }}>
+                            <Plus size={12} /> Add
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Specialization */}
-                  <div className="specialization-row">
-                    <strong>Specialization:</strong> {supplier.specialization}
+                  <div className="specialization-bar">
+                    <span className="detail-label">Specialization</span>
+                    <span>{supplier.specialization}</span>
                   </div>
 
                   {/* Notes */}
-                  <div className="notes-section">
-                    <div className="notes-header">
-                      <h4>📝 Notes</h4>
-                      <button onClick={(e) => { e.stopPropagation(); setEditNotesModal(supplier); setEditingNotes(supplier.notes || ''); }}>
-                        Edit Notes
+                  <div className="notes-bar">
+                    <div className="notes-top">
+                      <div className="notes-heading">
+                        <PenLine size={14} />
+                        <span>Notes</span>
+                      </div>
+                      <button className="edit-notes-btn" onClick={(e) => { e.stopPropagation(); setEditNotesModal(supplier); setEditingNotes(supplier.notes || ''); }}>
+                        Edit
                       </button>
                     </div>
-                    <p className="notes-content">
-                      {supplier.notes || 'No notes yet. Click "Edit Notes" to add some.'}
+                    <p className="notes-text">
+                      {supplier.notes || 'No notes yet. Click "Edit" to add some.'}
                     </p>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="action-buttons-row">
-                    <button className="btn-action message" onClick={(e) => { e.stopPropagation(); handleMessage(supplier); }}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                      </svg>
-                      Message
+                  {/* Actions */}
+                  <div className="detail-actions">
+                    <button className="action-btn primary" onClick={(e) => { e.stopPropagation(); handleMessage(supplier); }}>
+                      <MessageCircle size={15} />
+                      <span>Message</span>
                     </button>
-                    <button className="btn-action rfq" onClick={(e) => { e.stopPropagation(); handleSendRFQ(supplier); }}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                      </svg>
-                      Send RFQ
+                    <button className="action-btn accent" onClick={(e) => { e.stopPropagation(); handleSendRFQ(supplier); }}>
+                      <FileText size={15} />
+                      <span>Send RFQ</span>
                     </button>
-                    <button className="btn-action orders" onClick={(e) => { e.stopPropagation(); router.push('/my-orders'); }}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                      </svg>
-                      View Orders
+                    <button className="action-btn neutral" onClick={(e) => { e.stopPropagation(); router.push('/my-orders'); }}>
+                      <ShoppingCart size={15} />
+                      <span>Orders</span>
                     </button>
-                    <button className="btn-action remove" onClick={(e) => { e.stopPropagation(); setConfirmRemoveModal(supplier); }}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      </svg>
-                      Remove
+                    <button className="action-btn danger" onClick={(e) => { e.stopPropagation(); setConfirmRemoveModal(supplier); }}>
+                      <Trash2 size={15} />
+                      <span>Remove</span>
                     </button>
                   </div>
                 </div>
@@ -726,107 +743,105 @@ export default function OurVendorsPage() {
           color: var(--text-secondary);
         }
 
-        .filter-bar {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          padding: 16px 20px;
-          background: var(--bg-secondary);
-          border: 1px solid var(--border-color);
-          border-radius: 12px;
-          margin-bottom: 20px;
-          flex-wrap: wrap;
-        }
-
-        .search-box {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex: 1;
-          min-width: 200px;
-          background: var(--bg-tertiary);
-          padding: 10px 14px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color);
-        }
-
-        .search-box svg {
-          width: 18px;
-          height: 18px;
-          color: var(--text-secondary);
-        }
-
-        .search-box input {
-          flex: 1;
-          background: transparent;
-          border: none;
-          color: var(--text-primary);
-          font-size: 0.95rem;
-        }
-
-        .search-box input:focus {
-          outline: none;
-        }
-
-        .filter-dropdowns {
-          display: flex;
-          gap: 12px;
-        }
-
-        .filter-dropdowns select {
-          padding: 10px 14px;
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          color: var(--text-primary);
-          font-size: 0.9rem;
-          cursor: pointer;
-        }
-
-        .results-count {
-          color: var(--text-secondary);
-          font-size: 0.85rem;
-        }
-
-        .sort-bar {
+        /* ─── Toolbar ─── */
+        .toolbar {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 16px;
           margin-bottom: 16px;
-          padding: 0 4px;
+          flex-wrap: wrap;
         }
 
-        .sort-select {
-          padding: 8px 14px;
-          background: var(--bg-secondary);
+        .toolbar-left {
+          display: flex;
+          gap: 10px;
+        }
+
+        .toolbar-right {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+
+        .btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 9px 18px;
+          background: linear-gradient(135deg, #f97316, #ea580c);
+          border: none;
+          border-radius: 8px;
+          color: white;
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+        }
+
+        .btn-secondary {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 9px 16px;
+          background: var(--card-bg);
           border: 1px solid var(--border-color);
           border-radius: 8px;
           color: var(--text-primary);
-          font-size: 0.9rem;
+          font-size: 0.88rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+          border-color: var(--text-muted);
+        }
+
+        .results-count {
+          color: var(--text-muted);
+          font-size: 0.82rem;
+          white-space: nowrap;
+        }
+
+        .sort-select {
+          padding: 8px 12px;
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          color: var(--text-primary);
+          font-size: 0.85rem;
           cursor: pointer;
         }
 
-        .suppliers-table {
-          background: var(--bg-secondary);
+        /* ─── Supplier list container ─── */
+        .suppliers-list {
+          background: var(--card-bg);
           border: 1px solid var(--border-color);
-          border-radius: 12px;
+          border-radius: 14px;
           overflow: hidden;
         }
 
+        /* ─── Table header (desktop) ─── */
         .table-header {
           display: grid;
-          grid-template-columns: 40px 2fr 1.5fr 1fr 0.8fr 0.8fr 0.8fr;
-          gap: 12px;
-          padding: 14px 20px;
-          background: var(--bg-tertiary);
+          grid-template-columns: 36px 2fr 1.4fr 1fr 0.7fr 0.6fr 0.9fr;
+          gap: 10px;
+          padding: 12px 20px;
           border-bottom: 1px solid var(--border-color);
-          font-size: 0.85rem;
+          font-size: 0.75rem;
           font-weight: 600;
-          color: var(--text-secondary);
+          color: var(--text-muted);
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 0.06em;
         }
 
+        /* ─── Supplier row ─── */
         .supplier-row {
           border-bottom: 1px solid var(--border-color);
         }
@@ -835,207 +850,232 @@ export default function OurVendorsPage() {
           border-bottom: none;
         }
 
+        .supplier-row.expanded {
+          background: var(--bg-secondary);
+        }
+
+        /* Desktop main row */
         .row-main {
           display: grid;
-          grid-template-columns: 40px 2fr 1.5fr 1fr 0.8fr 0.8fr 0.8fr;
-          gap: 12px;
-          padding: 16px 20px;
+          grid-template-columns: 36px 2fr 1.4fr 1fr 0.7fr 0.6fr 0.9fr;
+          gap: 10px;
+          padding: 14px 20px;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: background 0.15s;
           align-items: center;
         }
 
         .row-main:hover {
-          background: var(--bg-tertiary);
+          background: var(--bg-secondary);
         }
 
-        .col-expand svg {
-          width: 18px;
-          height: 18px;
-          color: var(--text-secondary);
+        /* Mobile row – hidden on desktop */
+        .mobile-row {
+          display: none;
+        }
+
+        /* ─── Columns ─── */
+        .col-expand {
+          display: flex;
+          align-items: center;
+          color: var(--text-muted);
+        }
+
+        .col-expand :global(.chevron) {
           transition: transform 0.2s;
         }
 
-        .col-expand svg.rotated {
+        .col-expand :global(.rotated) {
           transform: rotate(90deg);
         }
 
-        .col-name strong {
-          display: block;
+        .supplier-name {
+          font-weight: 600;
           color: var(--text-primary);
+          font-size: 0.9rem;
+          line-height: 1.3;
         }
 
-        .sub-info {
+        .supplier-meta {
           display: flex;
+          align-items: center;
           gap: 8px;
-          margin-top: 4px;
-          font-size: 0.8rem;
+          margin-top: 3px;
         }
 
-        .verified-badge {
+        .verified-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
           color: #10b981;
+          font-size: 0.75rem;
           font-weight: 500;
         }
 
-        .tag-count {
-          color: var(--text-secondary);
+        .tag-chip {
+          font-size: 0.75rem;
+          color: var(--text-muted);
         }
 
         .col-location {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
           color: var(--text-secondary);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
         }
 
         .flag {
-          font-size: 1.1rem;
+          font-size: 1.05rem;
+          line-height: 1;
         }
 
         .col-category {
           color: var(--text-secondary);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
         }
 
         .col-rating {
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
         }
 
-        .rating-star {
-          font-size: 0.9rem;
-        }
-
-        .col-rating strong {
-          color: #f59e0b;
+        .rating-value {
+          font-weight: 600;
+          color: var(--text-primary);
+          font-size: 0.88rem;
         }
 
         .col-orders {
           color: var(--text-secondary);
+          font-size: 0.88rem;
         }
 
-        .status-badge {
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 0.8rem;
+        /* ─── Expanded detail ─── */
+        .row-detail {
+          padding: 20px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .detail-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+          margin-bottom: 14px;
+        }
+
+        .detail-card {
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          overflow: hidden;
+        }
+
+        .detail-card-header {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          padding: 10px 14px;
+          border-bottom: 1px solid var(--border-color);
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .detail-card-body {
+          padding: 12px 14px;
+        }
+
+        .detail-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          padding: 5px 0;
+          font-size: 0.82rem;
+          color: var(--text-secondary);
+        }
+
+        .detail-item:not(:last-child) {
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-label {
+          font-weight: 500;
+          color: var(--text-muted);
+          font-size: 0.78rem;
+        }
+
+        .detail-item a {
+          color: #f97316;
+          text-decoration: none;
+        }
+
+        .detail-item a:hover {
+          text-decoration: underline;
+        }
+
+        .no-data {
+          font-size: 0.82rem;
+          color: var(--text-muted);
+          font-style: italic;
+        }
+
+        .source-chip {
+          background: rgba(249, 115, 22, 0.12);
+          color: #f97316;
+          padding: 2px 8px;
+          border-radius: 4px;
+          font-size: 0.75rem;
           font-weight: 500;
           text-transform: capitalize;
         }
 
-        .status-badge.active {
-          background: rgba(16, 185, 129, 0.15);
-          color: #10b981;
-        }
-
-        .status-badge.pending {
-          background: rgba(59, 130, 246, 0.15);
-          color: #3b82f6;
-        }
-
-        .status-badge.inactive {
-          background: rgba(156, 163, 175, 0.15);
-          color: #9ca3af;
-        }
-
-        .status-badge.blocked {
-          background: rgba(239, 68, 68, 0.15);
-          color: #ef4444;
-        }
-
-        /* Expanded Row */
-        .row-expanded {
-          padding: 20px;
-          background: var(--bg-tertiary);
-          border-top: 1px solid var(--border-color);
-        }
-
-        .expanded-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          margin-bottom: 16px;
-        }
-
-        .info-section {
-          background: var(--bg-secondary);
-          padding: 16px;
-          border-radius: 10px;
-          border: 1px solid var(--border-color);
-        }
-
-        .info-section h4 {
-          font-size: 0.9rem;
-          color: var(--text-primary);
-          margin-bottom: 12px;
-          padding-bottom: 8px;
-          border-bottom: 1px solid var(--border-color);
-        }
-
-        .info-content p {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
-          margin-bottom: 6px;
-        }
-
-        .info-content p strong {
-          color: var(--text-primary);
-        }
-
-        .info-content a {
-          color: #f97316;
-        }
-
-        .no-data {
-          font-style: italic;
-          color: var(--text-muted) !important;
-        }
-
-        .source-badge {
-          background: rgba(249, 115, 22, 0.15);
-          color: #f97316;
-          padding: 2px 8px;
-          border-radius: 4px;
-          font-size: 0.8rem;
-          text-transform: capitalize;
-        }
-
-        .tags-list {
+        .tags-wrap {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 7px;
         }
 
-        .tag {
-          display: flex;
+        .tag-pill {
+          display: inline-flex;
           align-items: center;
-          gap: 6px;
+          gap: 5px;
           background: rgba(249, 115, 22, 0.1);
           color: #f97316;
-          padding: 6px 10px;
-          border-radius: 16px;
-          font-size: 0.8rem;
+          padding: 5px 10px;
+          border-radius: 14px;
+          font-size: 0.78rem;
+          font-weight: 500;
         }
 
-        .tag button {
+        .tag-pill button {
           background: none;
           border: none;
           color: #f97316;
           cursor: pointer;
-          font-size: 1rem;
+          font-size: 0.95rem;
           padding: 0;
           line-height: 1;
+          opacity: 0.7;
+        }
+
+        .tag-pill button:hover {
+          opacity: 1;
         }
 
         .add-tag-btn {
-          background: var(--bg-tertiary);
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          background: none;
           border: 1px dashed var(--border-color);
-          padding: 6px 10px;
-          border-radius: 16px;
-          font-size: 0.8rem;
-          color: var(--text-secondary);
+          padding: 5px 10px;
+          border-radius: 14px;
+          font-size: 0.78rem;
+          color: var(--text-muted);
           cursor: pointer;
+          transition: all 0.15s;
         }
 
         .add-tag-btn:hover {
@@ -1043,139 +1083,143 @@ export default function OurVendorsPage() {
           color: #f97316;
         }
 
-        .specialization-row {
-          background: var(--bg-secondary);
-          padding: 12px 16px;
-          border-radius: 8px;
-          font-size: 0.9rem;
-          color: var(--text-secondary);
-          margin-bottom: 16px;
-        }
-
-        .specialization-row strong {
-          color: var(--text-primary);
-        }
-
-        .notes-section {
-          background: var(--bg-secondary);
-          padding: 16px;
-          border-radius: 10px;
-          border: 1px solid var(--border-color);
-          margin-bottom: 16px;
-        }
-
-        .notes-header {
+        /* Specialization bar */
+        .specialization-bar {
           display: flex;
-          justify-content: space-between;
+          gap: 10px;
+          padding: 10px 14px;
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          font-size: 0.84rem;
+          color: var(--text-secondary);
+          margin-bottom: 14px;
+        }
+
+        /* Notes bar */
+        .notes-bar {
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          padding: 12px 14px;
+          margin-bottom: 14px;
+        }
+
+        .notes-top {
+          display: flex;
           align-items: center;
-          margin-bottom: 10px;
+          justify-content: space-between;
+          margin-bottom: 8px;
         }
 
-        .notes-header h4 {
-          font-size: 0.9rem;
+        .notes-heading {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.82rem;
+          font-weight: 600;
           color: var(--text-primary);
-          margin: 0;
         }
 
-        .notes-header button {
+        .edit-notes-btn {
           background: none;
           border: none;
           color: #f97316;
-          font-size: 0.85rem;
+          font-size: 0.82rem;
+          font-weight: 500;
           cursor: pointer;
         }
 
-        .notes-content {
-          font-size: 0.9rem;
+        .notes-text {
+          font-size: 0.84rem;
           color: var(--text-secondary);
           line-height: 1.6;
           margin: 0;
         }
 
-        .action-buttons-row {
+        /* Detail actions */
+        .detail-actions {
           display: flex;
-          gap: 12px;
+          gap: 10px;
         }
 
-        .btn-action {
-          display: flex;
+        .action-btn {
+          display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 10px 16px;
+          gap: 6px;
+          padding: 9px 16px;
           border-radius: 8px;
-          font-size: 0.9rem;
+          font-size: 0.84rem;
           font-weight: 500;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.15s;
         }
 
-        .btn-action svg {
-          width: 16px;
-          height: 16px;
+        .action-btn.primary {
+          background: rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.25);
+          color: #3b82f6;
         }
 
-        .btn-action.message {
-          background: linear-gradient(135deg, #3b82f6, #2563eb);
-          border: none;
-          color: white;
+        .action-btn.primary:hover {
+          background: rgba(59, 130, 246, 0.18);
         }
 
-        .btn-action.rfq {
-          background: linear-gradient(135deg, #f97316, #ea580c);
-          border: none;
-          color: white;
+        .action-btn.accent {
+          background: rgba(249, 115, 22, 0.1);
+          border: 1px solid rgba(249, 115, 22, 0.25);
+          color: #f97316;
         }
 
-        .btn-action.orders {
-          background: var(--bg-secondary);
+        .action-btn.accent:hover {
+          background: rgba(249, 115, 22, 0.18);
+        }
+
+        .action-btn.neutral {
+          background: var(--card-bg);
           border: 1px solid var(--border-color);
           color: var(--text-primary);
         }
 
-        .btn-action.remove {
-          background: var(--bg-secondary);
-          border: 1px solid rgba(239, 68, 68, 0.3);
+        .action-btn.neutral:hover {
+          border-color: var(--text-muted);
+        }
+
+        .action-btn.danger {
+          background: var(--card-bg);
+          border: 1px solid rgba(239, 68, 68, 0.25);
           color: #ef4444;
         }
 
-        .btn-action.remove:hover {
-          background: rgba(239, 68, 68, 0.1);
+        .action-btn.danger:hover {
+          background: rgba(239, 68, 68, 0.08);
         }
 
-        /* Empty State */
+        /* ─── Empty state ─── */
         .empty-state {
           text-align: center;
-          padding: 60px 20px;
+          padding: 60px 24px;
         }
 
-        .empty-state svg {
-          width: 60px;
-          height: 60px;
-          color: var(--text-secondary);
+        .empty-icon {
+          color: var(--text-muted);
           margin-bottom: 16px;
+          opacity: 0.5;
         }
 
         .empty-state h3 {
           color: var(--text-primary);
-          margin-bottom: 8px;
+          font-size: 1.05rem;
+          margin: 0 0 6px;
         }
 
         .empty-state p {
           color: var(--text-secondary);
-          margin-bottom: 20px;
+          font-size: 0.88rem;
+          margin: 0 0 20px;
         }
 
-        .empty-state button {
-          background: linear-gradient(135deg, #f97316, #ea580c);
-          border: none;
-          color: white;
-          padding: 12px 24px;
-          border-radius: 8px;
-          font-weight: 500;
-          cursor: pointer;
-        }
-
-        /* Modal Styles */
+        /* ─── Modals ─── */
         .modal-desc {
           color: var(--text-secondary);
           margin-bottom: 24px;
@@ -1187,21 +1231,22 @@ export default function OurVendorsPage() {
 
         .form-group label {
           display: block;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           color: var(--text-secondary);
           margin-bottom: 6px;
+          font-weight: 500;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
           width: 100%;
-          padding: 12px;
+          padding: 10px 12px;
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 8px;
           color: var(--text-primary);
-          font-size: 0.95rem;
+          font-size: 0.9rem;
         }
 
         .form-group input:focus,
@@ -1227,7 +1272,7 @@ export default function OurVendorsPage() {
 
         .btn-cancel {
           flex: 1;
-          padding: 12px;
+          padding: 10px;
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 8px;
@@ -1238,7 +1283,7 @@ export default function OurVendorsPage() {
 
         .btn-submit {
           flex: 1;
-          padding: 12px;
+          padding: 10px;
           background: linear-gradient(135deg, #f97316, #ea580c);
           border: none;
           border-radius: 8px;
@@ -1249,7 +1294,7 @@ export default function OurVendorsPage() {
 
         .btn-remove {
           flex: 1;
-          padding: 12px;
+          padding: 10px;
           background: #ef4444;
           border: none;
           border-radius: 8px;
@@ -1264,9 +1309,10 @@ export default function OurVendorsPage() {
 
         .suggested-tags label {
           display: block;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           color: var(--text-secondary);
           margin-bottom: 10px;
+          font-weight: 500;
         }
 
         .tags-grid {
@@ -1279,10 +1325,11 @@ export default function OurVendorsPage() {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           padding: 6px 12px;
-          border-radius: 16px;
-          font-size: 0.85rem;
+          border-radius: 14px;
+          font-size: 0.82rem;
           color: var(--text-secondary);
           cursor: pointer;
+          transition: all 0.15s;
         }
 
         .suggested-tag:hover {
@@ -1296,24 +1343,11 @@ export default function OurVendorsPage() {
         }
 
         .confirm-content .warning {
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           color: var(--text-muted);
         }
 
-        /* Quick Actions Update */
-        .quick-actions .action-buttons button,
-        .quick-actions .action-buttons a {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .quick-actions .action-buttons svg {
-          width: 16px;
-          height: 16px;
-        }
-
-        /* Tablet Responsive */
+        /* ─── Tablet ─── */
         @media (max-width: 1024px) {
           .table-header,
           .row-main {
@@ -1322,167 +1356,214 @@ export default function OurVendorsPage() {
 
           .col-category,
           .col-orders,
-          .col-status {
+          .col-stage {
             display: none;
           }
 
-          .expanded-grid {
+          .detail-grid {
             grid-template-columns: 1fr 1fr;
+          }
+
+          .detail-actions {
+            flex-wrap: wrap;
           }
         }
 
-        /* Mobile Responsive - Card Layout */
+        /* ─── Mobile ─── */
         @media (max-width: 768px) {
-          .filter-bar {
+          .toolbar {
             flex-direction: column;
-            align-items: stretch;
+            gap: 12px;
           }
 
-          .filter-dropdowns {
-            flex-wrap: wrap;
-          }
-
-          .sort-bar {
-            flex-direction: column;
+          .toolbar-left {
+            width: 100%;
             gap: 8px;
-            align-items: stretch;
           }
 
-          .results-count {
-            text-align: left;
-            font-size: 0.8rem;
+          .toolbar-left .btn-secondary span {
+            display: none;
+          }
+
+          .toolbar-right {
+            width: 100%;
+            justify-content: space-between;
           }
 
           .sort-select {
-            width: 100%;
+            flex: 1;
           }
 
-          /* Hide desktop table header */
+          /* Hide desktop row, show mobile row */
           .table-header {
             display: none;
           }
 
-          /* Card-based supplier rows */
           .row-main {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            grid-template-rows: auto auto;
-            gap: 6px 12px;
-            padding: 14px 16px;
-            align-items: center;
-          }
-
-          .col-expand {
             display: none;
           }
 
-          .col-name {
-            grid-column: 1;
-            grid-row: 1;
+          .mobile-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: background 0.15s;
           }
 
-          .col-name strong {
-            font-size: 0.9rem;
+          .mobile-row:active {
+            background: var(--bg-secondary);
           }
 
-          .sub-info {
-            margin-top: 2px;
+          .mobile-row-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+          }
+
+          .mobile-supplier-info {
+            flex: 1;
+            min-width: 0;
+          }
+
+          .mobile-supplier-info .supplier-name {
+            font-size: 0.88rem;
+          }
+
+          .mobile-supplier-info .supplier-meta {
+            gap: 6px;
+          }
+
+          .location-text {
             font-size: 0.75rem;
+            color: var(--text-muted);
           }
 
-          .col-rating {
-            grid-column: 2;
-            grid-row: 1;
-            justify-self: end;
+          .mobile-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
             font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex-shrink: 0;
           }
 
-          .col-location {
-            grid-column: 1;
-            grid-row: 2;
+          .mobile-row-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+
+          .mobile-category {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+          }
+
+          /* Detail section on mobile */
+          .row-detail {
+            padding: 14px 16px;
+          }
+
+          .detail-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+          }
+
+          .detail-card-header {
+            padding: 8px 12px;
             font-size: 0.8rem;
           }
 
-          .col-status {
-            grid-column: 2;
-            grid-row: 2;
-            justify-self: end;
-            display: block !important;
-          }
-
-          .col-category,
-          .col-orders {
-            display: none;
-          }
-
-          /* Expanded section - clean vertical stack */
-          .row-expanded {
-            padding: 14px 16px;
-          }
-
-          .expanded-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-          }
-
-          .info-section {
-            padding: 12px;
-          }
-
-          .info-section h4 {
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-          }
-
-          .info-content p {
-            font-size: 0.8125rem;
-            margin-bottom: 4px;
-          }
-
-          .specialization-row {
-            font-size: 0.8125rem;
+          .detail-card-body {
             padding: 10px 12px;
-            margin-bottom: 12px;
           }
 
-          .notes-section {
-            padding: 12px;
-            margin-bottom: 12px;
+          .detail-item {
+            font-size: 0.8rem;
+            padding: 4px 0;
           }
 
-          /* Icon-only action buttons on mobile */
-          .action-buttons-row {
-            display: flex;
+          .specialization-bar {
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+          }
+
+          .notes-bar {
+            padding: 10px 12px;
+            margin-bottom: 10px;
+          }
+
+          .notes-heading {
+            font-size: 0.8rem;
+          }
+
+          .notes-text {
+            font-size: 0.8rem;
+          }
+
+          /* Action buttons — icon-only on mobile */
+          .detail-actions {
+            justify-content: center;
             gap: 8px;
-            justify-content: center;
           }
 
-          .btn-action {
-            padding: 10px;
+          .action-btn {
+            padding: 10px 12px;
             border-radius: 10px;
-            font-size: 0;
-            min-width: 44px;
-            justify-content: center;
           }
 
-          .btn-action svg {
-            width: 18px;
-            height: 18px;
+          .action-btn span {
+            display: none;
           }
 
           .form-row {
             grid-template-columns: 1fr;
           }
 
-          .tags-list {
+          .tags-wrap {
             gap: 6px;
           }
 
-          .tag {
-            font-size: 0.75rem;
+          .tag-pill {
+            font-size: 0.74rem;
             padding: 4px 8px;
+          }
+        }
+
+        /* ─── Compact mobile ─── */
+        @media (max-width: 480px) {
+          .toolbar-left {
+            flex-wrap: wrap;
+          }
+
+          .btn-primary {
+            flex: 1;
+          }
+
+          .mobile-row {
+            padding: 12px 14px;
+            gap: 6px;
+          }
+
+          .mobile-supplier-info .supplier-name {
+            font-size: 0.84rem;
+          }
+
+          .row-detail {
+            padding: 12px 14px;
+          }
+
+          .detail-card-header {
+            font-size: 0.78rem;
+          }
+
+          .detail-item {
+            font-size: 0.78rem;
           }
         }
       `}</style>

@@ -7,7 +7,7 @@ import LocalBooking from './components/LocalBooking';
 import { bookingStorage } from '@/lib/bookingStorage';
 import { BookingRecord, BookingSegment, BookingStatus } from '@/types/booking';
 import { formatCurrency, getPortLabel, getCityLabel } from '@/lib/bookingConstants';
-import { Ship, Truck, ArrowLeft, Package, Plane, MapPin, Calendar, Trash2 } from 'lucide-react';
+import { Ship, Truck, ArrowLeft, Package, Plane, MapPin, Calendar, Trash2, Globe } from 'lucide-react';
 
 type ActiveSegment = null | 'international' | 'local';
 type Tab = 'new' | 'bookings';
@@ -20,7 +20,6 @@ export default function BookShipmentPage() {
   const [filter, setFilter] = useState<Filter>('all');
 
   useEffect(() => {
-    bookingStorage.generateDemoBookings();
     setBookings(bookingStorage.getAll());
   }, []);
 
@@ -89,12 +88,10 @@ export default function BookShipmentPage() {
   }
 
   return (
-    <AppLayout>
-      <div className="page-container">
+    <AppLayout>      <div className="page-container">
         <div className="content-header">
           <h1>Book Shipment</h1>
-          <p>Book international freight or local logistics with competitive carrier quotes</p>
-        </div>
+          <p>Book international freight or local logistics with competitive carrier quotes</p>        </div>
 
         {/* Tabs */}
         <div className="tabs-container">
@@ -193,7 +190,7 @@ export default function BookShipmentPage() {
                     <div key={b.id} className="booking-card">
                       <div className="booking-header">
                         <div className="booking-ref">
-                          <span className="segment-tag">{isIntl ? '🌐 International' : '🇮🇳 Local'}</span>
+                          <span className="segment-tag">{isIntl ? <><Globe size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> International</> : 'Local'}</span>
                           <span className="ref">{b.referenceNumber}</span>
                         </div>
                         <div className="status-badge" style={{ color: statusColor(b.status), background: `${statusColor(b.status)}15` }}>

@@ -1,5 +1,7 @@
 'use client';
 
+import { Search, Lightbulb } from 'lucide-react';
+
 interface EmptyStateProps {
   searchQuery: string;
   onSubmitRequirement: () => void;
@@ -9,12 +11,12 @@ interface EmptyStateProps {
 export default function EmptyState({ searchQuery, onSubmitRequirement, onInviteSupplier }: EmptyStateProps) {
   return (
     <div className="empty-state">
-      <div className="empty-icon">🔍</div>
+      <div className="empty-icon"><Search size={48} /></div>
       <h2>No suppliers found for your search</h2>
       <p>We searched our database but couldn&apos;t find suppliers matching &ldquo;{searchQuery || 'your criteria'}&rdquo;</p>
       <div className="empty-cta">
         <div className="cta-box primary">
-          <h3>💡 Let us find suppliers FOR you</h3>
+          <h3><Lightbulb size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Let us find suppliers FOR you</h3>
           <p>Share your requirement and our team will identify and verify matching suppliers within 24-48 hours.</p>
           <button className="btn-submit-req" onClick={onSubmitRequirement}>Share Your Requirement →</button>
         </div>

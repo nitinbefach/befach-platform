@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageSquare, Bug, Lightbulb, Star, X, Send } from 'lucide-react';
+import { MessageSquare, Bug, Lightbulb, Star, X, Send, Check } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
 import { submitFeedback, getSentiment, getSessionId, FEEDBACK_FEATURES } from '@/lib/feedback';
 
@@ -119,7 +119,7 @@ export default function FeedbackWidget() {
           <div className="feedback-modal">
             {submitted ? (
               <div className="success-state">
-                <div className="success-icon">✓</div>
+                <div className="success-icon"><Check size={20} /></div>
                 <h3>Thank you!</h3>
                 <p>Your feedback has been submitted successfully.</p>
               </div>
@@ -210,15 +210,15 @@ export default function FeedbackWidget() {
         /* Widget Container */
         .widget-container {
           position: fixed;
-          bottom: ${isMobile ? '80px' : '24px'};
-          right: 24px;
+          bottom: ${isMobile ? 'calc(100px + env(safe-area-inset-bottom, 0px))' : '24px'};
+          right: ${isMobile ? '16px' : '24px'};
           z-index: 900;
         }
 
         /* Floating Button */
         .widget-btn {
-          width: 52px;
-          height: 52px;
+          width: ${isMobile ? '46px' : '52px'};
+          height: ${isMobile ? '46px' : '52px'};
           border-radius: 50%;
           background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
           color: white;

@@ -2,6 +2,7 @@
 
 import { Supplier, SearchResult, formatLeadTime, isSupplierSaved, saveSupplier, unsaveSupplier } from '@/lib/suppliers';
 import { useState, useEffect } from 'react';
+import { Star, MapPin, Check, Heart, Package, Truck, Eye, Mail, MessageCircle } from 'lucide-react';
 
 interface SupplierCardProps {
   result: SearchResult;
@@ -34,48 +35,83 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
 
   return (
     <div className="supplier-card">
+      {/* Top row: badges */}
+      <div className="card-top-row">
+        <div className="badge-row">
+          {supplier.partnerStatus === 'premium' && (
+            <span className="premium-badge">
+              <Star size={10} style={{ fill: '#f59e0b', color: '#f59e0b' }} /> Premium
+            </span>
+          )}
+          <span className="verified-badge">
+            <Check size={10} /> Verified
+          </span>
+        </div>
+        <button
+          className={`save-btn ${isSaved ? 'saved' : ''}`}
+          onClick={handleSaveToggle}
+          title={isSaved ? 'Remove from saved' : 'Save supplier'}
+        >
+          <Heart size={16} style={isSaved ? { color: '#ef4444', fill: '#ef4444' } : {}} />
+        </button>
+      </div>
+
+      {/* Header: avatar + info */}
       <div className="card-header">
         <div className="supplier-avatar">
           {supplier.companyName.charAt(0)}
         </div>
         <div className="supplier-info">
-          <h3>{supplier.companyName}</h3>
+          <h3 title={supplier.companyName}>{supplier.companyName}</h3>
           <div className="supplier-rating">
-            {'★'.repeat(Math.floor(supplier.metrics.avgRating))}
-            {'☆'.repeat(5 - Math.floor(supplier.metrics.avgRating))}
-            <span>{supplier.metrics.avgRating.toFixed(1)} ({supplier.metrics.reviewCount} reviews)</span>
+            <div className="stars-row">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Star
+                  key={i}
+                  size={13}
+                  style={i < Math.floor(supplier.metrics.avgRating)
+                    ? { color: '#f59e0b', fill: '#f59e0b' }
+                    : { color: '#d1d5db' }
+                  }
+                />
+              ))}
+            </div>
+            <span className="rating-text">
+              {supplier.metrics.avgRating.toFixed(1)} ({supplier.metrics.reviewCount} reviews)
+            </span>
           </div>
           <div className="supplier-location">
-            📍 {supplier.location.city}, {supplier.location.country}
+            <MapPin size={13} />
+            <span>{supplier.location.city}, {supplier.location.country}</span>
           </div>
-        </div>
-        <div className="card-badges">
-          {supplier.partnerStatus === 'premium' && (
-            <span className="premium-badge">⭐ Premium</span>
-          )}
-          <span className="verified-badge">✓ Verified</span>
-          <button
-            className={`save-btn ${isSaved ? 'saved' : ''}`}
-            onClick={handleSaveToggle}
-            title={isSaved ? 'Remove from saved' : 'Save supplier'}
-          >
-            {isSaved ? '❤️' : '🤍'}
-          </button>
         </div>
       </div>
 
+      {/* Match score */}
       <div className="match-score">
         <div className="score-bar">
-          <div className="score-fill" style={{ width: `${matchScore}%` }}></div>
+          <div className="score-fill" style={{ width: `${matchScore}%` }} />
         </div>
         <span className="score-text">{matchScore}% Match</span>
       </div>
 
+      {/* Stats */}
       <div className="card-body">
         <div className="supplier-stats">
-          <span>✓ {supplier.metrics.responseRate}% Response</span>
-          <span>📦 MOQ: {mainCatalogue?.products[0]?.moq || 'N/A'}</span>
-          {leadTime && <span>🚚 {formatLeadTime(leadTime)}</span>}
+          <div className="stat-item">
+            <Check size={13} />
+            <span>{supplier.metrics.responseRate}% Response</span>
+          </div>
+          <div className="stat-item">
+            <Package size={13} />
+            <span>MOQ: {mainCatalogue?.products[0]?.moq || 'N/A'}</span>
+          </div>
+          {leadTime && (
+            <div className="stat-item">
+              <Truck size={13} />
+              <span>{formatLeadTime(leadTime)}</span>
+            </div>
+          )}
         </div>
 
         <div className="supplier-products">
@@ -92,7 +128,7 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
         <div className="supplier-certs">
           {supplier.certifications.slice(0, 4).map((cert) => (
             <span key={cert.name} className="cert-badge">
-              {cert.verified && '✓'} {cert.name}
+              {cert.verified && <Check size={10} />} {cert.name}
             </span>
           ))}
           {supplier.certifications.length > 4 && (
@@ -101,15 +137,16 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
         </div>
       </div>
 
+      {/* Actions */}
       <div className="card-actions">
         <button className="btn-view" onClick={() => onView(supplier)}>
-          👁 View
+          <Eye size={14} /> View
         </button>
         <button className="btn-contact" onClick={() => onContact(supplier)}>
-          ✉ Contact
+          <Mail size={14} /> Contact
         </button>
         <button className="btn-chat" onClick={() => onChat(supplier)}>
-          💬 Chat
+          <MessageCircle size={14} /> Chat
         </button>
       </div>
 
@@ -117,34 +154,94 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
         .supplier-card {
           background: var(--card-bg);
           border: 1px solid var(--border-color);
-          border-radius: 16px;
-          padding: 20px;
-          transition: all 0.2s;
+          border-radius: 14px;
+          padding: 18px;
+          transition: all 0.25s ease;
+          display: flex;
+          flex-direction: column;
         }
 
         .supplier-card:hover {
-          border-color: rgba(249, 115, 22, 0.5);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+          border-color: rgba(249, 115, 22, 0.4);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
         }
 
-        .card-header {
+        /* Top row: badges + save */
+        .card-top-row {
           display: flex;
-          gap: 12px;
-          align-items: flex-start;
-          position: relative;
-          margin-bottom: 12px;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 14px;
         }
 
-        .supplier-avatar {
-          width: 48px;
-          height: 48px;
-          background: linear-gradient(135deg, #f97316, #ea580c);
-          border-radius: 12px;
+        .badge-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .premium-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          background: rgba(249, 115, 22, 0.1);
+          color: #f97316;
+          padding: 3px 8px;
+          border-radius: 6px;
+          font-size: 0.68rem;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+        }
+
+        .verified-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          background: rgba(34, 197, 94, 0.1);
+          color: #22c55e;
+          padding: 3px 8px;
+          border-radius: 6px;
+          font-size: 0.68rem;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+        }
+
+        .save-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          opacity: 0.4;
+          transition: all 0.2s;
+          padding: 4px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.25rem;
+          color: var(--text-secondary);
+        }
+
+        .save-btn:hover,
+        .save-btn.saved {
+          opacity: 1;
+        }
+
+        /* Header */
+        .card-header {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin-bottom: 14px;
+        }
+
+        .supplier-avatar {
+          width: 44px;
+          height: 44px;
+          background: linear-gradient(135deg, #f97316, #ea580c);
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.15rem;
           font-weight: 700;
           color: white;
           flex-shrink: 0;
@@ -157,70 +254,45 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
 
         .supplier-info h3 {
           margin: 0 0 4px;
-          font-size: 1rem;
+          font-size: 0.95rem;
           color: var(--text-primary);
           font-weight: 600;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          line-height: 1.3;
         }
 
         .supplier-rating {
-          color: #fbbf24;
-          font-size: 0.8rem;
-          margin-bottom: 2px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-bottom: 3px;
         }
 
-        .supplier-rating span {
+        .stars-row {
+          display: flex;
+          align-items: center;
+          gap: 1px;
+          line-height: 1;
+        }
+
+        .rating-text {
+          font-size: 0.75rem;
           color: var(--text-muted);
-          margin-left: 6px;
+          white-space: nowrap;
         }
 
         .supplier-location {
-          font-size: 0.8rem;
-          color: var(--text-secondary);
-        }
-
-        .card-badges {
           display: flex;
-          flex-direction: column;
-          gap: 6px;
-          align-items: flex-end;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.78rem;
+          color: var(--text-secondary);
+          line-height: 1;
         }
 
-        .verified-badge {
-          background: rgba(34, 197, 94, 0.1);
-          color: #22c55e;
-          padding: 3px 8px;
-          border-radius: 12px;
-          font-size: 0.7rem;
-          font-weight: 600;
-        }
-
-        .premium-badge {
-          background: rgba(249, 115, 22, 0.1);
-          color: #f97316;
-          padding: 3px 8px;
-          border-radius: 12px;
-          font-size: 0.7rem;
-          font-weight: 600;
-        }
-
-        .save-btn {
-          background: none;
-          border: none;
-          cursor: pointer;
-          font-size: 1.2rem;
-          opacity: 0.6;
-          transition: all 0.2s;
-          padding: 0;
-        }
-
-        .save-btn:hover,
-        .save-btn.saved {
-          opacity: 1;
-        }
-
+        /* Match score */
         .match-score {
           display: flex;
           align-items: center;
@@ -230,7 +302,7 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
 
         .score-bar {
           flex: 1;
-          height: 6px;
+          height: 5px;
           background: var(--bg-secondary);
           border-radius: 3px;
           overflow: hidden;
@@ -244,68 +316,91 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
         }
 
         .score-text {
-          font-size: 0.8rem;
+          font-size: 0.78rem;
           font-weight: 600;
           color: #22c55e;
           white-space: nowrap;
         }
 
+        /* Body */
         .card-body {
           padding-top: 12px;
           border-top: 1px solid var(--border-color);
+          flex: 1;
         }
 
         .supplier-stats {
           display: flex;
+          align-items: center;
           gap: 14px;
-          font-size: 0.8rem;
-          color: var(--text-secondary);
           margin-bottom: 10px;
           flex-wrap: wrap;
         }
 
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.78rem;
+          color: var(--text-secondary);
+          white-space: nowrap;
+        }
+
         .supplier-products {
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           color: var(--text-secondary);
           margin-bottom: 10px;
-          line-height: 1.4;
+          line-height: 1.5;
         }
 
         .supplier-products strong {
           color: var(--text-primary);
+          font-weight: 600;
         }
 
         .supplier-certs {
           display: flex;
-          gap: 6px;
+          align-items: center;
+          gap: 5px;
           flex-wrap: wrap;
         }
 
         .cert-badge {
-          background: rgba(59, 130, 246, 0.1);
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          background: rgba(59, 130, 246, 0.08);
           color: #60a5fa;
-          padding: 3px 8px;
+          padding: 3px 7px;
           border-radius: 4px;
-          font-size: 0.7rem;
+          font-size: 0.68rem;
+          font-weight: 500;
         }
 
         .cert-more {
           color: var(--text-muted);
-          font-size: 0.7rem;
-          padding: 3px 6px;
+          font-size: 0.68rem;
+          padding: 3px 4px;
         }
 
+        /* Actions */
         .card-actions {
           display: flex;
           gap: 8px;
-          margin-top: 16px;
+          margin-top: 14px;
+          padding-top: 14px;
+          border-top: 1px solid var(--border-color);
         }
 
         .card-actions button {
           flex: 1;
-          padding: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+          padding: 9px 8px;
           border-radius: 8px;
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s;
@@ -322,28 +417,95 @@ export default function SupplierCard({ result, onView, onContact, onChat }: Supp
         }
 
         .btn-contact {
-          background: rgba(59, 130, 246, 0.1);
-          border: 1px solid rgba(59, 130, 246, 0.3);
+          background: rgba(59, 130, 246, 0.08);
+          border: 1px solid rgba(59, 130, 246, 0.2);
           color: #60a5fa;
         }
 
         .btn-contact:hover {
-          background: rgba(59, 130, 246, 0.2);
+          background: rgba(59, 130, 246, 0.18);
         }
 
         .btn-chat {
-          background: rgba(34, 197, 94, 0.1);
-          border: 1px solid rgba(34, 197, 94, 0.3);
+          background: rgba(34, 197, 94, 0.08);
+          border: 1px solid rgba(34, 197, 94, 0.2);
           color: #22c55e;
         }
 
         .btn-chat:hover {
-          background: rgba(34, 197, 94, 0.2);
+          background: rgba(34, 197, 94, 0.18);
+        }
+
+        @media (max-width: 768px) {
+          .supplier-card {
+            padding: 14px;
+          }
+
+          .supplier-avatar {
+            width: 40px;
+            height: 40px;
+            font-size: 1.05rem;
+            border-radius: 8px;
+          }
+
+          .supplier-info h3 {
+            font-size: 0.9rem;
+          }
+
+          .stars-row {
+            gap: 0;
+          }
+
+          .supplier-stats {
+            gap: 10px;
+          }
+
+          .stat-item {
+            font-size: 0.75rem;
+          }
+
+          .card-actions button {
+            padding: 8px 6px;
+            font-size: 0.78rem;
+          }
         }
 
         @media (max-width: 480px) {
+          .supplier-card {
+            padding: 12px;
+          }
+
+          .card-header {
+            gap: 10px;
+          }
+
+          .supplier-avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 0.95rem;
+          }
+
+          .supplier-info h3 {
+            font-size: 0.85rem;
+          }
+
+          .supplier-rating {
+            flex-wrap: wrap;
+            gap: 4px;
+          }
+
+          .rating-text {
+            font-size: 0.7rem;
+          }
+
           .card-actions {
-            flex-direction: column;
+            gap: 6px;
+          }
+
+          .card-actions button {
+            padding: 8px 4px;
+            font-size: 0.75rem;
+            gap: 3px;
           }
         }
       `}</style>

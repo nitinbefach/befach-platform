@@ -21,6 +21,7 @@ const chatRoutes = require('./routes/chat');
 const teamRoutes = require('./routes/team');
 const reportsRoutes = require('./routes/reports');
 const apikeysRoutes = require('./routes/apikeys');
+const feedbackRoutes = require('./routes/feedback');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -61,6 +62,7 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/api-keys', apikeysRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -74,8 +76,12 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 BEFACH API Server running on port ${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`BEFACH API Server running on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
+
+  // Initialize Google Sheets header row (non-blocking)
+  const { ensureHeaderRow } = require('./lib/googleSheets');
+  ensureHeaderRow().catch(err => console.warn('Sheets header init skipped:', err.message));
 });
 
 module.exports = app;

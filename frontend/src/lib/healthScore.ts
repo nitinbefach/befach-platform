@@ -232,21 +232,21 @@ export const METRIC_LABELS: Record<keyof HealthScoreBreakdown, { label: string; 
   qualityScore: {
     label: 'Quality',
     description: 'Product/service quality based on ratings',
-    icon: '⭐'
+    icon: ''
   },
   deliveryScore: {
     label: 'Delivery',
     description: 'On-time delivery and completion rate',
-    icon: '🚚'
+    icon: ''
   },
   responseScore: {
     label: 'Response',
     description: 'Communication frequency and responsiveness',
-    icon: '💬'
+    icon: ''
   },
   complianceScore: {
     label: 'Compliance',
     description: 'Documentation and verification status',
-    icon: '✅'
+    icon: ''
   }
 };

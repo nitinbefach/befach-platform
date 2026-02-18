@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
 import AppLayout from '@/components/layout/AppLayout';
 import DeleteConfirmModal from '@/components/common/DeleteConfirmModal';
 import {
@@ -169,7 +170,7 @@ export default function RecycleBinPage() {
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">🔍</div>
+            <div className="empty-icon"><Search size={48} /></div>
             <h3>No Results Found</h3>
             <p>Try adjusting your search or filter criteria.</p>
           </div>

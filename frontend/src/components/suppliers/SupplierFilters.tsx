@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Save } from 'lucide-react';
 import {
   RelationshipStage,
   RELATIONSHIP_STAGE_CONFIG,
@@ -321,7 +322,7 @@ export function SupplierFilters({
                 ))}
               </div>
               <button className="save-preset-btn" onClick={() => setSavePresetModal(true)}>
-                💾 Save Current
+                <Save size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Save Current
               </button>
             </div>
           </div>

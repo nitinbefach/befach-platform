@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders — Kanban Pipeline | Befach</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #f97316;
+    --accent-light: #fff7ed;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --radius: 14px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+
+    --status-processing: #8b5cf6;
+    --status-transit: #3b82f6;
+    --status-customs: #f59e0b;
+    --status-delivered: #10b981;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Page Shell ── */
+  .page { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .page-header h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+  }
+  .page-header p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .header-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(249,115,22,0.25);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(249,115,22,0.35); }
+  .btn-ghost {
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Stats Strip ── */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-pill {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .stat-dot {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+  }
+  .stat-info { display: flex; flex-direction: column; gap: 2px; }
+  .stat-info .label { font-size: 0.72rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-info .value { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+  .stat-info .trend { font-size: 0.72rem; color: var(--text-secondary); }
+
+  /* ── Kanban Board ── */
+  .kanban-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .kanban-lane {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .lane-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lane-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .lane-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .lane-title h3 {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .lane-count {
+    background: var(--bg);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  .lane-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Order Card ── */
+  .order-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .order-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .order-id {
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+  .order-product {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .order-supplier {
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .order-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .order-value {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .order-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .order-qty {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+  .order-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .order-eta {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .order-eta svg { flex-shrink: 0; }
+
+  /* ── Mobile Tabs ── */
+  .mobile-tabs {
+    display: none;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-tabs::-webkit-scrollbar { display: none; }
+  .mobile-tab {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .mobile-tab.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .mobile-tab .tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    margin-left: 6px;
+    background: rgba(0,0,0,0.08);
+  }
+  .mobile-tab.active .tab-count {
+    background: rgba(255,255,255,0.25);
+    color: white;
+  }
+
+  .mobile-cards {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Viewport Helper ── */
+  .viewport-helper {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    background: var(--text-primary);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    z-index: 999;
+    font-family: 'Inter', monospace;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .page { padding: 20px 16px; }
+    .page-header { margin-bottom: 20px; }
+    .page-header h1 { font-size: 1.35rem; }
+    .page-header p { display: none; }
+    .header-actions { width: 100%; }
+    .header-actions .btn-ghost { display: none; }
+    .header-actions .btn-primary { flex: 1; justify-content: center; }
+
+    .stats-strip { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat-pill { padding: 12px 14px; gap: 10px; }
+    .stat-dot { width: 36px; height: 36px; font-size: 0.95rem; }
+    .stat-info .value { font-size: 1.05rem; }
+
+    .kanban-board { display: none; }
+    .mobile-tabs { display: flex; }
+    .mobile-cards { display: flex; }
+
+    .order-card { padding: 16px; }
+    .order-product { font-size: 0.88rem; }
+  }
+
+  @media (max-width: 480px) {
+    .stats-strip { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-pill { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px; }
+    .stat-dot { width: 32px; height: 32px; border-radius: 9px; font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>My Orders</h1>
+        <p>Track and manage your import orders across every stage</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost">Export</button>
+        <button class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Order
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <div class="stat-dot" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="label">Total Orders</span>
+          <span class="value">1,847</span>
+          <span class="trend">+124 this month</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-dot" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="label">In Progress</span>
+          <span class="value">342</span>
+          <span class="trend">28 active now</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-dot" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="label">Completed</span>
+          <span class="value">1,476</span>
+          <span class="trend">98% on time</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-dot" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="label">Total Value</span>
+          <span class="value">$2.4M</span>
+          <span class="trend">+23% this year</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Tabs -->
+    <div class="mobile-tabs" id="mobileTabs">
+      <button class="mobile-tab active" data-status="processing" onclick="switchTab(this)">Processing <span class="tab-count">1</span></button>
+      <button class="mobile-tab" data-status="transit" onclick="switchTab(this)">In Transit <span class="tab-count">2</span></button>
+      <button class="mobile-tab" data-status="customs" onclick="switchTab(this)">Customs <span class="tab-count">1</span></button>
+      <button class="mobile-tab" data-status="delivered" onclick="switchTab(this)">Delivered <span class="tab-count">2</span></button>
+    </div>
+
+    <!-- Mobile Cards (shown on mobile) -->
+    <div class="mobile-cards" id="mobileCards">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Desktop Kanban -->
+    <div class="kanban-board">
+      <!-- Processing Lane -->
+      <div class="kanban-lane">
+        <div class="lane-header">
+          <div class="lane-title">
+            <div class="lane-dot" style="background: var(--status-processing);"></div>
+            <h3>Processing</h3>
+          </div>
+          <span class="lane-count">1</span>
+        </div>
+        <div class="lane-body">
+          <div class="order-card">
+            <div class="order-id">ORD-2844</div>
+            <div class="order-product">Bluetooth Speakers</div>
+            <div class="order-supplier">Guangzhou Audio Tech</div>
+            <div class="order-meta">
+              <span class="order-value">$5,695</span>
+              <span class="order-qty">300 pcs</span>
+            </div>
+            <div class="order-footer">
+              <span class="order-date">Nov 8, 2025</span>
+              <span class="order-eta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ETA: Dec 5
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Transit Lane -->
+      <div class="kanban-lane">
+        <div class="lane-header">
+          <div class="lane-title">
+            <div class="lane-dot" style="background: var(--status-transit);"></div>
+            <h3>In Transit</h3>
+          </div>
+          <span class="lane-count">2</span>
+        </div>
+        <div class="lane-body">
+          <div class="order-card">
+            <div class="order-id">ORD-2847</div>
+            <div class="order-product">LED Bulbs 9W</div>
+            <div class="order-supplier">Shenzhen Lighting Co.</div>
+            <div class="order-meta">
+              <span class="order-value">$3,728</span>
+              <span class="order-qty">1000 pcs</span>
+            </div>
+            <div class="order-footer">
+              <span class="order-date">Nov 15, 2025</span>
+              <span class="order-eta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ETA: Dec 1
+              </span>
+            </div>
+          </div>
+          <div class="order-card">
+            <div class="order-id">ORD-2843</div>
+            <div class="order-product">Solar Panels 300W</div>
+            <div class="order-supplier">Taiwan Solar Industries</div>
+            <div class="order-meta">
+              <span class="order-value">$9,782</span>
+              <span class="order-qty">100 pcs</span>
+            </div>
+            <div class="order-footer">
+              <span class="order-date">Nov 5, 2025</span>
+              <span class="order-eta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ETA: Dec 12
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customs Lane -->
+      <div class="kanban-lane">
+        <div class="lane-header">
+          <div class="lane-title">
+            <div class="lane-dot" style="background: var(--status-customs);"></div>
+            <h3>Customs</h3>
+          </div>
+          <span class="lane-count">1</span>
+        </div>
+        <div class="lane-body">
+          <div class="order-card">
+            <div class="order-id">ORD-2846</div>
+            <div class="order-product">Mobile Chargers</div>
+            <div class="order-supplier">Vietnam Tech Electronics</div>
+            <div class="order-meta">
+              <span class="order-value">$1,600</span>
+              <span class="order-qty">500 pcs</span>
+            </div>
+            <div class="order-footer">
+              <span class="order-date">Nov 12, 2025</span>
+              <span class="order-eta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ETA: Nov 25
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivered Lane -->
+      <div class="kanban-lane">
+        <div class="lane-header">
+          <div class="lane-title">
+            <div class="lane-dot" style="background: var(--status-delivered);"></div>
+            <h3>Delivered</h3>
+          </div>
+          <span class="lane-count">2</span>
+        </div>
+        <div class="lane-body">
+          <div class="order-card">
+            <div class="order-id">ORD-2845</div>
+            <div class="order-product">Cotton Fabric</div>
+            <div class="order-supplier">Dhaka Textiles Ltd.</div>
+            <div class="order-meta">
+              <span class="order-value">$4,154</span>
+              <span class="order-qty">2000 m</span>
+            </div>
+            <div class="order-footer">
+              <span class="order-date">Nov 10, 2025</span>
+              <span class="order-eta" style="color: var(--status-delivered);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Delivered
+              </span>
+            </div>
+          </div>
+          <div class="order-card">
+            <div class="order-id">ORD-2842</div>
+            <div class="order-product">Power Banks</div>
+            <div class="order-supplier">Shenzhen Power Tech</div>
+            <div class="order-meta">
+              <span class="order-value">$2,450</span>
+              <span class="order-qty">800 pcs</span>
+            </div>
+            <div class="order-footer">
+              <span class="order-date">Nov 3, 2025</span>
+              <span class="order-eta" style="color: var(--status-delivered);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Delivered
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viewport-helper" id="viewportHelper"></div>
+
+  <script>
+    // Demo data for mobile tabs
+    const orders = [
+      { id: 'ORD-2844', product: 'Bluetooth Speakers', supplier: 'Guangzhou Audio Tech', value: '$5,695', qty: '300 pcs', date: 'Nov 8, 2025', eta: 'Dec 5', status: 'processing' },
+      { id: 'ORD-2847', product: 'LED Bulbs 9W', supplier: 'Shenzhen Lighting Co.', value: '$3,728', qty: '1000 pcs', date: 'Nov 15, 2025', eta: 'Dec 1', status: 'transit' },
+      { id: 'ORD-2843', product: 'Solar Panels 300W', supplier: 'Taiwan Solar Industries', value: '$9,782', qty: '100 pcs', date: 'Nov 5, 2025', eta: 'Dec 12', status: 'transit' },
+      { id: 'ORD-2846', product: 'Mobile Chargers', supplier: 'Vietnam Tech Electronics', value: '$1,600', qty: '500 pcs', date: 'Nov 12, 2025', eta: 'Nov 25', status: 'customs' },
+      { id: 'ORD-2845', product: 'Cotton Fabric', supplier: 'Dhaka Textiles Ltd.', value: '$4,154', qty: '2000 m', date: 'Nov 10, 2025', eta: 'Delivered', status: 'delivered' },
+      { id: 'ORD-2842', product: 'Power Banks', supplier: 'Shenzhen Power Tech', value: '$2,450', qty: '800 pcs', date: 'Nov 3, 2025', eta: 'Delivered', status: 'delivered' },
+    ];
+
+    let activeTab = 'processing';
+
+    function switchTab(el) {
+      document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      activeTab = el.dataset.status;
+      renderMobileCards();
+    }
+
+    function renderMobileCards() {
+      const container = document.getElementById('mobileCards');
+      const filtered = orders.filter(o => o.status === activeTab);
+      const isDelivered = activeTab === 'delivered';
+
+      container.innerHTML = filtered.map(o => `
+        <div class="order-card">
+          <div class="order-id">${o.id}</div>
+          <div class="order-product">${o.product}</div>
+          <div class="order-supplier">${o.supplier}</div>
+          <div class="order-meta">
+            <span class="order-value">${o.value}</span>
+            <span class="order-qty">${o.qty}</span>
+          </div>
+          <div class="order-footer">
+            <span class="order-date">${o.date}</span>
+            <span class="order-eta" ${isDelivered ? 'style="color: var(--status-delivered);"' : ''}>
+              ${isDelivered
+                ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Delivered'
+                : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ETA: ${o.eta}`}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    renderMobileCards();
+
+    // Viewport helper
+    function updateVH() {
+      document.getElementById('viewportHelper').textContent = window.innerWidth + 'px';
+    }
+    updateVH();
+    window.addEventListener('resize', updateVH);
+  </script>
+</body>
+</html>

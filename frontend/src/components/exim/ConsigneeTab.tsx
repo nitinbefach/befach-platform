@@ -104,7 +104,7 @@ export default function ConsigneeTab({ consignees, onConsigneeClick }: Consignee
         .trader-name {
           background: none;
           border: none;
-          color: #2563eb;
+          color: #f97316;
           font-size: 0.84rem;
           font-weight: 600;
           cursor: pointer;

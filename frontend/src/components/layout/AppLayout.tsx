@@ -5,9 +5,10 @@
  *
  * Main application layout with:
  * - TopBar header
- * - Sidebar navigation (desktop)
+ * - Sidebar navigation (desktop: expanded 240px, mobile: hidden)
  * - MobileDrawer (mobile, swipe-to-close)
  * - BottomNav (mobile)
+ * - Optional right contextual panel (desktop only)
  * - Animated page transitions
  */
 
@@ -25,6 +26,10 @@ import { pageSlide, springConfig } from '@/lib/animations';
 
 interface AppLayoutProps {
   children: React.ReactNode;
+  /** Optional right panel content (rendered as 3rd grid column on desktop, below content on mobile) */
+  rightPanel?: React.ReactNode;
+  /** Right panel width in px (default 340) */
+  rightPanelWidth?: number;
   searchPlaceholder?: string;
   /** Hide bottom nav on specific pages */
   hideBottomNav?: boolean;
@@ -34,6 +39,8 @@ interface AppLayoutProps {
 
 export default function AppLayout({
   children,
+  rightPanel,
+  rightPanelWidth = 340,
   searchPlaceholder,
   hideBottomNav = false,
   animateContent = true
@@ -41,7 +48,7 @@ export default function AppLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const { isMobile } = useMobile();
+  const { isMobile, isDesktop } = useMobile();
 
   // Close drawer when switching to desktop view
   useEffect(() => {
@@ -59,8 +66,20 @@ export default function AppLayout({
     }
   };
 
+  const showRightColumn = rightPanel && isDesktop;
+  const showRightInline = rightPanel && !isDesktop;
+
+  const containerClasses = [
+    'app-container',
+    !hideBottomNav && isMobile ? 'has-bottom-nav' : '',
+    showRightColumn ? 'has-right-panel' : '',
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={`app-container ${!hideBottomNav && isMobile ? 'has-bottom-nav' : ''}`}>
+    <div
+      className={containerClasses}
+      style={showRightColumn ? { '--right-panel-width': `${rightPanelWidth}px` } as React.CSSProperties : undefined}
+    >
       <TopBar
         onMenuToggle={handleMenuToggle}
         onGetStarted={() => setModalOpen(true)}
@@ -91,13 +110,31 @@ export default function AppLayout({
             className="content-wrapper"
           >
             {children}
+            {/* Mobile/tablet: right panel stacks below content */}
+            {showRightInline && (
+              <div className="right-panel-mobile">
+                {rightPanel}
+              </div>
+            )}
           </motion.div>
         ) : (
           <div className="content-wrapper">
             {children}
+            {showRightInline && (
+              <div className="right-panel-mobile">
+                {rightPanel}
+              </div>
+            )}
           </div>
         )}
       </main>
+
+      {/* Desktop: Right Contextual Panel */}
+      {showRightColumn && (
+        <aside className="right-panel">
+          {rightPanel}
+        </aside>
+      )}
 
       {/* Mobile Bottom Navigation */}
       {!hideBottomNav && <BottomNav />}
@@ -146,11 +183,16 @@ export default function AppLayout({
       <style jsx>{`
         .app-container {
           display: grid;
-          grid-template-columns: 70px 1fr;
+          grid-template-columns: 240px 1fr;
           grid-template-rows: 64px 1fr;
           height: 100vh;
           width: 100vw;
           overflow: hidden;
+        }
+
+        /* 3-column layout when right panel is present */
+        .app-container.has-right-panel {
+          grid-template-columns: 240px 1fr var(--right-panel-width, 340px);
         }
 
         .main-content {
@@ -167,13 +209,37 @@ export default function AppLayout({
           min-height: 100%;
         }
 
-        /* Tablet - hide sidebar, show hamburger menu */
+        /* Right panel — desktop only (3rd grid column) */
+        .right-panel {
+          grid-column: 3;
+          grid-row: 2;
+          overflow-y: auto;
+          overflow-x: hidden;
+          border-left: 1px solid var(--border-color);
+          background: var(--bg-secondary);
+          padding: 20px;
+        }
+
+        /* Right panel — mobile/tablet (stacked below content) */
+        .right-panel-mobile {
+          margin-top: 24px;
+          padding-top: 24px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        /* Tablet - hide sidebar, collapse to single column */
         @media (max-width: 1024px) {
           .app-container {
             grid-template-columns: 1fr;
           }
+          .app-container.has-right-panel {
+            grid-template-columns: 1fr;
+          }
           .main-content {
             grid-column: 1;
+          }
+          .right-panel {
+            display: none;
           }
         }
 
@@ -186,6 +252,11 @@ export default function AppLayout({
 
           .app-container.has-bottom-nav .main-content {
             padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+          }
+
+          .right-panel-mobile {
+            margin-top: 16px;
+            padding-top: 16px;
           }
         }
 

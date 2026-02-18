@@ -6,7 +6,6 @@ import { useMobile } from '@/hooks/useMobile';
 import {
   getFeedbackList,
   getFeedbackStats,
-  initializeFeedback,
   downloadFeedbackCSV,
   deleteFeedback,
   FEEDBACK_FEATURES,
@@ -24,7 +23,6 @@ export default function FeedbackDashboard() {
   const { isMobile } = useMobile();
 
   const loadData = () => {
-    initializeFeedback();
     const list = getFeedbackList(filters);
     setEntries(list);
     setStats(getFeedbackStats());

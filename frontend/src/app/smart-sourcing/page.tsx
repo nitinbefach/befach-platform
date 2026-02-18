@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, ChatWindow, EmptyState } from '@/components/search';
 import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats } from '@/lib/suppliers';
+import { MapPin, Star, Info, HelpCircle, FileText, UserPlus, X } from 'lucide-react';
 
 type ModalType = 'none' | 'supplier-detail' | 'contact' | 'chat';
 type SourceTab = 'befach' | 'external';
@@ -47,6 +48,8 @@ export default function SmartSourcingPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [activeModal, setActiveModal] = useState<ModalType>('none');
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
+  const helpPopupRef = useRef<HTMLDivElement>(null);
   const [stats, setStats] = useState({ total: 0, premium: 0, byCategory: [] as { id: string; name: string; count: number }[] });
 
   useEffect(() => {
@@ -117,8 +120,7 @@ export default function SmartSourcingPage() {
   };
 
   return (
-    <AppLayout searchPlaceholder="Search suppliers...">
-      <HeroSearch
+    <AppLayout searchPlaceholder="Search suppliers...">      <HeroSearch
         onSearch={handleSearch}
         onToggleFilters={() => setShowFilters(!showFilters)}
         showFilters={showFilters}
@@ -194,7 +196,7 @@ export default function SmartSourcingPage() {
       {activeTab === 'external' && (
         <section className="results-section">
           <div className="external-notice">
-            <span className="notice-icon">ℹ️</span>
+            <span className="notice-icon"><Info size={14} /></span>
             <p>These suppliers are aggregated from external sources. Contact details require verification through Befach.</p>
           </div>
 
@@ -212,12 +214,12 @@ export default function SmartSourcingPage() {
                       <h3>{supplier.name}</h3>
                       <div className="external-meta">
                         <span className="source-badge">{supplier.source}</span>
-                        <span className="location">📍 {supplier.location}</span>
+                        <span className="location"><MapPin size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> {supplier.location}</span>
                       </div>
                     </div>
                   </div>
                   <div className="external-body">
-                    <div className="external-rating">{'★'.repeat(Math.floor(supplier.rating))}{'☆'.repeat(5 - Math.floor(supplier.rating))} {supplier.rating}</div>
+                    <div className="external-rating">{Array.from({ length: 5 }, (_, i) => (<Star key={i} size={12} style={i < Math.floor(supplier.rating) ? { color: '#f59e0b', fill: '#f59e0b' } : { color: '#4b5563' }} />))} {supplier.rating}</div>
                     <div className="external-products"><strong>Products:</strong> {supplier.products.join(', ')}</div>
                   </div>
                   <div className="external-actions">
@@ -236,12 +238,34 @@ export default function SmartSourcingPage() {
         </section>
       )}
 
-      {/* Secondary Actions Bar - Redirect to pages */}
+      {/* Help FAB + Popup */}
       {hasSearched && searchResults.length > 0 && activeTab === 'befach' && (
-        <div className="secondary-bar">
-          <span>Can&apos;t find what you need?</span>
-          <Link href="/submit-requirement" className="bar-btn">Share Your Requirement</Link>
-          <Link href="/invite-supplier" className="bar-btn">Invite Your Suppliers</Link>
+        <div className="help-fab-wrapper" ref={helpPopupRef}>
+          {showHelpPopup && (
+            <div className="help-popup">
+              <div className="help-popup-header">
+                <span>Can&apos;t find what you need?</span>
+                <button className="help-popup-close" onClick={() => setShowHelpPopup(false)}><X size={16} /></button>
+              </div>
+              <Link href="/submit-requirement" className="help-popup-item" onClick={() => setShowHelpPopup(false)}>
+                <div className="help-popup-icon req"><FileText size={18} /></div>
+                <div>
+                  <div className="help-popup-title">Share Your Requirement</div>
+                  <div className="help-popup-desc">Let us find suppliers for you</div>
+                </div>
+              </Link>
+              <Link href="/invite-supplier" className="help-popup-item" onClick={() => setShowHelpPopup(false)}>
+                <div className="help-popup-icon invite"><UserPlus size={18} /></div>
+                <div>
+                  <div className="help-popup-title">Invite Your Suppliers</div>
+                  <div className="help-popup-desc">Bring your existing suppliers to Befach</div>
+                </div>
+              </Link>
+            </div>
+          )}
+          <button className="help-fab" onClick={() => setShowHelpPopup(!showHelpPopup)}>
+            {showHelpPopup ? <X size={22} /> : <HelpCircle size={22} />}
+          </button>
         </div>
       )}
 
@@ -275,7 +299,7 @@ export default function SmartSourcingPage() {
         .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .results-header h2 { font-size: 1.1rem; color: var(--text-primary); margin: 0; }
         .sort-select { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); }
-        .supplier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; }
+        .supplier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
         .loading { text-align: center; padding: 60px; }
         .spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: #f97316; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -307,16 +331,48 @@ export default function SmartSourcingPage() {
 
         .no-external { text-align: center; padding: 40px; color: var(--text-muted); }
 
-        .secondary-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: center; align-items: center; gap: 16px; z-index: 90; }
-        .secondary-bar span { color: var(--text-secondary); }
-        .bar-btn { background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); color: #fb923c; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
-        .bar-btn:hover { background: rgba(249,115,22,0.2); }
+        .help-fab-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 90; display: flex; flex-direction: column; align-items: flex-end; }
+        .help-fab { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(249,115,22,0.4); transition: all 0.2s; }
+        .help-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(249,115,22,0.5); }
+        .help-popup { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 12px; width: 280px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: popupSlideUp 0.2s ease-out; }
+        @keyframes popupSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .help-popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .help-popup-header span { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+        .help-popup-close { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px; }
+        .help-popup-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; text-decoration: none; color: var(--text-primary); transition: background 0.2s; }
+        .help-popup-item:hover { background: var(--bg-hover, rgba(255,255,255,0.05)); }
+        .help-popup-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .help-popup-icon.req { background: rgba(249,115,22,0.12); color: #f97316; }
+        .help-popup-icon.invite { background: rgba(59,130,246,0.12); color: #60a5fa; }
+        .help-popup-title { font-weight: 600; font-size: 0.9rem; }
+        .help-popup-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 
         @media (max-width: 768px) {
           .source-tabs { width: 100%; }
           .source-tab { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.85rem; }
+          .stats-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; margin-bottom: 16px; }
+          .stat-item { border-right: none; padding: 12px; background: rgba(249,115,22,0.04); border-radius: 8px; }
+          .stat-value { font-size: 1.25rem; }
+          .stat-label { font-size: 0.8rem; }
           .supplier-grid, .external-grid { grid-template-columns: 1fr; }
-          .secondary-bar { flex-direction: column; gap: 10px; }
+          .results-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+          .sort-select { width: 100%; }
+          .external-card { padding: 14px; }
+          .external-cta { padding: 24px 16px; }
+          .help-fab-wrapper { bottom: 72px; right: 16px; }
+          .help-popup { width: 260px; }
+        }
+
+        @media (max-width: 480px) {
+          .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 12px; }
+          .stat-item { padding: 10px; }
+          .stat-value { font-size: 1.1rem; }
+          .stat-label { font-size: 0.75rem; }
+          .source-tabs { border-radius: 8px; padding: 4px; }
+          .source-tab { padding: 8px 10px; font-size: 0.8rem; }
+          .tab-count { padding: 2px 8px; font-size: 0.75rem; }
+          .external-actions { flex-direction: column; }
+          .external-actions button { padding: 8px; font-size: 0.8rem; }
         }
       `}</style>
       {promptElement}

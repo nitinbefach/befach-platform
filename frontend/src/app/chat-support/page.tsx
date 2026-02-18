@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { MessageCircle, Smartphone, Bot, Send, Phone, Mail, Clock, BookOpen } from 'lucide-react';
 
 interface Message {
   id: number;
@@ -11,21 +12,21 @@ interface Message {
 }
 
 const quickActions = [
-  { id: 'track', label: '📦 Track My Order', query: 'Track my order status' },
-  { id: 'quote', label: '💰 Get a Quote', query: 'I need a quote for a new product' },
-  { id: 'status', label: '📋 Order Status', query: 'What is the status of my latest order?' },
-  { id: 'supplier', label: '🏭 Find Supplier', query: 'Help me find a supplier' },
-  { id: 'customs', label: '📄 Customs Help', query: 'I have a question about customs clearance' },
-  { id: 'agent', label: '👤 Talk to Expert', query: 'Connect me with a human expert' },
+  { id: 'track', label: 'Track My Order', query: 'Track my order status' },
+  { id: 'quote', label: 'Get a Quote', query: 'I need a quote for a new product' },
+  { id: 'status', label: 'Order Status', query: 'What is the status of my latest order?' },
+  { id: 'supplier', label: 'Find Supplier', query: 'Help me find a supplier' },
+  { id: 'customs', label: 'Customs Help', query: 'I have a question about customs clearance' },
+  { id: 'agent', label: 'Talk to Expert', query: 'Connect me with a human expert' },
 ];
 
 const botResponses: Record<string, string> = {
   'track': "I'd be happy to help you track your order! Please provide your order ID or the product name, and I'll look up the current status for you.",
   'quote': "Great! I can help you get a quote. Please share:\n\n1. Product name/description\n2. Quantity needed\n3. Delivery location\n\nOur team will prepare a detailed quote within 24 hours.",
-  'status': "Let me check your recent orders... You have 2 active orders:\n\n📦 **ORD-2024-0847** - Organic Turmeric\nStatus: In Transit (ETA: Dec 5)\n\n📦 **ORD-2024-0812** - Black Pepper\nStatus: Customs Clearance\n\nWould you like more details about any of these?",
+  'status': "Let me check your recent orders... You have 2 active orders:\n\n**ORD-2024-0847** - Organic Turmeric\nStatus: In Transit (ETA: Dec 5)\n\n**ORD-2024-0812** - Black Pepper\nStatus: Customs Clearance\n\nWould you like more details about any of these?",
   'supplier': "I can help you find verified suppliers! What product are you looking for? Please also mention:\n\n• Desired origin country\n• Quality requirements\n• Approximate quantity",
   'customs': "I can help with customs-related queries. Common questions include:\n\n• HS Code lookup\n• Duty calculations\n• Required documents\n• Clearance process\n\nWhat specifically would you like to know?",
-  'agent': "Connecting you with a Befach expert... 👤\n\nYou can also reach us directly:\n📱 WhatsApp: +91 98765 43210\n📧 Email: support@befach.com\n\nAverage response time: 15 minutes during business hours.",
+  'agent': "Connecting you with a Befach expert...\n\nYou can also reach us directly:\nWhatsApp: +91 98765 43210\nEmail: support@befach.com\n\nAverage response time: 15 minutes during business hours.",
   'default': "I'm here to help with your import needs! You can ask me about:\n\n• Tracking orders\n• Getting quotes\n• Finding suppliers\n• Customs & compliance\n\nOr use the quick action buttons above for common requests."
 };
 
@@ -34,7 +35,7 @@ export default function ChatSupportPage() {
     {
       id: 1,
       type: 'bot',
-      content: "Hi! 👋 I'm your Befach assistant. How can I help you today?",
+      content: "Hi! I'm your Befach assistant. How can I help you today?",
       timestamp: new Date()
     }
   ]);
@@ -97,14 +98,14 @@ export default function ChatSupportPage() {
       <div className="chat-container">
         <div className="chat-header">
           <div className="chat-header-info">
-            <h1>💬 Chat with Us</h1>
+            <h1><MessageCircle size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Chat with Us</h1>
             <span className="online-status">
               <span className="status-dot"></span>
               Online - Avg. response: 5 min
             </span>
           </div>
           <button className="whatsapp-btn" onClick={openWhatsApp}>
-            📱 Open WhatsApp
+            <Smartphone size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Open WhatsApp
           </button>
         </div>
 
@@ -128,7 +129,7 @@ export default function ChatSupportPage() {
                 className={`message ${message.type}`}
               >
                 {message.type === 'bot' && (
-                  <div className="message-avatar">🤖</div>
+                  <div className="message-avatar"><Bot size={18} /></div>
                 )}
                 <div className="message-content">
                   <div className="message-text" style={{ whiteSpace: 'pre-line' }}>
@@ -143,7 +144,7 @@ export default function ChatSupportPage() {
             
             {isTyping && (
               <div className="message bot">
-                <div className="message-avatar">🤖</div>
+                <div className="message-avatar"><Bot size={18} /></div>
                 <div className="message-content">
                   <div className="typing-indicator">
                     <span></span>
@@ -166,31 +167,31 @@ export default function ChatSupportPage() {
               className="chat-input"
             />
             <button type="submit" className="send-btn" disabled={!inputValue.trim()}>
-              ➤
+              <Send size={16} />
             </button>
           </form>
         </div>
 
         <div className="chat-sidebar">
           <div className="sidebar-section">
-            <h3>📞 Direct Contact</h3>
+            <h3><Phone size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Direct Contact</h3>
             <div className="contact-card">
               <div className="contact-item">
-                <span className="contact-icon">📱</span>
+                <span className="contact-icon"><Smartphone size={16} /></span>
                 <div>
                   <strong>WhatsApp</strong>
                   <p>+91 98765 43210</p>
                 </div>
               </div>
               <div className="contact-item">
-                <span className="contact-icon">📧</span>
+                <span className="contact-icon"><Mail size={16} /></span>
                 <div>
                   <strong>Email</strong>
                   <p>support@befach.com</p>
                 </div>
               </div>
               <div className="contact-item">
-                <span className="contact-icon">🕐</span>
+                <span className="contact-icon"><Clock size={16} /></span>
                 <div>
                   <strong>Hours</strong>
                   <p>Mon-Sat, 9am-7pm IST</p>
@@ -200,7 +201,7 @@ export default function ChatSupportPage() {
           </div>
 
           <div className="sidebar-section">
-            <h3>📚 Help Articles</h3>
+            <h3><BookOpen size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Help Articles</h3>
             <ul className="help-links">
               <li><a href="#">How to track your shipment</a></li>
               <li><a href="#">Understanding customs duties</a></li>

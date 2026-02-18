@@ -110,7 +110,7 @@ export default function SummaryTab({ countries, hsCodes, totalValue }: SummaryTa
           color: var(--text-primary);
         }
         .bar-name.hs-code {
-          color: #2563eb;
+          color: #f97316;
           font-family: monospace;
         }
         .bar-meta {
@@ -129,7 +129,7 @@ export default function SummaryTab({ countries, hsCodes, totalValue }: SummaryTa
         }
         .bar-fill {
           height: 100%;
-          background: linear-gradient(90deg, #2563eb, #3b82f6);
+          background: linear-gradient(90deg, #f97316, #fb923c);
           border-radius: 4px;
           min-width: 4px;
           transition: width 0.4s ease;

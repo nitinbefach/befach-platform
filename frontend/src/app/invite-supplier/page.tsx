@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { CheckCircle, Mail, Download, FolderOpen, Check, AlertTriangle, Inbox, RefreshCw, X, Link2, MapPin, Briefcase } from 'lucide-react';
 import {
   CATEGORIES,
   COUNTRIES,
@@ -313,7 +314,7 @@ export default function InviteSupplierPage() {
       <AppLayout>
         <div className="success-container">
           <div className="success-content">
-            <div className="success-icon">✅</div>
+            <div className="success-icon"><CheckCircle size={48} /></div>
             <h1>Invitation Sent!</h1>
             <p className="success-subtitle">
               We&apos;ve sent an invitation to <strong>{lastInvitation.companyName}</strong>
@@ -474,7 +475,7 @@ export default function InviteSupplierPage() {
       <AppLayout>
         <div className="success-container">
           <div className="success-content">
-            <div className="success-icon">📧</div>
+            <div className="success-icon"><Mail size={48} /></div>
             <h1>Invitations Sent!</h1>
             <p className="success-subtitle">
               All invitations have been sent successfully.
@@ -725,7 +726,7 @@ export default function InviteSupplierPage() {
                     <h4>Download Template</h4>
                     <p>Get our CSV template with the required format</p>
                     <button className="btn-template" onClick={downloadTemplate}>
-                      📥 Download Template
+                      <Download size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Download Template
                     </button>
                   </div>
                 </div>
@@ -741,7 +742,7 @@ export default function InviteSupplierPage() {
                       className="upload-zone"
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      <div className="upload-icon">📁</div>
+                      <div className="upload-icon"><FolderOpen size={24} /></div>
                       <p>Click to upload or drag and drop</p>
                       <span>CSV files only</span>
                       <input
@@ -781,7 +782,7 @@ export default function InviteSupplierPage() {
                           <tbody>
                             {bulkData.map((row, idx) => (
                               <tr key={idx} className={row.isValid ? '' : 'invalid-row'}>
-                                <td>{row.isValid ? '✓' : '⚠️'}</td>
+                                <td>{row.isValid ? <Check size={14} /> : <AlertTriangle size={14} />}</td>
                                 <td>{row.companyName || <span className="missing">Missing</span>}</td>
                                 <td>{row.contactName || <span className="missing">—</span>}</td>
                                 <td>{row.email || <span className="missing">Missing</span>}</td>
@@ -841,7 +842,7 @@ export default function InviteSupplierPage() {
                 {/* Invitations List */}
                 {filteredInvitations.length === 0 ? (
                   <div className="empty-state">
-                    <div className="empty-icon">📭</div>
+                    <div className="empty-icon"><Inbox size={48} /></div>
                     <h3>No invitations {filter !== 'all' ? `with status "${filter}"` : 'yet'}</h3>
                     <p>
                       {filter === 'all'
@@ -869,9 +870,9 @@ export default function InviteSupplierPage() {
                         </div>
 
                         <div className="invitation-details">
-                          <span>📧 {inv.contactEmail}</span>
-                          {inv.country && <span>📍 {inv.country}</span>}
-                          {inv.category && <span>💼 {inv.category}</span>}
+                          <span><Mail size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> {inv.contactEmail}</span>
+                          {inv.country && <span><MapPin size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> {inv.country}</span>}
+                          {inv.category && <span><Briefcase size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> {inv.category}</span>}
                         </div>
 
                         <div className="invitation-meta">
@@ -892,7 +893,7 @@ export default function InviteSupplierPage() {
                               className="action-btn"
                               onClick={() => handleResend(inv.id)}
                             >
-                              🔄 Resend
+                              <RefreshCw size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Resend
                             </button>
                           )}
                           {inv.status === 'pending' && (
@@ -900,14 +901,14 @@ export default function InviteSupplierPage() {
                               className="action-btn cancel"
                               onClick={() => handleCancel(inv.id)}
                             >
-                              ✕ Cancel
+                              <X size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Cancel
                             </button>
                           )}
                           <button
                             className="action-btn"
                             onClick={() => copyInviteLink(inv)}
                           >
-                            🔗 Copy Link
+                            <Link2 size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Copy Link
                           </button>
                         </div>
                       </div>

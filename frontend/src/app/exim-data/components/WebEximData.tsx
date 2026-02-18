@@ -209,10 +209,10 @@ export default function WebEximData() {
           background: var(--bg-secondary, #f8fafc);
         }
         .tab-btn.active {
-          color: #2563eb;
-          border-bottom-color: #2563eb;
+          color: #f97316;
+          border-bottom-color: #f97316;
           font-weight: 600;
-          background: rgba(37, 99, 235, 0.05);
+          background: rgba(249, 115, 22, 0.05);
           border-radius: 6px 6px 0 0;
         }
 
@@ -278,7 +278,7 @@ export default function WebEximData() {
           width: 32px;
           height: 32px;
           border: 3px solid var(--border-color);
-          border-top-color: #2563eb;
+          border-top-color: #f97316;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }

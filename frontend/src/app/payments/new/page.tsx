@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
 import { getSavedSuppliers, type SavedSupplier } from '@/lib/savedSuppliers';
-import { createPayment, initializeDemoPayments } from '@/lib/payments';
+import { createPayment } from '@/lib/payments';
 import {
   CURRENCIES,
   PAYMENT_METHODS,
@@ -46,7 +46,6 @@ export default function MakePaymentPage() {
   const [paymentRef, setPaymentRef] = useState('');
 
   useEffect(() => {
-    initializeDemoPayments();
     setSuppliers(getSavedSuppliers());
   }, []);
 

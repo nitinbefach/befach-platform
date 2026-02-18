@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { Modal } from '@/components/ui';
+import { Package, DollarSign, TrendingDown, Factory, Lock, BarChart3, TrendingUp, ClipboardList } from 'lucide-react';
 
 interface Report {
   id: string;
@@ -52,19 +53,19 @@ const mockReports: Report[] = [
   }
 ];
 
-const summaryStats = [
-  { label: 'Total Orders', value: '47', change: '+12%', icon: '📦' },
-  { label: 'Total Spending', value: '₹45.2L', change: '+8%', icon: '💰' },
-  { label: 'Avg. Savings', value: '14%', change: '+2%', icon: '📉' },
-  { label: 'Active Suppliers', value: '12', change: '+3', icon: '🏭' }
+const summaryStats: { label: string; value: string; change: string; icon: React.ReactNode }[] = [
+  { label: 'Total Orders', value: '47', change: '+12%', icon: <Package size={20} /> },
+  { label: 'Total Spending', value: '₹45.2L', change: '+8%', icon: <DollarSign size={20} /> },
+  { label: 'Avg. Savings', value: '14%', change: '+2%', icon: <TrendingDown size={20} /> },
+  { label: 'Active Suppliers', value: '12', change: '+3', icon: <Factory size={20} /> }
 ];
 
-const typeIcons: Record<Report['type'], string> = {
-  orders: '📦',
-  spending: '💰',
-  suppliers: '🏭',
-  compliance: '🔒',
-  custom: '📊'
+const typeIcons: Record<Report['type'], React.ReactNode> = {
+  orders: <Package size={16} />,
+  spending: <DollarSign size={16} />,
+  suppliers: <Factory size={16} />,
+  compliance: <Lock size={16} />,
+  custom: <BarChart3 size={16} />
 };
 
 export default function ReportsPage() {
@@ -123,12 +124,10 @@ export default function ReportsPage() {
   };
 
   return (
-    <AppLayout>
-      <div className="content-header">
+    <AppLayout>      <div className="content-header">
         <div>
-          <h1>📊 Reports & Analytics</h1>
-          <p>Generate and download detailed reports for your import operations</p>
-        </div>
+          <h1><BarChart3 size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Reports & Analytics</h1>
+          <p>Generate and download detailed reports for your import operations</p>        </div>
         <button className="btn-primary" onClick={() => setShowGenerateModal(true)}>
           + Generate Report
         </button>
@@ -169,7 +168,7 @@ export default function ReportsPage() {
               </div>
             ))}
           </div>
-          <p className="chart-note">📈 Import volume increased 23% over the last 6 months</p>
+          <p className="chart-note"><TrendingUp size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Import volume increased 23% over the last 6 months</p>
         </div>
       </div>
 
@@ -226,19 +225,19 @@ export default function ReportsPage() {
         <h2>Quick Reports</h2>
         <div className="quick-reports-grid">
           <button className="quick-report-btn">
-            <span className="qr-icon">📦</span>
+            <span className="qr-icon"><Package size={16} /></span>
             <span>This Month&apos;s Orders</span>
           </button>
           <button className="quick-report-btn">
-            <span className="qr-icon">💰</span>
+            <span className="qr-icon"><DollarSign size={16} /></span>
             <span>Spending Summary</span>
           </button>
           <button className="quick-report-btn">
-            <span className="qr-icon">🏭</span>
+            <span className="qr-icon"><Factory size={16} /></span>
             <span>Supplier Overview</span>
           </button>
           <button className="quick-report-btn">
-            <span className="qr-icon">📋</span>
+            <span className="qr-icon"><ClipboardList size={16} /></span>
             <span>Compliance Status</span>
           </button>
         </div>

@@ -62,11 +62,9 @@ function MarketInsightsContent() {
   };
 
   return (
-    <AppLayout searchPlaceholder="Search markets, commodities, countries...">
-      <div className="content-header">
+    <AppLayout searchPlaceholder="Search markets, commodities, countries...">      <div className="content-header">
         <h1>Market Insights</h1>
-        <p>Real-time commodity prices, market trends, and trade intelligence</p>
-      </div>
+        <p>Real-time commodity prices, market trends, and trade intelligence</p>      </div>
 
       {/* Market Overview Card */}
       <div className="mb-6">

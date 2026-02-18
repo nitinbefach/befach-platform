@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Supplier, formatPrice, formatLeadTime } from '@/lib/suppliers';
 import { Modal } from '@/components/ui';
+import { Star, MapPin, Check, PenLine, Mail, MessageCircle } from 'lucide-react';
 
 interface SupplierModalProps {
   supplier: Supplier;
@@ -35,21 +36,20 @@ export default function SupplierModal({
           <div className="supplier-info">
             <h2>{supplier.companyName}</h2>
             <div className="supplier-rating">
-              {'★'.repeat(Math.floor(supplier.metrics.avgRating))}
-              {'☆'.repeat(5 - Math.floor(supplier.metrics.avgRating))}
+              {Array.from({ length: 5 }, (_, i) => (<Star key={i} size={14} style={i < Math.floor(supplier.metrics.avgRating) ? { color: '#f59e0b', fill: '#f59e0b' } : { color: '#4b5563' }} />))}
               <span>
                 {supplier.metrics.avgRating.toFixed(1)} ({supplier.metrics.reviewCount} reviews)
               </span>
             </div>
             <div className="supplier-location">
-              📍 {supplier.location.city}, {supplier.location.country}
+              <MapPin size={14} /> {supplier.location.city}, {supplier.location.country}
             </div>
           </div>
           <div className="header-badges">
             {supplier.partnerStatus === 'premium' && (
-              <span className="premium-badge">⭐ Premium Partner</span>
+              <span className="premium-badge"><Star size={12} style={{ color: '#f59e0b', fill: '#f59e0b' }} /> Premium Partner</span>
             )}
-            <span className="verified-badge">✓ Verified</span>
+            <span className="verified-badge"><Check size={12} /> Verified</span>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ export default function SupplierModal({
                 <div className="certs-list">
                   {supplier.certifications.map((cert) => (
                     <span key={cert.name} className="cert-badge">
-                      {cert.verified && '✓'} {cert.name}
+                      {cert.verified && <Check size={12} />} {cert.name}
                       {cert.validUntil && (
                         <small> (Valid until {cert.validUntil})</small>
                       )}
@@ -185,14 +185,13 @@ export default function SupplierModal({
                 <div className="rating-big">
                   <span className="rating-value">{supplier.metrics.avgRating.toFixed(1)}</span>
                   <div className="rating-stars">
-                    {'★'.repeat(Math.floor(supplier.metrics.avgRating))}
-                    {'☆'.repeat(5 - Math.floor(supplier.metrics.avgRating))}
+                    {Array.from({ length: 5 }, (_, i) => (<Star key={i} size={14} style={i < Math.floor(supplier.metrics.avgRating) ? { color: '#f59e0b', fill: '#f59e0b' } : { color: '#4b5563' }} />))}
                   </div>
                   <span className="rating-count">{supplier.metrics.reviewCount} reviews</span>
                 </div>
               </div>
               <div className="reviews-placeholder">
-                <p>📝 Review details coming soon...</p>
+                <p><PenLine size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Review details coming soon...</p>
                 <p className="placeholder-text">
                   This supplier has been verified by Befach with{' '}
                   {supplier.metrics.reviewCount} positive reviews from buyers.
@@ -205,10 +204,10 @@ export default function SupplierModal({
         {/* Footer Actions */}
         <div className="modal-footer">
           <button className="btn-contact" onClick={onContact}>
-            ✉ Contact Supplier
+            <Mail size={14} /> Contact Supplier
           </button>
           <button className="btn-chat" onClick={onChat}>
-            💬 Start Chat
+            <MessageCircle size={14} /> Start Chat
           </button>
         </div>
       </div>

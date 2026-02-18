@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Befach — International Trade, Fixed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+/* ========================================
+   CSS CUSTOM PROPERTIES
+   ======================================== */
+:root {
+  --color-dark: #111827;
+  --color-dark-secondary: #1f2937;
+  --color-dark-footer: #1c1917;
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-text-light: #d1d5db;
+  --color-white: #ffffff;
+  --color-orange: #f59e0b;
+  --color-orange-dark: #d97706;
+  --color-red: #ef4444;
+  --color-red-dark: #dc2626;
+  --color-red-bg: #fef2f2;
+  --color-green: #22c55e;
+  --color-green-bg: #f0fdf4;
+  --color-amber-bg: #fffbeb;
+  --color-timeline-bg: #faf9f7;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --max-width: 1200px;
+  --header-height: 72px;
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  background: var(--color-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 24px; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+}
+
+/* Scroll-reveal base */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left, .reveal-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-bg-line, .hero-dot { animation: none !important; }
+  .ecosystem-line { stroke-dashoffset: 0 !important; animation: none !important; }
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--header-height);
+  transition: background var(--transition-base), box-shadow var(--transition-base);
+}
+.header.scrolled {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.header-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-white);
+  transition: color var(--transition-base);
+}
+.header.scrolled .header-logo {
+  color: var(--color-text);
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.header-nav a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color var(--transition-base);
+  white-space: nowrap;
+}
+.header.scrolled .header-nav a {
+  color: var(--color-text-secondary);
+}
+.header-nav a:hover {
+  color: var(--color-white);
+}
+.header.scrolled .header-nav a:hover {
+  color: var(--color-text);
+}
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  background: var(--color-orange);
+  color: var(--color-white);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background var(--transition-base), transform 0.15s ease;
+  white-space: nowrap;
+}
+.header-cta:hover {
+  background: var(--color-orange-dark);
+  transform: translateY(-1px);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 28px;
+  padding: 4px 0;
+}
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: var(--color-white);
+  border-radius: 2px;
+  transition: background var(--transition-base), transform var(--transition-base), opacity var(--transition-base);
+}
+.header.scrolled .hamburger span {
+  background: var(--color-text);
+}
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-white);
+  padding: 32px 24px;
+  z-index: 999;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+.mobile-menu.open {
+  display: flex;
+}
+.mobile-menu a {
+  display: block;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  border-bottom: 1px solid #f3f4f6;
+}
+.mobile-menu .mobile-menu-cta {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  padding: 14px 24px;
+  background: var(--color-orange);
+  color: var(--color-white);
+  font-weight: 600;
+  border-radius: 8px;
+  border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+  .header-nav { display: none; }
+  .header-cta-desktop { display: none; }
+  .hamburger { display: flex; }
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-dark);
+}
+
+/* CSS-generated abstract background */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    /* Grid lines suggesting container stacks */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 120px,
+      rgba(245, 158, 11, 0.04) 120px,
+      rgba(245, 158, 11, 0.04) 121px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 80px,
+      rgba(245, 158, 11, 0.03) 80px,
+      rgba(245, 158, 11, 0.03) 81px
+    ),
+    /* Diagonal trade routes */
+    linear-gradient(135deg, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
+    linear-gradient(225deg, rgba(34, 197, 94, 0.04) 0%, transparent 35%),
+    linear-gradient(315deg, rgba(239, 68, 68, 0.04) 0%, transparent 30%),
+    /* Base gradient */
+    linear-gradient(180deg, #0a0f1a 0%, #111827 40%, #1a1f2e 100%);
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Geometric shipping container shapes */
+.hero-shape {
+  position: absolute;
+  border: 1px solid rgba(245, 158, 11, 0.08);
+  border-radius: 2px;
+}
+.hero-shape-1 {
+  width: 200px; height: 80px;
+  top: 15%; left: 8%;
+  transform: rotate(-8deg);
+}
+.hero-shape-2 {
+  width: 160px; height: 65px;
+  top: 18%; left: 12%;
+  transform: rotate(-8deg);
+  border-color: rgba(245, 158, 11, 0.05);
+}
+.hero-shape-3 {
+  width: 180px; height: 72px;
+  bottom: 25%; right: 10%;
+  transform: rotate(5deg);
+}
+.hero-shape-4 {
+  width: 140px; height: 56px;
+  bottom: 20%; right: 15%;
+  transform: rotate(5deg);
+  border-color: rgba(245, 158, 11, 0.05);
+}
+.hero-shape-5 {
+  width: 120px; height: 48px;
+  top: 60%; left: 5%;
+  transform: rotate(-3deg);
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Animated dotted trade route lines */
+.hero-bg-line {
+  position: absolute;
+  height: 1px;
+  background: none;
+  overflow: visible;
+}
+.hero-bg-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(245, 158, 11, 0.15) 0px,
+    rgba(245, 158, 11, 0.15) 4px,
+    transparent 4px,
+    transparent 12px
+  );
+  animation: tradeRoute 20s linear infinite;
+}
+.hero-line-1 {
+  width: 60%;
+  top: 30%;
+  left: -10%;
+  transform: rotate(12deg);
+}
+.hero-line-2 {
+  width: 50%;
+  top: 55%;
+  right: -10%;
+  left: auto;
+  transform: rotate(-8deg);
+}
+.hero-line-2::after { animation-duration: 25s; animation-direction: reverse; }
+.hero-line-3 {
+  width: 70%;
+  top: 75%;
+  left: -5%;
+  transform: rotate(3deg);
+}
+.hero-line-3::after { animation-duration: 30s; }
+.hero-line-4 {
+  width: 40%;
+  top: 20%;
+  right: 5%;
+  left: auto;
+  transform: rotate(-15deg);
+}
+.hero-line-4::after { animation-duration: 22s; animation-direction: reverse; }
+
+/* Floating dots (trade nodes) */
+.hero-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.25);
+  animation: dotPulse 4s ease-in-out infinite;
+}
+.hero-dot-1 { top: 25%; left: 20%; animation-delay: 0s; }
+.hero-dot-2 { top: 40%; left: 60%; animation-delay: 1s; }
+.hero-dot-3 { top: 65%; left: 35%; animation-delay: 2s; }
+.hero-dot-4 { top: 30%; right: 25%; animation-delay: 0.5s; }
+.hero-dot-5 { top: 70%; right: 20%; animation-delay: 1.5s; }
+.hero-dot-6 { top: 50%; left: 15%; animation-delay: 3s; }
+.hero-dot-7 { top: 80%; left: 55%; animation-delay: 2.5s; }
+
+@keyframes tradeRoute {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.8); }
+}
+
+/* Hero content */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 24px;
+}
+.hero-headline {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 800;
+  color: var(--color-white);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 28px;
+}
+.hero-subheadline {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--color-text-light);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+.hero-subheadline .pain-point {
+  display: inline;
+}
+.hero-subheadline .pain-sep {
+  display: inline;
+  margin: 0 8px;
+  color: var(--color-text-muted);
+}
+.hero-familiar {
+  font-style: italic;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+.hero-better {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-orange), var(--color-orange-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+}
+.hero-scroll-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: var(--color-white);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: border-color var(--transition-base), background var(--transition-base);
+  cursor: pointer;
+}
+.hero-scroll-cta:hover {
+  border-color: var(--color-white);
+  background: rgba(255, 255, 255, 0.08);
+}
+.hero-scroll-cta .arrow-down {
+  display: inline-flex;
+  animation: bounceDown 2s ease-in-out infinite;
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* ========================================
+   PAIN POINTS SECTION
+   ======================================== */
+.pain-section {
+  background: linear-gradient(180deg, var(--color-dark-secondary) 0%, #374151 40%, #4b5563 100%);
+  padding: 120px 0;
+}
+.pain-section .section-heading {
+  text-align: center;
+  color: var(--color-white);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 64px;
+}
+
+.pain-cards {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pain-card {
+  background: var(--color-red-bg);
+  border-left: 4px solid var(--color-red-dark);
+  border-radius: 12px;
+  padding: 32px;
+  position: relative;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.pain-card:nth-child(even) {
+  margin-left: 40px;
+}
+.pain-card:nth-child(odd) {
+  margin-right: 40px;
+}
+.pain-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+.pain-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.pain-card-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(220, 38, 38, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-red-dark);
+}
+.pain-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.3;
+  padding-top: 8px;
+}
+.pain-card-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.pain-card-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(220, 38, 38, 0.08);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-red-dark);
+}
+.pain-card-stat i {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 768px) {
+  .pain-card:nth-child(even),
+  .pain-card:nth-child(odd) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .pain-section { padding: 80px 0; }
+}
+
+/* ========================================
+   SOLUTIONS SECTION
+   ======================================== */
+.solutions-section {
+  background: linear-gradient(180deg, var(--color-amber-bg) 0%, var(--color-white) 100%);
+  padding: 120px 0;
+}
+.solutions-section .section-heading {
+  text-align: center;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 64px;
+}
+
+.solution-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.solution-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+.solution-pair .pain-card-mini {
+  background: var(--color-red-bg);
+  border-left: 4px solid var(--color-red-dark);
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.pain-card-mini .pain-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.pain-card-mini .pain-card-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-red-dark);
+}
+.pain-card-mini .pain-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding-top: 6px;
+}
+.pain-card-mini .pain-card-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.pain-card-mini .pain-card-stat {
+  font-size: 0.8rem;
+}
+
+.solution-card {
+  background: var(--color-green-bg);
+  border-left: 4px solid var(--color-green);
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.solution-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(34, 197, 94, 0.12);
+}
+.solution-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.solution-card-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(34, 197, 94, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-green);
+}
+.solution-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding-top: 6px;
+}
+.solution-card-tool {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-green);
+  margin-bottom: 8px;
+}
+.solution-card-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.solution-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-orange-dark);
+  transition: gap var(--transition-base);
+}
+.solution-card-link:hover {
+  gap: 8px;
+}
+
+/* Arrow connecting problem to solution */
+.pair-arrow {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .solution-pair {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .solutions-section { padding: 80px 0; }
+}
+
+/* ========================================
+   ECOSYSTEM SECTION
+   ======================================== */
+.ecosystem-section {
+  background: var(--color-dark);
+  padding: 120px 0;
+  overflow: hidden;
+}
+.ecosystem-section .section-heading {
+  text-align: center;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-white);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.ecosystem-section .section-subheading {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 80px;
+}
+
+.ecosystem-diagram {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+/* SVG connections */
+.ecosystem-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.ecosystem-line {
+  stroke: var(--color-orange);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+  fill: none;
+  opacity: 0.5;
+  stroke-dashoffset: 200;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ecosystem-diagram.visible .ecosystem-line {
+  stroke-dashoffset: 0;
+}
+.ecosystem-line-secondary {
+  stroke: rgba(245, 158, 11, 0.2);
+  stroke-width: 1;
+  stroke-dasharray: 3 6;
+}
+
+/* Center hub */
+.ecosystem-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-orange), var(--color-orange-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-white);
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 60px rgba(245, 158, 11, 0.3);
+  z-index: 2;
+}
+
+/* Service nodes */
+.ecosystem-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.ecosystem-diagram.visible .ecosystem-node {
+  opacity: 1;
+}
+.ecosystem-node-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-orange);
+  transition: background var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+}
+.ecosystem-node:hover .ecosystem-node-circle {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: var(--color-orange);
+  transform: scale(1.1);
+}
+.ecosystem-node-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  max-width: 100px;
+  line-height: 1.3;
+}
+
+/* Node positions (radial, 8 nodes) */
+.ecosystem-node:nth-child(1) { top: 20px; left: 50%; transform: translateX(-50%); }
+.ecosystem-node:nth-child(2) { top: 80px; right: 40px; }
+.ecosystem-node:nth-child(3) { top: 50%; right: 10px; transform: translateY(-50%); }
+.ecosystem-node:nth-child(4) { bottom: 80px; right: 40px; }
+.ecosystem-node:nth-child(5) { bottom: 20px; left: 50%; transform: translateX(-50%); }
+.ecosystem-node:nth-child(6) { bottom: 80px; left: 40px; }
+.ecosystem-node:nth-child(7) { top: 50%; left: 10px; transform: translateY(-50%); }
+.ecosystem-node:nth-child(8) { top: 80px; left: 40px; }
+
+/* Staggered node reveal */
+.ecosystem-diagram.visible .ecosystem-node:nth-child(1) { transition-delay: 0.1s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(2) { transition-delay: 0.2s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(3) { transition-delay: 0.3s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(4) { transition-delay: 0.4s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(5) { transition-delay: 0.5s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(6) { transition-delay: 0.6s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(7) { transition-delay: 0.7s; }
+.ecosystem-diagram.visible .ecosystem-node:nth-child(8) { transition-delay: 0.8s; }
+
+/* Mobile ecosystem: vertical list */
+.ecosystem-list {
+  display: none;
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 40px;
+}
+.ecosystem-list::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--color-orange) 0px,
+    var(--color-orange) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  opacity: 0.4;
+}
+.ecosystem-list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  position: relative;
+}
+.ecosystem-list-item::before {
+  content: '';
+  position: absolute;
+  left: -29px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  border: 2px solid var(--color-dark);
+}
+.ecosystem-list-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-orange);
+  flex-shrink: 0;
+}
+.ecosystem-list-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 768px) {
+  .ecosystem-diagram { display: none; }
+  .ecosystem-list { display: block; }
+  .ecosystem-section { padding: 80px 0; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ecosystem-diagram {
+    width: 420px;
+    height: 420px;
+  }
+  .ecosystem-hub {
+    width: 90px;
+    height: 90px;
+    font-size: 0.9rem;
+  }
+  .ecosystem-node-circle {
+    width: 52px;
+    height: 52px;
+  }
+  .ecosystem-node:nth-child(1) { top: 10px; }
+  .ecosystem-node:nth-child(2) { top: 50px; right: 15px; }
+  .ecosystem-node:nth-child(3) { right: 0; }
+  .ecosystem-node:nth-child(4) { bottom: 50px; right: 15px; }
+  .ecosystem-node:nth-child(5) { bottom: 10px; }
+  .ecosystem-node:nth-child(6) { bottom: 50px; left: 15px; }
+  .ecosystem-node:nth-child(7) { left: 0; }
+  .ecosystem-node:nth-child(8) { top: 50px; left: 15px; }
+}
+
+/* ========================================
+   DAY-IN-THE-LIFE TIMELINE
+   ======================================== */
+.timeline-section {
+  background: var(--color-timeline-bg);
+  padding: 120px 0;
+}
+.timeline-section .section-heading {
+  text-align: center;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.timeline-section .section-subheading {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 64px;
+}
+
+.timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+/* Center vertical line (desktop) */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--color-orange), var(--color-orange-dark));
+  border-radius: 3px;
+  transform: translateX(-50%);
+}
+
+.timeline-entry {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 48px;
+  width: 100%;
+}
+.timeline-entry:last-child { margin-bottom: 0; }
+
+/* Alternating sides */
+.timeline-entry:nth-child(odd) {
+  justify-content: flex-start;
+  padding-right: calc(50% + 40px);
+}
+.timeline-entry:nth-child(even) {
+  justify-content: flex-end;
+  padding-left: calc(50% + 40px);
+}
+
+/* Time badge on the line */
+.timeline-badge {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-orange);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+/* Content card */
+.timeline-card {
+  background: var(--color-white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  position: relative;
+}
+.timeline-card-tool {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-orange-dark);
+  margin-bottom: 6px;
+}
+.timeline-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* Mini snippets */
+.timeline-snippet {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+}
+.snippet-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 40px;
+}
+.snippet-chart-bar {
+  width: 12px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, var(--color-orange), var(--color-orange-dark));
+}
+.snippet-calc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.snippet-calc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+.snippet-calc-row span:last-child {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.snippet-calc-total {
+  border-top: 1.5px solid var(--color-text);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+.snippet-calc-total span:last-child {
+  color: var(--color-orange-dark);
+  font-weight: 700;
+}
+.snippet-carriers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.snippet-carrier-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+}
+.snippet-carrier-name {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.snippet-carrier-price {
+  color: var(--color-green);
+  font-weight: 700;
+}
+.snippet-carrier-days {
+  color: var(--color-text-muted);
+}
+.snippet-tracking {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.snippet-tracking-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+.snippet-tracking-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.snippet-tracking-dot.done {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--color-green);
+}
+.snippet-tracking-dot.pending {
+  background: #f3f4f6;
+  color: var(--color-text-muted);
+}
+.snippet-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.snippet-chat-bubble {
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  max-width: 90%;
+  line-height: 1.4;
+}
+.snippet-chat-bubble.user {
+  background: var(--color-orange);
+  color: var(--color-white);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.snippet-chat-bubble.ai {
+  background: #f3f4f6;
+  color: var(--color-text);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* Mobile timeline */
+@media (max-width: 768px) {
+  .timeline::before {
+    left: 16px;
+    transform: none;
+  }
+  .timeline-entry:nth-child(odd),
+  .timeline-entry:nth-child(even) {
+    padding-right: 0;
+    padding-left: 52px;
+    justify-content: flex-start;
+  }
+  .timeline-badge {
+    left: 16px;
+    transform: translateX(-50%);
+  }
+  .timeline-section { padding: 80px 0; }
+}
+
+@media (max-width: 480px) {
+  .timeline-snippet { display: none; }
+}
+
+/* ========================================
+   RESULTS SECTION
+   ======================================== */
+.results-section {
+  background: var(--color-white);
+  padding: 120px 0;
+}
+.results-section .section-heading {
+  text-align: center;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 64px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.result-card {
+  background: var(--color-white);
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+.result-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.result-icon.green {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--color-green);
+}
+.result-icon.orange {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-orange);
+}
+.result-icon.blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+.result-metric {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.result-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+}
+.result-quote {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+  position: relative;
+  padding: 0 8px;
+}
+.result-quote::before {
+  content: '\201C';
+  font-size: 2rem;
+  color: var(--color-orange);
+  position: absolute;
+  left: -4px;
+  top: -8px;
+  opacity: 0.4;
+}
+.result-author {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 400px;
+  }
+  .results-section { padding: 80px 0; }
+}
+
+/* ========================================
+   RISK REVERSAL CTA
+   ======================================== */
+.cta-section {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  padding: 100px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 40%);
+}
+.cta-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.cta-headline {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--color-white);
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.cta-objections {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  margin-bottom: 40px;
+}
+.cta-objection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.cta-objection-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cta-objection-check svg {
+  color: var(--color-white);
+}
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 80px;
+}
+.cta-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 36px;
+  background: var(--color-white);
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: transform 0.15s ease, box-shadow var(--transition-base);
+}
+.cta-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.cta-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 36px;
+  background: transparent;
+  color: var(--color-white);
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+.cta-btn-secondary:hover {
+  border-color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* FAQ Accordion */
+.faq-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px 20px 0 0;
+  padding: 48px 40px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.faq-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-white);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  min-height: 48px;
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+.faq-question:hover {
+  color: var(--color-white);
+}
+.faq-question-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-left: 16px;
+  transition: transform var(--transition-base);
+}
+.faq-item.open .faq-question-icon {
+  transform: rotate(45deg);
+}
+.faq-item.open .faq-question {
+  color: var(--color-white);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+}
+.faq-answer-inner {
+  padding: 0 0 18px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+}
+.faq-item.open .faq-answer {
+  max-height: 200px;
+}
+
+@media (max-width: 768px) {
+  .cta-objections {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .faq-container { padding: 32px 24px; }
+  .cta-section { padding: 80px 0 0; }
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+  background: var(--color-dark-footer);
+  padding: 72px 0 32px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+.footer-brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-white);
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.footer-brand-desc {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  max-width: 280px;
+}
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+.footer-social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background var(--transition-base), color var(--transition-base);
+}
+.footer-social-link:hover {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-orange);
+}
+.footer-col-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 20px;
+}
+.footer-col a {
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 0;
+  transition: color var(--transition-base);
+}
+.footer-col a:hover {
+  color: var(--color-orange);
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copyright {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color var(--transition-base);
+}
+.footer-legal a:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     HEADER
+     ======================================== -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="#" class="header-logo">Befach</a>
+    <nav class="header-nav">
+      <a href="#pain-section">Problem</a>
+      <a href="#solutions-section">Solutions</a>
+      <a href="#ecosystem-section">Platform</a>
+      <a href="#timeline-section">How It Works</a>
+      <a href="#results-section">Results</a>
+    </nav>
+    <a href="#cta-section" class="header-cta header-cta-desktop">Start Free Trial</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#pain-section" class="mobile-menu-link">Problem</a>
+  <a href="#solutions-section" class="mobile-menu-link">Solutions</a>
+  <a href="#ecosystem-section" class="mobile-menu-link">Platform</a>
+  <a href="#timeline-section" class="mobile-menu-link">How It Works</a>
+  <a href="#results-section" class="mobile-menu-link">Results</a>
+  <a href="#cta-section" class="mobile-menu-cta">Start Free Trial</a>
+</div>
+
+<!-- ========================================
+     HERO SECTION
+     ======================================== -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <!-- Geometric container shapes -->
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+    <div class="hero-shape hero-shape-4"></div>
+    <div class="hero-shape hero-shape-5"></div>
+    <!-- Animated trade route lines -->
+    <div class="hero-bg-line hero-line-1"></div>
+    <div class="hero-bg-line hero-line-2"></div>
+    <div class="hero-bg-line hero-line-3"></div>
+    <div class="hero-bg-line hero-line-4"></div>
+    <!-- Floating trade node dots -->
+    <div class="hero-dot hero-dot-1"></div>
+    <div class="hero-dot hero-dot-2"></div>
+    <div class="hero-dot hero-dot-3"></div>
+    <div class="hero-dot hero-dot-4"></div>
+    <div class="hero-dot hero-dot-5"></div>
+    <div class="hero-dot hero-dot-6"></div>
+    <div class="hero-dot hero-dot-7"></div>
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-headline">International trade is broken.</h1>
+    <p class="hero-subheadline">
+      <span class="pain-point">Hidden duties.</span><span class="pain-sep">&middot;</span>
+      <span class="pain-point">Unreliable carriers.</span><span class="pain-sep">&middot;</span>
+      <span class="pain-point">Compliance nightmares.</span><span class="pain-sep">&middot;</span>
+      <span class="pain-point">Manual spreadsheets.</span>
+    </p>
+    <p class="hero-familiar">Sound familiar?</p>
+    <p class="hero-better">There's a better way.</p>
+    <a href="#pain-section" class="hero-scroll-cta">
+      See how Befach fixes this
+      <span class="arrow-down"><i data-lucide="chevron-down" style="width:20px;height:20px"></i></span>
+    </a>
+  </div>
+</section>
+
+<!-- ========================================
+     PAIN POINTS SECTION
+     ======================================== -->
+<section class="pain-section" id="pain-section">
+  <div class="container">
+    <h2 class="section-heading reveal">The reality of international trade today</h2>
+    <div class="pain-cards">
+      <!-- Problem 1 -->
+      <div class="pain-card reveal" style="transition-delay: 0.1s">
+        <div class="pain-card-header">
+          <div class="pain-card-icon">
+            <i data-lucide="calculator" style="width:22px;height:22px"></i>
+          </div>
+          <h3 class="pain-card-title">You're guessing your margins</h3>
+        </div>
+        <p class="pain-card-desc">Spreadsheets, manual calculations, and crossed fingers. One missed duty rate and your 20% margin becomes a 5% loss.</p>
+        <div class="pain-card-stat">
+          <i data-lucide="trending-down" style="width:16px;height:16px"></i>
+          73% of importers underestimate their landed costs
+        </div>
+      </div>
+      <!-- Problem 2 -->
+      <div class="pain-card reveal" style="transition-delay: 0.2s">
+        <div class="pain-card-header">
+          <div class="pain-card-icon">
+            <i data-lucide="truck" style="width:22px;height:22px"></i>
+          </div>
+          <h3 class="pain-card-title">You're overpaying for shipping</h3>
+        </div>
+        <p class="pain-card-desc">Calling 5 carriers, waiting for email quotes, comparing in Excel. By the time you decide, rates have changed.</p>
+        <div class="pain-card-stat">
+          <i data-lucide="trending-down" style="width:16px;height:16px"></i>
+          Average importer overpays 18% on freight
+        </div>
+      </div>
+      <!-- Problem 3 -->
+      <div class="pain-card reveal" style="transition-delay: 0.3s">
+        <div class="pain-card-header">
+          <div class="pain-card-icon">
+            <i data-lucide="alert-triangle" style="width:22px;height:22px"></i>
+          </div>
+          <h3 class="pain-card-title">Compliance keeps you up at night</h3>
+        </div>
+        <p class="pain-card-desc">Wrong HS codes, missing documents, surprise customs holds. One mistake means delays, fines, or seized goods.</p>
+        <div class="pain-card-stat">
+          <i data-lucide="trending-down" style="width:16px;height:16px"></i>
+          35% of shipments face compliance-related delays
+        </div>
+      </div>
+      <!-- Problem 4 -->
+      <div class="pain-card reveal" style="transition-delay: 0.4s">
+        <div class="pain-card-header">
+          <div class="pain-card-icon">
+            <i data-lucide="users" style="width:22px;height:22px"></i>
+          </div>
+          <h3 class="pain-card-title">Finding reliable suppliers is a gamble</h3>
+        </div>
+        <p class="pain-card-desc">Alibaba listings with fake reviews, middlemen adding margins, no way to verify quality until it's too late.</p>
+        <div class="pain-card-stat">
+          <i data-lucide="trending-down" style="width:16px;height:16px"></i>
+          1 in 4 first-time supplier orders have quality issues
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     SOLUTIONS SECTION
+     ======================================== -->
+<section class="solutions-section" id="solutions-section">
+  <div class="container">
+    <h2 class="section-heading reveal">Now imagine this instead</h2>
+    <div class="solution-pairs">
+      <!-- Pair 1 -->
+      <div class="solution-pair">
+        <div class="pain-card-mini reveal-left" style="transition-delay: 0.1s">
+          <div class="pain-card-header">
+            <div class="pain-card-icon"><i data-lucide="calculator" style="width:20px;height:20px"></i></div>
+            <h3 class="pain-card-title">You're guessing your margins</h3>
+          </div>
+          <p class="pain-card-desc">Spreadsheets, manual calculations, and crossed fingers.</p>
+          <div class="pain-card-stat">
+            <i data-lucide="trending-down" style="width:14px;height:14px"></i>
+            73% underestimate landed costs
+          </div>
+        </div>
+        <div class="solution-card reveal-right" style="transition-delay: 0.2s">
+          <div class="solution-card-tool">Landed Cost Calculator</div>
+          <div class="solution-card-header">
+            <div class="solution-card-icon"><i data-lucide="check-circle" style="width:20px;height:20px"></i></div>
+            <h3 class="solution-card-title">Know your exact costs in seconds</h3>
+          </div>
+          <p class="solution-card-desc">Instant duty, tax, freight, and insurance calculations with 99.8% accuracy. HSN code lookup, multi-currency support, and custom charge management.</p>
+          <a href="#" class="solution-card-link">Try the calculator <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+        </div>
+      </div>
+      <!-- Pair 2 -->
+      <div class="solution-pair">
+        <div class="pain-card-mini reveal-left" style="transition-delay: 0.1s">
+          <div class="pain-card-header">
+            <div class="pain-card-icon"><i data-lucide="truck" style="width:20px;height:20px"></i></div>
+            <h3 class="pain-card-title">You're overpaying for shipping</h3>
+          </div>
+          <p class="pain-card-desc">Calling 5 carriers, waiting for email quotes, comparing in Excel.</p>
+          <div class="pain-card-stat">
+            <i data-lucide="trending-down" style="width:14px;height:14px"></i>
+            Average importer overpays 18%
+          </div>
+        </div>
+        <div class="solution-card reveal-right" style="transition-delay: 0.2s">
+          <div class="solution-card-tool">Shipping & Logistics</div>
+          <div class="solution-card-header">
+            <div class="solution-card-icon"><i data-lucide="check-circle" style="width:20px;height:20px"></i></div>
+            <h3 class="solution-card-title">Compare 50+ carriers instantly</h3>
+          </div>
+          <p class="solution-card-desc">Real-time rates from DHL, FedEx, UPS, Shiprocket, and 46 more carriers. Compare, book, and track &mdash; all in one place.</p>
+          <a href="#" class="solution-card-link">See carrier rates <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+        </div>
+      </div>
+      <!-- Pair 3 -->
+      <div class="solution-pair">
+        <div class="pain-card-mini reveal-left" style="transition-delay: 0.1s">
+          <div class="pain-card-header">
+            <div class="pain-card-icon"><i data-lucide="alert-triangle" style="width:20px;height:20px"></i></div>
+            <h3 class="pain-card-title">Compliance keeps you up at night</h3>
+          </div>
+          <p class="pain-card-desc">Wrong HS codes, missing documents, surprise customs holds.</p>
+          <div class="pain-card-stat">
+            <i data-lucide="trending-down" style="width:14px;height:14px"></i>
+            35% face compliance delays
+          </div>
+        </div>
+        <div class="solution-card reveal-right" style="transition-delay: 0.2s">
+          <div class="solution-card-tool">Compliance Tools + AI Assistant</div>
+          <div class="solution-card-header">
+            <div class="solution-card-icon"><i data-lucide="check-circle" style="width:20px;height:20px"></i></div>
+            <h3 class="solution-card-title">AI handles your compliance</h3>
+          </div>
+          <p class="solution-card-desc">AI-powered HS code classification, automated document checklists, and 24/7 regulatory guidance. Customs clearance, simplified.</p>
+          <a href="#" class="solution-card-link">Check compliance <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+        </div>
+      </div>
+      <!-- Pair 4 -->
+      <div class="solution-pair">
+        <div class="pain-card-mini reveal-left" style="transition-delay: 0.1s">
+          <div class="pain-card-header">
+            <div class="pain-card-icon"><i data-lucide="users" style="width:20px;height:20px"></i></div>
+            <h3 class="pain-card-title">Finding reliable suppliers is a gamble</h3>
+          </div>
+          <p class="pain-card-desc">Alibaba listings with fake reviews, middlemen adding margins.</p>
+          <div class="pain-card-stat">
+            <i data-lucide="trending-down" style="width:14px;height:14px"></i>
+            1 in 4 orders have quality issues
+          </div>
+        </div>
+        <div class="solution-card reveal-right" style="transition-delay: 0.2s">
+          <div class="solution-card-tool">Smart Sourcing</div>
+          <div class="solution-card-header">
+            <div class="solution-card-icon"><i data-lucide="check-circle" style="width:20px;height:20px"></i></div>
+            <h3 class="solution-card-title">850+ verified suppliers, zero guesswork</h3>
+          </div>
+          <p class="solution-card-desc">Verified suppliers with real ratings, certifications, and MOQ details. Direct chat, sample requests, and integration with Alibaba and IndiaMART.</p>
+          <a href="#" class="solution-card-link">Find suppliers <i data-lucide="arrow-right" style="width:16px;height:16px"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     ECOSYSTEM SECTION
+     ======================================== -->
+<section class="ecosystem-section" id="ecosystem-section">
+  <div class="container">
+    <h2 class="section-heading reveal">And that's just the beginning.</h2>
+    <p class="section-subheading reveal">Eight powerful tools. One connected ecosystem.</p>
+
+    <!-- Desktop radial diagram -->
+    <div class="ecosystem-diagram" id="ecosystemDiagram">
+      <!-- SVG connecting lines -->
+      <svg class="ecosystem-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hub-to-node lines (main connections) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="300" y2="52" /><!-- Landed Cost (top) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="498" y2="112" /><!-- Shipping (top-right) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="558" y2="300" /><!-- EXIM (right) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="498" y2="488" /><!-- Smart Sourcing (bottom-right) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="300" y2="548" /><!-- Compliance (bottom) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="102" y2="488" /><!-- AI (bottom-left) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="42" y2="300" /><!-- Orders (left) -->
+        <line class="ecosystem-line" x1="300" y1="300" x2="102" y2="112" /><!-- Payments (top-left) -->
+        <!-- Cross-connections (secondary) -->
+        <line class="ecosystem-line ecosystem-line-secondary" x1="300" y1="52" x2="300" y2="548" /><!-- Calculator - Compliance -->
+        <line class="ecosystem-line ecosystem-line-secondary" x1="498" y1="488" x2="42" y2="300" /><!-- Sourcing - Orders -->
+        <line class="ecosystem-line ecosystem-line-secondary" x1="498" y1="112" x2="558" y2="300" /><!-- Shipping - EXIM -->
+        <line class="ecosystem-line ecosystem-line-secondary" x1="102" y1="488" x2="300" y2="548" /><!-- AI - Compliance -->
+        <line class="ecosystem-line ecosystem-line-secondary" x1="42" y1="300" x2="102" y2="112" /><!-- Orders - Payments -->
+      </svg>
+
+      <!-- Center hub -->
+      <div class="ecosystem-hub">BEFACH</div>
+
+      <!-- 8 service nodes -->
+      <div class="ecosystem-node" style="top:12px;left:50%;transform:translateX(-50%)">
+        <div class="ecosystem-node-circle"><i data-lucide="calculator" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">Landed Cost Calculator</span>
+      </div>
+      <div class="ecosystem-node" style="top:72px;right:48px">
+        <div class="ecosystem-node-circle"><i data-lucide="truck" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">Shipping & Logistics</span>
+      </div>
+      <div class="ecosystem-node" style="top:50%;right:2px;transform:translateY(-50%)">
+        <div class="ecosystem-node-circle"><i data-lucide="bar-chart-3" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">EXIM Intelligence</span>
+      </div>
+      <div class="ecosystem-node" style="bottom:72px;right:48px">
+        <div class="ecosystem-node-circle"><i data-lucide="search" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">Smart Sourcing</span>
+      </div>
+      <div class="ecosystem-node" style="bottom:12px;left:50%;transform:translateX(-50%)">
+        <div class="ecosystem-node-circle"><i data-lucide="shield-check" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">Compliance Tools</span>
+      </div>
+      <div class="ecosystem-node" style="bottom:72px;left:48px">
+        <div class="ecosystem-node-circle"><i data-lucide="bot" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">AI Trade Assistant</span>
+      </div>
+      <div class="ecosystem-node" style="top:50%;left:2px;transform:translateY(-50%)">
+        <div class="ecosystem-node-circle"><i data-lucide="clipboard-list" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">Order Management</span>
+      </div>
+      <div class="ecosystem-node" style="top:72px;left:48px">
+        <div class="ecosystem-node-circle"><i data-lucide="credit-card" style="width:24px;height:24px"></i></div>
+        <span class="ecosystem-node-label">Payments & Invoicing</span>
+      </div>
+    </div>
+
+    <!-- Mobile vertical list -->
+    <div class="ecosystem-list reveal">
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="calculator" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">Landed Cost Calculator</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="truck" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">Shipping & Logistics</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="bar-chart-3" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">EXIM Intelligence</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="search" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">Smart Sourcing</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="shield-check" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">Compliance Tools</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="bot" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">AI Trade Assistant</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="clipboard-list" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">Order Management</span>
+      </div>
+      <div class="ecosystem-list-item">
+        <div class="ecosystem-list-icon"><i data-lucide="credit-card" style="width:22px;height:22px"></i></div>
+        <span class="ecosystem-list-label">Payments & Invoicing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     DAY-IN-THE-LIFE TIMELINE
+     ======================================== -->
+<section class="timeline-section" id="timeline-section">
+  <div class="container">
+    <h2 class="section-heading reveal">A day with Befach</h2>
+    <p class="section-subheading reveal">See how importers use Befach throughout their workday</p>
+
+    <div class="timeline">
+      <!-- 9:00 AM -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-badge">9:00 AM</div>
+        <div class="timeline-card">
+          <div class="timeline-card-tool">EXIM Intelligence</div>
+          <h3 class="timeline-card-title">Check cotton import trends from Turkey</h3>
+          <div class="timeline-snippet">
+            <div class="snippet-chart">
+              <div class="snippet-chart-bar" style="height:45%"></div>
+              <div class="snippet-chart-bar" style="height:55%"></div>
+              <div class="snippet-chart-bar" style="height:40%"></div>
+              <div class="snippet-chart-bar" style="height:70%"></div>
+              <div class="snippet-chart-bar" style="height:65%"></div>
+              <div class="snippet-chart-bar" style="height:80%"></div>
+              <div class="snippet-chart-bar" style="height:75%"></div>
+              <div class="snippet-chart-bar" style="height:90%"></div>
+              <div class="snippet-chart-bar" style="height:85%"></div>
+              <div class="snippet-chart-bar" style="height:95%"></div>
+            </div>
+            <div style="margin-top:6px;font-size:0.72rem;color:#6b7280">Cotton (HS 5201) &mdash; Turkey &rarr; India &mdash; <span style="color:#22c55e;font-weight:600">+12.4% YoY</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10:30 AM -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-badge">10:30 AM</div>
+        <div class="timeline-card">
+          <div class="timeline-card-tool">Landed Cost Calculator</div>
+          <h3 class="timeline-card-title">Calculate landed cost for new electronics order</h3>
+          <div class="timeline-snippet">
+            <div class="snippet-calc">
+              <div class="snippet-calc-row"><span>FOB Value</span><span>$24,500.00</span></div>
+              <div class="snippet-calc-row"><span>Freight (Sea)</span><span>$1,850.00</span></div>
+              <div class="snippet-calc-row"><span>Insurance</span><span>$245.00</span></div>
+              <div class="snippet-calc-row"><span>BCD (10%)</span><span>$2,659.50</span></div>
+              <div class="snippet-calc-row"><span>IGST (18%)</span><span>$5,265.81</span></div>
+              <div class="snippet-calc-row snippet-calc-total"><span>Total Landed Cost</span><span>$34,520.31</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11:00 AM -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-badge">11:00 AM</div>
+        <div class="timeline-card">
+          <div class="timeline-card-tool">Shipping & Logistics</div>
+          <h3 class="timeline-card-title">Compare carrier rates, book DHL shipment</h3>
+          <div class="timeline-snippet">
+            <div class="snippet-carriers">
+              <div class="snippet-carrier-row">
+                <span class="snippet-carrier-name">DHL Express</span>
+                <span class="snippet-carrier-price">$1,850</span>
+                <span class="snippet-carrier-days">5-7 days</span>
+              </div>
+              <div class="snippet-carrier-row">
+                <span class="snippet-carrier-name">FedEx Intl</span>
+                <span class="snippet-carrier-price">$2,120</span>
+                <span class="snippet-carrier-days">4-6 days</span>
+              </div>
+              <div class="snippet-carrier-row">
+                <span class="snippet-carrier-name">Maersk Sea</span>
+                <span class="snippet-carrier-price">$680</span>
+                <span class="snippet-carrier-days">28-32 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2:00 PM -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-badge">2:00 PM</div>
+        <div class="timeline-card">
+          <div class="timeline-card-tool">Shipment Tracking</div>
+          <h3 class="timeline-card-title">Track container from Shenzhen &mdash; clears customs</h3>
+          <div class="timeline-snippet">
+            <div class="snippet-tracking">
+              <div class="snippet-tracking-step">
+                <div class="snippet-tracking-dot done"><i data-lucide="check" style="width:12px;height:12px"></i></div>
+                <span>Departed Shenzhen Port</span>
+              </div>
+              <div class="snippet-tracking-step">
+                <div class="snippet-tracking-dot done"><i data-lucide="check" style="width:12px;height:12px"></i></div>
+                <span>In Transit &mdash; Singapore Hub</span>
+              </div>
+              <div class="snippet-tracking-step">
+                <div class="snippet-tracking-dot done"><i data-lucide="check" style="width:12px;height:12px"></i></div>
+                <span>Customs Cleared &mdash; JNPT Mumbai</span>
+              </div>
+              <div class="snippet-tracking-step">
+                <div class="snippet-tracking-dot pending"><i data-lucide="circle" style="width:10px;height:10px"></i></div>
+                <span style="color:#9ca3af">Out for Delivery</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3:30 PM -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-badge">3:30 PM</div>
+        <div class="timeline-card">
+          <div class="timeline-card-tool">AI Trade Assistant</div>
+          <h3 class="timeline-card-title">Ask AI about new DGFT notification</h3>
+          <div class="timeline-snippet">
+            <div class="snippet-chat">
+              <div class="snippet-chat-bubble user">What does DGFT Notification No. 45/2024 mean for my electronics imports?</div>
+              <div class="snippet-chat-bubble ai">This notification revises the import licensing requirement for certain electronic components under ITC(HS) 8542. Your current product line (LED controllers) is exempt, but I'd recommend updating your IEC documentation by March 31st. Want me to generate the updated checklist?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     RESULTS SECTION
+     ======================================== -->
+<section class="results-section" id="results-section">
+  <div class="container">
+    <h2 class="section-heading reveal">Results our users see</h2>
+    <div class="results-grid">
+      <div class="result-card reveal" style="transition-delay: 0.1s">
+        <div class="result-icon green">
+          <i data-lucide="trending-down" style="width:28px;height:28px"></i>
+        </div>
+        <div class="result-metric">25%</div>
+        <div class="result-label">reduction in landed costs</div>
+        <p class="result-quote">We saved over $200K in our first year.</p>
+        <p class="result-author">Rajesh Kumar</p>
+      </div>
+      <div class="result-card reveal" style="transition-delay: 0.2s">
+        <div class="result-icon orange">
+          <i data-lucide="clock" style="width:28px;height:28px"></i>
+        </div>
+        <div class="result-metric">3x</div>
+        <div class="result-label">faster carrier comparison</div>
+        <p class="result-quote">What took hours now takes minutes.</p>
+        <p class="result-author">Sarah Chen</p>
+      </div>
+      <div class="result-card reveal" style="transition-delay: 0.3s">
+        <div class="result-icon blue">
+          <i data-lucide="shield-check" style="width:28px;height:28px"></i>
+        </div>
+        <div class="result-metric">Zero</div>
+        <div class="result-label">compliance violations</div>
+        <p class="result-quote">Not a single customs hold since we switched.</p>
+        <p class="result-author">Michael Roberts</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     RISK REVERSAL CTA
+     ======================================== -->
+<section class="cta-section" id="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="cta-headline reveal">Start your free trial.</h2>
+      <div class="cta-objections reveal">
+        <div class="cta-objection">
+          <span class="cta-objection-check"><i data-lucide="check" style="width:14px;height:14px"></i></span>
+          No credit card required
+        </div>
+        <div class="cta-objection">
+          <span class="cta-objection-check"><i data-lucide="check" style="width:14px;height:14px"></i></span>
+          No contracts or commitments
+        </div>
+        <div class="cta-objection">
+          <span class="cta-objection-check"><i data-lucide="check" style="width:14px;height:14px"></i></span>
+          Full access for 14 days
+        </div>
+        <div class="cta-objection">
+          <span class="cta-objection-check"><i data-lucide="check" style="width:14px;height:14px"></i></span>
+          Cancel anytime
+        </div>
+      </div>
+      <div class="cta-buttons reveal">
+        <a href="#" class="cta-btn-primary">
+          Start Free Trial
+          <i data-lucide="arrow-right" style="width:18px;height:18px"></i>
+        </a>
+        <a href="#" class="cta-btn-secondary">
+          Talk to an expert first
+          <i data-lucide="message-circle" style="width:18px;height:18px"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="faq-container reveal">
+      <h3 class="faq-title">Frequently asked questions</h3>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How long is the free trial?
+          <span class="faq-question-icon"><i data-lucide="plus" style="width:18px;height:18px"></i></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">14 days with full access to all tools. No feature limitations, no hidden costs. Use every tool, run as many calculations as you need.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          What happens after the trial?
+          <span class="faq-question-icon"><i data-lucide="plus" style="width:18px;height:18px"></i></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">You choose a plan that fits your needs, or stay on the free tier with limited features. Your data is preserved either way &mdash; no pressure, no data loss.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Can I import my existing data?
+          <span class="faq-question-icon"><i data-lucide="plus" style="width:18px;height:18px"></i></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Yes, we support CSV imports and API integration. Bring your supplier lists, shipment history, and product catalogs. Our onboarding team helps with migration for free.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Is my data secure?
+          <span class="faq-question-icon"><i data-lucide="plus" style="width:18px;height:18px"></i></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">256-bit encryption, SOC-2 compliant, with 99.9% uptime. Your trade data is stored on enterprise-grade infrastructure with regular backups and strict access controls.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FOOTER
+     ======================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-name">Befach</div>
+        <p class="footer-brand-desc">The all-in-one platform for international trade. From sourcing to shipping to compliance &mdash; we've got you covered.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social-link" aria-label="Twitter"><i data-lucide="twitter" style="width:18px;height:18px"></i></a>
+          <a href="#" class="footer-social-link" aria-label="LinkedIn"><i data-lucide="linkedin" style="width:18px;height:18px"></i></a>
+          <a href="#" class="footer-social-link" aria-label="Instagram"><i data-lucide="instagram" style="width:18px;height:18px"></i></a>
+          <a href="#" class="footer-social-link" aria-label="YouTube"><i data-lucide="youtube" style="width:18px;height:18px"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <a href="#">Landed Cost Calculator</a>
+        <a href="#">Shipping & Logistics</a>
+        <a href="#">EXIM Intelligence</a>
+        <a href="#">AI Trade Assistant</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Solutions</div>
+        <a href="#">Smart Sourcing</a>
+        <a href="#">Compliance Tools</a>
+        <a href="#">Order Management</a>
+        <a href="#">Payments & Invoicing</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025 Befach. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ========================================
+     JAVASCRIPT
+     ======================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Initialize Lucide icons
+  lucide.createIcons();
+
+  // ========================================
+  // Header scroll behavior
+  // ========================================
+  const header = document.getElementById('header');
+  let lastScrollY = 0;
+
+  function handleHeaderScroll() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    if (scrollY > 80) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+    lastScrollY = scrollY;
+  }
+
+  window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+  handleHeaderScroll();
+
+  // ========================================
+  // Hamburger menu
+  // ========================================
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    // Force header to be scrolled state when menu is open
+    if (mobileMenu.classList.contains('open')) {
+      header.classList.add('scrolled');
+    } else {
+      handleHeaderScroll();
+    }
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.mobile-menu a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+      handleHeaderScroll();
+    });
+  });
+
+  // ========================================
+  // Scroll reveal (IntersectionObserver)
+  // ========================================
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+    const revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(function(el) {
+      revealObserver.observe(el);
+    });
+
+    // Ecosystem diagram observer
+    const ecosystemDiagram = document.getElementById('ecosystemDiagram');
+    if (ecosystemDiagram) {
+      const ecoObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            ecoObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.3
+      });
+      ecoObserver.observe(ecosystemDiagram);
+    }
+  } else {
+    // If reduced motion, just make everything visible
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(function(el) {
+      el.classList.add('visible');
+    });
+    const ecosystemDiagram = document.getElementById('ecosystemDiagram');
+    if (ecosystemDiagram) ecosystemDiagram.classList.add('visible');
+  }
+
+  // ========================================
+  // FAQ Accordion
+  // ========================================
+  document.querySelectorAll('.faq-question').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const item = this.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+
+      // Close all other items
+      document.querySelectorAll('.faq-item').forEach(function(otherItem) {
+        otherItem.classList.remove('open');
+        otherItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+
+      // Toggle current item
+      if (!isOpen) {
+        item.classList.add('open');
+        this.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // ========================================
+  // Smooth scroll for anchor links
+  // ========================================
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height'));
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+});
+</script>
+</body>
+</html>

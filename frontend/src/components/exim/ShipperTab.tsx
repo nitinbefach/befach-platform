@@ -103,7 +103,7 @@ export default function ShipperTab({ shippers, onShipperClick }: ShipperTabProps
         .trader-name {
           background: none;
           border: none;
-          color: #2563eb;
+          color: #f97316;
           font-size: 0.84rem;
           font-weight: 600;
           cursor: pointer;

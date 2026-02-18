@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Befach - The All-in-One Platform for Import-Export Businesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+:root {
+  --white: #ffffff;
+  --bg-alt: #f9fafb;
+  --text-heading: #111827;
+  --text-body: #6b7280;
+  --text-muted: #9ca3af;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --accent-light: #fef3c7;
+  --border: #e5e7eb;
+  --dark-bg: #111827;
+  --footer-bg: #1c1917;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-screenshot: 0 20px 60px rgba(0,0,0,0.08);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.06);
+  --max-w-text: 1280px;
+  --max-w-screenshot: 1400px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-heading);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ---- Utility ---- */
+.container { max-width: var(--max-w-text); margin: 0 auto; padding: 0 24px; }
+.container-wide { max-width: var(--max-w-screenshot); margin: 0 auto; padding: 0 24px; }
+
+/* Reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: var(--max-w-text);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.logo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text-heading); }
+.header-actions { display: flex; align-items: center; gap: 16px; }
+.btn-signin {
+  background: none;
+  border: none;
+  color: var(--text-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-signin:hover { color: var(--text-heading); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(245,158,11,0.35);
+}
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger svg { display: block; }
+
+/* Mobile nav */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 64px; left: 0; right: 0; bottom: 0;
+  background: var(--white);
+  z-index: 999;
+  padding: 24px;
+  flex-direction: column;
+  gap: 8px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  display: block;
+  padding: 14px 0;
+  text-decoration: none;
+  color: var(--text-heading);
+  font-size: 1.05rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-nav .btn-primary {
+  margin-top: 16px;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .nav-links { display: none; }
+  .btn-signin { display: none; }
+  .hamburger { display: block; }
+}
+@media (min-width: 1025px) {
+  .mobile-nav { display: none !important; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 72px 0 0;
+  text-align: center;
+  overflow: visible;
+}
+.hero-badge {
+  display: inline-block;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  max-width: 720px;
+  margin: 0 auto 16px;
+}
+.hero p.sub {
+  color: var(--text-body);
+  font-size: clamp(0.95rem, 1.5vw, 1.125rem);
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+.hero-ctas {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+}
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-heading);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline:hover { border-color: var(--text-body); background: var(--bg-alt); }
+
+/* Hero screenshot wrapper */
+.hero-screenshot-wrapper {
+  position: relative;
+  max-width: var(--max-w-screenshot);
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.hero-screenshot {
+  perspective: 1200px;
+}
+.hero-screenshot .browser-frame {
+  transform: rotateX(4deg);
+  transition: transform 0.5s ease;
+}
+/* Annotation badges */
+.annotation {
+  position: absolute;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+.annotation.orange { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.annotation.blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.annotation.green { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.annotation-top-right { top: 20px; right: 40px; }
+.annotation-left { top: 40%; left: 0; }
+.annotation-bottom-right { bottom: 100px; right: 30px; }
+
+@media (max-width: 1024px) {
+  .hero-screenshot .browser-frame { transform: none; }
+  .annotation { font-size: 0.7rem; padding: 4px 10px; }
+}
+@media (max-width: 768px) {
+  .hero { padding: 48px 0 0; }
+  .hero-ctas { margin-bottom: 36px; }
+  .annotation { display: none; }
+  .hero-screenshot-wrapper { padding-bottom: 40px; }
+  .mobile-annotations {
+    display: flex !important;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .mobile-annotations span {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+}
+.mobile-annotations { display: none; }
+
+/* ===== BROWSER FRAME ===== */
+.browser-frame {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-screenshot);
+}
+.browser-frame-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid var(--border);
+  gap: 6px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.red { background: #ff5f57; }
+.dot.yellow { background: #febc2e; }
+.dot.green { background: #28c840; }
+.browser-frame-bar .url-bar {
+  flex: 1;
+  margin-left: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.browser-frame-content {
+  background: #f3f4f6;
+}
+
+/* ===== DASHBOARD MOCKUP (Hero) ===== */
+.dashboard-mock {
+  display: flex;
+  min-height: 460px;
+  font-size: 0.78rem;
+}
+.dash-sidebar {
+  width: 200px;
+  background: var(--dark-bg);
+  color: #d1d5db;
+  padding: 16px 0;
+  flex-shrink: 0;
+}
+.dash-sidebar .brand {
+  padding: 0 16px 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  border-bottom: 1px solid #374151;
+  margin-bottom: 8px;
+}
+.dash-sidebar .brand span { color: var(--accent); }
+.dash-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  cursor: default;
+  font-size: 0.78rem;
+  transition: background 0.15s;
+}
+.dash-nav-item:hover { background: rgba(255,255,255,0.05); }
+.dash-nav-item.active {
+  background: rgba(245,158,11,0.15);
+  color: var(--accent);
+  font-weight: 600;
+}
+.dash-nav-item i { width: 16px; text-align: center; opacity: 0.7; }
+.dash-main { flex: 1; display: flex; flex-direction: column; }
+.dash-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+.dash-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  padding: 6px 14px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  width: 260px;
+}
+.dash-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #f87171);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.7rem; font-weight: 700;
+}
+.dash-content {
+  flex: 1;
+  padding: 20px;
+  background: #f9fafb;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+}
+.stat-card .label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.stat-card .value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.stat-card .change {
+  font-size: 0.65rem;
+  margin-top: 2px;
+}
+.stat-card .change.up { color: #059669; }
+.stat-card .change.down { color: #dc2626; }
+.dash-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+.chart-panel, .actions-panel {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+.chart-panel h4, .actions-panel h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.mini-chart {
+  width: 100%;
+  height: 120px;
+}
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f9fafb;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  margin-bottom: 6px;
+  cursor: default;
+  color: var(--text-heading);
+}
+.quick-action-btn .qa-icon {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .dash-sidebar { display: none; }
+  .stat-cards { grid-template-columns: repeat(2, 1fr); }
+  .dash-grid { grid-template-columns: 1fr; }
+  .dashboard-mock { min-height: 340px; }
+  .dash-search { width: 160px; }
+}
+@media (max-width: 480px) {
+  .stat-cards { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 10px; }
+  .stat-card .value { font-size: 1rem; }
+  .dash-content { padding: 12px; }
+}
+
+/* ===== INTEGRATION BAR ===== */
+.integration-bar {
+  background: var(--bg-alt);
+  padding: 48px 0;
+  text-align: center;
+}
+.integration-bar h3 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.logo-badge {
+  padding: 8px 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ===== FEATURE DEEP-DIVES ===== */
+.feature-section {
+  padding: 80px 0;
+}
+.feature-section:nth-child(even) {
+  background: var(--bg-alt);
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 48px;
+  align-items: center;
+  max-width: var(--max-w-text);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.feature-grid.reverse {
+  grid-template-columns: 1fr 1.25fr;
+}
+.feature-grid.reverse .feature-text { order: -1; }
+.feature-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-dark);
+  margin-bottom: 12px;
+}
+.feature-text h2 {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.feature-text p {
+  color: var(--text-body);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+.feature-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.feature-bullets li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-body);
+}
+.feature-bullets li .bullet-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #ecfdf5; color: #059669;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; flex-shrink: 0;
+}
+.feature-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s;
+}
+.feature-link:hover { gap: 8px; }
+
+/* Feature screenshots */
+.feature-screenshot .browser-frame {
+  box-shadow: var(--shadow-screenshot);
+}
+.feature-screenshot .browser-frame-content {
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  .feature-grid,
+  .feature-grid.reverse {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .feature-section { padding: 48px 0; }
+  .feature-grid,
+  .feature-grid.reverse {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .feature-grid.reverse .feature-text { order: 0; }
+  .feature-screenshot { order: -1; }
+}
+
+/* ===== INNER MOCKUP STYLES ===== */
+.mock-inner { padding: 16px; background: #f9fafb; font-size: 0.76rem; }
+.mock-inner-white { padding: 16px; background: #fff; font-size: 0.76rem; }
+
+/* Calculator mock */
+.calc-mock { padding: 20px; background: #fff; }
+.calc-form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.calc-field { flex: 1; }
+.calc-field label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.calc-field .input-mock {
+  background: #f3f4f6;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  color: var(--text-heading);
+}
+.calc-result {
+  margin-top: 16px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 14px;
+}
+.calc-result h5 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #166534;
+  margin-bottom: 10px;
+}
+.calc-result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.74rem;
+  color: var(--text-body);
+  border-bottom: 1px dashed #d1fae5;
+}
+.calc-result-row:last-child {
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--text-heading);
+  padding-top: 8px;
+  margin-top: 4px;
+  border-top: 1.5px solid #86efac;
+}
+
+/* Shipping mock */
+.shipping-mock { padding: 16px; background: #fff; }
+.shipping-table { width: 100%; border-collapse: collapse; }
+.shipping-table th {
+  text-align: left;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--border);
+}
+.shipping-table td {
+  padding: 10px;
+  font-size: 0.76rem;
+  border-bottom: 1px solid #f3f4f6;
+  color: var(--text-heading);
+}
+.carrier-name { font-weight: 600; }
+.rate-badge {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.rating-stars { color: var(--accent); font-size: 0.7rem; }
+.best-badge {
+  display: inline-block;
+  background: #ecfdf5;
+  color: #059669;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+/* EXIM mock */
+.exim-mock { padding: 16px; background: #fff; }
+.exim-chart-area {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+.exim-chart-area h5 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.exim-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.exim-table th {
+  text-align: left;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 6px 8px;
+  border-bottom: 2px solid var(--border);
+}
+.exim-table td {
+  padding: 7px 8px;
+  font-size: 0.74rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+.trend-up { color: #059669; font-weight: 600; }
+.trend-down { color: #dc2626; font-weight: 600; }
+
+/* Sourcing mock */
+.sourcing-mock { padding: 16px; background: #f9fafb; }
+.supplier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.supplier-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+.supplier-card .s-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 6px;
+}
+.supplier-card .s-name { font-weight: 600; font-size: 0.78rem; }
+.supplier-card .s-rating {
+  background: #fef3c7;
+  color: #b45309;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+.supplier-card .s-location {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.supplier-card .s-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.supplier-card .s-tag {
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  color: var(--text-body);
+}
+.s-tag.verified { background: #ecfdf5; color: #059669; }
+
+/* Compliance mock */
+.compliance-mock { padding: 16px; background: #fff; }
+.compliance-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+.compliance-list { list-style: none; }
+.compliance-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.76rem;
+}
+.compliance-check {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+.compliance-check.done { background: #ecfdf5; color: #059669; }
+.compliance-check.pending { background: #fef3c7; color: #b45309; }
+.compliance-check.missing { background: #fef2f2; color: #dc2626; }
+.compliance-status {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.status-done { background: #ecfdf5; color: #059669; }
+.status-pending { background: #fef3c7; color: #b45309; }
+.status-missing { background: #fef2f2; color: #dc2626; }
+
+/* AI Chat mock */
+.chat-mock { padding: 16px; background: #f3f4f6; display: flex; flex-direction: column; gap: 10px; }
+.chat-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+.chat-msg.user {
+  background: var(--dark-bg);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.ai {
+  background: #fff;
+  color: var(--text-heading);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  border: 1px solid var(--border);
+}
+.chat-msg.ai .label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 4px;
+}
+.chat-input-mock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== BEFORE/AFTER ===== */
+.before-after {
+  background: var(--bg-alt);
+  padding: 80px 0;
+}
+.before-after h2 {
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 48px;
+}
+.ba-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.ba-card {
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  position: relative;
+}
+.ba-card.without {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+.ba-card.with {
+  background: #fff;
+  border: 1px solid #fde68a;
+  box-shadow: 0 8px 32px rgba(245,158,11,0.08);
+}
+.ba-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ba-card.without .ba-label { color: #6b7280; }
+.ba-card.with .ba-label { color: var(--accent-dark); }
+.ba-card .ba-visual {
+  background: #e5e7eb;
+  border-radius: 8px;
+  height: 140px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.ba-card.with .ba-visual {
+  background: #f9fafb;
+  border: 1px solid var(--border);
+}
+/* Chaos visual */
+.chaos-visual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.chaos-sheet {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.55rem;
+  padding: 6px 8px;
+  color: var(--text-muted);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.chaos-sheet:nth-child(1) { top: 10px; left: 15px; transform: rotate(-3deg); width: 90px; }
+.chaos-sheet:nth-child(2) { top: 25px; left: 60px; transform: rotate(2deg); width: 85px; }
+.chaos-sheet:nth-child(3) { top: 50px; left: 30px; transform: rotate(-1deg); width: 100px; }
+.chaos-sticky {
+  position: absolute;
+  width: 50px; height: 50px;
+  background: #fef08a;
+  border-radius: 2px;
+  font-size: 0.5rem;
+  padding: 4px;
+  color: #713f12;
+  transform: rotate(5deg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  top: 15px; right: 20px;
+}
+.chaos-calc {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  width: 60px;
+  height: 70px;
+  background: #374151;
+  border-radius: 4px;
+  padding: 4px;
+}
+.chaos-calc-screen {
+  background: #86efac;
+  border-radius: 2px;
+  height: 16px;
+  margin-bottom: 4px;
+  font-size: 0.5rem;
+  text-align: right;
+  padding: 2px 4px;
+  color: #064e3b;
+}
+.chaos-calc-keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.chaos-calc-keys span {
+  background: #6b7280;
+  border-radius: 2px;
+  height: 8px;
+}
+/* Clean visual */
+.clean-visual {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  font-size: 0.6rem;
+}
+.clean-sidebar-mini {
+  width: 40px;
+  background: var(--dark-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  gap: 8px;
+}
+.clean-sidebar-mini span {
+  width: 20px;
+  height: 3px;
+  background: #4b5563;
+  border-radius: 1px;
+}
+.clean-sidebar-mini span:first-child { background: var(--accent); }
+.clean-main-mini {
+  flex: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.clean-stat-row {
+  display: flex;
+  gap: 4px;
+}
+.clean-stat-row span {
+  flex: 1;
+  height: 28px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.clean-chart-mini {
+  flex: 1;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.ba-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ba-bullets li {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.4;
+}
+.ba-bullets li .bullet-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  margin-top: 2px;
+}
+.ba-card.without .bullet-icon { background: #fee2e2; color: #dc2626; }
+.ba-card.with .bullet-icon { background: #ecfdf5; color: #059669; }
+
+@media (max-width: 768px) {
+  .ba-grid { grid-template-columns: 1fr; }
+  .before-after { padding: 48px 0; }
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonials {
+  padding: 80px 0;
+  background: var(--white);
+}
+.testimonials h2 {
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 48px;
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: var(--max-w-text);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.testimonial-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px;
+}
+.testimonial-card .quote-mark {
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--accent);
+  font-family: Georgia, serif;
+  margin-bottom: 8px;
+}
+.testimonial-card .quote-text {
+  font-size: 0.95rem;
+  color: var(--text-heading);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.testimonial-stars {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+.testimonial-author {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.testimonial-role {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .testimonials { padding: 48px 0; }
+}
+
+/* ===== PRICING PREVIEW ===== */
+.pricing-preview {
+  padding: 80px 0;
+  background: var(--bg-alt);
+  text-align: center;
+}
+.pricing-preview h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.pricing-preview .pricing-sub {
+  color: var(--text-body);
+  margin-bottom: 40px;
+  font-size: 0.95rem;
+}
+.pricing-tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 840px;
+  margin: 0 auto 32px;
+  padding: 0 24px;
+}
+.pricing-tier {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  text-align: center;
+}
+.pricing-tier.popular {
+  border-color: var(--accent);
+  box-shadow: 0 4px 24px rgba(245,158,11,0.12);
+  position: relative;
+}
+.pricing-tier.popular::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 999px;
+}
+.pricing-tier h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.pricing-tier .price {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+.pricing-tier .price-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.pricing-tier .tier-desc {
+  font-size: 0.85rem;
+  color: var(--text-body);
+}
+.pricing-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+.pricing-link:hover { text-decoration: underline; }
+
+@media (max-width: 768px) {
+  .pricing-tiers { grid-template-columns: 1fr; max-width: 400px; }
+  .pricing-preview { padding: 48px 0; }
+}
+
+/* ===== FINAL CTA ===== */
+.final-cta {
+  background: var(--dark-bg);
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.final-cta h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.final-cta p {
+  color: #9ca3af;
+  font-size: 1.05rem;
+  margin-bottom: 32px;
+}
+.final-cta .cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-outline-white {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+.final-cta-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  opacity: 0.07;
+  pointer-events: none;
+}
+.final-cta .btn-primary {
+  padding: 12px 28px;
+  font-size: 0.95rem;
+}
+
+/* Screenshot behind text */
+.final-screenshot-wrap {
+  max-width: 1000px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+  opacity: 0.25;
+  position: relative;
+}
+.final-screenshot-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, var(--dark-bg) 85%);
+  pointer-events: none;
+  border-radius: var(--radius-lg);
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: var(--footer-bg);
+  padding: 64px 0 32px;
+  color: #a8a29e;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  max-width: var(--max-w-text);
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  border-bottom: 1px solid #292524;
+}
+.footer-brand .logo {
+  font-size: 1.25rem;
+  color: #fff;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.footer-brand p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #78716c;
+  max-width: 280px;
+}
+.footer-col h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block;
+  text-decoration: none;
+  color: #78716c;
+  font-size: 0.85rem;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: #d6d3d1; }
+.footer-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  background: #292524;
+  color: #a8a29e;
+  transition: background 0.2s;
+}
+.footer-social a:hover { background: #44403c; }
+.footer-bottom {
+  max-width: var(--max-w-text);
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  font-size: 0.78rem;
+  color: #57534e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+}
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== ANALYTICS MOCK (Final CTA) ===== */
+.analytics-mock {
+  display: flex;
+  min-height: 320px;
+  font-size: 0.72rem;
+}
+.analytics-mock .dash-sidebar { width: 170px; }
+.analytics-main {
+  flex: 1;
+  background: #f9fafb;
+  padding: 16px;
+}
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.analytics-header h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.analytics-header .date-range {
+  font-size: 0.68rem;
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-body);
+}
+.analytics-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.a-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+.a-card .a-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.a-card .a-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.analytics-chart-area {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.analytics-chart-area h5 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .analytics-mock .dash-sidebar { display: none; }
+  .analytics-cards { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo">Be<span>f</span>ach</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+    </ul>
+    <div class="header-actions">
+      <button class="btn-signin">Sign In</button>
+      <button class="btn-primary">Start Free Trial</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="#features">Features</a>
+    <a href="#solutions">Solutions</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#testimonials">Testimonials</a>
+    <a href="#" class="btn-primary">Start Free Trial</a>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-badge">All-in-one trade platform</span>
+    <h1>The all-in-one platform for import-export businesses</h1>
+    <p class="sub">Calculate costs, find suppliers, ensure compliance, and ship &mdash; all from one intelligent dashboard.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" style="padding:12px 28px;font-size:0.95rem;">Start Free Trial</button>
+      <button class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Watch 2-min Demo
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-screenshot-wrapper reveal">
+    <span class="annotation orange annotation-top-right">AI-powered</span>
+    <span class="annotation blue annotation-left">Real-time data</span>
+    <span class="annotation green annotation-bottom-right">50+ carriers</span>
+
+    <div class="hero-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/dashboard</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="dashboard-mock">
+            <!-- Sidebar -->
+            <div class="dash-sidebar">
+              <div class="brand">Be<span>f</span>ach</div>
+              <div class="dash-nav-item active"><i>&#9633;</i> Dashboard</div>
+              <div class="dash-nav-item"><i>&#9881;</i> Cost Calculator</div>
+              <div class="dash-nav-item"><i>&#9992;</i> Shipping</div>
+              <div class="dash-nav-item"><i>&#9670;</i> Market Insights</div>
+              <div class="dash-nav-item"><i>&#9733;</i> Sourcing</div>
+              <div class="dash-nav-item"><i>&#9745;</i> Compliance</div>
+              <div class="dash-nav-item"><i>&#9883;</i> AI Assistant</div>
+              <div class="dash-nav-item"><i>&#9744;</i> Orders</div>
+              <div class="dash-nav-item"><i>&#9878;</i> Payments</div>
+            </div>
+            <!-- Main -->
+            <div class="dash-main">
+              <div class="dash-topbar">
+                <div class="dash-search">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  Search shipments, suppliers...
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  <div class="dash-avatar">NK</div>
+                </div>
+              </div>
+              <div class="dash-content">
+                <div class="stat-cards">
+                  <div class="stat-card">
+                    <div class="label">Total Shipments</div>
+                    <div class="value">1,847</div>
+                    <div class="change up">+12.3% vs last month</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="label">Active Orders</div>
+                    <div class="value">23</div>
+                    <div class="change up">+4 new this week</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="label">Cost Savings</div>
+                    <div class="value">$45.2K</div>
+                    <div class="change up">+8.7% optimized</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="label">Compliance Score</div>
+                    <div class="value">98%</div>
+                    <div class="change up">All clear</div>
+                  </div>
+                </div>
+                <div class="dash-grid">
+                  <div class="chart-panel">
+                    <h4>Shipment Trends (6 months)</h4>
+                    <svg class="mini-chart" viewBox="0 0 400 120" fill="none">
+                      <defs>
+                        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2"/>
+                          <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+                        </linearGradient>
+                      </defs>
+                      <!-- Grid lines -->
+                      <line x1="0" y1="30" x2="400" y2="30" stroke="#f3f4f6" stroke-width="1"/>
+                      <line x1="0" y1="60" x2="400" y2="60" stroke="#f3f4f6" stroke-width="1"/>
+                      <line x1="0" y1="90" x2="400" y2="90" stroke="#f3f4f6" stroke-width="1"/>
+                      <!-- Area fill -->
+                      <path d="M0,90 L67,70 L133,80 L200,50 L267,35 L333,40 L400,20 L400,120 L0,120 Z" fill="url(#chartGrad)"/>
+                      <!-- Line -->
+                      <polyline points="0,90 67,70 133,80 200,50 267,35 333,40 400,20" stroke="#f59e0b" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      <!-- Dots -->
+                      <circle cx="0" cy="90" r="3.5" fill="#f59e0b"/><circle cx="67" cy="70" r="3.5" fill="#f59e0b"/>
+                      <circle cx="133" cy="80" r="3.5" fill="#f59e0b"/><circle cx="200" cy="50" r="3.5" fill="#f59e0b"/>
+                      <circle cx="267" cy="35" r="3.5" fill="#f59e0b"/><circle cx="333" cy="40" r="3.5" fill="#f59e0b"/>
+                      <circle cx="400" cy="20" r="3.5" fill="#f59e0b"/>
+                      <!-- Labels -->
+                      <text x="0" y="115" fill="#9ca3af" font-size="10" font-family="Inter">Sep</text>
+                      <text x="67" y="115" fill="#9ca3af" font-size="10" font-family="Inter">Oct</text>
+                      <text x="133" y="115" fill="#9ca3af" font-size="10" font-family="Inter">Nov</text>
+                      <text x="200" y="115" fill="#9ca3af" font-size="10" font-family="Inter">Dec</text>
+                      <text x="267" y="115" fill="#9ca3af" font-size="10" font-family="Inter">Jan</text>
+                      <text x="333" y="115" fill="#9ca3af" font-size="10" font-family="Inter">Feb</text>
+                    </svg>
+                  </div>
+                  <div class="actions-panel">
+                    <h4>Quick Actions</h4>
+                    <div class="quick-action-btn">
+                      <div class="qa-icon" style="background:#fef3c7;color:#b45309;">$</div>
+                      Calculate Landed Cost
+                    </div>
+                    <div class="quick-action-btn">
+                      <div class="qa-icon" style="background:#dbeafe;color:#1d4ed8;">&#9992;</div>
+                      Compare Shipping Rates
+                    </div>
+                    <div class="quick-action-btn">
+                      <div class="qa-icon" style="background:#ecfdf5;color:#059669;">&#9733;</div>
+                      Find Suppliers
+                    </div>
+                    <div class="quick-action-btn">
+                      <div class="qa-icon" style="background:#ede9fe;color:#7c3aed;">&#9883;</div>
+                      Ask AI Assistant
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-annotations">
+      <span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">AI-powered</span>
+      <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;">Real-time data</span>
+      <span style="background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;">50+ carriers</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTEGRATION BAR ===== -->
+<section class="integration-bar">
+  <div class="container">
+    <h3>Works with the tools you already use</h3>
+    <div class="logo-row">
+      <span class="logo-badge">DHL</span>
+      <span class="logo-badge">FedEx</span>
+      <span class="logo-badge">UPS</span>
+      <span class="logo-badge">Shiprocket</span>
+      <span class="logo-badge">Aramex</span>
+      <span class="logo-badge">Alibaba</span>
+      <span class="logo-badge">IndiaMART</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURE DEEP-DIVES ===== -->
+<div id="features">
+
+<!-- Feature 1: Landed Cost Calculator (screenshot LEFT, text RIGHT) -->
+<section class="feature-section">
+  <div class="feature-grid reveal">
+    <div class="feature-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/cost-calculator</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="calc-mock">
+            <div style="font-weight:600;font-size:0.88rem;margin-bottom:14px;">Landed Cost Calculator</div>
+            <div class="calc-form-row">
+              <div class="calc-field">
+                <label>Origin Country</label>
+                <div class="input-mock">China (CN)</div>
+              </div>
+              <div class="calc-field">
+                <label>Destination</label>
+                <div class="input-mock">India (IN)</div>
+              </div>
+            </div>
+            <div class="calc-form-row">
+              <div class="calc-field">
+                <label>HSN Code</label>
+                <div class="input-mock">8471.30 &mdash; Laptops</div>
+              </div>
+              <div class="calc-field">
+                <label>Product Value (FOB)</label>
+                <div class="input-mock">$25,000.00</div>
+              </div>
+            </div>
+            <div class="calc-form-row">
+              <div class="calc-field">
+                <label>Shipping Method</label>
+                <div class="input-mock">Sea Freight (FCL)</div>
+              </div>
+              <div class="calc-field">
+                <label>Currency</label>
+                <div class="input-mock">INR (&#8377;)</div>
+              </div>
+            </div>
+            <div class="calc-result">
+              <h5>Cost Breakdown</h5>
+              <div class="calc-result-row"><span>Assessable Value (CIF)</span><span>$25,000.00</span></div>
+              <div class="calc-result-row"><span>Basic Customs Duty (BCD) @ 12%</span><span>$3,000.00</span></div>
+              <div class="calc-result-row"><span>Social Welfare Surcharge @ 10%</span><span>$300.00</span></div>
+              <div class="calc-result-row"><span>IGST @ 18%</span><span>$5,094.00</span></div>
+              <div class="calc-result-row"><span>Total Landed Cost</span><span>$33,394.00</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-eyebrow">Cost Calculator</div>
+      <h2>Know your true costs before you commit</h2>
+      <p>Calculate duties, taxes, freight, and insurance for any product from any origin country. HSN code-based duty rates with 99.8% accuracy.</p>
+      <ul class="feature-bullets">
+        <li><span class="bullet-check">&#10003;</span> Multi-currency support</li>
+        <li><span class="bullet-check">&#10003;</span> Real-time FX rates</li>
+        <li><span class="bullet-check">&#10003;</span> Custom charges &amp; overheads</li>
+      </ul>
+      <a href="#" class="feature-link">Try the calculator <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 2: Shipping & Logistics (text LEFT, screenshot RIGHT) -->
+<section class="feature-section">
+  <div class="feature-grid reverse reveal">
+    <div class="feature-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/shipping/compare</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="shipping-mock">
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:12px;">Carrier Comparison &mdash; Mumbai to New York, 250 kg</div>
+            <table class="shipping-table">
+              <thead>
+                <tr><th>Carrier</th><th>Rate</th><th>Delivery</th><th>Rating</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="carrier-name">DHL Express</td>
+                  <td><span class="rate-badge">$1,240</span></td>
+                  <td>3-5 days</td>
+                  <td class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+                  <td><span class="best-badge">Best</span></td>
+                </tr>
+                <tr>
+                  <td class="carrier-name">FedEx International</td>
+                  <td><span class="rate-badge">$1,380</span></td>
+                  <td>4-6 days</td>
+                  <td class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="carrier-name">UPS Worldwide</td>
+                  <td><span class="rate-badge">$1,295</span></td>
+                  <td>4-7 days</td>
+                  <td class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="carrier-name">Shiprocket</td>
+                  <td><span class="rate-badge">$890</span></td>
+                  <td>8-12 days</td>
+                  <td class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</td>
+                  <td><span class="best-badge" style="background:#fef3c7;color:#b45309;">Value</span></td>
+                </tr>
+                <tr>
+                  <td class="carrier-name">Aramex</td>
+                  <td><span class="rate-badge">$1,150</span></td>
+                  <td>5-8 days</td>
+                  <td class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-eyebrow">Shipping &amp; Logistics</div>
+      <h2>Compare 50+ carriers in seconds</h2>
+      <p>Get instant rate quotes from global and regional carriers. Book, track, and manage all your shipments from a single dashboard.</p>
+      <ul class="feature-bullets">
+        <li><span class="bullet-check">&#10003;</span> Real-time rate comparison</li>
+        <li><span class="bullet-check">&#10003;</span> One-click carrier booking</li>
+        <li><span class="bullet-check">&#10003;</span> End-to-end shipment tracking</li>
+      </ul>
+      <a href="#" class="feature-link">Compare rates <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 3: EXIM Intelligence (screenshot LEFT, text RIGHT) -->
+<section class="feature-section">
+  <div class="feature-grid reveal">
+    <div class="feature-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/market-insights</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="exim-mock">
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:14px;">EXIM Intelligence &mdash; India Import Trends</div>
+            <div class="exim-chart-area">
+              <h5>Import Volume (Electronics, last 12 months)</h5>
+              <svg viewBox="0 0 380 90" fill="none" style="width:100%;height:80px;">
+                <defs>
+                  <linearGradient id="eximGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/>
+                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="22" x2="380" y2="22" stroke="#f3f4f6" stroke-width="1"/>
+                <line x1="0" y1="45" x2="380" y2="45" stroke="#f3f4f6" stroke-width="1"/>
+                <line x1="0" y1="68" x2="380" y2="68" stroke="#f3f4f6" stroke-width="1"/>
+                <path d="M0,65 L32,58 L63,60 L95,52 L127,48 L158,42 L190,38 L222,40 L253,32 L285,28 L317,25 L348,18 L380,12 L380,90 L0,90 Z" fill="url(#eximGrad)"/>
+                <polyline points="0,65 32,58 63,60 95,52 127,48 158,42 190,38 222,40 253,32 285,28 317,25 348,18 380,12" stroke="#3b82f6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <table class="exim-table">
+              <thead>
+                <tr><th>Commodity</th><th>HS Code</th><th>Volume (USD)</th><th>YoY Change</th></tr>
+              </thead>
+              <tbody>
+                <tr><td style="font-weight:600;">Electronic Components</td><td>8542.31</td><td>$4.2B</td><td class="trend-up">+18.4%</td></tr>
+                <tr><td style="font-weight:600;">Organic Chemicals</td><td>2933.39</td><td>$3.8B</td><td class="trend-up">+12.1%</td></tr>
+                <tr><td style="font-weight:600;">Auto Parts</td><td>8708.29</td><td>$2.9B</td><td class="trend-down">-3.2%</td></tr>
+                <tr><td style="font-weight:600;">Textiles (Cotton)</td><td>5208.12</td><td>$2.1B</td><td class="trend-up">+7.8%</td></tr>
+                <tr><td style="font-weight:600;">Machinery</td><td>8479.89</td><td>$1.7B</td><td class="trend-up">+5.3%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-eyebrow">EXIM Intelligence</div>
+      <h2>Trade data that drives decisions</h2>
+      <p>Access detailed import-export data across 200+ countries. Spot trends, analyze competitors, and discover untapped markets before anyone else.</p>
+      <ul class="feature-bullets">
+        <li><span class="bullet-check">&#10003;</span> 200+ country coverage</li>
+        <li><span class="bullet-check">&#10003;</span> Competitor shipment analysis</li>
+        <li><span class="bullet-check">&#10003;</span> Custom reports &amp; alerts</li>
+      </ul>
+      <a href="#" class="feature-link">Explore market data <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 4: Smart Sourcing (text LEFT, screenshot RIGHT) -->
+<section class="feature-section">
+  <div class="feature-grid reverse reveal">
+    <div class="feature-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/sourcing</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="sourcing-mock">
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:12px;color:var(--text-heading);">Verified Suppliers &mdash; Electronic Components</div>
+            <div class="supplier-grid">
+              <div class="supplier-card">
+                <div class="s-header">
+                  <div class="s-name">Shenzhen TechParts Ltd.</div>
+                  <div class="s-rating">4.9 &#9733;</div>
+                </div>
+                <div class="s-location">Shenzhen, China</div>
+                <div class="s-tags">
+                  <span class="s-tag verified">Verified</span>
+                  <span class="s-tag">MOQ: 500</span>
+                  <span class="s-tag">ISO 9001</span>
+                </div>
+              </div>
+              <div class="supplier-card">
+                <div class="s-header">
+                  <div class="s-name">Rajesh Electronics Pvt.</div>
+                  <div class="s-rating">4.7 &#9733;</div>
+                </div>
+                <div class="s-location">Mumbai, India</div>
+                <div class="s-tags">
+                  <span class="s-tag verified">Verified</span>
+                  <span class="s-tag">MOQ: 100</span>
+                  <span class="s-tag">BIS Certified</span>
+                </div>
+              </div>
+              <div class="supplier-card">
+                <div class="s-header">
+                  <div class="s-name">TaiwanSemi Corp.</div>
+                  <div class="s-rating">4.8 &#9733;</div>
+                </div>
+                <div class="s-location">Taipei, Taiwan</div>
+                <div class="s-tags">
+                  <span class="s-tag verified">Verified</span>
+                  <span class="s-tag">MOQ: 1000</span>
+                  <span class="s-tag">RoHS</span>
+                </div>
+              </div>
+              <div class="supplier-card">
+                <div class="s-header">
+                  <div class="s-name">GlobalSource Trading</div>
+                  <div class="s-rating">4.6 &#9733;</div>
+                </div>
+                <div class="s-location">Ho Chi Minh, Vietnam</div>
+                <div class="s-tags">
+                  <span class="s-tag verified">Verified</span>
+                  <span class="s-tag">MOQ: 200</span>
+                  <span class="s-tag">CE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-eyebrow">Smart Sourcing</div>
+      <h2>850+ verified suppliers at your fingertips</h2>
+      <p>Find trusted manufacturers and suppliers with verified credentials, ratings, and certifications. Connect directly through our platform.</p>
+      <ul class="feature-bullets">
+        <li><span class="bullet-check">&#10003;</span> Advanced search &amp; filters</li>
+        <li><span class="bullet-check">&#10003;</span> Direct chat with suppliers</li>
+        <li><span class="bullet-check">&#10003;</span> Trade assurance protection</li>
+      </ul>
+      <a href="#" class="feature-link">Browse suppliers <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 5: Compliance Tools (screenshot LEFT, text RIGHT) -->
+<section class="feature-section">
+  <div class="feature-grid reveal">
+    <div class="feature-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/compliance</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="compliance-mock">
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:14px;">Compliance Checklist &mdash; Order #BF-2847</div>
+            <div class="compliance-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Search HS codes, regulations...
+            </div>
+            <ul class="compliance-list">
+              <li class="compliance-item">
+                <span class="compliance-check done">&#10003;</span>
+                <span>HS Code Classification (8471.30.00)</span>
+                <span class="compliance-status status-done">Verified</span>
+              </li>
+              <li class="compliance-item">
+                <span class="compliance-check done">&#10003;</span>
+                <span>Bill of Lading Generated</span>
+                <span class="compliance-status status-done">Complete</span>
+              </li>
+              <li class="compliance-item">
+                <span class="compliance-check done">&#10003;</span>
+                <span>Certificate of Origin (Form A)</span>
+                <span class="compliance-status status-done">Uploaded</span>
+              </li>
+              <li class="compliance-item">
+                <span class="compliance-check pending">!</span>
+                <span>Phytosanitary Certificate</span>
+                <span class="compliance-status status-pending">Pending</span>
+              </li>
+              <li class="compliance-item">
+                <span class="compliance-check done">&#10003;</span>
+                <span>Customs Declaration (BE)</span>
+                <span class="compliance-status status-done">Filed</span>
+              </li>
+              <li class="compliance-item">
+                <span class="compliance-check missing">&#10007;</span>
+                <span>Import License (DGFT)</span>
+                <span class="compliance-status status-missing">Required</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-eyebrow">Compliance Tools</div>
+      <h2>Never miss a customs requirement</h2>
+      <p>AI-powered HS code classification, automated document checklists, and real-time regulatory updates keep you compliant across borders.</p>
+      <ul class="feature-bullets">
+        <li><span class="bullet-check">&#10003;</span> AI-powered HS classification</li>
+        <li><span class="bullet-check">&#10003;</span> Auto-generated documents</li>
+        <li><span class="bullet-check">&#10003;</span> Country-specific regulations</li>
+      </ul>
+      <a href="#" class="feature-link">Check compliance <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Feature 6: AI Trade Assistant (text LEFT, screenshot RIGHT) -->
+<section class="feature-section">
+  <div class="feature-grid reverse reveal">
+    <div class="feature-screenshot">
+      <div class="browser-frame">
+        <div class="browser-frame-bar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url-bar">app.befach.com/ai-assistant</span>
+        </div>
+        <div class="browser-frame-content">
+          <div class="chat-mock">
+            <div class="chat-msg user">
+              What are the import duties on cotton textiles (HS 5208) from India to the United States?
+            </div>
+            <div class="chat-msg ai">
+              <div class="label">Befach AI</div>
+              <strong>Cotton textile imports (HS 5208) &mdash; India to US:</strong><br><br>
+              &#8226; <strong>Base MFN duty:</strong> 8.4% - 12.0% ad valorem (varies by weave type)<br>
+              &#8226; <strong>Merchandise Processing Fee:</strong> 0.3464% (min $27.75, max $538.40)<br>
+              &#8226; <strong>Harbor Maintenance Fee:</strong> 0.125% (sea freight only)<br><br>
+              India lost GSP eligibility in 2019, so no preferential rates apply. Consider sourcing from countries with active FTAs for better duty treatment.
+            </div>
+            <div class="chat-msg user">
+              Are there any anti-dumping duties to worry about?
+            </div>
+            <div class="chat-input-mock">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              Ask anything about trade, duties, compliance...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-eyebrow">AI Trade Assistant</div>
+      <h2>Your 24/7 trade expert</h2>
+      <p>Get instant answers to complex trade questions. Our AI is trained on customs regulations, duty schedules, and trade agreements from 200+ countries.</p>
+      <ul class="feature-bullets">
+        <li><span class="bullet-check">&#10003;</span> Real-time duty calculations</li>
+        <li><span class="bullet-check">&#10003;</span> Multi-topic conversations</li>
+        <li><span class="bullet-check">&#10003;</span> Saved conversation history</li>
+      </ul>
+      <a href="#" class="feature-link">Try the AI assistant <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+</div><!-- end #features -->
+
+<!-- ===== BEFORE / AFTER ===== -->
+<section class="before-after" id="solutions">
+  <div class="container">
+    <h2 class="reveal">Trade operations, transformed</h2>
+    <div class="ba-grid reveal">
+      <!-- WITHOUT -->
+      <div class="ba-card without">
+        <div class="ba-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Without Befach
+        </div>
+        <div class="ba-visual">
+          <div class="chaos-visual">
+            <div class="chaos-sheet">
+              <div style="font-weight:600;margin-bottom:2px;">costs_v3_FINAL.xlsx</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;">
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+              </div>
+            </div>
+            <div class="chaos-sheet">
+              <div style="font-weight:600;margin-bottom:2px;">suppliers_list.xlsx</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;">
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+                <span style="background:#e5e7eb;height:4px;border-radius:1px;"></span>
+              </div>
+            </div>
+            <div class="chaos-sheet">
+              <div style="font-weight:600;margin-bottom:2px;">shipping_quotes.pdf</div>
+              <div style="height:8px;background:#e5e7eb;border-radius:1px;width:80%;"></div>
+            </div>
+            <div class="chaos-sticky">
+              Call DHL<br>for quote!!
+            </div>
+            <div class="chaos-calc">
+              <div class="chaos-calc-screen">14,592</div>
+              <div class="chaos-calc-keys">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="ba-bullets">
+          <li><span class="bullet-icon">&#10007;</span> Manual spreadsheets for cost calculation</li>
+          <li><span class="bullet-icon">&#10007;</span> Calling carriers one by one for rate quotes</li>
+          <li><span class="bullet-icon">&#10007;</span> Guessing at compliance requirements</li>
+          <li><span class="bullet-icon">&#10007;</span> No visibility into shipment status</li>
+        </ul>
+      </div>
+      <!-- WITH -->
+      <div class="ba-card with">
+        <div class="ba-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          With Befach
+        </div>
+        <div class="ba-visual">
+          <div class="clean-visual">
+            <div class="clean-sidebar-mini">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="clean-main-mini">
+              <div class="clean-stat-row">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="clean-chart-mini"></div>
+            </div>
+          </div>
+        </div>
+        <ul class="ba-bullets">
+          <li><span class="bullet-icon">&#10003;</span> Automated landed cost in seconds</li>
+          <li><span class="bullet-icon">&#10003;</span> 50+ carrier rates with one click</li>
+          <li><span class="bullet-icon">&#10003;</span> AI-powered compliance checks</li>
+          <li><span class="bullet-icon">&#10003;</span> Real-time shipment tracking</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="reveal">Trusted by import-export businesses</h2>
+    <div class="testimonial-grid reveal">
+      <div class="testimonial-card">
+        <div class="quote-mark">&ldquo;</div>
+        <div class="quote-text">The cost calculator saved us 25% on our China imports. We finally have accurate duty projections before placing orders.</div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-author">Rajesh Kumar</div>
+        <div class="testimonial-role">CEO, TechImports India</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">&ldquo;</div>
+        <div class="quote-text">EXIM data helped us discover 3 new export markets we never considered. Revenue grew 40% in one quarter.</div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-author">Sarah Chen</div>
+        <div class="testimonial-role">Director, Global Trade Co.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">&ldquo;</div>
+        <div class="quote-text">Compliance tools eliminated our customs delays entirely. No more surprise holds at the port.</div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-author">Michael Roberts</div>
+        <div class="testimonial-role">Founder, Import Solutions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING PREVIEW ===== -->
+<section class="pricing-preview" id="pricing">
+  <div class="container">
+    <h2 class="reveal">Free to start. Scales with your business.</h2>
+    <p class="pricing-sub reveal">No credit card required. Upgrade when you are ready.</p>
+    <div class="pricing-tiers reveal">
+      <div class="pricing-tier">
+        <h3>Free</h3>
+        <div class="price">$0<span style="font-size:0.85rem;font-weight:500;color:var(--text-muted);">/mo</span></div>
+        <div class="price-note">Forever free</div>
+        <div class="tier-desc">For individual traders exploring the platform</div>
+      </div>
+      <div class="pricing-tier popular">
+        <h3>Pro</h3>
+        <div class="price">$49<span style="font-size:0.85rem;font-weight:500;color:var(--text-muted);">/mo</span></div>
+        <div class="price-note">Billed annually</div>
+        <div class="tier-desc">For growing businesses with active shipments</div>
+      </div>
+      <div class="pricing-tier">
+        <h3>Enterprise</h3>
+        <div class="price">Custom</div>
+        <div class="price-note">Talk to sales</div>
+        <div class="tier-desc">For large operations needing custom solutions</div>
+      </div>
+    </div>
+    <a href="#" class="pricing-link reveal">See all plans &rarr;</a>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final-cta">
+  <div class="final-screenshot-wrap">
+    <div class="browser-frame" style="border-color:#374151;">
+      <div class="browser-frame-bar" style="background:#1f2937;border-color:#374151;">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="url-bar" style="background:#374151;color:#6b7280;">app.befach.com/analytics</span>
+      </div>
+      <div class="browser-frame-content">
+        <div class="analytics-mock">
+          <div class="dash-sidebar" style="width:170px;">
+            <div class="brand">Be<span>f</span>ach</div>
+            <div class="dash-nav-item"><i>&#9633;</i> Dashboard</div>
+            <div class="dash-nav-item"><i>&#9881;</i> Calculator</div>
+            <div class="dash-nav-item"><i>&#9992;</i> Shipping</div>
+            <div class="dash-nav-item"><i>&#9670;</i> Insights</div>
+            <div class="dash-nav-item active"><i>&#9670;</i> Analytics</div>
+            <div class="dash-nav-item"><i>&#9733;</i> Sourcing</div>
+            <div class="dash-nav-item"><i>&#9745;</i> Compliance</div>
+          </div>
+          <div class="analytics-main">
+            <div class="analytics-header">
+              <h4>Analytics &amp; Reports</h4>
+              <div class="date-range">Jan 1 &mdash; Feb 11, 2026</div>
+            </div>
+            <div class="analytics-cards">
+              <div class="a-card">
+                <div class="a-label">Revenue</div>
+                <div class="a-value" style="color:#059669;">$2.4M</div>
+              </div>
+              <div class="a-card">
+                <div class="a-label">Shipments</div>
+                <div class="a-value">342</div>
+              </div>
+              <div class="a-card">
+                <div class="a-label">Avg. Savings</div>
+                <div class="a-value" style="color:var(--accent-dark);">18.3%</div>
+              </div>
+            </div>
+            <div class="analytics-chart-area">
+              <h5>Monthly Revenue Breakdown</h5>
+              <svg viewBox="0 0 380 80" fill="none" style="width:100%;height:70px;">
+                <!-- Stacked bars -->
+                <rect x="10" y="30" width="24" height="50" rx="3" fill="#fde68a"/>
+                <rect x="10" y="15" width="24" height="15" rx="3" fill="#f59e0b"/>
+                <rect x="45" y="25" width="24" height="55" rx="3" fill="#fde68a"/>
+                <rect x="45" y="8" width="24" height="17" rx="3" fill="#f59e0b"/>
+                <rect x="80" y="20" width="24" height="60" rx="3" fill="#fde68a"/>
+                <rect x="80" y="5" width="24" height="15" rx="3" fill="#f59e0b"/>
+                <rect x="115" y="32" width="24" height="48" rx="3" fill="#fde68a"/>
+                <rect x="115" y="18" width="24" height="14" rx="3" fill="#f59e0b"/>
+                <rect x="150" y="22" width="24" height="58" rx="3" fill="#fde68a"/>
+                <rect x="150" y="6" width="24" height="16" rx="3" fill="#f59e0b"/>
+                <rect x="185" y="18" width="24" height="62" rx="3" fill="#fde68a"/>
+                <rect x="185" y="2" width="24" height="16" rx="3" fill="#f59e0b"/>
+                <rect x="220" y="24" width="24" height="56" rx="3" fill="#fde68a"/>
+                <rect x="220" y="10" width="24" height="14" rx="3" fill="#f59e0b"/>
+                <rect x="255" y="16" width="24" height="64" rx="3" fill="#fde68a"/>
+                <rect x="255" y="2" width="24" height="14" rx="3" fill="#f59e0b"/>
+                <rect x="290" y="12" width="24" height="68" rx="3" fill="#fde68a"/>
+                <rect x="290" y="0" width="24" height="12" rx="3" fill="#f59e0b"/>
+                <rect x="325" y="10" width="24" height="70" rx="3" fill="#fde68a"/>
+                <rect x="325" y="0" width="24" height="10" rx="3" fill="#f59e0b"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="final-cta-inner">
+    <h2>See Befach in action</h2>
+    <p>Start your free trial and explore every tool.</p>
+    <div class="cta-buttons">
+      <button class="btn-primary">Start Free Trial</button>
+      <button class="btn-outline-white">Book a Demo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">Be<span>f</span>ach</a>
+      <p>The all-in-one platform for modern import-export businesses. Calculate, source, ship, and comply &mdash; from one intelligent dashboard.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Twitter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" aria-label="GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="#">Cost Calculator</a>
+      <a href="#">Shipping</a>
+      <a href="#">Market Insights</a>
+      <a href="#">AI Assistant</a>
+      <a href="#">Analytics</a>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <a href="#">Sourcing</a>
+      <a href="#">Compliance</a>
+      <a href="#">Orders</a>
+      <a href="#">Payments</a>
+      <a href="#">Integrations</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Befach. All rights reserved.</span>
+    <span>Made for global trade</span>
+  </div>
+</footer>
+
+<script>
+// Hamburger toggle
+const hamburger = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+let menuOpen = false;
+
+hamburger.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileNav.classList.toggle('open', menuOpen);
+  hamburger.innerHTML = menuOpen
+    ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+});
+
+// Close mobile nav on link click
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    menuOpen = false;
+    mobileNav.classList.remove('open');
+    hamburger.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+  });
+});
+
+// IntersectionObserver for reveal animations
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!prefersReducedMotion) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
+</script>
+
+</body>
+</html>

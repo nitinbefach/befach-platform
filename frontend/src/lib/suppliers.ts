@@ -139,9 +139,9 @@ export interface SupplierInvitation {
 // ============================================
 
 export const CATEGORIES = [
-  { id: 'electronics', name: 'Electronics', icon: '🔌', color: '#3B82F6' },
-  { id: 'health-supplements', name: 'Health Supplements', icon: '💊', color: '#10B981' },
-  { id: 'consumer-electronics', name: 'Consumer Electronics', icon: '📱', color: '#8B5CF6' },
+  { id: 'electronics', name: 'Electronics', icon: '', color: '#3B82F6' },
+  { id: 'health-supplements', name: 'Health Supplements', icon: '', color: '#10B981' },
+  { id: 'consumer-electronics', name: 'Consumer Electronics', icon: '', color: '#8B5CF6' },
 ];
 
 export const COUNTRIES = [

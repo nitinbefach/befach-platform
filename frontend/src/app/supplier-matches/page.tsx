@@ -22,18 +22,29 @@ import {
   formatFullTime,
   formatDateSeparator,
   getCountryFlag,
-  initializeDemoData,
   STATUS_CONFIG,
 } from '@/lib/conversations';
+import { MessageCircle, Star, FolderOpen, CheckCircle, Inbox, CircleDot, DollarSign, Archive, Paperclip } from 'lucide-react';
 
 // Filter tabs configuration
-const FILTER_TABS: { id: ConversationFilter; label: string; icon: string }[] = [
-  { id: 'all', label: 'All', icon: '📬' },
-  { id: 'active', label: 'Active', icon: '🟢' },
-  { id: 'favorites', label: 'Favorites', icon: '⭐' },
-  { id: 'quoted', label: 'Quoted', icon: '💰' },
-  { id: 'archived', label: 'Archived', icon: '📁' },
+const FILTER_TABS: { id: ConversationFilter; label: string; iconKey: string }[] = [
+  { id: 'all', label: 'All', iconKey: 'inbox' },
+  { id: 'active', label: 'Active', iconKey: 'active' },
+  { id: 'favorites', label: 'Favorites', iconKey: 'star' },
+  { id: 'quoted', label: 'Quoted', iconKey: 'quoted' },
+  { id: 'archived', label: 'Archived', iconKey: 'archived' },
 ];
+
+function FilterIcon({ iconKey, size = 14 }: { iconKey: string; size?: number }) {
+  switch (iconKey) {
+    case 'inbox': return <Inbox size={size} />;
+    case 'active': return <CircleDot size={size} />;
+    case 'star': return <Star size={size} />;
+    case 'quoted': return <DollarSign size={size} />;
+    case 'archived': return <Archive size={size} />;
+    default: return <Inbox size={size} />;
+  }
+}
 
 export default function MessagesPage() {
   // State
@@ -62,7 +73,6 @@ export default function MessagesPage() {
 
   // Load conversations on mount
   useEffect(() => {
-    initializeDemoData();
     const stored = getStoredConversations();
     setConversations(stored);
     setIsLoading(false);
@@ -195,7 +205,7 @@ export default function MessagesPage() {
           ...allConvs[idx],
           messages: [...allConvs[idx].messages, quoteMessage],
           lastMessageAt: now,
-          lastMessagePreview: '💰 Quote received',
+          lastMessagePreview: 'Quote received',
           status: 'quoted',
           unreadCount: 1,
           updatedAt: now,
@@ -314,7 +324,7 @@ export default function MessagesPage() {
                 className={`filter-tab ${activeFilter === tab.id ? 'active' : ''}`}
                 onClick={() => setActiveFilter(tab.id)}
               >
-                <span className="tab-icon">{tab.icon}</span>
+                <span className="tab-icon"><FilterIcon iconKey={tab.iconKey} size={13} /></span>
                 <span className="tab-label">{tab.label}</span>
                 {tab.id === 'all' && stats.total > 0 && (
                   <span className="tab-count">{stats.total}</span>
@@ -327,7 +337,7 @@ export default function MessagesPage() {
           <div className="conversations-list">
             {displayedConversations.length === 0 ? (
               <div className="empty-list">
-                <span className="empty-icon">💬</span>
+                <span className="empty-icon"><MessageCircle size={48} /></span>
                 <p>No conversations found</p>
               </div>
             ) : (
@@ -353,7 +363,7 @@ export default function MessagesPage() {
                       <span className="conv-location">
                         {getCountryFlag(conv.supplierCountry)} {conv.supplierCountry}
                       </span>
-                      {conv.isFavorite && <span className="favorite-star">⭐</span>}
+                      {conv.isFavorite && <span className="favorite-star"><Star size={14} style={{ color: '#f59e0b', fill: '#f59e0b' }} /></span>}
                     </div>
                     <p className="conv-preview">{conv.lastMessagePreview}</p>
                   </div>
@@ -381,9 +391,9 @@ export default function MessagesPage() {
             /* No Selection State */
             <div className="no-selection-state">
               <div className="no-selection-content">
-                <span className="no-selection-icon">👈</span>
+                <span className="no-selection-icon"><MessageCircle size={48} /></span>
                 <h2>Select a conversation</h2>
-                <p>Choose a supplier from the list to view your messages and negotiate</p>
+                <p>Choose a supplier from the list to view messages and negotiate</p>
               </div>
             </div>
           ) : selectedConversation ? (
@@ -409,7 +419,7 @@ export default function MessagesPage() {
                       {selectedConversation.supplierVerified && <span className="verified-tag">✓ Verified</span>}
                       <span>{getCountryFlag(selectedConversation.supplierCountry)} {selectedConversation.supplierCountry}</span>
                       {selectedConversation.supplierRating && (
-                        <span>⭐ {selectedConversation.supplierRating}</span>
+                        <span><Star size={14} style={{ color: '#f59e0b', fill: '#f59e0b', display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> {selectedConversation.supplierRating}</span>
                       )}
                     </div>
                   </div>
@@ -421,21 +431,21 @@ export default function MessagesPage() {
                     onClick={() => handleToggleFavorite(selectedConversation.id)}
                     title={selectedConversation.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                   >
-                    {selectedConversation.isFavorite ? '⭐' : '☆'}
+                    <Star size={16} style={selectedConversation.isFavorite ? { color: '#f59e0b', fill: '#f59e0b' } : { color: '#4b5563' }} />
                   </button>
                   <button
                     className="action-btn rfq-btn"
                     onClick={() => setShowRFQModal(true)}
                     title="Send RFQ"
                   >
-                    📋 RFQ
+                    RFQ
                   </button>
                   <button
                     className="action-btn"
                     onClick={() => handleArchive(selectedConversation.id)}
                     title="Archive conversation"
                   >
-                    📁
+                    <FolderOpen size={14} />
                   </button>
                 </div>
               </div>
@@ -459,7 +469,7 @@ export default function MessagesPage() {
                           <div className="system-message">{msg.content}</div>
                         ) : msg.type === 'rfq' && msg.rfqData ? (
                           <div className="rfq-card">
-                            <div className="rfq-header">📋 REQUEST FOR QUOTE</div>
+                            <div className="rfq-header">REQUEST FOR QUOTE</div>
                             <div className="rfq-content">
                               <div className="rfq-row">
                                 <span className="rfq-label">Product:</span>
@@ -495,8 +505,8 @@ export default function MessagesPage() {
                         ) : msg.type === 'quote' && msg.quoteData ? (
                           <div className="quote-card">
                             <div className="quote-header">
-                              <span>💰 QUOTE RECEIVED</span>
-                              <span className="competitive-tag">✅ Competitive</span>
+                              <span>QUOTE RECEIVED</span>
+                              <span className="competitive-tag"><CheckCircle size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Competitive</span>
                             </div>
                             <div className="quote-content">
                               <div className="quote-price">
@@ -543,13 +553,13 @@ export default function MessagesPage() {
               {/* Message Input */}
               <div className="message-input-area">
                 <button className="attach-btn" title="Attach file">
-                  📎
+                  <Paperclip size={18} />
                 </button>
                 <textarea
                   ref={messageInputRef}
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyPress}
                   placeholder="Type your message..."
                   rows={1}
                 />
@@ -682,29 +692,31 @@ export default function MessagesPage() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 20px 20px 16px;
-          border-bottom: 1px solid var(--border-color);
+          padding: 18px 20px 14px;
         }
 
         .list-header h1 {
-          font-size: 1.5rem;
+          font-size: 1.3rem;
           font-weight: 700;
           color: var(--text-primary);
+          margin: 0;
         }
 
         .unread-badge {
           background: #f97316;
           color: white;
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 0.8rem;
+          padding: 3px 9px;
+          border-radius: 10px;
+          font-size: 0.75rem;
           font-weight: 600;
+          min-width: 20px;
+          text-align: center;
         }
 
         .search-box {
           position: relative;
           padding: 0 16px;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
 
         .search-box svg {
@@ -712,19 +724,19 @@ export default function MessagesPage() {
           left: 28px;
           top: 50%;
           transform: translateY(-50%);
-          width: 18px;
-          height: 18px;
+          width: 16px;
+          height: 16px;
           color: var(--text-muted);
         }
 
         .search-box input {
           width: 100%;
-          padding: 10px 12px 10px 40px;
+          padding: 9px 12px 9px 38px;
           border: 1px solid var(--border-color);
           border-radius: 8px;
           background: var(--bg-secondary);
           color: var(--text-primary);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
         }
 
         .search-box input:focus {
@@ -735,21 +747,24 @@ export default function MessagesPage() {
         /* Filter Tabs */
         .filter-tabs {
           display: flex;
-          gap: 4px;
-          padding: 0 16px 12px;
+          gap: 2px;
+          padding: 6px 12px 10px;
           overflow-x: auto;
           border-bottom: 1px solid var(--border-color);
+          scrollbar-width: none;
         }
+        .filter-tabs::-webkit-scrollbar { display: none; }
 
         .filter-tab {
           display: flex;
           align-items: center;
-          gap: 4px;
-          padding: 6px 10px;
-          border: none;
+          gap: 5px;
+          padding: 6px 12px;
+          border: 1px solid transparent;
           background: none;
-          border-radius: 16px;
-          font-size: 0.8rem;
+          border-radius: 8px;
+          font-size: 0.78rem;
+          font-weight: 500;
           color: var(--text-secondary);
           cursor: pointer;
           white-space: nowrap;
@@ -758,22 +773,26 @@ export default function MessagesPage() {
 
         .filter-tab:hover {
           background: var(--bg-secondary);
+          color: var(--text-primary);
         }
 
         .filter-tab.active {
           background: rgba(249, 115, 22, 0.1);
+          border-color: rgba(249, 115, 22, 0.25);
           color: #f97316;
         }
 
         .tab-icon {
-          font-size: 0.9rem;
+          display: flex;
+          align-items: center;
         }
 
         .tab-count {
-          background: var(--bg-tertiary);
-          padding: 2px 6px;
-          border-radius: 10px;
-          font-size: 0.7rem;
+          background: var(--bg-tertiary, rgba(255,255,255,0.06));
+          padding: 1px 6px;
+          border-radius: 8px;
+          font-size: 0.68rem;
+          font-weight: 600;
         }
 
         .filter-tab.active .tab-count {
@@ -784,7 +803,7 @@ export default function MessagesPage() {
         .conversations-list {
           flex: 1;
           overflow-y: auto;
-          padding: 8px;
+          padding: 6px 8px;
         }
 
         .empty-list {
@@ -794,23 +813,28 @@ export default function MessagesPage() {
           justify-content: center;
           height: 200px;
           color: var(--text-muted);
+          gap: 8px;
         }
 
         .empty-icon {
-          font-size: 2rem;
-          margin-bottom: 8px;
+          opacity: 0.4;
+        }
+
+        .empty-list p {
+          font-size: 0.85rem;
         }
 
         /* Conversation Card */
         .conversation-card {
           display: flex;
-          align-items: flex-start;
+          align-items: center;
           gap: 12px;
-          padding: 12px;
+          padding: 10px 12px;
           border-radius: 10px;
           cursor: pointer;
-          transition: all 0.2s;
-          margin-bottom: 4px;
+          transition: all 0.15s;
+          margin-bottom: 2px;
+          border: 1px solid transparent;
         }
 
         .conversation-card:hover {
@@ -818,23 +842,33 @@ export default function MessagesPage() {
         }
 
         .conversation-card.selected {
-          background: rgba(249, 115, 22, 0.08);
-          border-left: 3px solid #f97316;
+          background: rgba(249, 115, 22, 0.07);
+          border-color: rgba(249, 115, 22, 0.2);
         }
 
         .conversation-card.unread {
-          background: rgba(249, 115, 22, 0.04);
+          background: rgba(249, 115, 22, 0.03);
+        }
+
+        .conversation-card.unread .conv-name {
+          color: var(--text-primary);
+          font-weight: 700;
+        }
+
+        .conversation-card.unread .conv-preview {
+          color: var(--text-secondary);
+          font-weight: 500;
         }
 
         .conv-avatar {
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
           background: linear-gradient(135deg, #f97316, #ea580c);
-          border-radius: 12px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: white;
           flex-shrink: 0;
@@ -845,14 +879,14 @@ export default function MessagesPage() {
           position: absolute;
           bottom: -2px;
           right: -2px;
-          width: 16px;
-          height: 16px;
+          width: 15px;
+          height: 15px;
           background: #10b981;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.6rem;
+          font-size: 0.55rem;
           color: white;
           border: 2px solid var(--card-bg);
         }
@@ -866,11 +900,12 @@ export default function MessagesPage() {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 2px;
+          gap: 8px;
+          margin-bottom: 1px;
         }
 
         .conv-name {
-          font-size: 0.95rem;
+          font-size: 0.88rem;
           font-weight: 600;
           color: var(--text-primary);
           white-space: nowrap;
@@ -879,7 +914,7 @@ export default function MessagesPage() {
         }
 
         .conv-time {
-          font-size: 0.75rem;
+          font-size: 0.7rem;
           color: var(--text-muted);
           flex-shrink: 0;
         }
@@ -888,24 +923,26 @@ export default function MessagesPage() {
           display: flex;
           align-items: center;
           gap: 8px;
-          margin-bottom: 4px;
+          margin-bottom: 3px;
         }
 
         .conv-location {
-          font-size: 0.8rem;
+          font-size: 0.75rem;
           color: var(--text-secondary);
         }
 
         .favorite-star {
-          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
         }
 
         .conv-preview {
-          font-size: 0.85rem;
+          font-size: 0.8rem;
           color: var(--text-muted);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          line-height: 1.3;
         }
 
         .conv-status {
@@ -913,19 +950,20 @@ export default function MessagesPage() {
           flex-direction: column;
           align-items: center;
           gap: 6px;
+          flex-shrink: 0;
         }
 
         .status-dot {
-          width: 8px;
-          height: 8px;
+          width: 7px;
+          height: 7px;
           border-radius: 50%;
         }
 
         .unread-count {
           background: #f97316;
           color: white;
-          font-size: 0.7rem;
-          font-weight: 600;
+          font-size: 0.65rem;
+          font-weight: 700;
           padding: 2px 6px;
           border-radius: 10px;
           min-width: 18px;
@@ -938,6 +976,7 @@ export default function MessagesPage() {
           display: flex;
           flex-direction: column;
           background: var(--bg-primary);
+          min-width: 0;
         }
 
         .chat-panel.no-selection {
@@ -954,34 +993,43 @@ export default function MessagesPage() {
         .no-selection-content {
           text-align: center;
           color: var(--text-muted);
+          max-width: 280px;
         }
 
         .no-selection-icon {
-          font-size: 3rem;
-          display: block;
+          display: flex;
+          justify-content: center;
           margin-bottom: 16px;
+          opacity: 0.3;
+          color: var(--text-secondary);
         }
 
         .no-selection-content h2 {
-          font-size: 1.25rem;
+          font-size: 1.15rem;
           color: var(--text-primary);
-          margin-bottom: 8px;
+          margin-bottom: 6px;
+          font-weight: 600;
+        }
+
+        .no-selection-content p {
+          font-size: 0.85rem;
+          line-height: 1.4;
         }
 
         /* Chat Header */
         .chat-header {
           display: flex;
           align-items: center;
-          gap: 16px;
-          padding: 16px 20px;
+          gap: 12px;
+          padding: 14px 20px;
           background: var(--card-bg);
           border-bottom: 1px solid var(--border-color);
         }
 
         .back-btn {
           display: none;
-          width: 36px;
-          height: 36px;
+          width: 34px;
+          height: 34px;
           align-items: center;
           justify-content: center;
           background: var(--bg-secondary);
@@ -992,8 +1040,8 @@ export default function MessagesPage() {
         }
 
         .back-btn svg {
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
         }
 
         .chat-supplier-info {
@@ -1001,34 +1049,43 @@ export default function MessagesPage() {
           align-items: center;
           gap: 12px;
           flex: 1;
+          min-width: 0;
         }
 
         .chat-avatar {
-          width: 44px;
-          height: 44px;
+          width: 40px;
+          height: 40px;
           background: linear-gradient(135deg, #f97316, #ea580c);
           border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.1rem;
+          font-size: 1.05rem;
           font-weight: 700;
           color: white;
           position: relative;
+          flex-shrink: 0;
+        }
+
+        .chat-details {
+          min-width: 0;
         }
 
         .chat-details h2 {
-          font-size: 1rem;
+          font-size: 0.95rem;
           font-weight: 600;
           color: var(--text-primary);
           margin-bottom: 2px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .chat-meta {
           display: flex;
           align-items: center;
-          gap: 10px;
-          font-size: 0.8rem;
+          gap: 8px;
+          font-size: 0.78rem;
           color: var(--text-secondary);
         }
 
@@ -1039,34 +1096,39 @@ export default function MessagesPage() {
 
         .chat-actions {
           display: flex;
-          gap: 8px;
+          gap: 6px;
+          flex-shrink: 0;
         }
 
         .action-btn {
-          padding: 8px 12px;
+          padding: 7px 10px;
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 8px;
           cursor: pointer;
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           color: var(--text-primary);
           transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .action-btn:hover {
-          background: var(--bg-tertiary);
+          background: var(--bg-tertiary, rgba(255,255,255,0.08));
         }
 
         .action-btn.active {
           background: rgba(249, 115, 22, 0.1);
-          border-color: #f97316;
+          border-color: rgba(249, 115, 22, 0.3);
         }
 
         .rfq-btn {
           background: rgba(249, 115, 22, 0.1);
           color: #f97316;
-          border-color: transparent;
-          font-weight: 500;
+          border-color: rgba(249, 115, 22, 0.2);
+          font-weight: 600;
+          font-size: 0.78rem;
         }
 
         .rfq-btn:hover {
@@ -1322,40 +1384,44 @@ export default function MessagesPage() {
         .message-input-area {
           display: flex;
           align-items: flex-end;
-          gap: 12px;
-          padding: 16px 20px;
+          gap: 10px;
+          padding: 12px 16px;
           background: var(--card-bg);
           border-top: 1px solid var(--border-color);
         }
 
         .attach-btn {
-          width: 40px;
-          height: 40px;
+          width: 38px;
+          height: 38px;
           display: flex;
           align-items: center;
           justify-content: center;
           background: var(--bg-secondary);
-          border: none;
+          border: 1px solid var(--border-color);
           border-radius: 8px;
-          font-size: 1.2rem;
+          color: var(--text-secondary);
           cursor: pointer;
           transition: all 0.2s;
+          flex-shrink: 0;
         }
 
         .attach-btn:hover {
-          background: var(--bg-tertiary);
+          background: var(--bg-tertiary, rgba(255,255,255,0.08));
+          color: var(--text-primary);
         }
 
         .message-input-area textarea {
           flex: 1;
-          padding: 12px 16px;
+          padding: 10px 14px;
           border: 1px solid var(--border-color);
-          border-radius: 12px;
+          border-radius: 10px;
           background: var(--bg-secondary);
           color: var(--text-primary);
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           resize: none;
-          max-height: 120px;
+          max-height: 100px;
+          line-height: 1.4;
+          font-family: inherit;
         }
 
         .message-input-area textarea:focus {
@@ -1364,8 +1430,8 @@ export default function MessagesPage() {
         }
 
         .send-btn {
-          width: 44px;
-          height: 44px;
+          width: 38px;
+          height: 38px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1374,16 +1440,21 @@ export default function MessagesPage() {
           border-radius: 10px;
           cursor: pointer;
           transition: all 0.2s;
+          flex-shrink: 0;
+        }
+
+        .send-btn:hover:not(:disabled) {
+          transform: scale(1.05);
         }
 
         .send-btn:disabled {
-          opacity: 0.5;
+          opacity: 0.4;
           cursor: not-allowed;
         }
 
         .send-btn svg {
-          width: 20px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
           color: white;
         }
 
@@ -1507,10 +1578,28 @@ export default function MessagesPage() {
           color: white;
         }
 
-        /* Mobile Responsive */
+        /* Tablet */
+        @media (max-width: 1024px) {
+          .conversation-list-panel {
+            width: 320px;
+          }
+
+          .chat-actions {
+            gap: 4px;
+          }
+
+          .action-btn {
+            padding: 6px 8px;
+            font-size: 0.78rem;
+          }
+        }
+
+        /* Mobile */
         @media (max-width: 768px) {
           .inbox-container {
-            height: calc(100vh - 80px);
+            height: calc(100vh - 130px);
+            border-radius: 10px;
+            position: relative;
           }
 
           .conversation-list-panel {
@@ -1542,12 +1631,153 @@ export default function MessagesPage() {
             display: flex;
           }
 
+          .list-header {
+            padding: 14px 16px 10px;
+          }
+
+          .list-header h1 {
+            font-size: 1.15rem;
+          }
+
+          .search-box {
+            padding: 0 12px;
+            margin-bottom: 8px;
+          }
+
+          .filter-tabs {
+            padding: 4px 10px 8px;
+            gap: 2px;
+          }
+
+          .filter-tab {
+            padding: 5px 10px;
+            font-size: 0.75rem;
+          }
+
+          .conversations-list {
+            padding: 4px 6px;
+          }
+
+          .conversation-card {
+            padding: 10px 8px;
+            gap: 10px;
+          }
+
+          .conv-avatar {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+            border-radius: 8px;
+          }
+
+          .conv-name {
+            font-size: 0.85rem;
+          }
+
+          .conv-preview {
+            font-size: 0.78rem;
+          }
+
+          .chat-header {
+            padding: 12px 14px;
+            gap: 10px;
+          }
+
+          .chat-avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 0.95rem;
+          }
+
+          .chat-details h2 {
+            font-size: 0.88rem;
+          }
+
+          .chat-meta {
+            font-size: 0.72rem;
+            gap: 6px;
+          }
+
           .message {
             max-width: 85%;
           }
 
+          .messages-area {
+            padding: 14px 12px;
+          }
+
+          .message-bubble {
+            padding: 10px 14px;
+          }
+
+          .message-bubble p {
+            font-size: 0.85rem;
+          }
+
+          .message-input-area {
+            padding: 10px 12px;
+            gap: 8px;
+          }
+
+          .attach-btn {
+            width: 36px;
+            height: 36px;
+          }
+
+          .send-btn {
+            width: 36px;
+            height: 36px;
+          }
+
+          .rfq-card,
+          .quote-card {
+            min-width: 240px;
+          }
+
           .form-row {
             grid-template-columns: 1fr;
+          }
+
+          .modal {
+            padding: 20px 16px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .inbox-container {
+            border-radius: 8px;
+          }
+
+          .conv-avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 0.9rem;
+          }
+
+          .conv-name {
+            font-size: 0.82rem;
+          }
+
+          .conv-location {
+            font-size: 0.7rem;
+          }
+
+          .conv-preview {
+            font-size: 0.75rem;
+          }
+
+          .chat-actions {
+            gap: 3px;
+          }
+
+          .action-btn {
+            padding: 5px 7px;
+            font-size: 0.75rem;
+          }
+
+          .quote-actions {
+            flex-direction: column;
+            gap: 6px;
           }
         }
       `}</style>

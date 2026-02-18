@@ -1,6 +1,7 @@
 'use client';
 
 import { AppLayout } from '@/components/layout';
+import { Ship } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ShippingCalculatorPage() {
@@ -13,7 +14,7 @@ export default function ShippingCalculatorPage() {
 
       <div className="calculator-card">
         <div className="coming-soon">
-          <span className="icon">🚢</span>
+          <span className="icon"><Ship size={16} /></span>
           <h2>Coming Soon</h2>
           <p>We&apos;re building a comprehensive shipping calculator that will help you:</p>
           <ul>

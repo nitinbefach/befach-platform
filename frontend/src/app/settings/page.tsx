@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useUser } from '@/context/UserModeContext';
+import {
+  Building2, Users, Lock, Smartphone, Monitor, ChevronRight,
+  LogOut, Download, Trash2, CreditCard, Code2, Pin, PinOff,
+} from 'lucide-react';
 
 const allSidebarItems = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -30,6 +33,7 @@ export default function SettingsPage() {
   useEffect(() => {
     triggerTimeBasedFeedback('settings', 25000);
   }, [triggerTimeBasedFeedback]);
+
   const [notifications, setNotifications] = useState({
     orderUpdates: true,
     shipmentTracking: true,
@@ -59,649 +63,737 @@ export default function SettingsPage() {
 
   const isPinned = (itemId: string) => sidebarPreferences.pinnedItems.includes(itemId);
 
+  const planName = subscription?.plan
+    ? subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)
+    : 'Free';
+
+  const initials = 'JS';
+
   return (
     <AppLayout searchPlaceholder="Search settings...">
       <div className="content-header">
         <h1>Settings</h1>
       </div>
 
-      {/* Account Overview */}
-      <div className="settings-section">
-        <h2>Account Overview</h2>
-        <div className="account-grid">
-          <div className="account-card">
-            <div className="account-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 21h18M3 10h18M3 3h18M9 21v-9M15 21v-9M9 3v6M15 3v6"></path>
-              </svg>
-            </div>
-            <div className="account-info">
-              <label>Organization</label>
-              <span>{organization?.name || 'Not set'}</span>
-            </div>
+      {/* Profile Banner */}
+      <div className="profile-banner">
+        <div className="profile-left">
+          <div className="profile-avatar">{initials}</div>
+          <div className="profile-identity">
+            <h2>John Smith</h2>
+            <span className="profile-email">john.smith@company.com</span>
           </div>
-          <div className="account-card">
-            <div className="account-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-              </svg>
-            </div>
-            <div className="account-info">
-              <label>Plan</label>
-              <span>{subscription?.plan || 'Free'}</span>
-            </div>
+        </div>
+        <div className="profile-meta">
+          <div className="meta-chip">
+            <Building2 size={14} />
+            <span>{organization?.name || 'Not set'}</span>
           </div>
-          <div className="account-card">
-            <div className="account-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-            </div>
-            <div className="account-info">
-              <label>Team Seats</label>
-              <span>{subscription?.seats || 1} members</span>
-            </div>
+          <div className="meta-chip plan">
+            <span>{planName} Plan</span>
           </div>
-          <div className="account-card">
-            <div className="account-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                <line x1="7" y1="7" x2="7.01" y2="7"></line>
-              </svg>
-            </div>
-            <div className="account-info">
-              <label>Business Type</label>
-              <span>{organization?.type === 'company' ? 'Company' : 'Individual'}</span>
-            </div>
+          <div className="meta-chip">
+            <Users size={14} />
+            <span>{subscription?.seats || 1} seat{(subscription?.seats || 1) > 1 ? 's' : ''}</span>
           </div>
         </div>
       </div>
 
-      {/* Sidebar Customization */}
-      <div className="settings-section">
-        <h2>Customize Sidebar</h2>
-        <p className="section-desc">Pin your most-used features to Quick Access in the sidebar</p>
-        
-        <div className="pinned-items">
-          <h4>Quick Access Items ({sidebarPreferences.pinnedItems.length} pinned)</h4>
-          <div className="items-grid">
-            {allSidebarItems.map(item => (
-              <label 
-                key={item.id}
-                className={`item-toggle ${isPinned(item.id) ? 'pinned' : ''}`}
-              >
-                <input 
-                  type="checkbox"
-                  checked={isPinned(item.id)}
-                  onChange={() => togglePinnedItem(item.id)}
-                />
-                <span className="item-checkbox">
-                  {isPinned(item.id) && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  )}
-                </span>
-                <span className="item-label">{item.label}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Two-column layout for desktop */}
+      <div className="settings-grid">
+        {/* Left column */}
+        <div className="settings-col">
 
-      {/* Profile Settings */}
-      <div className="settings-section">
-        <h2>Profile Information</h2>
-        <form className="settings-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label>Full Name</label>
-              <input type="text" defaultValue="John Smith" />
+          {/* Profile Information */}
+          <section className="card">
+            <div className="card-head">
+              <h3>Profile Information</h3>
             </div>
-            <div className="form-group">
-              <label>Email Address</label>
-              <input type="email" defaultValue="john.smith@company.com" />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Company Name</label>
-              <input type="text" defaultValue={organization?.name || ''} />
-            </div>
-            <div className="form-group">
-              <label>Phone Number</label>
-              <input type="tel" defaultValue="+91 98765 43210" />
-            </div>
-          </div>
-          <div className="form-actions">
-            <button type="submit" className="btn-submit">Save Changes</button>
-            <button type="button" className="btn-cancel">Cancel</button>
-          </div>
-        </form>
-      </div>
-
-      {/* Notification Preferences */}
-      <div className="settings-section">
-        <h2>Notifications</h2>
-        <div className="notifications-grid">
-          {[
-            { key: 'orderUpdates', title: 'Order Updates' },
-            { key: 'shipmentTracking', title: 'Shipment Tracking' },
-            { key: 'priceAlerts', title: 'Price Alerts' },
-            { key: 'supplierMessages', title: 'Supplier Messages' },
-            { key: 'regulatoryUpdates', title: 'Regulatory Updates' },
-            { key: 'marketingEmails', title: 'Marketing Emails' },
-          ].map((item) => (
-            <div key={item.key} className="notification-item">
-              <div className="notification-info">
-                <h4>{item.title}</h4>
+            <form className="profile-form">
+              <div className="field-row">
+                <div className="form-group">
+                  <label>Full Name</label>
+                  <input type="text" defaultValue="John Smith" />
+                </div>
+                <div className="form-group">
+                  <label>Email Address</label>
+                  <input type="email" defaultValue="john.smith@company.com" />
+                </div>
               </div>
-              <label className="toggle">
-                <input 
-                  type="checkbox" 
-                  checked={notifications[item.key as keyof typeof notifications]}
-                  onChange={() => handleNotificationChange(item.key)}
-                />
-                <span className="slider"></span>
-              </label>
-            </div>
-          ))}
-        </div>
-        <button type="button" className="btn-submit" style={{ marginTop: '20px' }}>
-          Save Preferences
-        </button>
-      </div>
+              <div className="field-row">
+                <div className="form-group">
+                  <label>Company</label>
+                  <input type="text" defaultValue={organization?.name || ''} />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input type="tel" defaultValue="+91 98765 43210" />
+                </div>
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="btn-submit">Save Changes</button>
+                <button type="button" className="btn-cancel">Cancel</button>
+              </div>
+            </form>
+          </section>
 
-      {/* Quick Links */}
-      <div className="settings-section">
-        <h2>Quick Links</h2>
-        <div className="quick-links">
-          <Link href="/team-management" className="quick-link-card">
-            <div className="link-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
+          {/* Notifications */}
+          <section className="card">
+            <div className="card-head">
+              <h3>Notifications</h3>
             </div>
-            <div>
-              <h4>Team Management</h4>
+            <div className="notif-list">
+              {[
+                { key: 'orderUpdates', title: 'Order updates', desc: 'Status changes on your orders' },
+                { key: 'shipmentTracking', title: 'Shipment tracking', desc: 'Real-time shipment alerts' },
+                { key: 'priceAlerts', title: 'Price alerts', desc: 'When prices match your targets' },
+                { key: 'supplierMessages', title: 'Supplier messages', desc: 'New messages from suppliers' },
+                { key: 'regulatoryUpdates', title: 'Regulatory updates', desc: 'Compliance & duty changes' },
+                { key: 'marketingEmails', title: 'Marketing', desc: 'Product news & tips' },
+              ].map((item) => (
+                <label key={item.key} className="notif-row">
+                  <div className="notif-text">
+                    <span className="notif-title">{item.title}</span>
+                    <span className="notif-desc">{item.desc}</span>
+                  </div>
+                  <div className="toggle-wrap">
+                    <input
+                      type="checkbox"
+                      checked={notifications[item.key as keyof typeof notifications]}
+                      onChange={() => handleNotificationChange(item.key)}
+                    />
+                    <span className="toggle-track">
+                      <span className="toggle-thumb" />
+                    </span>
+                  </div>
+                </label>
+              ))}
             </div>
-            <span className="link-arrow">→</span>
-          </Link>
-          <Link href="/api-settings" className="quick-link-card">
-            <div className="link-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
-            </div>
-            <div>
-              <h4>API Settings</h4>
-            </div>
-            <span className="link-arrow">→</span>
-          </Link>
-          <Link href="/billing-history" className="quick-link-card">
-            <div className="link-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                <line x1="1" y1="10" x2="23" y2="10"></line>
-              </svg>
-            </div>
-            <div>
-              <h4>Billing</h4>
-            </div>
-            <span className="link-arrow">→</span>
-          </Link>
-        </div>
-      </div>
+          </section>
 
-      {/* Security */}
-      <div className="settings-section">
-        <h2>Security</h2>
-        <div className="security-options">
-          <div className="security-item">
-            <div className="security-info">
-              <h4>Change Password</h4>
+          {/* Sidebar Customization */}
+          <section className="card">
+            <div className="card-head">
+              <h3>Quick Access</h3>
+              <span className="head-badge">{sidebarPreferences.pinnedItems.length} pinned</span>
             </div>
-            <button className="btn-outline">Change</button>
-          </div>
-          <div className="security-item">
-            <div className="security-info">
-              <h4>Two-Factor Authentication</h4>
+            <p className="card-desc">Pin features you use often to the sidebar.</p>
+            <div className="pin-grid">
+              {allSidebarItems.map(item => {
+                const pinned = isPinned(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    className={`pin-item ${pinned ? 'active' : ''}`}
+                    onClick={() => togglePinnedItem(item.id)}
+                  >
+                    {pinned ? <PinOff size={13} /> : <Pin size={13} />}
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
             </div>
-            <button className="btn-outline">Enable</button>
-          </div>
-          <div className="security-item">
-            <div className="security-info">
-              <h4>Active Sessions</h4>
-              <p>View and manage logged-in devices</p>
-            </div>
-            <button className="btn-outline">View</button>
-          </div>
+          </section>
         </div>
-      </div>
 
-      {/* Logout Section */}
-      <div className="settings-section logout-section">
-        <h2>Logout</h2>
-        <div className="logout-content">
-          <div className="logout-info">
-            <p>Sign out of your account. You&apos;ll need to log in again when you return.</p>
-          </div>
-          <button className="btn-logout" onClick={handleLogout}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            Logout
-          </button>
-        </div>
-      </div>
+        {/* Right column */}
+        <div className="settings-col narrow">
 
-      {/* Danger Zone */}
-      <div className="settings-section danger">
-        <h2>Danger Zone</h2>
-        <div className="danger-options">
-          <div className="danger-item">
-            <div className="danger-info">
-              <h4>Export Account Data</h4>
-              <p>Download all your account data</p>
+          {/* Quick Links */}
+          <section className="card">
+            <div className="card-head">
+              <h3>Manage</h3>
             </div>
-            <button className="btn-danger-outline">Export</button>
-          </div>
-          <div className="danger-item">
-            <div className="danger-info">
-              <h4>Delete Account</h4>
-              <p>Permanently delete your account and data</p>
+            <div className="link-list">
+              <a href="/team-management" className="link-row">
+                <Users size={16} />
+                <span>Team Management</span>
+                <ChevronRight size={15} />
+              </a>
+              <a href="/api-settings" className="link-row">
+                <Code2 size={16} />
+                <span>API Settings</span>
+                <ChevronRight size={15} />
+              </a>
+              <a href="/billing-history" className="link-row">
+                <CreditCard size={16} />
+                <span>Billing & Invoices</span>
+                <ChevronRight size={15} />
+              </a>
             </div>
-            <button className="btn-danger">Delete</button>
-          </div>
+          </section>
+
+          {/* Security */}
+          <section className="card">
+            <div className="card-head">
+              <h3>Security</h3>
+            </div>
+            <div className="link-list">
+              <button className="link-row" type="button">
+                <Lock size={16} />
+                <span>Change password</span>
+                <ChevronRight size={15} />
+              </button>
+              <button className="link-row" type="button">
+                <Smartphone size={16} />
+                <span>Two-factor authentication</span>
+                <span className="row-badge off">Off</span>
+              </button>
+              <button className="link-row" type="button">
+                <Monitor size={16} />
+                <span>Active sessions</span>
+                <span className="row-badge">1 device</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Logout */}
+          <section className="card">
+            <button className="logout-btn" onClick={handleLogout}>
+              <LogOut size={16} />
+              <span>Log out</span>
+            </button>
+          </section>
+
+          {/* Danger Zone */}
+          <section className="card danger-card">
+            <div className="card-head">
+              <h3>Danger Zone</h3>
+            </div>
+            <div className="danger-list">
+              <div className="danger-row">
+                <div>
+                  <h4>Export data</h4>
+                  <p>Download all your account data</p>
+                </div>
+                <button className="btn-ghost-danger" type="button">
+                  <Download size={14} /> Export
+                </button>
+              </div>
+              <div className="danger-row">
+                <div>
+                  <h4>Delete account</h4>
+                  <p>This action cannot be undone</p>
+                </div>
+                <button className="btn-solid-danger" type="button">
+                  <Trash2 size={14} /> Delete
+                </button>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
       <style jsx>{`
-        .settings-section {
-          background: var(--card-bg);
-          border-radius: 12px;
-          padding: 25px;
-          margin-bottom: 25px;
-        }
-        .settings-section.danger {
-          border-left: 4px solid #ef4444;
-        }
-        .settings-section.logout-section {
-          border-left: 4px solid var(--accent-primary);
-        }
-        .settings-section h2 {
-          color: var(--text-primary);
-          margin-bottom: 20px;
-          font-size: 1.2em;
-        }
-        .section-desc {
-          color: var(--text-secondary);
-          margin-bottom: 20px;
-        }
-        .account-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 15px;
-        }
-        .account-card {
+        /* Profile Banner */
+        .profile-banner {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 15px;
-          background: var(--bg-tertiary);
-          border-radius: 10px;
+          justify-content: space-between;
+          gap: 20px;
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 20px 24px;
+          margin-bottom: 20px;
         }
-        .account-icon-wrap {
-          width: 40px;
-          height: 40px;
-          background: var(--accent-gradient);
-          border-radius: 10px;
+
+        .profile-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .profile-avatar {
+          width: 52px;
+          height: 52px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #f97316, #ea580c);
+          color: white;
+          font-weight: 700;
+          font-size: 1.1rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: white;
+          flex-shrink: 0;
+          letter-spacing: 0.5px;
         }
-        .account-icon-wrap svg {
-          width: 20px;
-          height: 20px;
-        }
-        .account-info label {
-          display: block;
-          color: var(--text-secondary);
-          font-size: 0.8em;
-        }
-        .account-info span {
+
+        .profile-identity h2 {
+          font-size: 1.1rem;
+          font-weight: 700;
           color: var(--text-primary);
+          margin: 0 0 2px;
+          line-height: 1.3;
+        }
+
+        .profile-email {
+          font-size: 0.82rem;
+          color: var(--text-muted);
+        }
+
+        .profile-meta {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .meta-chip {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 5px 12px;
+          border-radius: 8px;
+          font-size: 0.78rem;
+          font-weight: 500;
+          background: var(--bg-secondary);
+          color: var(--text-secondary);
+          border: 1px solid var(--border-color);
+        }
+
+        .meta-chip.plan {
+          background: rgba(249, 115, 22, 0.1);
+          color: #f97316;
+          border-color: rgba(249, 115, 22, 0.2);
           font-weight: 600;
         }
-        .pinned-items h4 {
-          color: var(--text-primary);
-          margin-bottom: 15px;
-        }
-        .items-grid {
+
+        /* Two-column grid */
+        .settings-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
-        }
-        .item-toggle {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 12px 15px;
-          background: var(--bg-tertiary);
-          border: 2px solid var(--border-color);
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .item-toggle:hover {
-          border-color: var(--accent-primary);
-        }
-        .item-toggle.pinned {
-          border-color: var(--accent-primary);
-          background: rgba(255, 107, 53, 0.05);
-        }
-        .item-toggle input {
-          display: none;
-        }
-        .item-checkbox {
-          width: 20px;
-          height: 20px;
-          border: 2px solid var(--border-color);
-          border-radius: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-        }
-        .item-toggle.pinned .item-checkbox {
-          background: var(--accent-primary);
-          border-color: var(--accent-primary);
-        }
-        .item-checkbox svg {
-          width: 12px;
-          height: 12px;
-          color: white;
-        }
-        .item-label {
-          flex: 1;
-          color: var(--text-primary);
-          font-size: 0.9em;
-        }
-        .settings-form {
-          max-width: 700px;
-        }
-        .form-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 340px;
           gap: 20px;
-          margin-bottom: 20px;
+          align-items: start;
         }
-        .form-actions {
+
+        .settings-col {
           display: flex;
-          gap: 15px;
-          margin-top: 25px;
+          flex-direction: column;
+          gap: 20px;
         }
-        .notifications-grid {
-          display: grid;
-          gap: 12px;
+
+        /* Card base */
+        .card {
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 20px;
         }
-        .notification-item {
+
+        .card-head {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          padding: 15px 20px;
-          background: var(--bg-tertiary);
-          border-radius: 10px;
+          justify-content: space-between;
+          margin-bottom: 16px;
         }
-        .notification-info h4 {
+
+        .card-head h3 {
+          font-size: 0.95rem;
+          font-weight: 700;
           color: var(--text-primary);
-          margin-bottom: 4px;
-        }
-        .notification-info p {
-          color: var(--text-secondary);
-          font-size: 0.85em;
           margin: 0;
         }
-        .toggle {
-          position: relative;
-          display: inline-block;
-          width: 50px;
-          height: 28px;
+
+        .head-badge {
+          font-size: 0.72rem;
+          font-weight: 600;
+          padding: 3px 9px;
+          border-radius: 6px;
+          background: rgba(249, 115, 22, 0.1);
+          color: #f97316;
         }
-        .toggle input {
+
+        .card-desc {
+          font-size: 0.82rem;
+          color: var(--text-muted);
+          margin: -8px 0 14px;
+          line-height: 1.4;
+        }
+
+        /* Profile form */
+        .profile-form {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .field-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+          margin-bottom: 14px;
+        }
+
+        .form-actions {
+          display: flex;
+          gap: 10px;
+          margin-top: 6px;
+        }
+
+        .form-actions .btn-submit,
+        .form-actions .btn-cancel {
+          flex: 0;
+          padding: 9px 22px;
+          font-size: 0.85rem;
+        }
+
+        /* Notifications */
+        .notif-list {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .notif-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 11px 0;
+          cursor: pointer;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .notif-row:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+
+        .notif-row:first-child {
+          padding-top: 0;
+        }
+
+        .notif-text {
+          display: flex;
+          flex-direction: column;
+          gap: 1px;
+        }
+
+        .notif-title {
+          font-size: 0.88rem;
+          font-weight: 500;
+          color: var(--text-primary);
+        }
+
+        .notif-desc {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+
+        /* Toggle switch */
+        .toggle-wrap {
+          position: relative;
+          flex-shrink: 0;
+        }
+
+        .toggle-wrap input {
+          position: absolute;
           opacity: 0;
           width: 0;
           height: 0;
         }
-        .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: var(--border-color);
-          transition: 0.3s;
-          border-radius: 28px;
-        }
-        .slider:before {
-          position: absolute;
-          content: "";
-          height: 20px;
-          width: 20px;
-          left: 4px;
-          bottom: 4px;
-          background-color: white;
-          transition: 0.3s;
-          border-radius: 50%;
-        }
-        input:checked + .slider {
-          background: var(--accent-gradient);
-        }
-        input:checked + .slider:before {
-          transform: translateX(22px);
-        }
-        .quick-links {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 15px;
-        }
-        .quick-link-card {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          padding: 20px;
-          background: var(--bg-tertiary);
-          border-radius: 10px;
-          text-decoration: none;
-          transition: all 0.2s;
-          border: 2px solid transparent;
-        }
-        .quick-link-card:hover {
-          border-color: var(--accent-primary);
-          background: rgba(255, 107, 53, 0.05);
-        }
-        .link-icon-wrap {
-          width: 44px;
-          height: 44px;
-          background: var(--bg-secondary);
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--accent-primary);
-        }
-        .link-icon-wrap svg {
-          width: 22px;
+
+        .toggle-track {
+          display: block;
+          width: 40px;
           height: 22px;
+          border-radius: 12px;
+          background: var(--border-color);
+          transition: background 0.2s;
+          position: relative;
+          cursor: pointer;
         }
-        .quick-link-card h4 {
-          color: var(--text-primary);
-          margin-bottom: 3px;
+
+        .toggle-thumb {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: white;
+          transition: transform 0.2s;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.15);
         }
-        .quick-link-card p {
-          color: var(--text-secondary);
-          font-size: 0.85em;
-          margin: 0;
+
+        .toggle-wrap input:checked + .toggle-track {
+          background: #f97316;
         }
-        .link-arrow {
-          margin-left: auto;
-          color: var(--text-muted);
-          font-size: 1.2em;
+
+        .toggle-wrap input:checked + .toggle-track .toggle-thumb {
+          transform: translateX(18px);
         }
-        .security-options, .danger-options {
-          display: grid;
-          gap: 12px;
-        }
-        .security-item, .danger-item {
+
+        /* Pin grid */
+        .pin-grid {
           display: flex;
-          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+
+        .pin-item {
+          display: flex;
           align-items: center;
-          padding: 15px 20px;
-          background: var(--bg-tertiary);
-          border-radius: 10px;
-        }
-        .danger-item {
-          background: #fef2f2;
-        }
-        .security-info h4, .danger-info h4 {
-          color: var(--text-primary);
-          margin-bottom: 4px;
-        }
-        .danger-info h4 {
-          color: #dc2626;
-        }
-        .security-info p, .danger-info p {
+          gap: 5px;
+          padding: 6px 12px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          background: none;
           color: var(--text-secondary);
-          font-size: 0.85em;
-          margin: 0;
+          font-size: 0.8rem;
+          cursor: pointer;
+          transition: all 0.15s;
+          font-weight: 500;
         }
-        .danger-info p {
-          color: #991b1b;
-        }
-        .btn-outline {
-          background: transparent;
-          border: 2px solid var(--border-color);
+
+        .pin-item:hover {
+          border-color: var(--text-muted);
           color: var(--text-primary);
-          padding: 8px 20px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 0.9em;
         }
-        .btn-outline:hover {
-          border-color: var(--accent-primary);
-          color: var(--accent-primary);
+
+        .pin-item.active {
+          background: rgba(249, 115, 22, 0.1);
+          border-color: rgba(249, 115, 22, 0.3);
+          color: #f97316;
         }
-        .btn-danger-outline {
-          background: transparent;
-          border: 2px solid #dc2626;
-          color: #dc2626;
-          padding: 8px 20px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 0.9em;
-        }
-        .btn-danger {
-          background: #dc2626;
-          border: none;
-          color: white;
-          padding: 8px 20px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 0.9em;
-        }
-        .logout-content {
+
+        /* Link list (manage + security) */
+        .link-list {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 15px 20px;
-          background: var(--bg-tertiary);
-          border-radius: 10px;
+          flex-direction: column;
         }
-        .logout-info p {
-          color: var(--text-secondary);
-          margin: 0;
-        }
-        .btn-logout {
+
+        .link-row {
           display: flex;
+          flex-direction: row;
           align-items: center;
           gap: 10px;
-          background: var(--accent-gradient);
-          color: white;
+          padding: 11px 2px;
           border: none;
-          padding: 12px 28px;
-          border-radius: 10px;
-          font-size: 1em;
+          background: none;
+          text-decoration: none;
+          color: var(--text-primary);
+          font-size: 0.88rem;
+          font-weight: 500;
+          cursor: pointer;
+          border-bottom: 1px solid var(--border-color);
+          transition: color 0.15s;
+          text-align: left;
+          width: 100%;
+        }
+
+        .link-row:last-child {
+          border-bottom: none;
+        }
+
+        .link-row:hover {
+          color: #f97316;
+        }
+
+        .link-row span:first-of-type {
+          flex: 1;
+        }
+
+        .row-badge {
+          font-size: 0.72rem;
+          font-weight: 600;
+          padding: 2px 8px;
+          border-radius: 6px;
+          background: rgba(34, 197, 94, 0.1);
+          color: #22c55e;
+        }
+
+        .row-badge.off {
+          background: var(--bg-secondary);
+          color: var(--text-muted);
+        }
+
+        /* Logout */
+        .logout-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: 100%;
+          padding: 11px 0;
+          background: none;
+          border: none;
+          color: var(--text-secondary);
+          font-size: 0.88rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: color 0.15s;
+        }
+
+        .logout-btn:hover {
+          color: #ef4444;
+        }
+
+        /* Danger zone */
+        .danger-card {
+          border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .danger-card .card-head h3 {
+          color: #ef4444;
+          font-size: 0.88rem;
+        }
+
+        .danger-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .danger-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        }
+
+        .danger-row h4 {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0 0 2px;
+        }
+
+        .danger-row p {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin: 0;
+        }
+
+        .btn-ghost-danger {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 7px 14px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          background: none;
+          color: var(--text-secondary);
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.15s;
+          white-space: nowrap;
+        }
+
+        .btn-ghost-danger:hover {
+          border-color: #ef4444;
+          color: #ef4444;
+        }
+
+        .btn-solid-danger {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 7px 14px;
+          border-radius: 8px;
+          border: none;
+          background: #ef4444;
+          color: white;
+          font-size: 0.8rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s;
+          transition: all 0.15s;
+          white-space: nowrap;
         }
-        .btn-logout:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+
+        .btn-solid-danger:hover {
+          background: #dc2626;
         }
-        @media (max-width: 900px) {
-          .account-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .items-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .quick-links {
-            grid-template-columns: 1fr;
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+          .settings-grid {
+            grid-template-columns: 1fr 300px;
+            gap: 16px;
           }
         }
+
+        /* Mobile */
         @media (max-width: 768px) {
-          .settings-section {
+          .profile-banner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
             padding: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
           }
-          .settings-section h2 {
-            font-size: 1rem;
-            margin-bottom: 12px;
+
+          .profile-meta {
+            gap: 6px;
           }
-          .quick-links {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+
+          .meta-chip {
+            font-size: 0.72rem;
+            padding: 4px 9px;
           }
-          .quick-link-card {
-            padding: 12px;
+
+          .settings-grid {
+            grid-template-columns: 1fr;
+            gap: 14px;
           }
-          .quick-link-card p {
+
+          .card {
+            padding: 16px;
+          }
+
+          .field-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+          }
+
+          .notif-desc {
             display: none;
           }
-          .notification-item {
-            padding: 10px 0;
+
+          .notif-row {
+            padding: 9px 0;
           }
-          .notification-info p {
-            display: none;
+
+          .pin-grid {
+            gap: 5px;
           }
-          .security-info p {
-            display: none;
+
+          .pin-item {
+            padding: 5px 10px;
+            font-size: 0.75rem;
           }
         }
-        @media (max-width: 600px) {
-          .form-row {
-            grid-template-columns: 1fr;
+
+        @media (max-width: 480px) {
+          .profile-banner {
+            padding: 14px;
           }
-          .items-grid {
-            grid-template-columns: 1fr;
+
+          .profile-avatar {
+            width: 44px;
+            height: 44px;
+            font-size: 0.95rem;
           }
-          .quick-links {
-            grid-template-columns: 1fr;
+
+          .profile-identity h2 {
+            font-size: 1rem;
+          }
+
+          .card {
+            padding: 14px;
+            border-radius: 10px;
+          }
+
+          .card-head h3 {
+            font-size: 0.9rem;
+          }
+
+          .form-actions {
+            flex-direction: column;
+          }
+
+          .form-actions .btn-submit,
+          .form-actions .btn-cancel {
+            flex: 1;
+            text-align: center;
           }
         }
       `}</style>

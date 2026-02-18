@@ -34,11 +34,11 @@ const RETENTION_DAYS = 30; // Items auto-delete after 30 days
 
 // Type labels for display
 export const TYPE_LABELS: Record<DeletedItemType, { label: string; icon: string }> = {
-  requirement: { label: 'Requirement', icon: '📋' },
-  supplier: { label: 'Supplier', icon: '🏭' },
-  vendor: { label: 'Vendor', icon: '⭐' },
-  order: { label: 'Order', icon: '📦' },
-  document: { label: 'Document', icon: '📄' },
+  requirement: { label: 'Requirement', icon: '' },
+  supplier: { label: 'Supplier', icon: '' },
+  vendor: { label: 'Vendor', icon: '' },
+  order: { label: 'Order', icon: '' },
+  document: { label: 'Document', icon: '' },
 };
 
 // ============================================

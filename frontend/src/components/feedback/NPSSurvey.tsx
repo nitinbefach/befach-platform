@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Check } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import { submitFeedback, getSentiment, getSessionId } from '@/lib/feedback';
 
@@ -151,7 +152,7 @@ export default function NPSSurvey({ isOpen, onClose, onComplete }: NPSSurveyProp
                   onClick={() => togglePriority(feature)}
                 >
                   <span className="toggle-indicator">
-                    {priorities.includes(feature) ? '✓' : ''}
+                    {priorities.includes(feature) ? <Check size={14} /> : ''}
                   </span>
                   <span>{feature}</span>
                 </button>
