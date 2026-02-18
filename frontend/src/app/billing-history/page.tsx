@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { CreditCard, Undo2, Gift, DollarSign, BarChart3, Download, Landmark, Lightbulb } from 'lucide-react';
 
 interface Transaction {
   id: string;
@@ -103,25 +104,25 @@ export default function BillingHistoryPage() {
     return colors[status];
   };
 
-  const getTypeIcon = (type: Transaction['type']) => {
+  const getTypeIcon = (type: Transaction['type']): React.ReactNode => {
     switch (type) {
-      case 'payment': return '💳';
-      case 'refund': return '↩️';
-      case 'credit': return '🎁';
+      case 'payment': return <CreditCard size={20} />;
+      case 'refund': return <Undo2 size={20} />;
+      case 'credit': return <Gift size={20} />;
     }
   };
 
   return (
     <AppLayout>
       <div className="content-header">
-        <h1>💰 Billing History</h1>
+        <h1><DollarSign size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Billing History</h1>
         <p>View your transactions and download invoices</p>
       </div>
 
       {/* Summary Cards */}
       <div className="summary-cards">
         <div className="summary-card">
-          <span className="summary-icon">💳</span>
+          <span className="summary-icon"><CreditCard size={24} /></span>
           <div className="summary-content">
             <span className="summary-label">Total Payments</span>
             <span className="summary-value">
@@ -130,7 +131,7 @@ export default function BillingHistoryPage() {
           </div>
         </div>
         <div className="summary-card">
-          <span className="summary-icon">🎁</span>
+          <span className="summary-icon"><Gift size={24} /></span>
           <div className="summary-content">
             <span className="summary-label">Credits & Refunds</span>
             <span className="summary-value green">
@@ -139,7 +140,7 @@ export default function BillingHistoryPage() {
           </div>
         </div>
         <div className="summary-card">
-          <span className="summary-icon">📊</span>
+          <span className="summary-icon"><BarChart3 size={24} /></span>
           <div className="summary-content">
             <span className="summary-label">This Year</span>
             <span className="summary-value">{mockTransactions.length} Transactions</span>
@@ -168,7 +169,7 @@ export default function BillingHistoryPage() {
           </select>
         </div>
         <button className="btn-export">
-          📥 Export CSV
+          <Download size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Export CSV
         </button>
       </div>
 
@@ -238,10 +239,10 @@ export default function BillingHistoryPage() {
 
       {/* Payment Methods */}
       <div className="payment-methods-section">
-        <h2>💳 Payment Methods</h2>
+        <h2><CreditCard size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Payment Methods</h2>
         <div className="payment-methods">
           <div className="payment-method">
-            <div className="pm-icon">🏦</div>
+            <div className="pm-icon"><Landmark size={24} /></div>
             <div className="pm-info">
               <strong>Bank Transfer (NEFT/RTGS)</strong>
               <p>Primary payment method</p>
@@ -249,7 +250,7 @@ export default function BillingHistoryPage() {
             <span className="pm-default">Default</span>
           </div>
           <div className="payment-method">
-            <div className="pm-icon">💳</div>
+            <div className="pm-icon"><CreditCard size={24} /></div>
             <div className="pm-info">
               <strong>Credit/Debit Card</strong>
               <p>For small transactions</p>
@@ -257,7 +258,7 @@ export default function BillingHistoryPage() {
           </div>
         </div>
         <p className="payment-note">
-          💡 Contact support to update payment methods or request alternative payment options.
+          <Lightbulb size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Contact support to update payment methods or request alternative payment options.
         </p>
       </div>
 

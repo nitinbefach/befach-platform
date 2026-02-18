@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useUser } from '@/context/UserModeContext';
+import { useMobile } from '@/hooks/useMobile';
 import styles from './Sidebar.module.css';
 
 // Navigation structure with parent sections and child features
@@ -95,6 +96,13 @@ const sectionTitles: Record<string, string> = {
   settings: 'Settings',
   account: 'Account',
 };
+
+// Chevron icon for section expand/collapse
+const ChevronRight = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
 
 // SVG Icons
 const icons: { [key: string]: JSX.Element } = {
@@ -334,6 +342,7 @@ interface SidebarProps {
 export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { organization, logout } = useUser();
+  const { isDesktop } = useMobile();
   const [activePanel, setActivePanel] = useState<string | null>(null);
 
   const handleLogout = () => {
@@ -374,7 +383,101 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     return grouped;
   };
 
+  // ─── Desktop: Expanded Sidebar with Inline Labels + Accordion ───
+  if (isDesktop) {
+    return (
+      <div className={styles.sidebarWrapper}>
+        <aside className={`${styles.iconSidebar} ${styles.iconSidebarExpanded}`}>
+          {/* Logo */}
+          <div className={styles.sidebarLogo}>
+            <div className={styles.logoBadge}>
+              {organization?.name?.charAt(0).toUpperCase() || 'B'}
+            </div>
+            <span className={styles.orgName}>{organization?.name || 'Befach'}</span>
+          </div>
 
+          {/* Nav Items */}
+          <nav className={`${styles.navIcons} ${styles.navIconsExpanded}`}>
+            {/* Standalone Items */}
+            {navigationConfig.standalone.map((item) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`${styles.navIconItem} ${styles.navItemExpanded} ${isStandaloneActive(item.href) ? styles.active : ''}`}
+                onClick={onClose}
+              >
+                <div className={styles.iconWrapper}>{icons[item.icon]}</div>
+                <span className={styles.navLabel}>{item.label}</span>
+              </Link>
+            ))}
+
+            {/* Section Items with Inline Accordion */}
+            {Object.entries(navigationConfig.sections).map(([key, section]) => {
+              const isOpen = activePanel === key;
+              const sectionActive = isSectionActive(key);
+              const groupedFeatures = groupFeaturesBySection(section.features);
+
+              return (
+                <div key={key}>
+                  {/* Section Header */}
+                  <div
+                    className={`${styles.navIconItem} ${styles.navItemExpanded} ${sectionActive ? styles.active : ''}`}
+                    onClick={() => togglePanel(key)}
+                  >
+                    <div className={styles.iconWrapper}>{icons[section.icon]}</div>
+                    <span className={styles.navLabel}>{section.label}</span>
+                    <span className={`${styles.sectionChevron} ${isOpen ? styles.sectionChevronOpen : ''}`}>
+                      <ChevronRight />
+                    </span>
+                  </div>
+
+                  {/* Inline Accordion Children */}
+                  {isOpen && (
+                    <div className={styles.inlineChildren}>
+                      {Object.entries(groupedFeatures).map(([sectionKey, features]) => (
+                        <div key={sectionKey}>
+                          {Object.keys(groupedFeatures).length > 1 && (
+                            <div className={styles.inlineSectionTitle}>
+                              {sectionTitles[sectionKey] || sectionKey}
+                            </div>
+                          )}
+                          {features.map((feature) => (
+                            <Link
+                              key={feature.id}
+                              href={feature.href}
+                              className={`${styles.inlineChildItem} ${pathname === feature.href ? styles.active : ''}`}
+                              onClick={handleFeatureClick}
+                            >
+                              <span className={styles.childIcon}>{icons[feature.icon]}</span>
+                              <span className={styles.childLabel}>{feature.label}</span>
+                              {feature.badge && <span className={styles.inlineChildBadge}>{feature.badge}</span>}
+                            </Link>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+
+          {/* Footer */}
+          <div className={styles.sidebarFooter}>
+            <button
+              className={`${styles.navIconItem} ${styles.navItemExpanded} ${styles.logoutItem} ${styles.logoutExpanded}`}
+              onClick={handleLogout}
+            >
+              <div className={styles.iconWrapper}>{icons.logout}</div>
+              <span className={styles.logoutLabel}>Logout</span>
+            </button>
+          </div>
+        </aside>
+      </div>
+    );
+  }
+
+  // ─── Mobile/Tablet: Original Icon-Only Sidebar + Flyout Panels ───
   return (
     <div className={`${styles.sidebarWrapper} ${isOpen ? styles.open : ''}`}>
       {/* Icon Sidebar */}
@@ -422,7 +525,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         </div>
       </aside>
 
-      {/* Expandable Panels */}
+      {/* Expandable Panels (mobile/tablet only) */}
       {Object.entries(navigationConfig.sections).map(([key, section]) => {
         const groupedFeatures = groupFeaturesBySection(section.features);
 

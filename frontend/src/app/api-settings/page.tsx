@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { Modal } from '@/components/ui';
+import { Plug, Key, Check, Copy, Bell, BookOpen, BarChart3, AlertTriangle } from 'lucide-react';
 
 interface ApiKey {
   id: string;
@@ -103,7 +104,7 @@ export default function ApiSettingsPage() {
     <AppLayout>
       <div className="content-header">
         <div>
-          <h1>🔌 API Settings</h1>
+          <h1><Plug size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> API Settings</h1>
           <p>Manage your API keys and webhook configurations</p>
         </div>
         <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
@@ -113,7 +114,7 @@ export default function ApiSettingsPage() {
 
       {/* API Keys Section */}
       <div className="section">
-        <h2>🔑 API Keys</h2>
+        <h2><Key size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> API Keys</h2>
         <p className="section-desc">
           Use these keys to authenticate API requests from your applications.
         </p>
@@ -125,7 +126,7 @@ export default function ApiSettingsPage() {
                 <div className="key-header">
                   <h4>{key.name}</h4>
                   <span className={`key-type ${key.type}`}>
-                    {key.type === 'production' ? '🔴 Production' : '🟡 Test'}
+                    {key.type === 'production' ? <><span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#ef4444', marginRight: 6 }} /> Production</> : <><span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#eab308', marginRight: 6 }} /> Test</>}
                   </span>
                 </div>
                 <div className="key-value">
@@ -134,14 +135,14 @@ export default function ApiSettingsPage() {
                     className="copy-btn"
                     onClick={() => copyKey(key.key)}
                   >
-                    {copiedKey === key.key ? '✓ Copied' : '📋 Copy'}
+                    {copiedKey === key.key ? <><Check size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Copied</> : <><Copy size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Copy</>}
                   </button>
                 </div>
                 <div className="key-meta">
                   <span>Created: {key.createdAt}</span>
                   {key.lastUsed && <span>Last used: {key.lastUsed}</span>}
                   <span className={`status ${key.status}`}>
-                    {key.status === 'active' ? '✓ Active' : '✗ Revoked'}
+                    {key.status === 'active' ? 'Active' : 'Revoked'}
                   </span>
                 </div>
               </div>
@@ -169,7 +170,7 @@ export default function ApiSettingsPage() {
 
       {/* Webhooks Section */}
       <div className="section">
-        <h2>🔔 Webhooks</h2>
+        <h2><Bell size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Webhooks</h2>
         <p className="section-desc">
           Receive real-time notifications when events happen in your account.
         </p>
@@ -220,7 +221,7 @@ export default function ApiSettingsPage() {
       {/* Documentation Link */}
       <div className="docs-section">
         <div className="docs-content">
-          <span className="docs-icon">📚</span>
+          <span className="docs-icon"><BookOpen size={20} /></span>
           <div>
             <h3>API Documentation</h3>
             <p>Learn how to integrate Befach APIs into your applications</p>
@@ -231,7 +232,7 @@ export default function ApiSettingsPage() {
 
       {/* Rate Limits Info */}
       <div className="rate-limits">
-        <h3>📊 Rate Limits</h3>
+        <h3><BarChart3 size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Rate Limits</h3>
         <div className="limits-grid">
           <div className="limit-item">
             <span className="limit-value">1,000</span>
@@ -274,7 +275,7 @@ export default function ApiSettingsPage() {
                 checked={newKeyType === 'test'}
                 onChange={() => setNewKeyType('test')}
               />
-              <span>🟡 Test</span>
+              <span><span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#eab308', marginRight: 6 }} /> Test</span>
               <small>For development and testing</small>
             </label>
             <label className={`radio-option ${newKeyType === 'production' ? 'selected' : ''}`}>
@@ -285,7 +286,7 @@ export default function ApiSettingsPage() {
                 checked={newKeyType === 'production'}
                 onChange={() => setNewKeyType('production')}
               />
-              <span>🔴 Production</span>
+              <span><span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#ef4444', marginRight: 6 }} /> Production</span>
               <small>For live applications</small>
             </label>
           </div>
@@ -308,7 +309,7 @@ export default function ApiSettingsPage() {
       >
         <div className="key-display">
           <p className="key-warning">
-            ⚠️ Make sure to copy your API key now. You won&apos;t be able to see it again!
+            <AlertTriangle size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Make sure to copy your API key now. You won&apos;t be able to see it again!
           </p>
           <div className="key-box">
             <code>{createdKey}</code>
@@ -316,7 +317,7 @@ export default function ApiSettingsPage() {
               className="copy-btn"
               onClick={() => copyKey(createdKey)}
             >
-              {copiedKey === createdKey ? '✓ Copied!' : '📋 Copy'}
+              {copiedKey === createdKey ? <><Check size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Copied!</> : <><Copy size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Copy</>}
             </button>
           </div>
         </div>

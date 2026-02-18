@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Modal } from '@/components/ui';
 import { CATEGORIES, addInvitation } from '@/lib/suppliers';
+import { FolderOpen, Download } from 'lucide-react';
 
 interface Props { isOpen: boolean; onClose: () => void; }
 
@@ -39,10 +40,10 @@ export default function InviteSupplierModal({ isOpen, onClose }: Props) {
       ) : (
         <div className="bulk-upload">
           <div className="upload-box">
-            <div className="upload-icon">📁</div>
+            <div className="upload-icon"><FolderOpen size={24} /></div>
             <h4>Upload Supplier List</h4>
             <p>Download our template, fill in supplier details, and upload</p>
-            <button className="btn-template">📥 Download Template</button>
+            <button className="btn-template"><Download size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Download Template</button>
             <div className="upload-area"><p>Drag & drop CSV/Excel file here or <span>browse</span></p></div>
           </div>
           <div className="form-actions"><button type="button" className="btn-cancel" onClick={onClose}>Cancel</button></div>

@@ -8,11 +8,10 @@ import {
   filterPayments,
   getPaymentStats,
   exportPaymentsCSV,
-  initializeDemoPayments,
 } from '@/lib/payments';
 import { STATUS_CONFIG, formatPaymentCurrency } from '@/lib/paymentConstants';
 import type { PaymentRecord, PaymentFilters, PaymentStatus, PaymentSegment } from '@/types/payments';
-import { Download, ChevronRight, X, Clock, ArrowUpRight, Wallet, Filter } from 'lucide-react';
+import { Download, ChevronRight, X, Clock, ArrowUpRight, Wallet, Filter, Globe } from 'lucide-react';
 
 export default function PaymentHistoryPage() {
   const { isMobile } = useMobile();
@@ -27,7 +26,6 @@ export default function PaymentHistoryPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    initializeDemoPayments();
     setPayments(getPayments());
   }, []);
 
@@ -52,7 +50,7 @@ export default function PaymentHistoryPage() {
           </button>
 
           <div className="detail-header">
-            <span className="detail-segment">{p.segment === 'international' ? '🌐 International' : '🇮🇳 Local'}</span>
+            <span className="detail-segment">{p.segment === 'international' ? <><Globe size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> International</> : 'Local'}</span>
             <span className="detail-status" style={{ background: statusStyle.bg, color: statusStyle.text }}>
               {statusStyle.label}
             </span>
@@ -184,7 +182,7 @@ export default function PaymentHistoryPage() {
                 className={`filter-pill ${filters.segment === seg ? 'active' : ''}`}
                 onClick={() => setFilters(prev => ({ ...prev, segment: seg }))}
               >
-                {seg === 'all' ? 'All' : seg === 'international' ? '🌐 International' : '🇮🇳 Local'}
+                {seg === 'all' ? 'All' : seg === 'international' ? <><Globe size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> International</> : 'Local'}
               </button>
             ))}
           </div>
@@ -274,7 +272,7 @@ export default function PaymentHistoryPage() {
               return (
                 <button key={p.id} className="payment-card" onClick={() => setSelectedPayment(p)}>
                   <div className="card-top">
-                    <span className="card-segment">{p.segment === 'international' ? '🌐 International' : '🇮🇳 Local'}</span>
+                    <span className="card-segment">{p.segment === 'international' ? <><Globe size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> International</> : 'Local'}</span>
                     <span className="card-status" style={{ background: statusStyle.bg, color: statusStyle.text }}>
                       {statusStyle.label}
                     </span>
@@ -318,7 +316,7 @@ export default function PaymentHistoryPage() {
                     <tr key={p.id} onClick={() => setSelectedPayment(p)} className="table-row-click">
                       <td>
                         <div className="txn-info">
-                          <span className="txn-segment">{p.segment === 'international' ? '🌐' : '🇮🇳'}</span>
+                          <span className="txn-segment">{p.segment === 'international' ? <Globe size={12} /> : 'IN'}</span>
                           <div>
                             <span className="txn-id">{p.id}</span>
                             <span className="txn-purpose">{p.purpose.slice(0, 40)}{p.purpose.length > 40 ? '...' : ''}</span>

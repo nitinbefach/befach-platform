@@ -18,7 +18,7 @@ import {
 import { bookingStorage } from '@/lib/bookingStorage';
 import QuoteCard from './QuoteCard';
 import BookingSuccess from './BookingSuccess';
-import { ArrowLeft, ArrowRight, Ship, Plane, Package, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Ship, Plane, Package, Loader2, Check, AlertTriangle } from 'lucide-react';
 
 interface InternationalBookingProps {
   onBack: () => void;
@@ -147,7 +147,7 @@ export default function InternationalBooking({ onBack }: InternationalBookingPro
       <div className="progress-bar">
         {STEPS.map((s, i) => (
           <div key={i} className={`progress-step ${i <= step ? 'active' : ''} ${i < step ? 'completed' : ''}`}>
-            <div className="step-dot">{i < step ? '✓' : i + 1}</div>
+            <div className="step-dot">{i < step ? <Check size={14} /> : i + 1}</div>
             <span className="step-label">{s}</span>
           </div>
         ))}
@@ -340,7 +340,7 @@ export default function InternationalBooking({ onBack }: InternationalBookingPro
                 checked={form.hazardous}
                 onChange={(e) => updateField('hazardous', e.target.checked)}
               />
-              <span className="toggle-text">⚠️ Contains hazardous goods</span>
+              <span className="toggle-text"><AlertTriangle size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Contains hazardous goods</span>
             </label>
           </div>
 

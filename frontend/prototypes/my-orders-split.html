@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders — Split Table + Detail | Befach</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #f97316;
+    --accent-light: #fff7ed;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --radius: 14px;
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+
+    --status-processing: #8b5cf6;
+    --status-processing-bg: #f5f3ff;
+    --status-transit: #3b82f6;
+    --status-transit-bg: #eff6ff;
+    --status-customs: #f59e0b;
+    --status-customs-bg: #fffbeb;
+    --status-delivered: #10b981;
+    --status-delivered-bg: #ecfdf5;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+  }
+  .page-header h1 { font-size: 1.65rem; font-weight: 800; letter-spacing: -0.03em; }
+  .page-header p { font-size: 0.88rem; color: var(--text-secondary); margin-top: 4px; }
+  .header-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 18px; border-radius: 10px; font-size: 0.84rem;
+    font-weight: 600; cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #f97316, #ea580c); color: white;
+    box-shadow: 0 2px 8px rgba(249,115,22,0.25);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(249,115,22,0.35); }
+  .btn-ghost { background: var(--card-bg); color: var(--text-secondary); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Stats ── */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px;
+  }
+  .stat-mini {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .stat-mini-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .stat-mini-text .label { font-size: 0.7rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-mini-text .value { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
+
+  /* ── Split Layout ── */
+  .split-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .split-layout.no-detail {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Table Panel ── */
+  .table-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .table-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; gap: 12px; border-bottom: 1px solid var(--border);
+  }
+  .table-search {
+    flex: 1; max-width: 280px; padding: 9px 14px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 0.8rem; outline: none; background: var(--bg);
+    color: var(--text-primary);
+  }
+  .table-search:focus { border-color: var(--accent); }
+  .table-search::placeholder { color: var(--text-muted); }
+  .table-count { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+  .orders-table { width: 100%; border-collapse: collapse; }
+  .orders-table th {
+    text-align: left; padding: 12px 20px;
+    font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+  }
+  .orders-table td {
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    font-size: 0.82rem; vertical-align: middle;
+  }
+  .orders-table tr { cursor: pointer; transition: background 0.1s; }
+  .orders-table tbody tr:hover { background: var(--accent-light); }
+  .orders-table tbody tr.active { background: var(--accent-light); }
+  .orders-table tbody tr:last-child td { border-bottom: none; }
+
+  .cell-product { font-weight: 700; color: var(--text-primary); }
+  .cell-supplier { font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px; }
+  .cell-value { font-weight: 800; color: var(--accent); }
+  .cell-date { color: var(--text-secondary); font-size: 0.78rem; }
+
+  .status-dot {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.76rem; font-weight: 600;
+  }
+  .status-dot::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .status-dot.processing::before { background: var(--status-processing); }
+  .status-dot.transit::before { background: var(--status-transit); }
+  .status-dot.customs::before { background: var(--status-customs); }
+  .status-dot.delivered::before { background: var(--status-delivered); }
+
+  /* ── Detail Panel ── */
+  .detail-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    position: sticky;
+    top: 24px;
+    animation: slideIn 0.2s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .detail-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px; border-bottom: 1px solid var(--border);
+  }
+  .detail-header h3 { font-size: 0.9rem; font-weight: 800; }
+  .detail-close {
+    width: 32px; height: 32px; border-radius: 8px; border: none;
+    background: var(--bg); cursor: pointer; display: flex;
+    align-items: center; justify-content: center; color: var(--text-secondary);
+    transition: background 0.12s;
+  }
+  .detail-close:hover { background: var(--border); }
+
+  .detail-body { padding: 20px; }
+
+  .detail-status-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-radius: 10px; margin-bottom: 20px;
+  }
+  .detail-status-banner .icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .detail-status-banner .info { display: flex; flex-direction: column; gap: 1px; }
+  .detail-status-banner .status-text { font-size: 0.84rem; font-weight: 700; }
+  .detail-status-banner .status-sub { font-size: 0.72rem; font-weight: 500; }
+
+  .detail-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+  }
+  .detail-field { display: flex; flex-direction: column; gap: 4px; }
+  .detail-label { font-size: 0.68rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .detail-value { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); }
+  .detail-value.accent { color: var(--accent); font-size: 1.1rem; }
+
+  .detail-progress-title {
+    font-size: 0.75rem; font-weight: 700; color: var(--text-primary);
+    margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  .detail-steps {
+    display: flex; flex-direction: column; gap: 0; position: relative;
+    padding-left: 20px; margin-bottom: 20px;
+  }
+  .detail-steps::before {
+    content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--border);
+  }
+  .detail-step {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 0; position: relative;
+  }
+  .detail-step-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    position: absolute; left: -20px; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--card-bg);
+  }
+  .detail-step-dot.done { background: var(--status-delivered); }
+  .detail-step-dot.active { background: var(--accent); box-shadow: 0 0 0 3px rgba(249,115,22,0.2); }
+  .detail-step-dot.pending { background: var(--border); }
+  .detail-step-text { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+  .detail-step-text.done { color: var(--status-delivered); }
+  .detail-step-text.active { color: var(--accent); font-weight: 700; }
+  .detail-step-date { margin-left: auto; font-size: 0.7rem; color: var(--text-muted); }
+
+  .detail-actions {
+    display: flex; gap: 10px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+  .detail-actions .btn { flex: 1; justify-content: center; font-size: 0.8rem; padding: 10px 14px; }
+
+  /* ── Empty State ── */
+  .detail-empty {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 60px 40px;
+    text-align: center;
+    position: sticky;
+    top: 24px;
+  }
+  .detail-empty-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--bg); display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 16px; color: var(--text-muted);
+  }
+  .detail-empty h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+  .detail-empty p { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ── Mobile Bottom Sheet ── */
+  .mobile-sheet-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4); z-index: 1000;
+  }
+  .mobile-sheet {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--card-bg); border-radius: 20px 20px 0 0;
+    max-height: 85vh; overflow-y: auto; z-index: 1001;
+    padding: 0 20px 30px; animation: sheetUp 0.25s ease;
+  }
+  @keyframes sheetUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .mobile-sheet-handle {
+    width: 36px; height: 4px; background: var(--border);
+    border-radius: 2px; margin: 12px auto 16px;
+  }
+  .mobile-sheet .detail-body { padding: 0; }
+
+  /* ── Viewport Helper ── */
+  .viewport-helper {
+    position: fixed; bottom: 12px; right: 12px;
+    background: var(--text-primary); color: white;
+    font-size: 0.68rem; font-weight: 600;
+    padding: 6px 12px; border-radius: 8px; z-index: 999;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .split-layout { grid-template-columns: 1fr; }
+    .detail-panel { display: none; }
+    .detail-empty { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    .page { padding: 20px 16px; }
+    .page-header h1 { font-size: 1.35rem; }
+    .page-header p { display: none; }
+    .header-actions .btn-ghost { display: none; }
+    .header-actions { width: 100%; }
+    .header-actions .btn-primary { flex: 1; justify-content: center; }
+
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat-mini { padding: 12px; gap: 10px; }
+    .stat-mini-icon { width: 34px; height: 34px; }
+    .stat-mini-text .value { font-size: 1rem; }
+
+    .orders-table th:nth-child(3),
+    .orders-table td:nth-child(3),
+    .orders-table th:nth-child(5),
+    .orders-table td:nth-child(5) { display: none; }
+    .orders-table th, .orders-table td { padding: 12px 14px; }
+  }
+
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-mini { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px; }
+
+    .table-toolbar { flex-direction: column; gap: 8px; }
+    .table-search { max-width: 100%; }
+
+    .orders-table th:nth-child(4),
+    .orders-table td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>My Orders</h1>
+        <p>Master-detail view for quick order management</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost">Export</button>
+        <button class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Order
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="stat-mini-icon" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
+        </div>
+        <div class="stat-mini-text">
+          <span class="label">Total Orders</span>
+          <span class="value">1,847</span>
+        </div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-mini-text">
+          <span class="label">In Progress</span>
+          <span class="value">342</span>
+        </div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-icon" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="stat-mini-text">
+          <span class="label">Completed</span>
+          <span class="value">1,476</span>
+        </div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="stat-mini-text">
+          <span class="label">Total Value</span>
+          <span class="value">$2.4M</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Split Layout -->
+    <div class="split-layout" id="splitLayout">
+      <!-- Table -->
+      <div class="table-panel">
+        <div class="table-toolbar">
+          <input class="table-search" type="text" placeholder="Search orders...">
+          <span class="table-count">6 orders</span>
+        </div>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Product</th>
+              <th>Supplier</th>
+              <th>Value</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr onclick="selectOrder(0)" id="row-0">
+              <td style="font-weight:700; color: var(--accent); font-size: 0.78rem;">ORD-2847</td>
+              <td>
+                <div class="cell-product">LED Bulbs 9W</div>
+                <div class="cell-supplier">1,000 pcs</div>
+              </td>
+              <td class="cell-supplier">Shenzhen Lighting Co.</td>
+              <td class="cell-value">$3,728</td>
+              <td class="cell-date">Nov 15</td>
+              <td><span class="status-dot transit">In Transit</span></td>
+            </tr>
+            <tr onclick="selectOrder(1)" id="row-1">
+              <td style="font-weight:700; color: var(--accent); font-size: 0.78rem;">ORD-2846</td>
+              <td>
+                <div class="cell-product">Mobile Chargers</div>
+                <div class="cell-supplier">500 pcs</div>
+              </td>
+              <td class="cell-supplier">Vietnam Tech Electronics</td>
+              <td class="cell-value">$1,600</td>
+              <td class="cell-date">Nov 12</td>
+              <td><span class="status-dot customs">Customs</span></td>
+            </tr>
+            <tr onclick="selectOrder(2)" id="row-2">
+              <td style="font-weight:700; color: var(--accent); font-size: 0.78rem;">ORD-2845</td>
+              <td>
+                <div class="cell-product">Cotton Fabric</div>
+                <div class="cell-supplier">2,000 m</div>
+              </td>
+              <td class="cell-supplier">Dhaka Textiles Ltd.</td>
+              <td class="cell-value">$4,154</td>
+              <td class="cell-date">Nov 10</td>
+              <td><span class="status-dot delivered">Delivered</span></td>
+            </tr>
+            <tr onclick="selectOrder(3)" id="row-3">
+              <td style="font-weight:700; color: var(--accent); font-size: 0.78rem;">ORD-2844</td>
+              <td>
+                <div class="cell-product">Bluetooth Speakers</div>
+                <div class="cell-supplier">300 pcs</div>
+              </td>
+              <td class="cell-supplier">Guangzhou Audio Tech</td>
+              <td class="cell-value">$5,695</td>
+              <td class="cell-date">Nov 8</td>
+              <td><span class="status-dot processing">Processing</span></td>
+            </tr>
+            <tr onclick="selectOrder(4)" id="row-4">
+              <td style="font-weight:700; color: var(--accent); font-size: 0.78rem;">ORD-2843</td>
+              <td>
+                <div class="cell-product">Solar Panels 300W</div>
+                <div class="cell-supplier">100 pcs</div>
+              </td>
+              <td class="cell-supplier">Taiwan Solar Industries</td>
+              <td class="cell-value">$9,782</td>
+              <td class="cell-date">Nov 5</td>
+              <td><span class="status-dot transit">In Transit</span></td>
+            </tr>
+            <tr onclick="selectOrder(5)" id="row-5">
+              <td style="font-weight:700; color: var(--accent); font-size: 0.78rem;">ORD-2842</td>
+              <td>
+                <div class="cell-product">Power Banks</div>
+                <div class="cell-supplier">800 pcs</div>
+              </td>
+              <td class="cell-supplier">Shenzhen Power Tech</td>
+              <td class="cell-value">$2,450</td>
+              <td class="cell-date">Nov 3</td>
+              <td><span class="status-dot delivered">Delivered</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Detail Panel (desktop) -->
+      <div id="detailPanel">
+        <div class="detail-empty">
+          <div class="detail-empty-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
+          </div>
+          <h4>Select an order</h4>
+          <p>Click a row to view details</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Sheet -->
+  <div class="mobile-sheet-backdrop" id="sheetBackdrop" onclick="closeMobileSheet()"></div>
+  <div class="mobile-sheet" id="mobileSheet">
+    <div class="mobile-sheet-handle"></div>
+    <div class="detail-body" id="mobileDetailContent"></div>
+  </div>
+
+  <div class="viewport-helper" id="viewportHelper"></div>
+
+  <script>
+    const orders = [
+      {
+        id: 'ORD-2847', product: 'LED Bulbs 9W', supplier: 'Shenzhen Lighting Co.',
+        value: '$3,728', qty: '1,000 pcs', date: 'Nov 15, 2025', eta: 'Dec 1, 2025',
+        status: 'transit', statusLabel: 'In Transit', statusSub: 'Shipped from Shenzhen port',
+        stage: 2 // 1=placed, 2=shipped, 3=customs, 4=delivered
+      },
+      {
+        id: 'ORD-2846', product: 'Mobile Chargers', supplier: 'Vietnam Tech Electronics',
+        value: '$1,600', qty: '500 pcs', date: 'Nov 12, 2025', eta: 'Nov 25, 2025',
+        status: 'customs', statusLabel: 'At Customs', statusSub: 'Awaiting clearance at Mumbai port',
+        stage: 3
+      },
+      {
+        id: 'ORD-2845', product: 'Cotton Fabric', supplier: 'Dhaka Textiles Ltd.',
+        value: '$4,154', qty: '2,000 meters', date: 'Nov 10, 2025', eta: 'Nov 18, 2025',
+        status: 'delivered', statusLabel: 'Delivered', statusSub: 'Received at warehouse',
+        stage: 4
+      },
+      {
+        id: 'ORD-2844', product: 'Bluetooth Speakers', supplier: 'Guangzhou Audio Tech',
+        value: '$5,695', qty: '300 pcs', date: 'Nov 8, 2025', eta: 'Dec 5, 2025',
+        status: 'processing', statusLabel: 'Processing', statusSub: 'Order confirmed, awaiting shipment',
+        stage: 1
+      },
+      {
+        id: 'ORD-2843', product: 'Solar Panels 300W', supplier: 'Taiwan Solar Industries',
+        value: '$9,782', qty: '100 pcs', date: 'Nov 5, 2025', eta: 'Dec 12, 2025',
+        status: 'transit', statusLabel: 'In Transit', statusSub: 'En route from Kaohsiung',
+        stage: 2
+      },
+      {
+        id: 'ORD-2842', product: 'Power Banks', supplier: 'Shenzhen Power Tech',
+        value: '$2,450', qty: '800 pcs', date: 'Nov 3, 2025', eta: 'Nov 14, 2025',
+        status: 'delivered', statusLabel: 'Delivered', statusSub: 'Signed by warehouse manager',
+        stage: 4
+      },
+    ];
+
+    const statusColors = {
+      processing: { bg: 'var(--status-processing-bg)', color: 'var(--status-processing)' },
+      transit: { bg: 'var(--status-transit-bg)', color: 'var(--status-transit)' },
+      customs: { bg: 'var(--status-customs-bg)', color: 'var(--status-customs)' },
+      delivered: { bg: 'var(--status-delivered-bg)', color: 'var(--status-delivered)' },
+    };
+
+    const stages = ['Placed', 'Shipped', 'Customs', 'Delivered'];
+
+    let selectedIndex = -1;
+
+    function buildDetailHTML(order) {
+      const sc = statusColors[order.status];
+      const stepsHTML = stages.map((stage, i) => {
+        const stageNum = i + 1;
+        let cls = 'pending';
+        if (stageNum < order.stage) cls = 'done';
+        else if (stageNum === order.stage) cls = 'active';
+        return `
+          <div class="detail-step">
+            <div class="detail-step-dot ${cls}"></div>
+            <span class="detail-step-text ${cls}">${stage}</span>
+            ${cls === 'done' ? '<span class="detail-step-date">Completed</span>' : ''}
+            ${cls === 'active' ? '<span class="detail-step-date">Current</span>' : ''}
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="detail-status-banner" style="background: ${sc.bg};">
+          <div class="icon" style="background: ${sc.color}; color: white;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              ${order.status === 'delivered'
+                ? '<polyline points="20 6 9 17 4 12"/>'
+                : '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'}
+            </svg>
+          </div>
+          <div class="info">
+            <span class="status-text" style="color: ${sc.color};">${order.statusLabel}</span>
+            <span class="status-sub" style="color: ${sc.color}; opacity: 0.8;">${order.statusSub}</span>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-field">
+            <span class="detail-label">Order ID</span>
+            <span class="detail-value">${order.id}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Value</span>
+            <span class="detail-value accent">${order.value}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Product</span>
+            <span class="detail-value">${order.product}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Quantity</span>
+            <span class="detail-value">${order.qty}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Supplier</span>
+            <span class="detail-value">${order.supplier}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Order Date</span>
+            <span class="detail-value">${order.date}</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">${order.status === 'delivered' ? 'Delivered' : 'ETA'}</span>
+            <span class="detail-value">${order.eta}</span>
+          </div>
+        </div>
+
+        <div class="detail-progress-title">Order Progress</div>
+        <div class="detail-steps">
+          ${stepsHTML}
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn btn-ghost" style="font-size: 0.8rem;">Track</button>
+          <button class="btn btn-primary" style="font-size: 0.8rem;">View Invoice</button>
+        </div>
+      `;
+    }
+
+    function selectOrder(index) {
+      const order = orders[index];
+      const isMobile = window.innerWidth <= 1024;
+
+      // Highlight row
+      document.querySelectorAll('.orders-table tbody tr').forEach(r => r.classList.remove('active'));
+      document.getElementById('row-' + index).classList.add('active');
+      selectedIndex = index;
+
+      if (isMobile) {
+        openMobileSheet(order);
+      } else {
+        showDesktopDetail(order);
+      }
+    }
+
+    function showDesktopDetail(order) {
+      const panel = document.getElementById('detailPanel');
+      panel.innerHTML = `
+        <div class="detail-panel">
+          <div class="detail-header">
+            <h3>${order.product}</h3>
+            <button class="detail-close" onclick="closeDesktopDetail()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="detail-body">
+            ${buildDetailHTML(order)}
+          </div>
+        </div>
+      `;
+      document.getElementById('splitLayout').classList.remove('no-detail');
+    }
+
+    function closeDesktopDetail() {
+      const panel = document.getElementById('detailPanel');
+      panel.innerHTML = `
+        <div class="detail-empty">
+          <div class="detail-empty-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
+          </div>
+          <h4>Select an order</h4>
+          <p>Click a row to view details</p>
+        </div>
+      `;
+      document.querySelectorAll('.orders-table tbody tr').forEach(r => r.classList.remove('active'));
+      selectedIndex = -1;
+    }
+
+    function openMobileSheet(order) {
+      document.getElementById('mobileDetailContent').innerHTML = buildDetailHTML(order);
+      document.getElementById('sheetBackdrop').style.display = 'block';
+      document.getElementById('mobileSheet').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileSheet() {
+      document.getElementById('sheetBackdrop').style.display = 'none';
+      document.getElementById('mobileSheet').style.display = 'none';
+      document.body.style.overflow = '';
+      document.querySelectorAll('.orders-table tbody tr').forEach(r => r.classList.remove('active'));
+      selectedIndex = -1;
+    }
+
+    // Viewport helper
+    function updateVH() {
+      document.getElementById('viewportHelper').textContent = window.innerWidth + 'px';
+    }
+    updateVH();
+    window.addEventListener('resize', updateVH);
+  </script>
+</body>
+</html>

@@ -222,7 +222,7 @@ export default function EximFiltersSidebar({ filters, onChange, collapsed, onTog
           align-items: center;
           justify-content: space-between;
           padding: 14px 16px;
-          background: #2563eb;
+          background: #f97316;
           color: white;
         }
         .filter-title {
@@ -322,15 +322,15 @@ export default function EximFiltersSidebar({ filters, onChange, collapsed, onTog
           align-items: center;
           gap: 4px;
           padding: 2px 8px;
-          background: #dbeafe;
-          color: #1e40af;
+          background: rgba(249, 115, 22, 0.12);
+          color: #ea580c;
           border-radius: 4px;
           font-size: 0.7rem;
         }
         .active-tag button {
           background: none;
           border: none;
-          color: #1e40af;
+          color: #ea580c;
           cursor: pointer;
           font-size: 0.85rem;
           padding: 0 2px;
@@ -381,7 +381,7 @@ function ToggleSwitch({ label, checked, onChange }: { label: string; checked: bo
           flex-shrink: 0;
         }
         .toggle-track.active {
-          background: #2563eb;
+          background: #f97316;
         }
         .toggle-thumb {
           position: absolute;

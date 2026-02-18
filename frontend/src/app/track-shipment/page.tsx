@@ -18,7 +18,7 @@ import { AppLayout } from '@/components/layout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { trackShipment, ShipmentTracking, formatShipmentNumber, getTimelineStatusColor } from '@/lib/tracking';
 import { usePrefersReducedMotion, useMobile } from '@/hooks/useMobile';
-import { Package, Ship, MapPin, Clock, ChevronRight, Bookmark } from 'lucide-react';
+import { Package, Ship, MapPin, Clock, ChevronRight, Bookmark, Calendar, Check, Info } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
 
 // Types for tracked shipments
@@ -303,8 +303,7 @@ export default function TrackShipmentPage() {
   };
 
   return (
-    <AppLayout>
-      <div className={`track-page ${isMobile ? 'mobile' : 'web'}`}>
+    <AppLayout>      <div className={`track-page ${isMobile ? 'mobile' : 'web'}`}>
         {/* My Shipments Section - Always visible at top */}
         {!shipmentData && (
           <motion.div
@@ -427,7 +426,7 @@ export default function TrackShipmentPage() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <span className="alert-icon">ℹ️</span>
+                  <span className="alert-icon"><Info size={14} /></span>
                   <strong>Important Note:</strong> {shipmentData.alerts[0].message}
                 </motion.div>
               )}
@@ -485,7 +484,7 @@ export default function TrackShipmentPage() {
                   >
                     <h2>Shipment Summary</h2>
                     <div className="freight-badge">
-                      <span className="freight-icon">🚢</span>
+                      <span className="freight-icon"><Ship size={16} /></span>
                       <span>{shipmentData.carrier}</span>
                     </div>
 
@@ -542,7 +541,7 @@ export default function TrackShipmentPage() {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <h3>📦 Shipment Details</h3>
+                    <h3><Package size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Shipment Details</h3>
                     <div className="details-grid">
                       <div className="detail-item">
                         <span className="detail-label">Package Count</span>
@@ -572,7 +571,7 @@ export default function TrackShipmentPage() {
                     </div>
 
                     <div className="delivery-estimate">
-                      <div className="estimate-icon">📅</div>
+                      <div className="estimate-icon"><Calendar size={18} /></div>
                       <div className="estimate-info">
                         <span className="estimate-label">Estimated Delivery</span>
                         <strong>{shipmentData.estimatedDelivery}</strong>
@@ -631,7 +630,7 @@ export default function TrackShipmentPage() {
                               className={`status-dot ${event.status}`}
                               style={{ backgroundColor: getTimelineStatusColor(event.status) }}
                             >
-                              {event.status === 'completed' && '✓'}
+                              {event.status === 'completed' && <Check size={14} />}
                             </span>
                             {index < shipmentData.timeline.length - 1 && <div className="timeline-line" />}
                           </div>
@@ -681,7 +680,7 @@ export default function TrackShipmentPage() {
                                             className="substage-dot"
                                             style={{ backgroundColor: getTimelineStatusColor(substage.status) }}
                                           >
-                                            {substage.status === 'completed' && '✓'}
+                                            {substage.status === 'completed' && <Check size={14} />}
                                           </span>
                                           <span className={`substage-status ${substage.status}`}>
                                             {substage.status === 'completed' ? 'Done' :

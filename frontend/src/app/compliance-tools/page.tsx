@@ -78,16 +78,14 @@ export default function ComplianceToolsPage() {
   };
 
   return (
-    <AppLayout searchPlaceholder="Search regulations, HSN codes...">
-      <div className="dashboard-container">
+    <AppLayout searchPlaceholder="Search regulations, HSN codes...">      <div className="dashboard-container">
         {/* Welcome Section with Quick Actions */}
         <div className="welcome-section">
           <div className="welcome-content">
-            <h1 className="welcome-title">Compliance & Regulatory Tools 🛡️</h1>
+            <h1 className="welcome-title">Compliance & Regulatory Tools <Shield size={20} style={{ display: 'inline', verticalAlign: 'middle', marginLeft: 8 }} /></h1>
             <p className="welcome-subtitle">
               Customs clearance, BOE filing, duty calculation, and EXIM regulation compliance made easy
-            </p>
-          </div>
+            </p>          </div>
           <div className="quick-actions-bar">
             <button onClick={() => setBoeModal(true)} className="quick-action-button">
               <div className="action-icon-wrapper" style={{ backgroundColor: '#3b82f615' }}>

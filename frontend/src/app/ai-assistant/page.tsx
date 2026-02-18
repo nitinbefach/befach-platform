@@ -73,8 +73,8 @@ function ConversationItem({
           background: var(--bg-secondary, #f8fafc);
         }
         .ch-conv-item.active {
-          background: rgba(102, 126, 234, 0.08);
-          border-color: rgba(102, 126, 234, 0.2);
+          background: rgba(249, 115, 22, 0.08);
+          border-color: rgba(249, 115, 22, 0.2);
         }
         .ch-conv-content {
           flex: 1;
@@ -211,7 +211,7 @@ function HubMessageBubble({ message }: { message: AIMessage }) {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -232,7 +232,7 @@ function HubMessageBubble({ message }: { message: AIMessage }) {
           font-size: 0.875rem;
         }
         .user-bubble {
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           color: white;
           border-radius: 18px 18px 4px 18px;
         }
@@ -277,11 +277,11 @@ function HubMessageBubble({ message }: { message: AIMessage }) {
           background: rgba(255,255,255,0.25);
         }
         .bot-bubble .ch-msg-link {
-          color: #667eea;
-          background: rgba(102, 126, 234, 0.1);
+          color: #f97316;
+          background: rgba(249, 115, 22, 0.1);
         }
         .bot-bubble .ch-msg-link:hover {
-          background: rgba(102, 126, 234, 0.2);
+          background: rgba(249, 115, 22, 0.2);
         }
       `}</style>
     </div>
@@ -316,7 +316,7 @@ function HubTypingIndicator() {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -355,7 +355,7 @@ const TOPIC_CARDS = [
     title: 'Trade Regulations',
     desc: 'Import/export rules, duties, compliance',
     query: 'What are the key import regulations I should know about?',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
   },
   {
     title: 'Supplier Discovery',
@@ -563,7 +563,7 @@ export default function AIAssistantPage() {
           border-radius: 8px;
           border: 1.5px solid var(--border-color);
           background: var(--bg-primary);
-          color: #667eea;
+          color: #f97316;
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -571,8 +571,8 @@ export default function AIAssistantPage() {
           transition: all 0.15s;
         }
         .ch-new-btn:hover {
-          background: rgba(102, 126, 234, 0.08);
-          border-color: #667eea;
+          background: rgba(249, 115, 22, 0.08);
+          border-color: #f97316;
         }
         .ch-search {
           padding: 0 16px 12px;
@@ -589,7 +589,7 @@ export default function AIAssistantPage() {
           font-family: inherit;
         }
         .ch-search input:focus {
-          border-color: #667eea;
+          border-color: #f97316;
         }
         .ch-conv-list {
           flex: 1;
@@ -609,7 +609,7 @@ export default function AIAssistantPage() {
           padding: 8px 16px;
           border-radius: 8px;
           border: none;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           color: white;
           font-size: 0.82rem;
           font-weight: 600;
@@ -755,11 +755,12 @@ export default function AIAssistantPage() {
           width: 64px;
           height: 64px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 16px;
+          box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
         }
         .ch-welcome h3 {
           font-size: 1.1rem;
@@ -786,9 +787,9 @@ export default function AIAssistantPage() {
         .ch-suggestion-chip {
           padding: 8px 16px;
           border-radius: 18px;
-          border: 1.5px solid rgba(102, 126, 234, 0.3);
+          border: 1.5px solid rgba(249, 115, 22, 0.3);
           background: transparent;
-          color: #667eea;
+          color: #f97316;
           font-size: 0.78rem;
           font-weight: 500;
           cursor: pointer;
@@ -798,8 +799,8 @@ export default function AIAssistantPage() {
           min-height: 36px;
         }
         .ch-suggestion-chip:hover {
-          background: rgba(102, 126, 234, 0.08);
-          border-color: #667eea;
+          background: rgba(249, 115, 22, 0.08);
+          border-color: #f97316;
         }
         .ch-input-area {
           display: flex;
@@ -821,8 +822,8 @@ export default function AIAssistantPage() {
           min-height: 44px;
         }
         .ch-input:focus {
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          border-color: #f97316;
+          box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
         }
         .ch-input::placeholder {
           color: var(--text-secondary);
@@ -832,7 +833,7 @@ export default function AIAssistantPage() {
           height: 44px;
           border-radius: 50%;
           border: none;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           color: white;
           cursor: pointer;
           display: flex;
@@ -858,11 +859,12 @@ export default function AIAssistantPage() {
           width: 80px;
           height: 80px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 20px;
+          box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
         }
         .ch-empty-state h2 {
           font-size: 1.35rem;
@@ -897,8 +899,9 @@ export default function AIAssistantPage() {
           transition: all 0.15s;
         }
         .ch-topic-card:hover {
-          border-color: #667eea;
-          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+          border-color: #f97316;
+          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.12);
+          transform: translateY(-2px);
         }
         .ch-topic-icon {
           width: 40px;
@@ -937,8 +940,7 @@ export default function AIAssistantPage() {
   // ===== PAGE RENDER =====
 
   return (
-    <AppLayout>
-      <div className="ch-page">
+    <AppLayout>      <div className="ch-page">
         {isMobile ? (
           <>
             <div className="ch-mobile-header">

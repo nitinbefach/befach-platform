@@ -1,8 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { Logo, DarkModeToggle } from '../ui';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { Logo } from '../ui';
 import { Search, Bell, User } from 'lucide-react';
+import { useMobile } from '@/hooks/useMobile';
+import { getAllFeatureStatus } from '@/lib/walkthroughStorage';
+import { FEATURE_FLOW_ORDER } from '@/lib/walkthroughSteps';
+import NotificationPanel from './NotificationPanel';
+import ProfileMenu from './ProfileMenu';
 
 interface TopBarProps {
   onMenuToggle?: () => void;
@@ -15,6 +20,46 @@ export default function TopBar({
   onGetStarted,
   searchPlaceholder = "Search products, suppliers, or markets..."
 }: TopBarProps) {
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const { isMobile } = useMobile();
+  const notifRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  // Check if there are undiscovered features (for notification dot)
+  const hasUndiscovered = useMemo(() => {
+    const status = getAllFeatureStatus();
+    return FEATURE_FLOW_ORDER.some(id => !status[id] || status[id].visitCount === 0);
+  }, [notifOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Close dropdowns on click outside (desktop only)
+  useEffect(() => {
+    if (isMobile) return;
+    if (!notifOpen && !profileOpen) return;
+
+    const handleClick = (e: MouseEvent) => {
+      if (notifOpen && notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotifOpen(false);
+      }
+      if (profileOpen && profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [notifOpen, profileOpen, isMobile]);
+
+  const toggleNotif = () => {
+    setNotifOpen(prev => !prev);
+    setProfileOpen(false);
+  };
+
+  const toggleProfile = () => {
+    setProfileOpen(prev => !prev);
+    setNotifOpen(false);
+  };
+
   return (
     <div className="top-bar">
       <div className="top-bar-left">
@@ -33,14 +78,24 @@ export default function TopBar({
           <Search size={18} />
           <input type="text" placeholder={searchPlaceholder} />
         </div>
-        <button className="icon-btn notification-btn">
-          <Bell size={20} />
-          <span className="notification-dot"></span>
-        </button>
-        <DarkModeToggle />
+
+        {/* Notification bell */}
+        <div className="dropdown-anchor" ref={notifRef}>
+          <button className={`icon-btn notification-btn ${notifOpen ? 'active' : ''}`} onClick={toggleNotif}>
+            <Bell size={20} />
+            {hasUndiscovered && <span className="notification-dot"></span>}
+          </button>
+          <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
+        </div>
+
         <button className="btn-primary" onClick={onGetStarted}>Get Started</button>
-        <div className="user-avatar">
-          <User size={18} />
+
+        {/* Profile avatar */}
+        <div className="dropdown-anchor" ref={profileRef}>
+          <div className={`user-avatar ${profileOpen ? 'active' : ''}`} onClick={toggleProfile}>
+            <User size={18} />
+          </div>
+          <ProfileMenu isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
         </div>
       </div>
 
@@ -81,6 +136,10 @@ export default function TopBar({
           display: flex;
           align-items: center;
           gap: 16px;
+        }
+
+        .dropdown-anchor {
+          position: relative;
         }
 
         .search-bar {
@@ -132,14 +191,28 @@ export default function TopBar({
           color: var(--accent-primary);
         }
 
+        .icon-btn.active {
+          background: rgba(249, 115, 22, 0.08);
+          border-color: rgba(249, 115, 22, 0.2);
+          color: var(--accent-primary);
+        }
+
         .notification-dot {
           position: absolute;
-          top: 8px;
-          right: 8px;
+          top: 7px;
+          right: 7px;
           width: 8px;
           height: 8px;
           background: #ef4444;
           border-radius: 50%;
+          border: 2px solid var(--bg-secondary);
+          box-sizing: content-box;
+          animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+          50% { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
         }
 
         .btn-primary {
@@ -169,6 +242,11 @@ export default function TopBar({
           justify-content: center;
           color: white;
           cursor: pointer;
+          transition: box-shadow 0.2s;
+        }
+
+        .user-avatar.active {
+          box-shadow: 0 0 0 2px var(--bg-secondary), 0 0 0 4px rgba(249, 115, 22, 0.3);
         }
 
         @media (max-width: 1024px) {

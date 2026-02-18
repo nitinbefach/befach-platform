@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { Factory, Search, MapPin, Check, Package, Truck, Eye, Mail, MessageCircle, Lightbulb, Info, FolderOpen, Star } from 'lucide-react';
 
 // ============================================
 // MOCK DATA - 100 Befach Partner Suppliers
 // ============================================
 
 const CATEGORIES = [
-  { id: 'electronics', name: 'Electronics', icon: '🔌' },
-  { id: 'health-supplements', name: 'Health Supplements', icon: '💊' },
-  { id: 'consumer-electronics', name: 'Consumer Electronics', icon: '📱' },
+  { id: 'electronics', name: 'Electronics', icon: '' },
+  { id: 'health-supplements', name: 'Health Supplements', icon: '' },
+  { id: 'consumer-electronics', name: 'Consumer Electronics', icon: '' },
 ];
 
 const MOCK_SUPPLIERS = [
@@ -182,7 +183,7 @@ export default function MockupSupplierSearch() {
       {/* Header */}
       <header className="header">
         <div className="header-content">
-          <div className="logo">🏭 BEFACH</div>
+          <div className="logo"><Factory size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> BEFACH</div>
           <div className="header-badge">MOCKUP PREVIEW</div>
         </div>
       </header>
@@ -195,7 +196,7 @@ export default function MockupSupplierSearch() {
 
           <div className="search-box">
             <div className="search-input-wrapper">
-              <span className="search-icon">🔍</span>
+              <span className="search-icon"><Search size={18} /></span>
               <input
                 type="text"
                 placeholder="Describe what you're looking for... (e.g., LED bulbs, vitamins, smart watches)"
@@ -224,7 +225,7 @@ export default function MockupSupplierSearch() {
                 >
                   <option value="">All Categories</option>
                   {CATEGORIES.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.icon} {cat.name}</option>
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>
               </div>
@@ -232,11 +233,11 @@ export default function MockupSupplierSearch() {
                 <label>Location</label>
                 <select>
                   <option>All Countries</option>
-                  <option>🇨🇳 China</option>
-                  <option>🇮🇳 India</option>
-                  <option>🇹🇼 Taiwan</option>
-                  <option>🇰🇷 South Korea</option>
-                  <option>🇻🇳 Vietnam</option>
+                  <option>China</option>
+                  <option>India</option>
+                  <option>Taiwan</option>
+                  <option>South Korea</option>
+                  <option>Vietnam</option>
                 </select>
               </div>
               <div className="filter-group">
@@ -299,22 +300,21 @@ export default function MockupSupplierSearch() {
                         <div className="supplier-info">
                           <h3>{supplier.name}</h3>
                           <div className="supplier-rating">
-                            {'★'.repeat(Math.floor(supplier.rating))}
-                            {'☆'.repeat(5 - Math.floor(supplier.rating))}
+                            {Array.from({ length: 5 }, (_, i) => (<Star key={i} size={12} style={i < Math.floor(supplier.rating) ? { color: '#f59e0b', fill: '#f59e0b' } : { color: '#4b5563' }} />))}
                             <span>{supplier.rating} ({supplier.reviews} reviews)</span>
                           </div>
                           <div className="supplier-location">
-                            📍 {supplier.location.city}, {supplier.location.country}
+                            <MapPin size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> {supplier.location.city}, {supplier.location.country}
                           </div>
                         </div>
-                        {supplier.verified && <span className="verified-badge">✓ Verified</span>}
+                        {supplier.verified && <span className="verified-badge"><Check size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> Verified</span>}
                       </div>
 
                       <div className="card-body">
                         <div className="supplier-stats">
-                          <span>✓ {supplier.responseRate}% Response</span>
-                          <span>📦 MOQ: {supplier.moq}</span>
-                          <span>🚚 {supplier.leadTime}</span>
+                          <span><Check size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> {supplier.responseRate}% Response</span>
+                          <span><Package size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> MOQ: {supplier.moq}</span>
+                          <span><Truck size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> {supplier.leadTime}</span>
                         </div>
 
                         <div className="supplier-products">
@@ -331,13 +331,13 @@ export default function MockupSupplierSearch() {
 
                       <div className="card-actions">
                         <button className="btn-view" onClick={() => openSupplierDetail(supplier)}>
-                          👁 View
+                          <Eye size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> View
                         </button>
                         <button className="btn-contact" onClick={() => openContact(supplier)}>
-                          ✉ Contact
+                          <Mail size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Contact
                         </button>
                         <button className="btn-chat" onClick={() => openChat(supplier)}>
-                          💬 Chat
+                          <MessageCircle size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Chat
                         </button>
                       </div>
                     </div>
@@ -347,13 +347,13 @@ export default function MockupSupplierSearch() {
             ) : (
               /* Empty State */
               <div className="empty-state">
-                <div className="empty-icon">🔍</div>
+                <div className="empty-icon"><Search size={48} /></div>
                 <h2>No suppliers found for your search</h2>
                 <p>We searched our database but couldn't find suppliers matching "{searchQuery || 'your criteria'}"</p>
 
                 <div className="empty-cta">
                   <div className="cta-box primary">
-                    <h3>💡 Let us find suppliers FOR you</h3>
+                    <h3><Lightbulb size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Let us find suppliers FOR you</h3>
                     <p>Submit your requirement and our team will identify and verify matching suppliers within 24-48 hours.</p>
                     <button className="btn-submit-req" onClick={() => setActiveModal('submit-requirement')}>
                       Submit Requirement →
@@ -399,11 +399,11 @@ export default function MockupSupplierSearch() {
               <div>
                 <h2>{selectedSupplier.name}</h2>
                 <div className="supplier-rating">
-                  {'★'.repeat(Math.floor(selectedSupplier.rating))} {selectedSupplier.rating} ({selectedSupplier.reviews} reviews)
+                  {Array.from({ length: 5 }, (_, i) => (<Star key={i} size={12} style={i < Math.floor(selectedSupplier.rating) ? { color: '#f59e0b', fill: '#f59e0b' } : { color: '#4b5563' }} />))} {selectedSupplier.rating} ({selectedSupplier.reviews} reviews)
                 </div>
-                <div>📍 {selectedSupplier.location.city}, {selectedSupplier.location.country}</div>
+                <div><MapPin size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> {selectedSupplier.location.city}, {selectedSupplier.location.country}</div>
               </div>
-              {selectedSupplier.verified && <span className="verified-badge large">✓ Verified Partner</span>}
+              {selectedSupplier.verified && <span className="verified-badge large"><Check size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> Verified Partner</span>}
             </div>
 
             <div className="modal-tabs">
@@ -457,10 +457,10 @@ export default function MockupSupplierSearch() {
 
             <div className="modal-footer">
               <button className="btn-contact" onClick={() => { setActiveModal('contact'); }}>
-                ✉ Contact Supplier
+                <Mail size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Contact Supplier
               </button>
               <button className="btn-chat" onClick={() => { setActiveModal('chat'); }}>
-                💬 Start Chat
+                <MessageCircle size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Start Chat
               </button>
             </div>
           </div>
@@ -627,7 +627,7 @@ export default function MockupSupplierSearch() {
               </div>
 
               <div className="info-box">
-                <span>ℹ️</span>
+                <span><Info size={16} /></span>
                 <span>Our team will find and verify matching suppliers within 24-48 hours.</span>
               </div>
 
@@ -686,7 +686,7 @@ export default function MockupSupplierSearch() {
               </div>
 
               <div className="bulk-upload-info">
-                <p>📁 Need to invite multiple suppliers?</p>
+                <p><FolderOpen size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Need to invite multiple suppliers?</p>
                 <button type="button" className="btn-link">Download CSV Template</button>
               </div>
 
@@ -1633,8 +1633,21 @@ export default function MockupSupplierSearch() {
 
         /* Responsive */
         @media (max-width: 768px) {
+          .hero-section {
+            padding: 32px 16px;
+          }
+
           .hero-content h1 {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
+          }
+
+          .hero-content > p {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+          }
+
+          .search-box {
+            padding: 16px;
           }
 
           .search-input-wrapper {
@@ -1650,8 +1663,36 @@ export default function MockupSupplierSearch() {
             grid-template-columns: repeat(2, 1fr);
           }
 
+          .results-section {
+            padding: 24px 16px;
+          }
+
+          .results-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+          }
+
+          .results-controls select {
+            width: 100%;
+          }
+
           .supplier-grid {
             grid-template-columns: 1fr;
+          }
+
+          .supplier-card {
+            padding: 16px;
+          }
+
+          .supplier-stats {
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+
+          .card-actions button {
+            padding: 8px;
+            font-size: 0.8rem;
           }
 
           .form-row {
@@ -1670,6 +1711,71 @@ export default function MockupSupplierSearch() {
           .modal-container {
             margin: 10px;
             max-height: 95vh;
+          }
+
+          .popular-searches {
+            gap: 8px;
+          }
+
+          .popular-searches button {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+          }
+
+          .empty-state {
+            padding: 40px 16px;
+          }
+
+          .empty-state h2 {
+            font-size: 1.25rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-section {
+            padding: 24px 12px;
+          }
+
+          .hero-content h1 {
+            font-size: 1.3rem;
+          }
+
+          .search-box {
+            padding: 12px;
+          }
+
+          .search-input-wrapper {
+            padding: 10px;
+          }
+
+          .filters-panel {
+            grid-template-columns: 1fr;
+          }
+
+          .results-section {
+            padding: 16px 12px;
+          }
+
+          .card-actions {
+            flex-direction: column;
+          }
+
+          .card-actions button {
+            padding: 10px;
+            font-size: 0.85rem;
+          }
+
+          .header {
+            padding: 12px 16px;
+          }
+
+          .logo {
+            font-size: 1.2rem;
+          }
+
+          .header-badge {
+            font-size: 0.65rem;
+            padding: 3px 8px;
           }
         }
       `}</style>

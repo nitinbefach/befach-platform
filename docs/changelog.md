@@ -2,6 +2,124 @@
 
 All significant changes to the Befach project are documented here.
 
+## [0.7.0] - Feb 13, 2026 (Header Enhancements — Notifications, Profile & Logo)
+
+### Added
+- **Notification dropdown panel** (`NotificationPanel.tsx`) — bell icon in TopBar now opens a functional panel showing:
+  - Feature exploration progress bar (X/17 features explored)
+  - "Recently Used" section with features the user has visited
+  - "Discover" section with unexplored features and "Try it" CTAs
+  - Desktop: positioned dropdown; Mobile: BottomSheet
+- **Profile dropdown menu** (`ProfileMenu.tsx`) — user avatar in TopBar now opens a menu with:
+  - Organization name and user role display
+  - "My Profile" and "Settings" links (→ `/settings`)
+  - "Logout" button with red styling
+  - Desktop: positioned dropdown; Mobile: BottomSheet
+- `getAllFeatureStatus()` export in `walkthroughStorage.ts` for reading all feature visit data
+- Exported `FeatureStatus` and `WalkthroughStatus` types from `walkthroughStorage.ts`
+
+### Changed
+- **Logo component** (`Logo.tsx`) — replaced inline SVG 3D box + text with actual company logo image (`/logo.png`) using Next.js `<Image>`
+  - `showText={true}` (default): full logo with "BEFACH INTERNATIONAL" text
+  - `showText={false}`: cropped to just the diamond icon mark
+- TopBar logo now shows the full company logo image instead of inline SVG
+- Notification dot on bell icon is now dynamic — only appears when there are undiscovered features (previously always visible)
+- TopBar now manages open/close state for both notification and profile panels with click-outside-to-close behavior
+
+---
+
+## [0.6.0] - Feb 12, 2026 (Mobile Optimization & Onboarding Split)
+
+### Added
+- **Mobile/Web component split for Onboarding** — separate `MobileOnboarding.tsx` and `WebOnboarding.tsx` with shared `useOnboarding.ts` hook
+  - Mobile version: progress bar, touch-friendly cards, safe area support, `100dvh` layout
+  - Web version: verbatim extraction of original desktop UI
+  - `page.tsx` is now a thin wrapper using `useMobile()` to conditionally render
+- `goalOptions`, `typeOptions`, `tourOptions` exports in `useOnboarding.ts` with Lucide icons (Search, Truck, Calculator, User, Building2, Compass, ArrowRight)
+- **Walkthrough system** — 17 feature walkthroughs with glassmorphic overlay, progress tracking, and chained navigation
+  - `walkthroughSteps.ts`: configs for all features with titles, highlights, tips, feedback
+  - `useFeatureWalkthrough()` hook: auto-triggers on first visit
+  - `FeatureWalkthrough.tsx`, `WalkthroughComplete.tsx` components
+  - `walkthroughStorage.ts`: persistent completion tracking with visit counts
+  - Integrated into all 18 feature pages (dashboard through settings)
+- **Google Sheets feedback integration** — `submitFeedback()` sends to backend POST `/api/feedback` which appends to Google Sheet
+  - `FeedbackWidget.tsx`: floating button with menu (Give Feedback, Report Bug, Suggest Feature, Rate Befach)
+  - `FeedbackPrompt.tsx`, `NPSSurvey.tsx`: contextual feedback prompts
+  - `feedbackTriggers.ts`: automatic triggers based on user actions
+- Global CSS rule to disable dragging across the entire project (`-webkit-user-drag: none` on `*`, `img`, `a`, `svg`)
+
+### Changed
+- **Mobile Dashboard fixes** (`MobileDashboard.tsx`):
+  - Removed AI Assist purple button from top-right greeting row
+  - Increased Quick Actions BottomSheet snap point from `0.45` to `0.55` for full card visibility
+  - Replaced collapsible Analytics section with always-visible stats section
+  - Removed `CollapsibleSection` import (no longer used)
+- FeedbackWidget mobile positioning adjusted to `calc(100px + env(safe-area-inset-bottom))` for proper clearance above BottomNav
+
+---
+
+## [0.5.0] - Feb 11, 2026 (Login Flow, Dark Mode Removal & Homepage Polish)
+
+### Added
+- Smart Login/Dashboard button in landing header — returning users (who completed onboarding) see "Go to Dashboard", new users see "Login" + "Start Free Trial"
+- Onboarding page honors `?redirect=` query parameter for post-login navigation to specific feature pages
+
+### Changed
+- Interactive demo cards (Cost Calculator, Rate Checker, HS Code Lookup, AI Assistant) now redirect to `/onboarding?redirect=<feature-page>` instead of running inline calculations
+- All "Start Free Trial" and "Get Started Free" CTA buttons across the site now link to `/onboarding`
+- "Schedule a Walkthrough" CTA links to `/contact`
+- Demo card subtitle updated from "No signup needed" to "sign up free to unlock full access"
+- Landing header shows conditional buttons: Login + Start Free Trial (new users) or Go to Dashboard (returning users), on both desktop and mobile
+
+### Removed
+- **Complete dark mode removal** across 7 files:
+  - `globals.css` — removed `[data-theme="dark"]` variables block, `.dark-mode-toggle` styles, dark quick-actions override
+  - `layout.tsx` — removed ThemeProvider wrapper, inline dark mode detection script, `suppressHydrationWarning`
+  - `TopBar.tsx` — removed DarkModeToggle component
+  - `Header.tsx` — removed dark mode state/toggle, Moon/Sun icons, all `.main-header.dark` CSS rules
+  - `onboarding/page.tsx` — removed DarkModeToggle from header
+  - `ui/index.ts` — removed DarkModeToggle and ThemeProvider exports
+- Removed inline calculation logic from InteractiveDemo (dutyRates, taxRates, result states)
+
+---
+
+## [0.4.0] - Feb 10, 2026 (SSR-Safe Storage & Vercel Deployment)
+
+### Added
+- `safeStorage.ts` — SSR-safe drop-in replacement for `localStorage`/`sessionStorage` (uses in-memory Map on server, localStorage in browser)
+- Vercel deployment pipeline connected to `nitinbefach/befach-platform` repo
+
+### Changed
+- Replaced all direct `localStorage`/`sessionStorage` calls with `safeStorage` across 29 files
+- Removed stale `isBrowser` and `typeof window` SSR guards (now handled by safeStorage)
+- Vercel root directory set to `frontend/` for Next.js builds
+
+### Fixed
+- Vercel SSR build crash caused by `localStorage` access during static page generation
+- `historyStorage.ts` constructor calling `migrateFromLegacyStorage()` at import time during SSR
+
+---
+
+## [0.3.0] - Feb 10, 2026 (Auth Removal & Static Demo Mode)
+
+### Added
+- In-memory demo data for orders (3 demo orders) and suppliers (4 demo suppliers)
+- Default authenticated state with demo organization and subscription
+
+### Changed
+- Removed all authentication gates — pages are freely accessible without login
+- Unlinked PostgreSQL/Prisma database — backend uses in-memory arrays
+- Removed Prisma dependencies (`@prisma/client`, `@prisma/adapter-pg`, `prisma`, `pg`)
+- Deleted `backend/src/lib/prisma.js`
+- Backend routes (`orders.js`, `suppliers.js`) rewritten with in-memory CRUD
+
+### Fixed
+- Broken navigation links: `/login` → `/onboarding`, `/suppliers` → `/our-vendors`, `/share-requirement` → `/submit-requirement`
+- Dashboard redirect loop — was redirecting unauthenticated users back to homepage
+- Invalid `title` prop on lucide `Info` icon component
+
+---
+
 ## [Unreleased]
 
 ### Added
@@ -18,12 +136,6 @@ All significant changes to the Befach project are documented here.
 - Moved `BEFACH_PROJECT_STRUCTURE.md` to `ARCHITECTURE/Project_Structure_Definition.md`
 - Moved `EXECUTION_TAGS_AND_WORKFLOW.md` to `EXECUTION/EXECUTION_TAGS/Workflow_Standard.md`
 - Moved `QUICK_SETUP_GUIDE.md` to `RESOURCES/DOCUMENTATION/Quick_Setup.md`
-
-### Fixed
-- [Nothing yet]
-
-### Security
-- [Nothing yet]
 
 ---
 
@@ -84,6 +196,11 @@ All significant changes to the Befach project are documented here.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 0.7.0 | Feb 13, 2026 | Header enhancements — notifications, profile & logo |
+| 0.6.0 | Feb 12, 2026 | Mobile optimization & onboarding split |
+| 0.5.0 | Feb 11, 2026 | Login flow, dark mode removal & homepage polish |
+| 0.4.0 | Feb 10, 2026 | SSR-safe storage & Vercel deployment |
+| 0.3.0 | Feb 10, 2026 | Auth removal & static demo mode |
 | 0.2.0 | Nov 27, 2025 | Project structure and organization |
 | 0.1.0 | Nov 26, 2025 | Initial UI and backend structure |
 

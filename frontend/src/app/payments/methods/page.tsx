@@ -7,7 +7,6 @@ import {
   getPaymentSources,
   getGateways,
   toggleGateway,
-  initializeDemoPayments,
 } from '@/lib/payments';
 import { getSavedSuppliers, type SavedSupplier } from '@/lib/savedSuppliers';
 import type { SavedPaymentSource, GatewayConfig } from '@/types/payments';
@@ -23,7 +22,6 @@ export default function PaymentMethodsPage() {
   const [suppliers, setSuppliers] = useState<SavedSupplier[]>([]);
 
   useEffect(() => {
-    initializeDemoPayments();
     setSources(getPaymentSources());
     setGateways(getGateways());
     setSuppliers(getSavedSuppliers().slice(0, 8));

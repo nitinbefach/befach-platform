@@ -1,5 +1,6 @@
 'use client';
 
+import { Ban } from 'lucide-react';
 import {
   RelationshipStage,
   RELATIONSHIP_STAGE_CONFIG,
@@ -101,7 +102,7 @@ export function SupplierPipelineStats({
               className={`secondary-badge blocked ${activeStages.includes('blocked') ? 'active' : ''}`}
               onClick={() => onStageClick?.('blocked')}
             >
-              <span>🚫</span>
+              <span><Ban size={14} /></span>
               <span>{stats.byStage.blocked} Blocked</span>
             </button>
           )}
@@ -276,7 +277,7 @@ export function SupplierPipelineStats({
 
         @media (max-width: 768px) {
           .pipeline-stats {
-            padding: 16px;
+            padding: 14px;
             margin-bottom: 16px;
             border-radius: 12px;
           }
@@ -293,51 +294,54 @@ export function SupplierPipelineStats({
             font-size: 0.8rem;
           }
 
-          /* Horizontal scroll strip on mobile */
+          /* 4-column grid on mobile — no overflow */
           .stage-cards {
-            justify-content: flex-start;
-            gap: 0;
-            margin-bottom: 16px;
-            margin-left: -16px;
-            margin-right: -16px;
-            padding-left: 16px;
-            padding-right: 16px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+            padding: 0;
           }
 
-          .stage-cards::-webkit-scrollbar {
-            display: none;
-          }
-
-          .stage-card {
-            min-width: 80px;
-            padding: 10px 14px;
-            gap: 4px;
-            flex-shrink: 0;
-          }
-
-          .stage-count {
-            font-size: 1.25rem;
-          }
-
-          .stage-label {
-            font-size: 0.75rem;
+          .stage-card-wrapper {
+            display: contents;
           }
 
           .stage-connector {
             display: none;
           }
 
+          .stage-card {
+            min-width: 0;
+            padding: 10px 6px;
+            gap: 3px;
+            border-radius: 10px;
+            border-width: 1.5px;
+          }
+
+          .stage-icon {
+            font-size: 1rem;
+          }
+
+          .stage-count {
+            font-size: 1.15rem;
+          }
+
+          .stage-label {
+            font-size: 0.68rem;
+            text-align: center;
+            line-height: 1.2;
+          }
+
           /* 2x2 quick stats */
           .quick-stats {
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 12px;
+            gap: 8px;
+            padding: 10px;
           }
 
           .stat-value {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
           }
 
           .stat-label {
@@ -345,13 +349,48 @@ export function SupplierPipelineStats({
           }
 
           .secondary-stats {
-            margin-top: 12px;
-            padding-top: 12px;
+            margin-top: 10px;
+            padding-top: 10px;
           }
 
           .secondary-badge {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             padding: 6px 12px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .pipeline-stats {
+            padding: 12px;
+          }
+
+          .stage-card {
+            padding: 8px 4px;
+          }
+
+          .card-header {
+            gap: 4px;
+          }
+
+          .stage-count {
+            font-size: 1.05rem;
+          }
+
+          .stage-label {
+            font-size: 0.65rem;
+          }
+
+          .quick-stats {
+            padding: 8px;
+            gap: 6px;
+          }
+
+          .stat-value {
+            font-size: 0.95rem;
+          }
+
+          .stat-label {
+            font-size: 0.65rem;
           }
         }
       `}</style>

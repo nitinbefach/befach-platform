@@ -32,7 +32,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'maersk',
     name: 'Maersk',
-    logo: '🚢',
+    logo: '',
     modes: ['fcl', 'lcl'],
     rating: 4.7,
     baseRates: { fcl20: 1800, fcl40: 2800, lcl: 45, air: 0 },
@@ -41,7 +41,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'msc',
     name: 'MSC Mediterranean',
-    logo: '🚢',
+    logo: '',
     modes: ['fcl', 'lcl'],
     rating: 4.5,
     baseRates: { fcl20: 1650, fcl40: 2600, lcl: 42, air: 0 },
@@ -50,7 +50,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'cma-cgm',
     name: 'CMA CGM',
-    logo: '🚢',
+    logo: '',
     modes: ['fcl', 'lcl'],
     rating: 4.6,
     baseRates: { fcl20: 1900, fcl40: 3000, lcl: 48, air: 0 },
@@ -59,7 +59,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'hapag',
     name: 'Hapag-Lloyd',
-    logo: '🚢',
+    logo: '',
     modes: ['fcl'],
     rating: 4.4,
     baseRates: { fcl20: 1750, fcl40: 2750, lcl: 0, air: 0 },
@@ -68,7 +68,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'one',
     name: 'ONE',
-    logo: '🚢',
+    logo: '',
     modes: ['fcl', 'lcl'],
     rating: 4.3,
     baseRates: { fcl20: 1550, fcl40: 2450, lcl: 40, air: 0 },
@@ -77,7 +77,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'emirates-cargo',
     name: 'Emirates SkyCargo',
-    logo: '✈️',
+    logo: '',
     modes: ['air'],
     rating: 4.8,
     baseRates: { fcl20: 0, fcl40: 0, lcl: 0, air: 5.80 },
@@ -86,7 +86,7 @@ export const INTERNATIONAL_CARRIERS: CarrierInfo[] = [
   {
     id: 'qatar-cargo',
     name: 'Qatar Airways Cargo',
-    logo: '✈️',
+    logo: '',
     modes: ['air'],
     rating: 4.6,
     baseRates: { fcl20: 0, fcl40: 0, lcl: 0, air: 5.20 },
@@ -115,7 +115,7 @@ export const LOCAL_PROVIDERS: LocalProviderInfo[] = [
   {
     id: 'delhivery',
     name: 'Delhivery Freight',
-    logo: '🚛',
+    logo: '',
     vehicleTypes: ['mini_truck', 'truck', 'trailer', 'container_truck'],
     rating: 4.5,
     baseRates: { mini_truck: 6500, truck: 14000, trailer: 28000, container_truck: 35000 },
@@ -124,7 +124,7 @@ export const LOCAL_PROVIDERS: LocalProviderInfo[] = [
   {
     id: 'rivigo',
     name: 'Rivigo',
-    logo: '🚛',
+    logo: '',
     vehicleTypes: ['truck', 'trailer', 'container_truck'],
     rating: 4.3,
     baseRates: { mini_truck: 0, truck: 15000, trailer: 30000, container_truck: 38000 },
@@ -133,7 +133,7 @@ export const LOCAL_PROVIDERS: LocalProviderInfo[] = [
   {
     id: 'blackbuck',
     name: 'BlackBuck',
-    logo: '🚛',
+    logo: '',
     vehicleTypes: ['mini_truck', 'truck', 'trailer', 'container_truck'],
     rating: 4.4,
     baseRates: { mini_truck: 5800, truck: 12500, trailer: 26000, container_truck: 33000 },
@@ -142,7 +142,7 @@ export const LOCAL_PROVIDERS: LocalProviderInfo[] = [
   {
     id: 'tci',
     name: 'TCI Freight',
-    logo: '🚛',
+    logo: '',
     vehicleTypes: ['mini_truck', 'truck', 'trailer', 'container_truck'],
     rating: 4.2,
     baseRates: { mini_truck: 7000, truck: 15500, trailer: 29000, container_truck: 36000 },
@@ -151,7 +151,7 @@ export const LOCAL_PROVIDERS: LocalProviderInfo[] = [
   {
     id: 'safexpress',
     name: 'SafeExpress',
-    logo: '🚛',
+    logo: '',
     vehicleTypes: ['mini_truck', 'truck'],
     rating: 4.1,
     baseRates: { mini_truck: 5500, truck: 13000, trailer: 0, container_truck: 0 },
@@ -160,7 +160,7 @@ export const LOCAL_PROVIDERS: LocalProviderInfo[] = [
   {
     id: 'gati',
     name: 'Gati KWE',
-    logo: '🚛',
+    logo: '',
     vehicleTypes: ['mini_truck', 'truck'],
     rating: 4.0,
     baseRates: { mini_truck: 5000, truck: 11500, trailer: 0, container_truck: 0 },
@@ -259,20 +259,20 @@ export interface VehicleInfo {
 }
 
 export const VEHICLE_TYPES: VehicleInfo[] = [
-  { id: 'mini_truck', name: 'Mini Truck', capacity: '1 Ton', priceRange: '₹5K–15K', icon: '🛻' },
-  { id: 'truck', name: 'Truck', capacity: '5 Tons', priceRange: '₹12K–35K', icon: '🚚' },
-  { id: 'trailer', name: 'Trailer', capacity: '15 Tons', priceRange: '₹25K–55K', icon: '🚛' },
-  { id: 'container_truck', name: 'Container Truck', capacity: '20 Tons', priceRange: '₹30K–65K', icon: '🏗️' },
+  { id: 'mini_truck', name: 'Mini Truck', capacity: '1 Ton', priceRange: '₹5K–15K', icon: '' },
+  { id: 'truck', name: 'Truck', capacity: '5 Tons', priceRange: '₹12K–35K', icon: '' },
+  { id: 'trailer', name: 'Trailer', capacity: '15 Tons', priceRange: '₹25K–55K', icon: '' },
+  { id: 'container_truck', name: 'Container Truck', capacity: '20 Tons', priceRange: '₹30K–65K', icon: '' },
 ];
 
 // ─── Material Types ────────────────────────────────────────────────────
 
 export const MATERIAL_TYPES = [
-  { id: 'general' as const, name: 'General', icon: '📦', description: 'Standard goods' },
-  { id: 'fragile' as const, name: 'Fragile', icon: '🔮', description: 'Handle with care' },
-  { id: 'perishable' as const, name: 'Perishable', icon: '🥶', description: 'Temperature sensitive' },
-  { id: 'hazardous' as const, name: 'Hazardous', icon: '⚠️', description: 'DG certified' },
-  { id: 'heavy_machinery' as const, name: 'Heavy Machinery', icon: '⚙️', description: 'ODC cargo' },
+  { id: 'general' as const, name: 'General', icon: '', description: 'Standard goods' },
+  { id: 'fragile' as const, name: 'Fragile', icon: '', description: 'Handle with care' },
+  { id: 'perishable' as const, name: 'Perishable', icon: '', description: 'Temperature sensitive' },
+  { id: 'hazardous' as const, name: 'Hazardous', icon: '', description: 'DG certified' },
+  { id: 'heavy_machinery' as const, name: 'Heavy Machinery', icon: '', description: 'ODC cargo' },
 ];
 
 // ─── Incoterms ─────────────────────────────────────────────────────────
@@ -288,9 +288,9 @@ export const INCOTERMS = [
 // ─── Urgency Options ───────────────────────────────────────────────────
 
 export const URGENCY_OPTIONS = [
-  { id: 'standard' as const, name: 'Standard', time: '2–5 days', multiplier: 1.0, icon: '📦' },
-  { id: 'express' as const, name: 'Express', time: '1–2 days', multiplier: 1.6, icon: '⚡' },
-  { id: 'same_day' as const, name: 'Same Day', time: 'Within 24hrs', multiplier: 2.5, icon: '🚀' },
+  { id: 'standard' as const, name: 'Standard', time: '2–5 days', multiplier: 1.0, icon: '' },
+  { id: 'express' as const, name: 'Express', time: '1–2 days', multiplier: 1.6, icon: '' },
+  { id: 'same_day' as const, name: 'Same Day', time: 'Within 24hrs', multiplier: 2.5, icon: '' },
 ];
 
 // ─── Approximate City Distances (km) for price calculation ─────────────

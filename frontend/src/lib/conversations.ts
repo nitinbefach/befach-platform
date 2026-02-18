@@ -247,7 +247,7 @@ export function sendMessage(
     ...conversations[index],
     messages: [...conversations[index].messages, message],
     lastMessageAt: now,
-    lastMessagePreview: type === 'rfq' ? '📋 RFQ sent' : content.substring(0, 50),
+    lastMessagePreview: type === 'rfq' ? 'RFQ sent' : content.substring(0, 50),
     status: 'awaiting_response',
     updatedAt: now,
   };
@@ -459,136 +459,6 @@ export function formatDateSeparator(dateString: string): string {
 // DEMO DATA GENERATION
 // ============================================
 
-const DEMO_SUPPLIERS = [
-  { name: 'Shenzhen Tech Industries', country: 'China', category: 'Electronics', verified: true, rating: 4.8 },
-  { name: 'Mumbai Trade Partners', country: 'India', category: 'Textiles', verified: true, rating: 4.5 },
-  { name: 'Vietnam Manufacturing Co.', country: 'Vietnam', category: 'Furniture', verified: false, rating: 4.2 },
-  { name: 'Taiwan Precision Corp.', country: 'Taiwan', category: 'Electronics', verified: true, rating: 4.9 },
-  { name: 'Bangkok Exports Ltd.', country: 'Thailand', category: 'Food & Beverage', verified: true, rating: 4.6 },
-];
-
-const DEMO_MESSAGES = [
-  { user: "Hi, I'm interested in your LED bulb products. Can you share your catalog?", supplier: "Thank you for your interest! Our MOQ is 1000 units at $2.50/pc. I'll send you our catalog." },
-  { user: "What's your best price for 10,000 units?", supplier: "For 10K units, we can offer $2.10/unit with free shipping to your port." },
-  { user: "Can you provide samples first?", supplier: "Yes, we can send 10 samples for $50 including shipping. Lead time is 3 days." },
-  { user: "I need custom packaging. Is that possible?", supplier: "Absolutely! Custom packaging is available for orders above 5000 units. Additional $0.05/unit." },
-];
-
-export function generateDemoConversations(): Conversation[] {
-  const conversations: Conversation[] = [];
-  const now = Date.now();
-
-  DEMO_SUPPLIERS.forEach((supplier, index) => {
-    const conversation: Conversation = {
-      id: `CONV-DEMO-${index}`,
-      supplierId: `SUP-${index}`,
-      supplierName: supplier.name,
-      supplierCountry: supplier.country,
-      supplierCategory: supplier.category,
-      supplierVerified: supplier.verified,
-      supplierRating: supplier.rating,
-      status: index === 0 ? 'active' : index === 1 ? 'quoted' : index === 2 ? 'awaiting_response' : 'active',
-      isFavorite: index === 0 || index === 3,
-      messages: [],
-      lastMessageAt: new Date(now - index * 3600000).toISOString(),
-      lastMessagePreview: '',
-      unreadCount: index === 0 ? 2 : index === 1 ? 1 : 0,
-      source: index % 2 === 0 ? 'requirement_match' : 'direct_contact',
-      createdAt: new Date(now - index * 86400000).toISOString(),
-      updatedAt: new Date(now - index * 3600000).toISOString(),
-    };
-
-    // Add messages
-    const messageSet = DEMO_MESSAGES[index % DEMO_MESSAGES.length];
-    const baseTime = now - index * 86400000;
-
-    // System message
-    conversation.messages.push({
-      id: `MSG-${index}-0`,
-      conversationId: conversation.id,
-      type: 'system',
-      content: 'Conversation started',
-      sender: 'system',
-      sentAt: new Date(baseTime).toISOString(),
-    });
-
-    // User message
-    conversation.messages.push({
-      id: `MSG-${index}-1`,
-      conversationId: conversation.id,
-      type: 'text',
-      content: messageSet.user,
-      sender: 'user',
-      sentAt: new Date(baseTime + 60000).toISOString(),
-      readAt: new Date(baseTime + 120000).toISOString(),
-    });
-
-    // Supplier response
-    conversation.messages.push({
-      id: `MSG-${index}-2`,
-      conversationId: conversation.id,
-      type: 'text',
-      content: messageSet.supplier,
-      sender: 'supplier',
-      sentAt: new Date(baseTime + 180000).toISOString(),
-      readAt: index > 1 ? new Date(baseTime + 240000).toISOString() : undefined,
-    });
-
-    // Add RFQ for first conversation
-    if (index === 0) {
-      conversation.messages.push({
-        id: `MSG-${index}-3`,
-        conversationId: conversation.id,
-        type: 'rfq',
-        content: 'Request for Quote: LED Bulb 9W',
-        sender: 'user',
-        sentAt: new Date(baseTime + 300000).toISOString(),
-        rfqData: {
-          productName: 'LED Bulb 9W Cool White',
-          quantity: '10000',
-          unit: 'pieces',
-          targetPrice: '$2.00/unit',
-          specifications: 'E27 base, 6500K color temperature, 800 lumens',
-          deliveryDate: '30 days',
-        },
-      });
-    }
-
-    // Add Quote for second conversation
-    if (index === 1) {
-      conversation.messages.push({
-        id: `MSG-${index}-3`,
-        conversationId: conversation.id,
-        type: 'quote',
-        content: 'Quote received',
-        sender: 'supplier',
-        sentAt: new Date(baseTime + 300000).toISOString(),
-        quoteData: {
-          unitPrice: 2.30,
-          currency: 'USD',
-          moq: 5000,
-          leadTime: 25,
-          validUntil: new Date(now + 7 * 86400000).toISOString(),
-          notes: 'Price includes FOB shipping. Custom packaging available.',
-        },
-      });
-    }
-
-    conversation.lastMessagePreview = conversation.messages[conversation.messages.length - 1].content.substring(0, 50);
-    conversations.push(conversation);
-  });
-
-  return conversations;
-}
-
-export function initializeDemoData(): void {
-  const existing = getStoredConversations();
-  if (existing.length === 0) {
-    const demoConversations = generateDemoConversations();
-    saveConversations(demoConversations);
-  }
-}
-
 // ============================================
 // COUNTRY FLAG HELPER
 // ============================================
@@ -609,5 +479,5 @@ export function getCountryFlag(country: string): string {
     'Germany': '🇩🇪',
     'UK': '🇬🇧',
   };
-  return flags[country] || '🌍';
+  return flags[country] || '';
 }

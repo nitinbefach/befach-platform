@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { CATEGORIES, getSearchHistory, SearchHistoryItem } from '@/lib/suppliers';
+import { Search, Clock } from 'lucide-react';
 
 interface HeroSearchProps {
   onSearch: (query: string, category: string | null) => void;
@@ -62,7 +63,7 @@ export default function HeroSearch({
 
         <form className="search-box" onSubmit={handleSubmit}>
           <div className="search-input-wrapper">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><Search size={18} /></span>
             <input
               ref={inputRef}
               type="text"
@@ -88,7 +89,7 @@ export default function HeroSearch({
                   className="history-item"
                   onClick={() => handleHistoryClick(item.query)}
                 >
-                  <span className="history-icon">🕒</span>
+                  <span className="history-icon"><Clock size={14} /></span>
                   <span className="history-query">{item.query}</span>
                   <span className="history-count">{item.resultCount} results</span>
                 </button>
@@ -356,8 +357,25 @@ export default function HeroSearch({
         }
 
         @media (max-width: 768px) {
+          .hero-section {
+            padding: 28px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+          }
+
           .hero-content h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+          }
+
+          .hero-content > p {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+          }
+
+          .search-box {
+            padding: 14px;
+            border-radius: 12px;
           }
 
           .search-input-wrapper {
@@ -375,7 +393,43 @@ export default function HeroSearch({
 
           .category-pill {
             padding: 6px 12px;
+            font-size: 0.82rem;
+          }
+
+          .popular-searches {
+            gap: 8px;
+          }
+
+          .popular-searches > span {
+            font-size: 0.82rem;
+          }
+
+          .popular-searches button {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-section {
+            padding: 20px 12px;
+          }
+
+          .hero-content h1 {
+            font-size: 1.3rem;
+          }
+
+          .hero-content > p {
             font-size: 0.85rem;
+            margin-bottom: 16px;
+          }
+
+          .search-box {
+            padding: 12px;
+          }
+
+          .search-input-wrapper {
+            padding: 10px;
           }
         }
       `}</style>

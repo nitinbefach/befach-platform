@@ -53,14 +53,6 @@ export function BottomNav({ className = '' }: BottomNavProps) {
               )}
             </motion.div>
             <span className="nav-label">{item.label}</span>
-            {isActive && (
-              <motion.div
-                className="active-indicator"
-                layoutId="bottomNavIndicator"
-                initial={false}
-                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-              />
-            )}
           </Link>
         );
       })}
@@ -130,17 +122,6 @@ export function BottomNav({ className = '' }: BottomNavProps) {
 
         .bottom-nav-item.active svg {
           transform: scale(1.1);
-        }
-
-        .bottom-nav-item .active-indicator {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 20px;
-          height: 3px;
-          background: var(--accent-primary);
-          border-radius: 0 0 3px 3px;
         }
 
         /* Primary button (center Add button) */

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { Package, MapPin, ClipboardList, Wrench, FileText, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
 interface TrackingInfo {
@@ -115,7 +116,7 @@ export default function TrackSimplePage() {
   return (
     <AppLayout>
       <div className="content-header">
-        <h1>📦 Track Your Shipment</h1>
+        <h1><Package size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Track Your Shipment</h1>
         <p>Enter your order ID or select from your active orders</p>
       </div>
 
@@ -186,7 +187,7 @@ export default function TrackSimplePage() {
           <div className="tracking-grid">
             {/* Timeline */}
             <div className="timeline-card">
-              <h3>📍 Tracking Timeline</h3>
+              <h3><MapPin size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Tracking Timeline</h3>
               <div className="timeline">
                 {selectedOrder.timeline.map((step, idx) => (
                   <div 
@@ -199,7 +200,7 @@ export default function TrackSimplePage() {
                     <div className="timeline-content">
                       <strong>{step.status}</strong>
                       <span className="timeline-date">{step.date}</span>
-                      {step.location && <span className="timeline-location">📍 {step.location}</span>}
+                      {step.location && <span className="timeline-location"><MapPin size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> {step.location}</span>}
                     </div>
                   </div>
                 ))}
@@ -208,7 +209,7 @@ export default function TrackSimplePage() {
 
             {/* Shipment Details */}
             <div className="details-card">
-              <h3>📋 Shipment Details</h3>
+              <h3><ClipboardList size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Shipment Details</h3>
               <div className="detail-item">
                 <label>Carrier</label>
                 <span>{selectedOrder.shipmentDetails.carrier}</span>
@@ -237,12 +238,12 @@ export default function TrackSimplePage() {
 
             {/* Actions */}
             <div className="actions-card">
-              <h3>🔧 Quick Actions</h3>
+              <h3><Wrench size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Quick Actions</h3>
               <Link href="/documents" className="action-btn">
-                📄 View Documents
+                <FileText size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> View Documents
               </Link>
               <Link href="/chat-support" className="action-btn">
-                💬 Chat with Support
+                <MessageCircle size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Chat with Support
               </Link>
               <button className="action-btn" onClick={() => window.print()}>
                 🖨️ Print Tracking Details

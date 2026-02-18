@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { Modal } from '@/components/ui';
+import { Users, Lock, ClipboardList } from 'lucide-react';
 import { useUserMode } from '@/context/UserModeContext';
 
 interface TeamMember {
@@ -120,12 +121,10 @@ export default function TeamManagementPage() {
   };
 
   return (
-    <AppLayout>
-      <div className="content-header">
+    <AppLayout>      <div className="content-header">
         <div>
-          <h1>👥 Team Management</h1>
-          <p>Manage your team members and their access levels</p>
-        </div>
+          <h1><Users size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Team Management</h1>
+          <p>Manage your team members and their access levels</p>        </div>
         <button 
           className="btn-primary"
           onClick={() => setShowInviteModal(true)}
@@ -154,7 +153,7 @@ export default function TeamManagementPage() {
         </div>
         {activeMembers >= maxSeats && (
           <p className="seats-warning">
-            🔒 You&apos;ve reached your seat limit. Upgrade your plan to add more members.
+            <Lock size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> You&apos;ve reached your seat limit. Upgrade your plan to add more members.
           </p>
         )}
       </div>
@@ -238,7 +237,7 @@ export default function TeamManagementPage() {
 
       {/* Roles Guide */}
       <div className="roles-guide">
-        <h2>📋 Roles & Permissions</h2>
+        <h2><ClipboardList size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Roles & Permissions</h2>
         <div className="roles-grid">
           {(Object.keys(roleDescriptions) as TeamMember['role'][]).map(role => (
             <div key={role} className="role-card">

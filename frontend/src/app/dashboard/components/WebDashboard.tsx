@@ -17,7 +17,6 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { AppLayout } from '@/components/layout';
-import { GuidedTour } from '@/components/onboarding';
 import { usePrefersReducedMotion } from '@/hooks/useMobile';
 import { Package, ArrowRight, Star, Activity } from 'lucide-react';
 import {
@@ -167,11 +166,6 @@ export default function WebDashboard() {
 
   return (
     <AppLayout searchPlaceholder="Search dashboard, orders, suppliers...">
-      {/* Guided Tour */}
-      {showTour && (
-        <GuidedTour onComplete={handleCompleteTour} />
-      )}
-
       <div className="dashboard-container">
         {/* Welcome & Actions Bar */}
         <motion.div

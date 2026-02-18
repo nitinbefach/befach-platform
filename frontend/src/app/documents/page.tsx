@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { Receipt, ClipboardList, Ship, Package, ScrollText, Landmark, FileText, BookOpen, Check, Clock, Pause } from 'lucide-react';
 
 interface Document {
   id: string;
@@ -88,13 +89,13 @@ const mockDocuments: Document[] = [
   },
 ];
 
-const typeIcons: Record<Document['type'], string> = {
-  invoice: '🧾',
-  boe: '📋',
-  shipping: '🚢',
-  packing: '📦',
-  certificate: '📜',
-  customs: '🏛️'
+const typeIcons: Record<Document['type'], React.ReactNode> = {
+  invoice: <Receipt size={16} />,
+  boe: <ClipboardList size={16} />,
+  shipping: <Ship size={16} />,
+  packing: <Package size={16} />,
+  certificate: <ScrollText size={16} />,
+  customs: <Landmark size={16} />
 };
 
 const typeLabels: Record<Document['type'], string> = {
@@ -147,11 +148,9 @@ export default function DocumentsPage() {
   };
 
   return (
-    <AppLayout>
-      <div className="content-header">
-        <h1>📄 My Documents</h1>
-        <p>Access all your import documents in one place</p>
-      </div>
+    <AppLayout>      <div className="content-header">
+        <h1><FileText size={24} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> My Documents</h1>
+        <p>Access all your import documents in one place</p>      </div>
 
       {/* Filters */}
       <div className="filters-section">
@@ -219,8 +218,8 @@ export default function DocumentsPage() {
                         className="doc-status"
                         style={{ color: getStatusColor(doc.status) }}
                       >
-                        {doc.status === 'ready' ? '✓ Ready' : 
-                         doc.status === 'processing' ? '⏳ Processing' : '⏸ Pending'}
+                        {doc.status === 'ready' ? <><Check size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> Ready</> :
+                         doc.status === 'processing' ? <><Clock size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> Processing</> : <><Pause size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} /> Pending</>}
                       </span>
                       {doc.status === 'ready' && (
                         <button 
@@ -305,7 +304,7 @@ export default function DocumentsPage() {
 
       {/* Help Section */}
       <div className="help-section">
-        <h3>📚 Document Guide</h3>
+        <h3><BookOpen size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Document Guide</h3>
         <div className="help-grid">
           {Object.entries(typeLabels).map(([key, label]) => (
             <div key={key} className="help-item">

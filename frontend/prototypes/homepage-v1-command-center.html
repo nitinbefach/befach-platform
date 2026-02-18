@@ -1,0 +1,2725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Befach International — Your Command Center for Global Trade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* ===== CSS CUSTOM PROPERTIES ===== */
+    :root {
+      --primary-start: #f59e0b;
+      --primary-end: #d97706;
+      --primary-mid: #e8930f;
+      --dark: #111827;
+      --dark-card: #1f2937;
+      --light-bg: #faf9f7;
+      --white: #ffffff;
+      --text-heading: #111827;
+      --text-body: #6b7280;
+      --text-muted: #9ca3af;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+      --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+      --gradient-primary: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      --gradient-cta: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+      --container: 1280px;
+      --header-height: 72px;
+    }
+
+    /* ===== RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-heading);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    /* ===== UTILITIES ===== */
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 48px);
+    }
+
+    .gradient-text {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary-end);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #b45309;
+    }
+
+    .btn-outline {
+      border: 2px solid var(--border);
+      color: var(--text-heading);
+      background: var(--white);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary-start);
+      color: var(--primary-end);
+      background: #fffbeb;
+    }
+
+    .btn-white {
+      background: var(--white);
+      color: var(--primary-end);
+      font-weight: 700;
+    }
+
+    .btn-white:hover {
+      background: #f5f5f4;
+    }
+
+    .btn-outline-white {
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: var(--white);
+    }
+
+    .btn-outline-white:hover {
+      border-color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary-end);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: var(--text-heading);
+    }
+
+    .section-subtitle {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--text-body);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 1000;
+      transition: box-shadow 0.3s;
+    }
+
+    .header.scrolled {
+      box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 48px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gradient-primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .logo-icon::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border: 3px solid var(--white);
+      border-radius: 3px;
+      transform: rotate(45deg);
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    .footer-logo-img {
+      height: 38px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-body);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-heading);
+    }
+
+    .nav-links a.active {
+      color: var(--text-heading);
+      font-weight: 600;
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+    }
+
+    .header-cta {
+      padding: 10px 22px;
+      font-size: 0.88rem;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-heading);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 999;
+      flex-direction: column;
+      padding: 24px;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-heading);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .mobile-nav .btn {
+      margin-top: 16px;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+
+      .nav-links,
+      .header-cta {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding-top: calc(var(--header-height) + 48px);
+      padding-bottom: 64px;
+      background: var(--white);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 40% 60%;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-body);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-trust {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .hero-trust span {
+      margin: 0 6px;
+      opacity: 0.4;
+    }
+
+    /* Browser Mockup */
+    .hero-visual {
+      position: relative;
+    }
+
+    .browser-frame {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .browser-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #f9fafb;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .browser-dot:nth-child(1) {
+      background: #ef4444;
+    }
+
+    .browser-dot:nth-child(2) {
+      background: #f59e0b;
+    }
+
+    .browser-dot:nth-child(3) {
+      background: #22c55e;
+    }
+
+    .browser-url {
+      flex: 1;
+      height: 28px;
+      background: var(--white);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    .browser-url i {
+      width: 12px;
+      height: 12px;
+      margin-right: 6px;
+      opacity: 0.5;
+    }
+
+    .browser-content {
+      display: flex;
+      min-height: 320px;
+    }
+
+    /* Dashboard sidebar */
+    .dash-sidebar {
+      width: 150px;
+      background: var(--dark);
+      padding: 16px 0;
+      flex-shrink: 0;
+    }
+
+    .dash-sidebar-brand {
+      padding: 0 14px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 10px;
+    }
+
+    .dash-sidebar-brand span {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--primary-start);
+    }
+
+    .dash-sidebar-brand small {
+      display: block;
+      font-size: 0.5rem;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.5);
+      transition: all 0.2s;
+    }
+
+    .dash-nav-item.active {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+      border-right: 2px solid var(--primary-start);
+    }
+
+    .dash-nav-item i {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Dashboard main */
+    .dash-main {
+      flex: 1;
+      min-width: 0;
+      padding: 14px 14px;
+      background: var(--light-bg);
+    }
+
+    .dash-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .dash-header h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .dash-header-date {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      background: var(--white);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .dash-quick-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .dash-quick-action {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 8px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: var(--text-body);
+      white-space: nowrap;
+    }
+
+    .dash-quick-action i {
+      width: 12px;
+      height: 12px;
+      color: var(--primary-end);
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .dash-stat-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 10px 10px;
+      border: 1px solid var(--border-light);
+    }
+
+    .dash-stat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .dash-stat-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dash-stat-icon i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .dash-stat-icon.orange {
+      background: #fff7ed;
+      color: var(--primary-end);
+    }
+
+    .dash-stat-icon.green {
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .dash-stat-icon.blue {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .dash-stat-icon.red {
+      background: #fef2f2;
+      color: #ef4444;
+    }
+
+    .dash-stat-badge {
+      font-size: 0.5rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .dash-stat-label {
+      font-size: 0.58rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .dash-stat-value {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-heading);
+    }
+
+    .dash-stat-sub {
+      font-size: 0.5rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .dash-secondary-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .dash-secondary-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 8px 8px;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dash-secondary-card .sec-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dash-secondary-card .sec-icon i {
+      width: 12px;
+      height: 12px;
+    }
+
+    .dash-secondary-card .sec-value {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-heading);
+    }
+
+    .dash-secondary-card .sec-label {
+      font-size: 0.52rem;
+      color: var(--text-muted);
+    }
+
+    /* Mini chart */
+    .dash-chart {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--border-light);
+    }
+
+    .dash-chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .dash-chart-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .dash-chart-tabs {
+      display: flex;
+      gap: 2px;
+    }
+
+    .dash-chart-tab {
+      font-size: 0.55rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .dash-chart-tab.active {
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    .mini-chart {
+      width: 100%;
+      height: 80px;
+    }
+
+    .mini-chart polyline {
+      fill: none;
+      stroke: var(--primary-start);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mini-chart .chart-fill {
+      fill: url(#chartGrad);
+      opacity: 0.15;
+    }
+
+    .mini-chart .chart-grid {
+      stroke: var(--border);
+      stroke-width: 0.5;
+    }
+
+
+    @media (max-width: 1024px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+      }
+
+      .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-ctas {
+        justify-content: center;
+      }
+
+      .hero-trust {
+        text-align: center;
+      }
+
+      .dash-sidebar {
+        width: 120px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        min-height: auto;
+        padding-top: calc(var(--header-height) + 40px);
+        padding-bottom: 48px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        margin-bottom: 28px;
+        font-size: 0.95rem;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .hero-ctas {
+        gap: 12px;
+      }
+
+      .hero-ctas .btn {
+        padding: 14px 28px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding-top: calc(var(--header-height) + 32px);
+        padding-bottom: 36px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+        margin-bottom: 14px;
+      }
+
+      .hero-subtitle {
+        font-size: 0.88rem;
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hero-ctas .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 24px;
+        font-size: 0.88rem;
+      }
+
+      .hero-trust {
+        font-size: 0.75rem;
+        margin-top: 4px;
+      }
+
+      .dash-secondary-stats {
+        display: none;
+      }
+
+      .dash-chart {
+        display: none;
+      }
+    }
+
+
+    /* ===== INTERACTIVE DEMO ===== */
+    .demo-section {
+      padding: 80px 0;
+      background: var(--light-bg);
+    }
+
+    .demo-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .demo-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .demo-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-card:hover {
+      border-color: var(--primary-start);
+    }
+
+    .demo-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .demo-card-icon i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .demo-card-icon.orange {
+      background: #fef3c7;
+      color: var(--primary-end);
+    }
+
+    .demo-card-icon.blue {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .demo-card-icon.green {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .demo-card-icon.purple {
+      background: #ede9fe;
+      color: #7c3aed;
+    }
+
+    .demo-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .demo-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .demo-form select,
+    .demo-form input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--text-heading);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .demo-form select:focus,
+    .demo-form input:focus {
+      border-color: var(--primary-start);
+    }
+
+    .demo-form .demo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .demo-btn {
+      padding: 10px 16px;
+      background: var(--primary-end);
+      color: var(--white);
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      transition: all 0.25s;
+      margin-top: auto;
+    }
+
+    .demo-btn:hover {
+      background: linear-gradient(135deg, #d97706, #b45309);
+    }
+
+    .demo-result {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .demo-result.show {
+      display: block;
+    }
+
+    .demo-result-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .demo-result-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-heading);
+    }
+
+    .demo-result-detail {
+      font-size: 0.72rem;
+      color: var(--text-body);
+      margin-top: 4px;
+    }
+
+    /* Rate results */
+    .rate-results {
+      margin-top: 12px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .rate-results.show {
+      display: flex;
+    }
+
+    .rate-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: var(--light-bg);
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    .rate-row-carrier {
+      font-weight: 600;
+    }
+
+    .rate-row-price {
+      font-weight: 700;
+      color: var(--primary-end);
+    }
+
+    .rate-row-time {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    /* HS result */
+    .hs-result {
+      margin-top: 12px;
+      padding: 12px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .hs-result.show {
+      display: block;
+    }
+
+    .hs-code-tag {
+      display: inline-block;
+      background: #2563eb;
+      color: var(--white);
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .hs-desc {
+      font-size: 0.78rem;
+      color: var(--text-body);
+    }
+
+    .hs-confidence {
+      font-size: 0.68rem;
+      color: #16a34a;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Chat result */
+    .chat-result {
+      margin-top: 12px;
+      display: none;
+    }
+
+    .chat-result.show {
+      display: block;
+    }
+
+    .chat-bubble {
+      background: var(--light-bg);
+      border-radius: 12px 12px 12px 4px;
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      color: var(--text-heading);
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .chat-bubble::before {
+      content: 'Befach AI';
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--primary-end);
+      margin-bottom: 4px;
+    }
+
+    /* Mode selector */
+    .mode-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      background: var(--light-bg);
+      padding: 3px;
+      border-radius: 6px;
+    }
+
+    .mode-option {
+      padding: 6px 8px;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-muted);
+    }
+
+    .mode-option.active {
+      background: var(--white);
+      color: var(--text-heading);
+    }
+
+    .mode-option:hover {
+      color: var(--text-heading);
+    }
+
+    @media (max-width: 1024px) {
+      .demo-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        padding-bottom: 16px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .demo-card {
+        min-width: 300px;
+        scroll-snap-align: center;
+        flex-shrink: 0;
+      }
+
+      .demo-section {
+        padding: 48px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .demo-section {
+        padding: 32px 0;
+      }
+
+      .demo-card {
+        min-width: 270px;
+      }
+
+      .demo-form .demo-row {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-card h3 {
+        font-size: 0.88rem;
+      }
+    }
+
+    /* ===== BENTO GRID ===== */
+    .services-section {
+      padding: 80px 0;
+      background: var(--white);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .services-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto auto;
+      gap: 16px;
+    }
+
+    .bento-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bento-card:hover {
+      border-color: var(--primary-start);
+    }
+
+    .bento-card.span-2 {
+      grid-column: span 2;
+    }
+
+    .bento-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .bento-icon i {
+      width: 18px;
+      height: 18px;
+    }
+
+    .bento-icon.orange {
+      background: #fef3c7;
+      color: var(--primary-end);
+    }
+
+    .bento-icon.blue {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .bento-icon.green {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .bento-icon.purple {
+      background: #ede9fe;
+      color: #7c3aed;
+    }
+
+    .bento-icon.red {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .bento-icon.teal {
+      background: #ccfbf1;
+      color: #0d9488;
+    }
+
+    .bento-icon.indigo {
+      background: #e0e7ff;
+      color: #4f46e5;
+    }
+
+    .bento-icon.pink {
+      background: #fce7f3;
+      color: #db2777;
+    }
+
+    .bento-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .bento-card p {
+      font-size: 0.82rem;
+      color: var(--text-body);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .bento-visual {
+      margin-top: auto;
+      flex-shrink: 0;
+    }
+
+    /* Mini bar chart */
+    .mini-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 70px;
+      padding-top: 10px;
+    }
+
+    .mini-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+    }
+
+    .mini-bar-label {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Carrier logos strip */
+    .carrier-strip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .carrier-badge {
+      padding: 4px 10px;
+      background: var(--light-bg);
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* Mini trend line */
+    .mini-trend {
+      width: 100%;
+      height: 50px;
+    }
+
+    .mini-trend polyline {
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Stat badge */
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--light-bg);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .stat-badge i {
+      width: 16px;
+      height: 16px;
+      color: var(--primary-end);
+    }
+
+    /* Checklist */
+    .mini-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-body);
+    }
+
+    .check-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #dcfce7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-dot i {
+      width: 10px;
+      height: 10px;
+      color: #16a34a;
+    }
+
+    /* Chat preview */
+    .chat-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-msg {
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+
+    .chat-msg.user {
+      background: var(--primary-end);
+      color: var(--white);
+      align-self: flex-end;
+      border-radius: 10px 10px 4px 10px;
+    }
+
+    .chat-msg.bot {
+      background: var(--light-bg);
+      color: var(--text-heading);
+      align-self: flex-start;
+      border-radius: 10px 10px 10px 4px;
+    }
+
+    @media (max-width: 1024px) {
+      .bento-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .bento-card.span-2 {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .bento-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .bento-card.span-2 {
+        grid-column: span 1;
+      }
+
+      .services-section {
+        padding: 48px 0;
+      }
+
+      .services-header {
+        margin-bottom: 32px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-section {
+        padding: 32px 0;
+      }
+
+      .bento-card {
+        padding: 18px;
+      }
+
+      .bento-card h3 {
+        font-size: 0.9rem;
+      }
+
+      .bento-card p {
+        font-size: 0.78rem;
+      }
+
+      .mini-bar-label {
+        display: none;
+      }
+
+      .mini-bars {
+        height: 50px;
+      }
+
+      .stat-badge {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+      }
+
+      .chat-msg {
+        font-size: 0.7rem;
+      }
+    }
+
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-section {
+      padding: 80px 0;
+      background: var(--white);
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .testimonials-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .testimonial-card {
+      background: var(--light-bg);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .testimonial-metric {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-metric-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary-start);
+      line-height: 1;
+    }
+
+    .testimonial-metric-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .testimonial-quote {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-body);
+      margin-bottom: 24px;
+      flex: 1;
+    }
+
+    .testimonial-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .testimonial-avatar.a1 {
+      background: #d97706;
+    }
+
+    .testimonial-avatar.a2 {
+      background: #2563eb;
+    }
+
+    .testimonial-avatar.a3 {
+      background: #7c3aed;
+    }
+
+    .testimonial-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .testimonial-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1024px) {
+      .testimonials-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials-section {
+        padding: 48px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .testimonials-section {
+        padding: 32px 0;
+      }
+
+      .testimonial-card {
+        padding: 24px;
+      }
+
+      .testimonial-metric-value {
+        font-size: 1.5rem;
+      }
+
+      .testimonial-quote {
+        font-size: 0.88rem;
+      }
+
+      .testimonials-header {
+        margin-bottom: 32px;
+      }
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 56px 0;
+      background: var(--white);
+      text-align: center;
+      position: relative;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: var(--text-heading);
+      margin-bottom: 16px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.05rem);
+      color: var(--text-body);
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-buttons .btn-primary {
+      background: var(--gradient-primary);
+      color: var(--white);
+      padding: 14px 32px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      transition: opacity 0.2s;
+    }
+
+    .cta-buttons .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .cta-buttons .btn-outline-light {
+      border: 1.5px solid var(--border);
+      color: var(--text-heading);
+      padding: 14px 32px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .cta-buttons .btn-outline-light:hover {
+      border-color: var(--text-muted);
+      background: var(--light-bg);
+    }
+
+    .cta-note {
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .cta-note span {
+      margin: 0 6px;
+      opacity: 0.4;
+    }
+
+    @media (max-width: 768px) {
+      .cta-section {
+        padding: 40px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cta-section {
+        padding: 28px 0;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .cta-buttons .btn-primary,
+      .cta-buttons .btn-outline-light {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .cta-title {
+        font-size: 1.5rem;
+      }
+
+      .cta-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+      }
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #1c1917;
+      padding: 56px 0 0;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-brand {
+      text-align: center;
+      padding: 28px 0 8px;
+    }
+
+    .footer-brand .logo {
+      justify-content: center;
+    }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      margin-top: 12px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-col h4 {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.85rem;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--primary-start);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      font-size: 0.8rem;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-socials a {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .footer-socials a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--white);
+    }
+
+    .footer-socials a i {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .footer {
+        padding: 40px 0 0;
+      }
+
+      .footer-brand p {
+        font-size: 0.78rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        padding: 28px 0 0;
+      }
+
+      .footer-col a {
+        padding: 6px 0;
+        font-size: 0.82rem;
+      }
+
+      .footer-grid {
+        gap: 24px;
+        padding-bottom: 28px;
+      }
+
+      .footer-bottom {
+        padding: 18px 0;
+        font-size: 0.72rem;
+      }
+
+      .footer-socials a {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* ===== GLOBAL SMALL MOBILE ===== */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 14px;
+      }
+
+      .section-label {
+        font-size: 0.72rem;
+        margin-bottom: 8px;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+      }
+
+      .section-subtitle {
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <img src="../public/logo.png" alt="Befach International" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#services">Services</a>
+        <a href="#demo">Products</a>
+        <a href="#stats">About</a>
+        <a href="#cta">Contact</a>
+      </nav>
+      <a href="#" class="btn btn-primary header-cta">Start Free Trial</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#" onclick="closeMobileNav()">Home</a>
+    <a href="#services" onclick="closeMobileNav()">Services</a>
+    <a href="#demo" onclick="closeMobileNav()">Products</a>
+    <a href="#stats" onclick="closeMobileNav()">About</a>
+    <a href="#cta" onclick="closeMobileNav()">Contact</a>
+    <a href="#" class="btn btn-primary" style="margin-top:12px;justify-content:center;">Start Free Trial</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <!-- Left -->
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Your <span class="gradient-text">Command Center</span><br>for Global Trade
+        </h1>
+        <p class="hero-subtitle">
+          Calculate landed costs, compare 50+ carrier rates, track shipments, and manage compliance &mdash; all from one
+          intelligent dashboard.
+        </p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-primary">
+            <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+            Start Free Trial
+          </a>
+          <a href="#" class="btn btn-outline">
+            <i data-lucide="play-circle" style="width:18px;height:18px;"></i>
+            Watch Demo
+          </a>
+        </div>
+        <p class="hero-trust">
+          No credit card required <span>&middot;</span> 14-day free trial <span>&middot;</span> 5-minute setup
+        </p>
+      </div>
+
+      <!-- Right: Browser Mockup -->
+      <div class="hero-visual">
+        <div class="browser-frame" draggable="false">
+          <div class="browser-topbar">
+            <div class="browser-dots">
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+              <div class="browser-dot"></div>
+            </div>
+            <div class="browser-url">
+              <i data-lucide="lock"></i>
+              app.befach.com/dashboard
+            </div>
+          </div>
+          <div class="browser-content" draggable="false">
+            <!-- Sidebar -->
+            <div class="dash-sidebar">
+              <div class="dash-sidebar-brand">
+                <span>BEFACH</span>
+                <small>International</small>
+              </div>
+              <div class="dash-nav-item active">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="receipt"></i> Cost Calculator
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="ship"></i> Shipments
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="search"></i> Sourcing
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="file-check-2"></i> Compliance
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="trending-up"></i> Market Insights
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="message-square"></i> AI Assistant
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="package"></i> Orders
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="wallet"></i> Payments
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="users"></i> Team
+              </div>
+              <div class="dash-nav-item">
+                <i data-lucide="settings"></i> Settings
+              </div>
+            </div>
+            <!-- Main -->
+            <div class="dash-main">
+              <div class="dash-header">
+                <h3>Welcome back, Befach!</h3>
+                <div class="dash-quick-actions">
+                  <div class="dash-quick-action"><i data-lucide="file-plus"></i> Share Requirement</div>
+                  <div class="dash-quick-action"><i data-lucide="map-pin"></i> Track Shipment</div>
+                  <div class="dash-quick-action"><i data-lucide="search"></i> Find Suppliers</div>
+                  <div class="dash-quick-action"><i data-lucide="message-square"></i> AI Assistant</div>
+                </div>
+              </div>
+              <div class="dash-stats">
+                <div class="dash-stat-card">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon orange"><i data-lucide="shopping-cart"></i></div>
+                    <span class="dash-stat-badge">+12%</span>
+                  </div>
+                  <div class="dash-stat-value">123</div>
+                  <div class="dash-stat-label">Total Orders</div>
+                  <div class="dash-stat-sub">30 this month</div>
+                </div>
+                <div class="dash-stat-card">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon green"><i data-lucide="dollar-sign"></i></div>
+                    <span class="dash-stat-badge">+18%</span>
+                  </div>
+                  <div class="dash-stat-value">$258K</div>
+                  <div class="dash-stat-label">Total Spend</div>
+                  <div class="dash-stat-sub">$64.8K this month</div>
+                </div>
+                <div class="dash-stat-card">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon red"><i data-lucide="users"></i></div>
+                    <span class="dash-stat-badge">+25%</span>
+                  </div>
+                  <div class="dash-stat-value">12</div>
+                  <div class="dash-stat-label">Active Suppliers</div>
+                  <div class="dash-stat-sub">8 countries</div>
+                </div>
+                <div class="dash-stat-card">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon blue"><i data-lucide="trending-up"></i></div>
+                    <span class="dash-stat-badge">+3%</span>
+                  </div>
+                  <div class="dash-stat-value">12.0%</div>
+                  <div class="dash-stat-label">Avg. Savings</div>
+                  <div class="dash-stat-sub">$31K saved</div>
+                </div>
+              </div>
+              <div class="dash-secondary-stats">
+                <div class="dash-secondary-card">
+                  <div class="sec-icon" style="background:#f0fdf4;color:#16a34a;"><i data-lucide="clock"></i></div>
+                  <div>
+                    <div class="sec-value">94%</div>
+                    <div class="sec-label">On-Time Delivery</div>
+                  </div>
+                </div>
+                <div class="dash-secondary-card">
+                  <div class="sec-icon" style="background:#fffbeb;color:#d97706;"><i data-lucide="star"></i></div>
+                  <div>
+                    <div class="sec-value">4.7/5</div>
+                    <div class="sec-label">Supplier Rating</div>
+                  </div>
+                </div>
+                <div class="dash-secondary-card">
+                  <div class="sec-icon" style="background:#fef2f2;color:#ef4444;"><i data-lucide="alert-circle"></i>
+                  </div>
+                  <div>
+                    <div class="sec-value">3</div>
+                    <div class="sec-label">Pending Approvals</div>
+                  </div>
+                </div>
+                <div class="dash-secondary-card">
+                  <div class="sec-icon" style="background:#eff6ff;color:#2563eb;"><i data-lucide="check-circle-2"></i>
+                  </div>
+                  <div>
+                    <div class="sec-value">24</div>
+                    <div class="sec-label">Completed Orders</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dash-chart">
+                <div class="dash-chart-header">
+                  <div class="dash-chart-title">Revenue & Savings</div>
+                  <div class="dash-chart-tabs">
+                    <div class="dash-chart-tab">3M</div>
+                    <div class="dash-chart-tab active">6M</div>
+                    <div class="dash-chart-tab">1Y</div>
+                  </div>
+                </div>
+                <svg class="mini-chart" viewBox="0 0 400 80" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#f59e0b" />
+                      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <line class="chart-grid" x1="0" y1="20" x2="400" y2="20" />
+                  <line class="chart-grid" x1="0" y1="40" x2="400" y2="40" />
+                  <line class="chart-grid" x1="0" y1="60" x2="400" y2="60" />
+                  <polygon class="chart-fill"
+                    points="0,65 50,58 100,50 150,45 200,40 250,32 300,28 350,20 400,15 400,80 0,80" />
+                  <polyline points="0,65 50,58 100,50 150,45 200,40 250,32 300,28 350,20 400,15" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== INTERACTIVE DEMO ===== -->
+  <section class="demo-section" id="demo">
+    <div class="container">
+      <div class="demo-header">
+        <p class="section-label">Check it out</p>
+        <h2 class="section-title">Watch trade get simple</h2>
+        <p class="section-subtitle">No signup needed. Play with our core tools right here and see how Befach simplifies
+          your trade operations.</p>
+      </div>
+      <div class="demo-grid">
+        <!-- Card 1: Cost Calculator -->
+        <div class="demo-card">
+          <div class="demo-card-icon orange"><i data-lucide="calculator"></i></div>
+          <h3>Cost Calculator</h3>
+          <div class="demo-form">
+            <div class="demo-row">
+              <select id="calcOrigin">
+                <option value="">Origin</option>
+                <option value="CN">China</option>
+                <option value="IN">India</option>
+                <option value="VN">Vietnam</option>
+                <option value="DE">Germany</option>
+              </select>
+              <select id="calcDest">
+                <option value="">Destination</option>
+                <option value="US">United States</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AE">UAE</option>
+                <option value="AU">Australia</option>
+              </select>
+            </div>
+            <input type="text" id="calcValue" placeholder="Product value (USD)" inputmode="numeric">
+            <button class="demo-btn" onclick="calculateCost()">Calculate Landed Cost</button>
+          </div>
+          <div class="demo-result" id="calcResult">
+            <div class="demo-result-label">Estimated Landed Cost</div>
+            <div class="demo-result-value" id="calcTotal">$0</div>
+            <div class="demo-result-detail" id="calcBreakdown"></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Rate Checker -->
+        <div class="demo-card">
+          <div class="demo-card-icon blue"><i data-lucide="truck"></i></div>
+          <h3>Rate Checker</h3>
+          <div class="demo-form">
+            <input type="text" id="rateWeight" placeholder="Weight (kg)" inputmode="numeric">
+            <div class="mode-selector" id="modeSelector">
+              <div class="mode-option active" onclick="selectMode(this)" data-mode="express">Express</div>
+              <div class="mode-option" onclick="selectMode(this)" data-mode="standard">Standard</div>
+              <div class="mode-option" onclick="selectMode(this)" data-mode="economy">Economy</div>
+            </div>
+            <button class="demo-btn" onclick="checkRates()">Compare Rates</button>
+          </div>
+          <div class="rate-results" id="rateResults">
+            <div class="rate-row" id="rate1">
+              <span class="rate-row-carrier">DHL Express</span>
+              <span class="rate-row-price">$0</span>
+              <span class="rate-row-time">3-5 days</span>
+            </div>
+            <div class="rate-row" id="rate2">
+              <span class="rate-row-carrier">FedEx</span>
+              <span class="rate-row-price">$0</span>
+              <span class="rate-row-time">4-6 days</span>
+            </div>
+            <div class="rate-row" id="rate3">
+              <span class="rate-row-carrier">Maersk</span>
+              <span class="rate-row-price">$0</span>
+              <span class="rate-row-time">5-8 days</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: HS Code Lookup -->
+        <div class="demo-card">
+          <div class="demo-card-icon green"><i data-lucide="search"></i></div>
+          <h3>HS Code Lookup</h3>
+          <div class="demo-form">
+            <input type="text" id="hsInput" placeholder="Describe your product...">
+            <button class="demo-btn" onclick="lookupHS()">Classify Product</button>
+          </div>
+          <div class="hs-result" id="hsResult">
+            <span class="hs-code-tag" id="hsCode">0000.00</span>
+            <div class="hs-desc" id="hsDesc">Product classification will appear here</div>
+            <div class="hs-confidence" id="hsConf">98.5% confidence</div>
+          </div>
+        </div>
+
+        <!-- Card 4: AI Assistant -->
+        <div class="demo-card">
+          <div class="demo-card-icon purple"><i data-lucide="bot"></i></div>
+          <h3>AI Assistant</h3>
+          <div class="demo-form">
+            <input type="text" id="aiInput" placeholder="Ask anything about trade...">
+            <button class="demo-btn" onclick="askAI()">Ask Befach AI</button>
+          </div>
+          <div class="chat-result" id="chatResult">
+            <div class="chat-bubble" id="chatBubble">
+              Response will appear here...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES BENTO GRID ===== -->
+  <section class="services-section" id="services">
+    <div class="container">
+      <div class="services-header">
+        <p class="section-label">Platform</p>
+        <h2 class="section-title">Everything you need to trade globally</h2>
+        <p class="section-subtitle">One platform. Eight powerful tools. Zero guesswork.</p>
+      </div>
+      <div class="bento-grid">
+        <!-- Row 1 -->
+        <div class="bento-card span-2">
+          <div class="bento-icon orange"><i data-lucide="receipt"></i></div>
+          <h3>Landed Cost Calculator</h3>
+          <p>Instantly calculate total import costs including duties, taxes, freight, and insurance for any product to
+            any country.</p>
+          <div class="bento-visual">
+            <div class="mini-bars">
+              <div class="mini-bar" style="height:60%;background:#fde68a;">
+                <span class="mini-bar-label">Product</span>
+              </div>
+              <div class="mini-bar" style="height:35%;background:#f59e0b;">
+                <span class="mini-bar-label">Duty</span>
+              </div>
+              <div class="mini-bar" style="height:20%;background:#d97706;">
+                <span class="mini-bar-label">Tax</span>
+              </div>
+              <div class="mini-bar" style="height:25%;background:#b45309;">
+                <span class="mini-bar-label">Freight</span>
+              </div>
+              <div class="mini-bar" style="height:10%;background:#92400e;">
+                <span class="mini-bar-label">Ins.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon blue"><i data-lucide="ship"></i></div>
+          <h3>Shipping & Logistics</h3>
+          <p>Compare rates, book shipments, and track cargo across 50+ carriers in real time.</p>
+          <div class="bento-visual">
+            <div class="carrier-strip">
+              <span class="carrier-badge">DHL</span>
+              <span class="carrier-badge">FedEx</span>
+              <span class="carrier-badge">Maersk</span>
+              <span class="carrier-badge">UPS</span>
+              <span class="carrier-badge">+46</span>
+            </div>
+          </div>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon indigo"><i data-lucide="trending-up"></i></div>
+          <h3>EXIM Intelligence</h3>
+          <p>Access real-time trade data, market trends, and competitor insights.</p>
+          <div class="bento-visual">
+            <svg class="mini-trend" viewBox="0 0 200 50" preserveAspectRatio="none">
+              <polyline points="0,40 20,38 50,30 80,32 110,20 140,22 170,10 200,8" style="stroke:#4f46e5;" />
+              <polyline points="0,45 20,42 50,40 80,38 110,35 140,30 170,28 200,25"
+                style="stroke:#a5b4fc;stroke-dasharray:4 3;" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="bento-card">
+          <div class="bento-icon teal"><i data-lucide="factory"></i></div>
+          <h3>Smart Sourcing</h3>
+          <p>Find verified suppliers and manufacturers across the globe with quality guarantees.</p>
+          <div class="bento-visual">
+            <div class="stat-badge">
+              <i data-lucide="users"></i>
+              850+ verified suppliers
+            </div>
+          </div>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon green"><i data-lucide="file-check-2"></i></div>
+          <h3>Compliance Tools</h3>
+          <p>Stay compliant with automated document checks, restricted party screening, and audit trails.</p>
+          <div class="bento-visual">
+            <div class="mini-checklist">
+              <div class="check-item">
+                <div class="check-dot"><i data-lucide="check"></i></div>
+                Import license verified
+              </div>
+              <div class="check-item">
+                <div class="check-dot"><i data-lucide="check"></i></div>
+                HS code validated
+              </div>
+              <div class="check-item">
+                <div class="check-dot"><i data-lucide="check"></i></div>
+                Sanctions screening clear
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bento-card span-2">
+          <div class="bento-icon purple"><i data-lucide="sparkles"></i></div>
+          <h3>AI Trade Assistant</h3>
+          <p>Get instant answers to complex trade questions, document drafting, and regulatory guidance powered by AI.
+          </p>
+          <div class="bento-visual">
+            <div class="chat-preview">
+              <div class="chat-msg user">What's the import duty on lithium batteries to the EU?</div>
+              <div class="chat-msg bot">Lithium-ion batteries (HS 8507.60) have a 2.7% MFN duty rate when imported to
+                the EU. Additional anti-dumping duties may apply for certain origins.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="bento-card span-2">
+          <div class="bento-icon red"><i data-lucide="package-check"></i></div>
+          <h3>Order Management</h3>
+          <p>Track every order from purchase to delivery with milestone notifications, document management, and team
+            collaboration.</p>
+        </div>
+        <div class="bento-card span-2">
+          <div class="bento-icon pink"><i data-lucide="wallet"></i></div>
+          <h3>Payments & Invoicing</h3>
+          <p>Generate pro-forma invoices, manage multi-currency payments, and automate reconciliation across all your
+            trade transactions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="container">
+      <div class="testimonials-header">
+        <p class="section-label">Testimonials</p>
+        <h2 class="section-title">Real results from real traders</h2>
+        <p class="section-subtitle">See how businesses like yours are saving time and money with Befach.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-metric">
+            <span class="testimonial-metric-value">25%</span>
+            <span class="testimonial-metric-label">cost reduction</span>
+          </div>
+          <p class="testimonial-quote">"Befach transformed our sourcing process. We reduced landed costs by 25% in the first quarter alone. The cost calculator pays for itself."</p>
+          <div class="testimonial-divider"></div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar a1">RK</div>
+            <div>
+              <div class="testimonial-name">Rajesh Kumar</div>
+              <div class="testimonial-role">CEO, TechImports India</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-metric">
+            <span class="testimonial-metric-value">40%</span>
+            <span class="testimonial-metric-label">revenue growth</span>
+          </div>
+          <p class="testimonial-quote">"The EXIM data analytics helped us identify three new export markets we hadn't considered. Revenue grew 40% year-over-year."</p>
+          <div class="testimonial-divider"></div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar a2">SC</div>
+            <div>
+              <div class="testimonial-name">Sarah Chen</div>
+              <div class="testimonial-role">Director, Global Trade Co.</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-metric">
+            <span class="testimonial-metric-value">3x</span>
+            <span class="testimonial-metric-label">faster clearance</span>
+          </div>
+          <p class="testimonial-quote">"Their customs clearance and compliance tools are exceptional. We went from 3-day clearance times to same-day. Absolutely game-changing."</p>
+          <div class="testimonial-divider"></div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar a3">MR</div>
+            <div>
+              <div class="testimonial-name">Michael Roberts</div>
+              <div class="testimonial-role">Founder, Import Solutions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <div class="cta-inner">
+        <h2 class="cta-title">One platform for your entire trade operation</h2>
+        <p class="cta-subtitle">From cost calculation to customs clearance — Befach brings every step of international trade under one roof. Start free, upgrade when you're ready.</p>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-primary">
+            Get Started Free
+          </a>
+          <a href="#" class="btn btn-outline-light">
+            Schedule a Walkthrough
+          </a>
+        </div>
+        <p class="cta-note">14-day free trial <span>&middot;</span> No credit card required <span>&middot;</span> Cancel anytime</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="#">Cost Calculator</a>
+          <a href="#">Shipping & Logistics</a>
+          <a href="#">EXIM Intelligence</a>
+          <a href="#">AI Assistant</a>
+          <a href="#">Compliance Tools</a>
+        </div>
+        <div class="footer-col">
+          <h4>Solutions</h4>
+          <a href="#">For Importers</a>
+          <a href="#">For Exporters</a>
+          <a href="#">For Freight Forwarders</a>
+          <a href="#">For Enterprises</a>
+          <a href="#">For SMBs</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Befach International. All rights reserved.</span>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+          <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
+          <a href="#" aria-label="YouTube"><i data-lucide="youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <img src="../public/logo.png" alt="Befach International" class="logo-img footer-logo-img">
+        </a>
+        <p>Simplifying global trade with intelligent tools for cost calculation, logistics, compliance, and market
+          intelligence.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Initialize Lucide icons
+    document.addEventListener('DOMContentLoaded', function () {
+      lucide.createIcons();
+    });
+
+    // ===== Header scroll effect =====
+    let lastScroll = 0;
+    window.addEventListener('scroll', function () {
+      const header = document.getElementById('header');
+      if (window.scrollY > 20) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ===== Hamburger menu =====
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+
+    hamburger.addEventListener('click', function () {
+      this.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeMobileNav() {
+      hamburger.classList.remove('active');
+      mobileNav.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ===== Demo: Cost Calculator =====
+    function calculateCost() {
+      const origin = document.getElementById('calcOrigin').value;
+      const dest = document.getElementById('calcDest').value;
+      const valueStr = document.getElementById('calcValue').value;
+      const value = parseFloat(valueStr.replace(/[^0-9.]/g, ''));
+
+      if (!origin || !dest || !value || isNaN(value)) {
+        alert('Please fill in all fields with valid values.');
+        return;
+      }
+
+      // Simulated rates by origin-dest
+      const dutyRates = {
+        'CN': { 'US': 0.08, 'GB': 0.04, 'AE': 0.05, 'AU': 0.05 },
+        'IN': { 'US': 0.04, 'GB': 0.03, 'AE': 0.0, 'AU': 0.05 },
+        'VN': { 'US': 0.06, 'GB': 0.04, 'AE': 0.05, 'AU': 0.05 },
+        'DE': { 'US': 0.03, 'GB': 0.0, 'AE': 0.05, 'AU': 0.04 }
+      };
+
+      const taxRates = { 'US': 0.0, 'GB': 0.20, 'AE': 0.05, 'AU': 0.10 };
+      const freightBase = { 'CN': 320, 'IN': 280, 'VN': 350, 'DE': 220 };
+
+      const duty = value * (dutyRates[origin]?.[dest] || 0.05);
+      const tax = (value + duty) * (taxRates[dest] || 0.05);
+      const freight = freightBase[origin] || 300;
+      const insurance = value * 0.005;
+      const total = value + duty + tax + freight + insurance;
+
+      document.getElementById('calcTotal').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      document.getElementById('calcBreakdown').textContent =
+        'Duty: $' + Math.round(duty) + ' | Tax: $' + Math.round(tax) + ' | Freight: $' + freight + ' | Insurance: $' + Math.round(insurance);
+      document.getElementById('calcResult').classList.add('show');
+    }
+
+    // ===== Demo: Rate Checker =====
+    function selectMode(el) {
+      document.querySelectorAll('#modeSelector .mode-option').forEach(function (opt) {
+        opt.classList.remove('active');
+      });
+      el.classList.add('active');
+    }
+
+    function checkRates() {
+      const weight = parseFloat(document.getElementById('rateWeight').value);
+      if (!weight || isNaN(weight)) {
+        alert('Please enter a valid weight.');
+        return;
+      }
+
+      const activeMode = document.querySelector('#modeSelector .mode-option.active').dataset.mode;
+
+      const multipliers = {
+        express: { dhl: 8.50, fedex: 7.80, maersk: 6.20 },
+        standard: { dhl: 5.20, fedex: 4.90, maersk: 3.50 },
+        economy: { dhl: 3.40, fedex: 3.10, maersk: 1.80 }
+      };
+
+      const times = {
+        express: { dhl: '2-3 days', fedex: '2-4 days', maersk: '3-5 days' },
+        standard: { dhl: '5-7 days', fedex: '5-8 days', maersk: '8-12 days' },
+        economy: { dhl: '7-10 days', fedex: '8-12 days', maersk: '14-21 days' }
+      };
+
+      const carriers = ['dhl', 'fedex', 'maersk'];
+      const names = { dhl: 'DHL Express', fedex: 'FedEx', maersk: 'Maersk' };
+
+      carriers.forEach(function (c, i) {
+        var row = document.getElementById('rate' + (i + 1));
+        var price = (weight * multipliers[activeMode][c]).toFixed(0);
+        row.querySelector('.rate-row-carrier').textContent = names[c];
+        row.querySelector('.rate-row-price').textContent = '$' + price;
+        row.querySelector('.rate-row-time').textContent = times[activeMode][c];
+      });
+
+      document.getElementById('rateResults').classList.add('show');
+    }
+
+    // ===== Demo: HS Code Lookup =====
+    function lookupHS() {
+      var input = document.getElementById('hsInput').value.toLowerCase().trim();
+      if (!input) {
+        alert('Please describe your product.');
+        return;
+      }
+
+      // Simulated HS code database
+      var hsDB = [
+        { keywords: ['cotton', 'shirt', 'tshirt', 't-shirt', 'clothing', 'garment'], code: '6109.10', desc: 'T-shirts, singlets and other vests, of cotton, knitted or crocheted', conf: '98.2%' },
+        { keywords: ['laptop', 'computer', 'notebook'], code: '8471.30', desc: 'Portable automatic data processing machines, weighing not more than 10 kg', conf: '99.1%' },
+        { keywords: ['phone', 'mobile', 'smartphone', 'iphone', 'android'], code: '8517.13', desc: 'Smartphones and other telephones for cellular networks', conf: '99.5%' },
+        { keywords: ['battery', 'lithium', 'cell'], code: '8507.60', desc: 'Lithium-ion accumulators (rechargeable batteries)', conf: '97.8%' },
+        { keywords: ['rice', 'basmati', 'grain'], code: '1006.30', desc: 'Semi-milled or wholly milled rice, whether or not polished or glazed', conf: '98.7%' },
+        { keywords: ['tea', 'green tea', 'black tea'], code: '0902.30', desc: 'Black tea (fermented) and partly fermented tea', conf: '96.4%' },
+        { keywords: ['shoe', 'shoes', 'footwear', 'sneaker', 'boot'], code: '6404.11', desc: 'Sports footwear with outer soles of rubber/plastics and uppers of textile materials', conf: '95.8%' },
+        { keywords: ['steel', 'iron', 'metal'], code: '7208.51', desc: 'Flat-rolled products of iron or non-alloy steel, of a width of 600mm or more', conf: '94.3%' },
+        { keywords: ['toy', 'toys', 'doll', 'game'], code: '9503.00', desc: 'Tricycles, scooters, pedal cars and similar wheeled toys; dolls; other toys', conf: '97.1%' },
+        { keywords: ['coffee', 'espresso', 'beans'], code: '0901.21', desc: 'Coffee, roasted, not decaffeinated', conf: '98.9%' }
+      ];
+
+      var match = hsDB.find(function (item) {
+        return item.keywords.some(function (kw) {
+          return input.includes(kw);
+        });
+      });
+
+      if (!match) {
+        match = { code: '9999.99', desc: 'Classification requires manual review — try a common product like "laptop", "cotton shirt", or "coffee"', conf: '—' };
+      }
+
+      document.getElementById('hsCode').textContent = match.code;
+      document.getElementById('hsDesc').textContent = match.desc;
+      document.getElementById('hsConf').textContent = match.conf !== '—' ? match.conf + ' confidence' : 'Try: laptop, phone, cotton shirt, coffee, shoes, battery, rice, tea, steel, toys';
+      document.getElementById('hsResult').classList.add('show');
+    }
+
+    // ===== Demo: AI Assistant =====
+    function askAI() {
+      var input = document.getElementById('aiInput').value.toLowerCase().trim();
+      if (!input) {
+        alert('Please type a question.');
+        return;
+      }
+
+      var responses = {
+        duty: 'Import duties vary by product (HS code) and origin country. For example, the US charges 0-25% on Chinese goods under current tariffs. Use our Cost Calculator for exact rates on your specific product.',
+        tariff: 'Tariff rates depend on the HS code classification and applicable trade agreements. Many countries offer preferential rates under FTAs. I can help you identify if your product qualifies for reduced tariffs.',
+        ship: 'Shipping costs depend on weight, dimensions, origin, destination, and speed. Ocean freight is cheapest for bulk ($1-3/kg), while air express is fastest but priciest ($5-12/kg). Our Rate Checker can give you real-time quotes.',
+        export: 'To start exporting, you typically need: 1) IEC (Import Export Code), 2) GST registration, 3) Product classification (HS code), 4) Understanding of destination country requirements. Befach handles all of this.',
+        import: 'Key steps for importing: 1) Identify your HS code, 2) Check applicable duty rates, 3) Ensure product compliance, 4) Arrange logistics, 5) Handle customs clearance. Our platform automates most of these steps.',
+        compliance: 'Trade compliance covers sanctions screening, restricted party lists, export controls, and documentation requirements. Befach automatically screens transactions against 40+ global sanctions lists.',
+        document: 'Common trade documents include: Commercial Invoice, Packing List, Bill of Lading, Certificate of Origin, Insurance Certificate, and customs declarations. Our platform generates and manages all of these.',
+        default: 'Great question! In international trade, the key factors to consider are HS classification, duty rates, trade agreements, compliance requirements, and logistics optimization. Befach helps you navigate all of these with AI-powered tools and real-time data.'
+      };
+
+      var answer = responses.default;
+      Object.keys(responses).forEach(function (key) {
+        if (key !== 'default' && input.includes(key)) {
+          answer = responses[key];
+        }
+      });
+
+      document.getElementById('chatBubble').innerHTML = '<span style="display:block;font-size:0.65rem;font-weight:700;color:#d97706;margin-bottom:4px;">Befach AI</span>' + answer;
+      document.getElementById('chatResult').classList.add('show');
+    }
+
+  </script>
+</body>
+
+</html>

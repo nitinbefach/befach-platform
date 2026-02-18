@@ -16,6 +16,7 @@ import {
   addMessage,
   getRelativeTime,
 } from '@/lib/aiChat';
+import AINudge from './AINudge';
 
 // ============ TYPING INDICATOR ============
 
@@ -134,7 +135,7 @@ function MessageBubble({ message }: { message: AIMessage }) {
           width: 28px;
           height: 28px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -155,7 +156,7 @@ function MessageBubble({ message }: { message: AIMessage }) {
           font-size: 0.84rem;
         }
         .user-bubble {
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           color: white;
           border-radius: 16px 16px 4px 16px;
         }
@@ -200,11 +201,11 @@ function MessageBubble({ message }: { message: AIMessage }) {
           background: rgba(255,255,255,0.25);
         }
         .bot-bubble .ai-msg-link {
-          color: #667eea;
-          background: rgba(102, 126, 234, 0.1);
+          color: #f97316;
+          background: rgba(249, 115, 22, 0.1);
         }
         .bot-bubble .ai-msg-link:hover {
-          background: rgba(102, 126, 234, 0.2);
+          background: rgba(249, 115, 22, 0.2);
         }
       `}</style>
     </div>
@@ -239,9 +240,9 @@ function SuggestionChips({ onSelect }: { onSelect: (query: string) => void }) {
         .ai-suggestion-chip {
           padding: 6px 14px;
           border-radius: 16px;
-          border: 1.5px solid rgba(102, 126, 234, 0.3);
+          border: 1.5px solid rgba(249, 115, 22, 0.3);
           background: transparent;
-          color: #667eea;
+          color: #f97316;
           font-size: 0.75rem;
           font-weight: 500;
           cursor: pointer;
@@ -251,11 +252,11 @@ function SuggestionChips({ onSelect }: { onSelect: (query: string) => void }) {
           min-height: 32px;
         }
         .ai-suggestion-chip:hover {
-          background: rgba(102, 126, 234, 0.08);
-          border-color: #667eea;
+          background: rgba(249, 115, 22, 0.08);
+          border-color: #f97316;
         }
         .ai-suggestion-chip:active {
-          background: rgba(102, 126, 234, 0.15);
+          background: rgba(249, 115, 22, 0.15);
         }
       `}</style>
     </div>
@@ -326,8 +327,8 @@ function ChatInput({
           font-family: inherit;
         }
         .ai-input:focus {
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          border-color: #f97316;
+          box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
         }
         .ai-input::placeholder {
           color: var(--text-secondary);
@@ -337,7 +338,7 @@ function ChatInput({
           height: 40px;
           border-radius: 50%;
           border: none;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           color: white;
           cursor: pointer;
           display: flex;
@@ -439,11 +440,12 @@ function ChatPanelContent({
           width: 56px;
           height: 56px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 12px;
+          box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
         }
         .ai-welcome h4 {
           font-size: 1rem;
@@ -549,6 +551,13 @@ export default function AIChatbot() {
 
   return (
     <>
+      {/* AI Nudge Tooltip */}
+      <AINudge
+        isPanelOpen={isOpen}
+        isMobile={isMobile}
+        onOpenChat={() => setIsOpen(true)}
+      />
+
       {/* FAB Button */}
       <motion.button
         className="ai-fab"
@@ -656,24 +665,24 @@ export default function AIChatbot() {
           width: 52px;
           height: 52px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
           color: white;
           border: none;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+          box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);
           transition: box-shadow 0.3s;
           animation: ${!isOpen ? 'ai-pulse 3s infinite' : 'none'};
         }
         .ai-fab:hover {
-          box-shadow: 0 6px 24px rgba(102, 126, 234, 0.5);
+          box-shadow: 0 6px 28px rgba(249, 115, 22, 0.5);
         }
 
         @keyframes ai-pulse {
-          0%, 100% { box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4); }
-          50% { box-shadow: 0 4px 24px rgba(102, 126, 234, 0.6); }
+          0%, 100% { box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35); }
+          50% { box-shadow: 0 4px 28px rgba(249, 115, 22, 0.55); }
         }
 
         /* Desktop Panel */
@@ -684,8 +693,8 @@ export default function AIChatbot() {
           width: 380px;
           height: 520px;
           background: var(--bg-primary);
-          border-radius: 16px;
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+          border-radius: 20px;
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
           z-index: 1050;
           display: flex;
           flex-direction: column;
@@ -700,7 +709,7 @@ export default function AIChatbot() {
           justify-content: space-between;
           padding: 14px 16px;
           border-bottom: 1px solid var(--border-color);
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: linear-gradient(135deg, #f97316, #ea580c);
           color: white;
           flex-shrink: 0;
         }

@@ -254,7 +254,7 @@ export default function TraderDetailModal({ trader, role, isOpen, onClose, onVie
         }
         .breakdown-bar-fill {
           height: 100%;
-          background: linear-gradient(90deg, #2563eb, #60a5fa);
+          background: linear-gradient(90deg, #f97316, #fb923c);
           border-radius: 4px;
           min-width: 4px;
         }
@@ -286,7 +286,7 @@ export default function TraderDetailModal({ trader, role, isOpen, onClose, onVie
           color: var(--text-primary);
         }
         .country-tag strong {
-          color: #2563eb;
+          color: #f97316;
         }
         .mini-table-scroll {
           overflow-x: auto;
@@ -311,7 +311,7 @@ export default function TraderDetailModal({ trader, role, isOpen, onClose, onVie
           border-bottom: 1px solid var(--border-color);
         }
         .hs-code {
-          color: #2563eb;
+          color: #f97316;
           font-family: monospace;
           font-weight: 500;
         }
@@ -332,7 +332,7 @@ export default function TraderDetailModal({ trader, role, isOpen, onClose, onVie
         .view-all-btn {
           width: 100%;
           padding: 12px;
-          background: #2563eb;
+          background: #f97316;
           color: white;
           border: none;
           border-radius: 8px;
@@ -342,7 +342,7 @@ export default function TraderDetailModal({ trader, role, isOpen, onClose, onVie
           transition: background 0.15s;
         }
         .view-all-btn:hover {
-          background: #1d4ed8;
+          background: #ea580c;
         }
         @media (max-width: 768px) {
           .modal-overlay {

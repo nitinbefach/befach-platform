@@ -82,7 +82,7 @@ export const SORT_OPTIONS = [
 export const RESULTS_PER_PAGE = 15;
 
 export const STAT_PILL_COLORS: Record<string, string> = {
-  shipments: '#2563eb',
+  shipments: '#f97316',
   consignees: '#059669',
   shippers: '#d97706',
   countriesOfOrigin: '#7c3aed',

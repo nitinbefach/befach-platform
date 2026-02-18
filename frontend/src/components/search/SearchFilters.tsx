@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { COUNTRIES, CERTIFICATIONS } from '@/lib/suppliers';
+import { Target, Package } from 'lucide-react';
 
 interface FilterState {
   countries: string[];
@@ -29,10 +30,10 @@ interface SearchFiltersProps {
 
 // Quick filter presets like Jungle Scout
 const QUICK_FILTERS = [
-  { id: 'verified', label: '✓ Verified Only', key: 'verifiedOnly' as const },
-  { id: 'premium', label: '⭐ Premium Suppliers', key: 'premiumOnly' as const },
-  { id: 'sample', label: '📦 Samples Available', key: 'sampleAvailable' as const },
-  { id: 'custom', label: '🔧 Customization', key: 'customization' as const },
+  { id: 'verified', label: 'Verified Only', key: 'verifiedOnly' as const },
+  { id: 'premium', label: 'Premium Suppliers', key: 'premiumOnly' as const },
+  { id: 'sample', label: 'Samples Available', key: 'sampleAvailable' as const },
+  { id: 'custom', label: 'Customization', key: 'customization' as const },
 ];
 
 const MOQ_PRESETS = [
@@ -114,7 +115,7 @@ export default function SearchFilters({
       {/* Header with active count */}
       <div className="filters-header">
         <div className="header-left">
-          <h3>🎯 Advanced Filters</h3>
+          <h3><Target size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Advanced Filters</h3>
           {activeCount > 0 && (
             <span className="active-badge">{activeCount} active</span>
           )}
@@ -142,7 +143,7 @@ export default function SearchFilters({
         {/* Product Requirements Section */}
         <div className={`filter-section ${expandedSection === 'product' ? 'expanded' : ''}`}>
           <button className="section-header" onClick={() => toggleSection('product')}>
-            <span className="section-title">📦 Product Requirements</span>
+            <span className="section-title"><Package size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Product Requirements</span>
             <span className="section-toggle">{expandedSection === 'product' ? '−' : '+'}</span>
           </button>
 
@@ -244,11 +245,11 @@ export default function SearchFilters({
                       }
                     >
                       <option value="">Any lead time</option>
-                      <option value="7">⚡ Express (≤7 days)</option>
-                      <option value="14">🚀 Fast (≤14 days)</option>
-                      <option value="21">📦 Standard (≤21 days)</option>
-                      <option value="30">🚢 Extended (≤30 days)</option>
-                      <option value="45">⏳ Long (≤45 days)</option>
+                      <option value="7">Express (≤7 days)</option>
+                      <option value="14">Fast (≤14 days)</option>
+                      <option value="21">Standard (≤21 days)</option>
+                      <option value="30">Extended (≤30 days)</option>
+                      <option value="45">Long (≤45 days)</option>
                     </select>
                   </div>
                 </div>
@@ -260,7 +261,7 @@ export default function SearchFilters({
         {/* Supplier Quality Section */}
         <div className={`filter-section ${expandedSection === 'quality' ? 'expanded' : ''}`}>
           <button className="section-header" onClick={() => toggleSection('quality')}>
-            <span className="section-title">⭐ Supplier Quality</span>
+            <span className="section-title">Supplier Quality</span>
             <span className="section-toggle">{expandedSection === 'quality' ? '−' : '+'}</span>
           </button>
 
@@ -274,7 +275,7 @@ export default function SearchFilters({
                 </label>
                 <div className="filter-control">
                   <div className="rating-options">
-                    {[{ value: null, label: 'Any' }, { value: 4, label: '4+ ★' }, { value: 4.5, label: '4.5+ ★' }, { value: 4.8, label: '4.8+ ★' }].map((opt) => (
+                    {[{ value: null, label: 'Any' }, { value: 4, label: '4+' }, { value: 4.5, label: '4.5+' }, { value: 4.8, label: '4.8+' }].map((opt) => (
                       <button
                         key={opt.label}
                         className={`rating-btn ${filters.minRating === opt.value ? 'active' : ''}`}
@@ -339,7 +340,7 @@ export default function SearchFilters({
         {/* Location Section */}
         <div className={`filter-section ${expandedSection === 'location' ? 'expanded' : ''}`}>
           <button className="section-header" onClick={() => toggleSection('location')}>
-            <span className="section-title">🌍 Supplier Location</span>
+            <span className="section-title">Supplier Location</span>
             <span className="section-toggle">{expandedSection === 'location' ? '−' : '+'}</span>
           </button>
 

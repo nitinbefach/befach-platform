@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
+import { ClipboardList } from 'lucide-react';
 import RequirementCard from '@/components/requirements/RequirementCard';
 import RequirementStats from '@/components/requirements/RequirementStats';
 import RequirementFilters from '@/components/requirements/RequirementFilters';
@@ -184,7 +185,7 @@ export default function MyRequirementsPage() {
         <div className="requirements-list">
           {filteredRequirements.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📋</div>
+              <div className="empty-icon"><ClipboardList size={48} /></div>
               <h3>No Requirements Found</h3>
               {requirements.length === 0 ? (
                 <>

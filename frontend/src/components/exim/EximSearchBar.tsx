@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { Search, RotateCcw } from 'lucide-react';
 import { EximSearchField, EximOperator, EximDataType, EximSearchParams, SearchSuggestion } from '@/types/exim';
 import { EXIM_COUNTRIES, EXIM_SEARCH_FIELDS, EXIM_OPERATORS, EXIM_DATA_TYPES } from '@/lib/eximConstants';
 import { eximDataService } from '@/services/eximDataService';
@@ -25,7 +26,6 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Default date range: last 6 months
   useEffect(() => {
     const now = new Date();
     const sixMonthsAgo = new Date();
@@ -34,7 +34,6 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
     setDateFrom(sixMonthsAgo.toISOString().split('T')[0]);
   }, []);
 
-  // Click outside to close suggestions
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node)) {
@@ -105,6 +104,8 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
     setInputValue('');
     setSearchField('product');
     setOperator('contains');
+    setDataType('import');
+    setCountry('India');
     setSuggestions([]);
     const now = new Date();
     const sixMonthsAgo = new Date();
@@ -118,45 +119,57 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
   return (
     <div className="exim-search-bar">
       {/* Row 1: Country + Data Type */}
-      <div className="search-row country-row">
+      <div className="form-row row-country">
         <div className="field-group">
           <label className="field-label">Select Country</label>
           <select
-            className="search-select country-select"
-            value={`${country}-${dataType}`}
-            onChange={(e) => {
-              const [c, dt] = e.target.value.split('-');
-              setCountry(c);
-              setDataType(dt as EximDataType);
-            }}
+            className="form-input"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
           >
             {EXIM_COUNTRIES.map(c => (
-              EXIM_DATA_TYPES.map(dt => (
-                <option key={`${c.name}-${dt.id}`} value={`${c.name}-${dt.id}`}>
-                  {c.flag} {c.name} {dt.label}
-                </option>
-              ))
+              <option key={c.code} value={c.name}>
+                {c.flag} {c.name}
+              </option>
             ))}
           </select>
         </div>
 
-        <div className="date-range-group">
-          <div className="date-field">
-            <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="date-input" />
-          </div>
-          <span className="date-separator">to</span>
-          <div className="date-field">
-            <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="date-input" />
+        <div className="field-group">
+          <label className="field-label">Data Type</label>
+          <div className="type-toggle">
+            {EXIM_DATA_TYPES.map(dt => (
+              <button
+                key={dt.id}
+                type="button"
+                className={`type-btn ${dataType === dt.id ? 'active' : ''}`}
+                onClick={() => setDataType(dt.id)}
+              >
+                {dt.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Row 2: Search Field + Operator + Tags Input */}
-      <div className="search-row query-row">
-        <div className="field-group field-type">
+      {/* Row 2: Date Range */}
+      <div className="form-row row-dates">
+        <div className="field-group">
+          <label className="field-label">Start Date</label>
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="form-input" />
+        </div>
+        <div className="field-group">
+          <label className="field-label">End Date</label>
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="form-input" />
+        </div>
+      </div>
+
+      {/* Row 3: Search Field + Operator + Terms */}
+      <div className="form-row row-search">
+        <div className="field-group">
           <label className="field-label">Search Field</label>
           <select
-            className="search-select"
+            className="form-input"
             value={searchField}
             onChange={e => setSearchField(e.target.value as EximSearchField)}
           >
@@ -166,10 +179,10 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           </select>
         </div>
 
-        <div className="field-group field-operator">
+        <div className="field-group">
           <label className="field-label">Operator</label>
           <select
-            className="search-select"
+            className="form-input"
             value={operator}
             onChange={e => setOperator(e.target.value as EximOperator)}
           >
@@ -179,20 +192,20 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           </select>
         </div>
 
-        <div className="field-group field-input" ref={suggestionsRef}>
+        <div className="field-group terms-field" ref={suggestionsRef}>
           <label className="field-label">Search Terms</label>
           <div className="tags-input-wrapper">
             {searchTerms.map((term, i) => (
               <span key={i} className="search-tag">
                 {term}
-                <button className="tag-remove" onClick={() => removeTerm(i)}>&times;</button>
+                <button type="button" className="tag-remove" onClick={() => removeTerm(i)}>&times;</button>
               </span>
             ))}
             <input
               ref={inputRef}
               type="text"
               className="tags-input"
-              placeholder={searchTerms.length === 0 ? (currentFieldConfig?.placeholder || 'Search...') : 'Add more...'}
+              placeholder={searchTerms.length === 0 ? (currentFieldConfig?.placeholder || 'Type and press Enter...') : 'Add more...'}
               value={inputValue}
               onChange={e => handleInputChange(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -212,15 +225,20 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
         </div>
       </div>
 
-      {/* Row 3: Buttons */}
-      <div className="search-row button-row">
-        <button className="btn-reset" onClick={handleReset}>Reset</button>
-        <button className="btn-search" onClick={handleSearch} disabled={loading}>
+      {/* Row 4: Buttons */}
+      <div className="form-row row-actions">
+        <button type="button" className="btn-reset" onClick={handleReset}>
+          <RotateCcw size={14} />
+          Reset
+        </button>
+        <button type="button" className="btn-search" onClick={handleSearch} disabled={loading}>
+          <Search size={14} />
           {loading ? 'Searching...' : 'Search'}
         </button>
       </div>
 
       <style jsx>{`
+        /* ── Container ── */
         .exim-search-bar {
           background: var(--bg-primary);
           border: 1px solid var(--border-color);
@@ -228,120 +246,143 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           padding: 24px;
           display: flex;
           flex-direction: column;
+          gap: 20px;
+        }
+
+        /* ── Shared row structure ── */
+        .form-row {
+          display: grid;
           gap: 16px;
         }
-        .search-row {
-          display: flex;
-          gap: 12px;
-          align-items: flex-end;
+
+        /* ── Row 1: Country + Type ── */
+        .row-country {
+          grid-template-columns: 1fr auto;
         }
-        .country-row {
-          flex-wrap: wrap;
+
+        /* ── Row 2: Dates ── */
+        .row-dates {
+          grid-template-columns: 1fr 1fr;
         }
+
+        /* ── Row 3: Search ── */
+        .row-search {
+          grid-template-columns: 160px 160px 1fr;
+        }
+
+        /* ── Row 4: Buttons ── */
+        .row-actions {
+          grid-template-columns: auto auto 1fr;
+          align-items: center;
+          gap: 10px;
+        }
+
+        /* ── Field groups ── */
         .field-group {
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 6px;
         }
         .field-label {
-          font-size: 0.75rem;
+          font-size: 0.78rem;
           font-weight: 600;
-          color: var(--text-secondary);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          color: var(--text-primary);
         }
-        .search-select {
-          height: 40px;
+
+        /* ── Form inputs ── */
+        .form-input {
+          height: 42px;
           padding: 0 12px;
           border: 1px solid var(--border-color);
           border-radius: 8px;
-          background: var(--bg-secondary, #fff);
+          background: var(--bg-secondary, #f9fafb);
           color: var(--text-primary);
           font-size: 0.875rem;
           cursor: pointer;
-          min-width: 140px;
+          transition: border-color 0.15s;
+          width: 100%;
         }
-        .country-select {
-          min-width: 240px;
-          flex: 1;
+        .form-input:focus {
+          outline: none;
+          border-color: #f97316;
         }
-        .date-range-group {
+
+        /* ── Data type toggle ── */
+        .type-toggle {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-left: auto;
-        }
-        .date-input {
-          height: 40px;
-          padding: 0 10px;
           border: 1px solid var(--border-color);
           border-radius: 8px;
-          background: var(--bg-secondary, #fff);
-          color: var(--text-primary);
-          font-size: 0.8rem;
+          overflow: hidden;
+          height: 42px;
         }
-        .date-separator {
-          color: var(--text-secondary);
-          font-size: 0.8rem;
-        }
-        .query-row {
-          flex-wrap: wrap;
-        }
-        .field-type {
-          min-width: 130px;
-        }
-        .field-operator {
-          min-width: 130px;
-        }
-        .field-input {
+        .type-btn {
           flex: 1;
-          min-width: 250px;
+          border: none;
+          background: var(--bg-secondary, #f9fafb);
+          color: var(--text-secondary);
+          font-size: 0.84rem;
+          font-weight: 500;
+          cursor: pointer;
+          padding: 0 20px;
+          transition: all 0.15s;
+          white-space: nowrap;
+        }
+        .type-btn.active {
+          background: #f97316;
+          color: white;
+          font-weight: 600;
+        }
+        .type-btn:not(.active):hover {
+          background: var(--bg-tertiary, #f1f5f9);
+        }
+
+        /* ── Tags input ── */
+        .terms-field {
           position: relative;
         }
         .tags-input-wrapper {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
-          padding: 6px 10px;
-          min-height: 40px;
+          padding: 6px 12px;
+          min-height: 42px;
           border: 1px solid var(--border-color);
           border-radius: 8px;
-          background: var(--bg-secondary, #fff);
+          background: var(--bg-secondary, #f9fafb);
           align-items: center;
           cursor: text;
+          transition: border-color 0.15s, box-shadow 0.15s;
         }
         .tags-input-wrapper:focus-within {
-          border-color: #2563eb;
-          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+          border-color: #f97316;
+          box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1);
         }
         .search-tag {
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          padding: 2px 8px;
-          background: #dbeafe;
-          color: #1e40af;
-          border-radius: 4px;
-          font-size: 0.813rem;
+          padding: 3px 10px;
+          background: rgba(249, 115, 22, 0.1);
+          color: #ea580c;
+          border-radius: 5px;
+          font-size: 0.8rem;
           font-weight: 500;
           white-space: nowrap;
         }
         .tag-remove {
           background: none;
           border: none;
-          color: #1e40af;
+          color: #ea580c;
           cursor: pointer;
           font-size: 1rem;
           line-height: 1;
           padding: 0 2px;
-          opacity: 0.7;
+          opacity: 0.6;
         }
-        .tag-remove:hover {
-          opacity: 1;
-        }
+        .tag-remove:hover { opacity: 1; }
         .tags-input {
           flex: 1;
-          min-width: 120px;
+          min-width: 100px;
           border: none;
           outline: none;
           background: transparent;
@@ -349,6 +390,8 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           color: var(--text-primary);
           padding: 2px 0;
         }
+
+        /* ── Suggestions ── */
         .suggestions-dropdown {
           position: absolute;
           top: 100%;
@@ -360,7 +403,7 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           border-radius: 8px;
           box-shadow: 0 8px 24px rgba(0,0,0,0.12);
           z-index: 50;
-          max-height: 240px;
+          max-height: 220px;
           overflow-y: auto;
         }
         .suggestion-item {
@@ -375,10 +418,10 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           text-align: left;
           font-size: 0.84rem;
           color: var(--text-primary);
-          border-bottom: 1px solid var(--border-color);
+          transition: background 0.1s;
         }
-        .suggestion-item:last-child {
-          border-bottom: none;
+        .suggestion-item:not(:last-child) {
+          border-bottom: 1px solid var(--border-color);
         }
         .suggestion-item:hover {
           background: var(--bg-secondary, #f0f4f8);
@@ -391,71 +434,156 @@ export default function EximSearchBar({ onSearch, loading }: EximSearchBarProps)
           margin-right: 12px;
         }
         .suggestion-count {
-          font-size: 0.75rem;
+          font-size: 0.72rem;
           color: var(--text-secondary);
           white-space: nowrap;
         }
-        .button-row {
-          justify-content: flex-start;
-          gap: 10px;
-        }
+
+        /* ── Buttons ── */
         .btn-reset {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
           height: 40px;
-          padding: 0 24px;
-          border-radius: 20px;
-          border: none;
-          background: #6b7280;
-          color: white;
-          font-size: 0.875rem;
-          font-weight: 600;
+          padding: 0 20px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          background: var(--bg-secondary, #f9fafb);
+          color: var(--text-secondary);
+          font-size: 0.84rem;
+          font-weight: 500;
           cursor: pointer;
-          transition: background 0.15s;
+          transition: all 0.15s;
         }
         .btn-reset:hover {
-          background: #4b5563;
+          border-color: var(--text-secondary);
+          color: var(--text-primary);
         }
         .btn-search {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
           height: 40px;
-          padding: 0 32px;
-          border-radius: 20px;
+          padding: 0 28px;
+          border-radius: 8px;
           border: none;
-          background: #2563eb;
+          background: #f97316;
           color: white;
-          font-size: 0.875rem;
+          font-size: 0.84rem;
           font-weight: 600;
           cursor: pointer;
           transition: background 0.15s;
         }
         .btn-search:hover {
-          background: #1d4ed8;
+          background: #ea580c;
         }
         .btn-search:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
+
+        /* ── Responsive: tablet ── */
+        @media (max-width: 1024px) {
+          .row-search {
+            grid-template-columns: 1fr 1fr;
+          }
+          .terms-field {
+            grid-column: 1 / -1;
+          }
+        }
+
+        /* ── Responsive: mobile (inside BottomSheet) ── */
         @media (max-width: 768px) {
           .exim-search-bar {
-            padding: 16px;
+            padding: 0;
+            border: none;
+            background: transparent;
+            gap: 18px;
           }
-          .search-row {
-            flex-direction: column;
-            align-items: stretch;
+
+          .form-row {
+            gap: 14px;
           }
-          .country-select {
-            min-width: 100%;
+
+          .field-label {
+            font-size: 0.74rem;
           }
-          .date-range-group {
-            margin-left: 0;
-            flex-wrap: wrap;
+
+          /* Row 1: stack country + type */
+          .row-country {
+            grid-template-columns: 1fr;
           }
-          .field-type, .field-operator {
-            min-width: 100%;
+
+          /* Row 2: side by side dates */
+          .row-dates {
+            grid-template-columns: 1fr 1fr;
           }
-          .field-input {
-            min-width: 100%;
+
+          /* Row 3: stack all */
+          .row-search {
+            grid-template-columns: 1fr 1fr;
           }
-          .button-row {
-            flex-direction: row;
+          .terms-field {
+            grid-column: 1 / -1;
+          }
+
+          /* Row 4: buttons side by side */
+          .row-actions {
+            grid-template-columns: 1fr 2fr;
+          }
+
+          .form-input {
+            height: 48px;
+            padding: 0 14px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+          }
+
+          .type-toggle {
+            height: 48px;
+            border-radius: 10px;
+          }
+          .type-btn {
+            font-size: 0.9rem;
+          }
+
+          .tags-input-wrapper {
+            min-height: 48px;
+            border-radius: 10px;
+            padding: 8px 12px;
+          }
+          .tags-input {
+            min-width: 80px;
+            font-size: 0.9rem;
+          }
+
+          .btn-reset {
+            height: 50px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            width: 100%;
+          }
+          .btn-search {
+            height: 50px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            width: 100%;
+            padding: 0;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .row-dates {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+          }
+          .row-search {
+            grid-template-columns: 1fr;
+          }
+          .terms-field {
+            grid-column: auto;
           }
         }
       `}</style>

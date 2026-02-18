@@ -1,5 +1,6 @@
 'use client';
 
+import { Search, ClipboardList, MessageCircle, CheckCircle, BarChart3 } from 'lucide-react';
 import { RequirementStatus, STATUS_CONFIG } from '@/lib/requirements';
 
 interface RequirementStatsProps {
@@ -13,11 +14,11 @@ export default function RequirementStats({
   onFilterClick,
   activeFilter,
 }: RequirementStatsProps) {
-  const statCards: { status: RequirementStatus; icon: string }[] = [
-    { status: 'matching', icon: '🔍' },
-    { status: 'quoted', icon: '📋' },
-    { status: 'negotiating', icon: '💬' },
-    { status: 'completed', icon: '✅' },
+  const statCards: { status: RequirementStatus; icon: React.ReactNode }[] = [
+    { status: 'matching', icon: <Search size={16} /> },
+    { status: 'quoted', icon: <ClipboardList size={16} /> },
+    { status: 'negotiating', icon: <MessageCircle size={16} /> },
+    { status: 'completed', icon: <CheckCircle size={16} /> },
   ];
 
   const totalActive = stats.matching + stats.quoted + stats.negotiating;
@@ -29,7 +30,7 @@ export default function RequirementStats({
         className={`stat-card total ${activeFilter === null ? 'active' : ''}`}
         onClick={() => onFilterClick(null)}
       >
-        <div className="stat-icon">📊</div>
+        <div className="stat-icon"><BarChart3 size={16} /></div>
         <div className="stat-content">
           <span className="stat-value">{totalActive}</span>
           <span className="stat-label">Active</span>

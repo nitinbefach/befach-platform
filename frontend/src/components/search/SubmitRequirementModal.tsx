@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { Info } from 'lucide-react';
 import { Modal } from '@/components/ui';
 import { CATEGORIES, COUNTRIES } from '@/lib/suppliers';
 import { createRequirement, addRequirementToStorage } from '@/lib/requirements';
@@ -42,7 +43,7 @@ export default function SubmitRequirementModal({ isOpen, onClose, searchQuery = 
         <div className="form-group"><label>Target Price</label><input type="text" value={formData.targetPrice} onChange={e => setFormData({...formData, targetPrice: e.target.value})} placeholder="e.g., $2.50" /></div>
         <div className="form-group"><label>Specifications</label><textarea rows={3} value={formData.specifications} onChange={e => setFormData({...formData, specifications: e.target.value})} placeholder="Product specifications..." /></div>
         <div className="form-group"><label>Preferred Countries</label><div className="chips">{COUNTRIES.slice(0,5).map(c => <label key={c.code} className="chip"><input type="checkbox" checked={formData.preferredCountries.includes(c.name)} onChange={() => setFormData({...formData, preferredCountries: formData.preferredCountries.includes(c.name) ? formData.preferredCountries.filter(x=>x!==c.name) : [...formData.preferredCountries, c.name]})} />{c.flag} {c.name}</label>)}</div></div>
-        <div className="info-box">ℹ️ Our team will find matching suppliers within 24-48 hours.</div>
+        <div className="info-box"><Info size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> Our team will find matching suppliers within 24-48 hours.</div>
         <div className="form-actions"><button type="button" className="btn-cancel" onClick={onClose}>Cancel</button><button type="submit" className="btn-submit" disabled={isSubmitting}>{isSubmitting ? 'Sharing...' : 'Share Requirement'}</button></div>
       </form>
       <style jsx>{`
