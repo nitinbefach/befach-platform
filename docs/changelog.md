@@ -2,6 +2,50 @@
 
 All significant changes to the Befach project are documented here.
 
+## [0.9.0] - Feb 18, 2026 (Mobile UI Fixes & Nav Polish)
+
+### Fixed
+- **My Orders submit button invisible** — globals.css `.btn-primary` with `var(--accent-gradient)` was overriding the page's button background to transparent; fixed with explicit `#f97316 !important` in my-orders page styles
+- **Feedback & AI chat FAB overlap on mobile** — FeedbackWidget repositioned from `bottom: 100px` to `bottom: 155px` on mobile to separate from AI chatbot FAB at `bottom: 90px`
+- **Our Vendors "Add Supplier" modal cut off on mobile** — added `max-height: calc(100vh - 40px)` and `overflow-y: auto` to `.modal-container` in globals.css mobile breakpoint so close button and submit button are accessible
+- **Mobile nav "Start Free Trial" unstyled** — `<Link>` component doesn't receive styled-jsx scoping; converted to native `<button>` with `router.push('/onboarding')` so styles apply correctly
+- **Mobile nav button text alignment** — Login button text was left-aligned due to `.btn` class setting `display: inline-flex`; overridden with `display: flex; justify-content: center` on `.mobile-login`
+
+### Changed
+- Mobile nav "Start Free Trial" button: solid `#f97316` orange background, white bold centered text with `→` arrow, `border-radius: 10px`
+- Mobile nav "Login" button: clean centered ghost button with `#d1d5db` border
+
+---
+
+## [0.8.0] - Feb 18, 2026 (Data Cleanup & Orange Rebrand)
+
+### Changed
+- **Orange rebrand** — replaced all blue (`#2563eb`) branding with Befach orange (`#f97316`) across Cost Calculator, EXIM Data, and other feature pages
+- **Layout redesign** — improved alignment, spacing, and responsive behavior across multiple pages
+
+### Removed
+- **Auto-init demo data removed from all transactional features** — users now start with clean empty states:
+  - `savedSuppliers.ts` — removed `DEMO_SUPPLIERS` array (15 records) and `generateDemoSuppliers()` function
+  - `conversations.ts` — removed `DEMO_SUPPLIERS`, `DEMO_MESSAGES` arrays and `initializeDemoData()` function
+  - `payments.ts` — removed `DEMO_PAYMENTS` (12 records), `DEMO_SOURCES` (3 accounts), `DEMO_GATEWAYS` (5 gateways), and `initializeDemoPayments()` function
+  - `orders.ts` — removed `DEMO_ORDERS` array (6 orders)
+  - `bookingStorage.ts` — removed `generateDemoBookings()` function
+  - `feedback.ts` — removed `generateDemoFeedback()` (25 entries) and `initializeFeedback()` function
+- Removed `initializeDemo*()` calls from 7 page/component files:
+  - `book-shipment/page.tsx`, `supplier-matches/page.tsx`, `our-vendors/page.tsx`
+  - `payments/history/page.tsx`, `payments/new/page.tsx`, `payments/methods/page.tsx`
+  - `FeedbackDashboard.tsx`
+
+### Not Changed (kept for demo/showcase)
+- Dashboard hardcoded metrics and chart data
+- Market Insights mock commodity prices and opportunity cards
+- Compliance Tools mock BOE records and metrics
+- Reports mock report list and summary stats
+- Documents mock document list
+- Smart Sourcing 100-supplier search database
+
+---
+
 ## [0.7.0] - Feb 13, 2026 (Header Enhancements — Notifications, Profile & Logo)
 
 ### Added
@@ -196,6 +240,8 @@ All significant changes to the Befach project are documented here.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 0.9.0 | Feb 18, 2026 | Mobile UI fixes & nav polish |
+| 0.8.0 | Feb 18, 2026 | Data cleanup & orange rebrand |
 | 0.7.0 | Feb 13, 2026 | Header enhancements — notifications, profile & logo |
 | 0.6.0 | Feb 12, 2026 | Mobile optimization & onboarding split |
 | 0.5.0 | Feb 11, 2026 | Login flow, dark mode removal & homepage polish |

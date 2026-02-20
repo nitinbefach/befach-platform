@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
 import Script from "next/script";
 import { Inter } from 'next/font/google'
+import { Suspense } from 'react'
 import './globals.css'
 import { UserProvider } from '@/context/UserModeContext'
+import { PostHogProvider } from '@/components/providers/PostHogProvider'
+import { PostHogPageView } from '@/components/providers/PostHogPageView'
+import { NextStepWrapper } from '@/components/providers/NextStepWrapper'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,9 +37,16 @@ export default function RootLayout({
         )}
       </head>
       <body className={inter.className}>
-        <UserProvider>
-          {children}
-        </UserProvider>
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
+          <UserProvider>
+            <NextStepWrapper>
+              {children}
+            </NextStepWrapper>
+          </UserProvider>
+        </PostHogProvider>
       </body>
     </html>
   )
