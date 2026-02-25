@@ -6,7 +6,6 @@ import './globals.css'
 import { UserProvider } from '@/context/UserModeContext'
 import { PostHogProvider } from '@/components/providers/PostHogProvider'
 import { PostHogPageView } from '@/components/providers/PostHogPageView'
-import { NextStepWrapper } from '@/components/providers/NextStepWrapper'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,9 +41,7 @@ export default function RootLayout({
             <PostHogPageView />
           </Suspense>
           <UserProvider>
-            <NextStepWrapper>
               {children}
-            </NextStepWrapper>
           </UserProvider>
         </PostHogProvider>
       </body>

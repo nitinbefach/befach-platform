@@ -99,13 +99,6 @@ export const TRIGGER_CONFIG: Record<string, TriggerConfig> = {
     cooldownHours: 48,
     minVisits: 1,
   },
-  'ai-assistant': {
-    question: 'Is the AI Assistant helpful?',
-    feedbackType: 'emoji',
-    delay: 0,
-    cooldownHours: 24,
-    minVisits: 1,
-  },
   'shipping-calculator': {
     question: 'Was the shipping estimate helpful?',
     feedbackType: 'thumbs',

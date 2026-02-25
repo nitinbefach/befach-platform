@@ -1,7 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { reportsTourSteps, mobileReportsTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { Modal } from '@/components/ui';
 import { Package, DollarSign, TrendingDown, Factory, Lock, BarChart3, TrendingUp, ClipboardList } from 'lucide-react';
 
@@ -68,7 +72,10 @@ const typeIcons: Record<Report['type'], React.ReactNode> = {
   custom: <BarChart3 size={16} />
 };
 
-export default function ReportsPage() {
+function ReportsContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileReportsTourSteps : reportsTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'reports', steps: tourSteps });
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [reports, setReports] = useState(mockReports);
   const [newReport, setNewReport] = useState({
@@ -134,7 +141,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Summary Stats */}
-      <div className="stats-grid">
+      <div id="reports-stats" className="stats-grid">
         {summaryStats.map((stat, idx) => (
           <div key={idx} className="stat-card">
             <span className="stat-icon">{stat.icon}</span>
@@ -150,7 +157,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Chart Placeholder */}
-      <div className="chart-section">
+      <div id="reports-chart" className="chart-section">
         <div className="chart-header">
           <h2>Import Trends</h2>
           <div className="chart-filters">
@@ -173,7 +180,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Reports List */}
-      <div className="reports-section">
+      <div id="reports-list" className="reports-section">
         <h2>Saved Reports</h2>
         <div className="reports-list">
           {reports.map(report => (
@@ -221,7 +228,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Quick Reports */}
-      <div className="quick-reports">
+      <div id="reports-quick" className="quick-reports">
         <h2>Quick Reports</h2>
         <div className="quick-reports-grid">
           <button className="quick-report-btn">
@@ -513,7 +520,16 @@ export default function ReportsPage() {
           }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function ReportsPage() {
+  return (
+    <Suspense fallback={null}>
+      <ReportsContent />
+    </Suspense>
   );
 }
 

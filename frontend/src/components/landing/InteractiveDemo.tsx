@@ -226,7 +226,7 @@ function AIAssistantCard() {
   const [input, setInput] = useState('');
 
   const handleClick = () => {
-    router.push('/onboarding?redirect=/ai-assistant');
+    router.push('/onboarding?redirect=/dashboard');
   };
 
   return (

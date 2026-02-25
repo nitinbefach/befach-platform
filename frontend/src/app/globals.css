@@ -1,5 +1,64 @@
 /* Import Inter Font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import 'driver.js/dist/driver.css';
+
+/* ── Driver.js Befach Theme ─────────────────────────────── */
+.driver-popover {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+    padding: 20px !important;
+    max-width: 340px !important;
+    font-family: var(--font-inter) !important;
+}
+.driver-popover .driver-popover-title {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 6px !important;
+}
+.driver-popover .driver-popover-description {
+    font-size: 0.875rem !important;
+    color: var(--text-secondary) !important;
+    line-height: 1.5 !important;
+}
+.driver-popover .driver-popover-progress-text {
+    font-size: 0.75rem !important;
+    color: var(--text-muted) !important;
+}
+.driver-popover .driver-popover-navigation-btns {
+    gap: 8px !important;
+}
+.driver-popover .driver-popover-next-btn {
+    background: var(--accent-gradient) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 18px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    text-shadow: none !important;
+}
+.driver-popover .driver-popover-prev-btn {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 18px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    text-shadow: none !important;
+}
+.driver-popover .driver-popover-close-btn {
+    color: var(--text-muted) !important;
+}
+.driver-popover-arrow-side-left .driver-popover-arrow,
+.driver-popover-arrow-side-right .driver-popover-arrow,
+.driver-popover-arrow-side-top .driver-popover-arrow,
+.driver-popover-arrow-side-bottom .driver-popover-arrow {
+    border-color: var(--bg-secondary) !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

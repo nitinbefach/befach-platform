@@ -173,14 +173,14 @@ export default function FeedbackWidget() {
                   <div className="form-group">
                     <label>
                       {activeModal === 'bug' ? 'Describe the issue' :
-                       activeModal === 'feature' ? 'Describe your idea' :
-                       'Comments (optional)'}
+                        activeModal === 'feature' ? 'Describe your idea' :
+                          'Comments (optional)'}
                     </label>
                     <textarea
                       placeholder={
                         activeModal === 'bug' ? 'What went wrong? Steps to reproduce...' :
-                        activeModal === 'feature' ? 'What feature would you like to see?' :
-                        'Tell us what you think...'
+                          activeModal === 'feature' ? 'What feature would you like to see?' :
+                            'Tell us what you think...'
                       }
                       rows={3}
                       value={comment}
@@ -210,7 +210,7 @@ export default function FeedbackWidget() {
         /* Widget Container */
         .widget-container {
           position: fixed;
-          bottom: ${isMobile ? 'calc(155px + env(safe-area-inset-bottom, 0px))' : '24px'};
+          bottom: ${isMobile ? 'calc(100px + env(safe-area-inset-bottom, 0px))' : '24px'};
           right: ${isMobile ? '16px' : '24px'};
           z-index: 900;
         }
@@ -248,12 +248,12 @@ export default function FeedbackWidget() {
         /* Menu */
         .widget-menu {
           position: absolute;
-          bottom: 62px;
+          bottom: 82px;
           right: 0;
           background: white;
           border-radius: 12px;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-          padding: 6px;
+          padding: 8px;
           min-width: 200px;
           animation: slideUp 0.2s ease;
         }

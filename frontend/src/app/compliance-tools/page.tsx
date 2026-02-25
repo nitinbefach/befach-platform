@@ -1,8 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
+import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { complianceTourSteps, mobileComplianceTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { Modal } from '@/components/ui';
 import { ComplianceSearch, ComplianceResultCard } from '@/components/compliance';
 import {
@@ -29,7 +33,10 @@ import {
   Package
 } from 'lucide-react';
 
-export default function ComplianceToolsPage() {
+function ComplianceToolsContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileComplianceTourSteps : complianceTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'compliance-tools', steps: tourSteps });
   const [boeModal, setBoeModal] = useState(false);
   const [searchResults, setSearchResults] = useState<ComplianceRequirement[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -80,7 +87,7 @@ export default function ComplianceToolsPage() {
   return (
     <AppLayout searchPlaceholder="Search regulations, HSN codes...">      <div className="dashboard-container">
         {/* Welcome Section with Quick Actions */}
-        <div className="welcome-section">
+        <div id="compliance-welcome" className="welcome-section">
           <div className="welcome-content">
             <h1 className="welcome-title">Compliance & Regulatory Tools <Shield size={20} style={{ display: 'inline', verticalAlign: 'middle', marginLeft: 8 }} /></h1>
             <p className="welcome-subtitle">
@@ -127,7 +134,7 @@ export default function ComplianceToolsPage() {
         </div>
 
         {/* Metrics Grid */}
-        <div className="metrics-grid">
+        <div id="compliance-metrics" className="metrics-grid">
           <div className="metric-card">
             <div className="metric-header">
               <div className="metric-icon-wrapper">
@@ -194,15 +201,17 @@ export default function ComplianceToolsPage() {
         </div>
 
         {/* Compliance Search Section */}
-        <div className="search-section">
+        <div id="compliance-search" className="search-section">
           <div className="section-header">
             <h2 className="section-title">Search Compliance Requirements</h2>
           </div>
-          <ComplianceSearch
-            onSearch={handleSearch}
-            isLoading={isSearching}
-            placeholder="Search by HSN code (e.g., 8517) or product description (e.g., smartphones)..."
-          />
+          <div>
+            <ComplianceSearch
+              onSearch={handleSearch}
+              isLoading={isSearching}
+              placeholder="Search by HSN code (e.g., 8517) or product description (e.g., smartphones)..."
+            />
+          </div>
         </div>
 
         {/* Search Results */}
@@ -229,7 +238,7 @@ export default function ComplianceToolsPage() {
         )}
 
         {/* Recent BOE Filings Table */}
-        <div className="requirements-section">
+        <div id="compliance-boe" className="requirements-section">
           <div className="section-header">
             <h2 className="section-title">Recent BOE Filings</h2>
             <button onClick={() => setBoeModal(true)} className="section-link">
@@ -870,6 +879,15 @@ export default function ComplianceToolsPage() {
           }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function ComplianceToolsPage() {
+  return (
+    <Suspense fallback={null}>
+      <ComplianceToolsContent />
+    </Suspense>
   );
 }

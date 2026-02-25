@@ -1,9 +1,12 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { myOrdersTourSteps, mobileMyOrdersTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import {
   Package, Clock, CheckCircle, DollarSign,
   Plus, Search, X, ChevronRight, Check, ArrowRight
@@ -13,9 +16,11 @@ import {
   getOrderCounts, filterOrders, groupByDate, createOrder
 } from '@/lib/orders';
 
-export default function MyOrdersPage() {
+function MyOrdersContent() {
   const router = useRouter();
   const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileMyOrdersTourSteps : myOrdersTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'my-orders', steps: tourSteps });
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -210,7 +215,7 @@ export default function MyOrdersPage() {
           </div>
 
           {/* Stats Strip */}
-          <div className="stats-strip">
+          <div id="orders-stats" className="stats-strip">
             <div className={`stat-card ${statHighlight === 'all' ? 'active' : ''}`} onClick={() => handleStatClick('all')}>
               <div className="stat-icon"><Package size={16} /></div>
               <div className="stat-text">
@@ -246,7 +251,7 @@ export default function MyOrdersPage() {
           </div>
 
           {/* Filter Bar */}
-          <div className="filter-bar">
+          <div id="orders-filters" className="filter-bar">
             <div className="filter-chips">
               {chips.map(chip => (
                 <button
@@ -279,7 +284,7 @@ export default function MyOrdersPage() {
         </div>
 
         {/* Timeline */}
-        <div className="timeline-container">
+        <div id="orders-timeline" className="timeline-container">
           {filtered.length === 0 ? (
             <div className="empty-state">
               <div className="empty-state-icon"><Search size={20} /></div>
@@ -1472,6 +1477,15 @@ export default function MyOrdersPage() {
           .form-row { grid-template-columns: 1fr; }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function MyOrdersPage() {
+  return (
+    <Suspense fallback={null}>
+      <MyOrdersContent />
+    </Suspense>
   );
 }

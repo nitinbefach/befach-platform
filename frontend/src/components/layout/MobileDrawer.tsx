@@ -27,7 +27,6 @@ const mobileNavItems = [
   { href: '/supplier-matches', label: 'Supplier Inbox', icon: InboxIcon, badge: '3' },
   { href: '/market-insights', label: 'Market Insights', icon: InsightsIcon },
   { href: '/exim-data', label: 'EX-IM Data', icon: GlobeIcon },
-  { href: '/ai-assistant', label: 'AI Assistant', icon: BrainIcon },
   { href: '/cost-calculator', label: 'Cost Calculator', icon: CalculatorIcon },
   { href: '/book-shipment', label: 'Book Shipment', icon: PackageIcon },
   { href: '/track-shipment', label: 'Track Shipments', icon: TruckIcon },
@@ -539,14 +538,6 @@ function ExchangeIcon() {
       <path d="M3 11V9a4 4 0 0 1 4-4h14" />
       <polyline points="7 23 3 19 7 15" />
       <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-    </svg>
-  );
-}
-
-function BrainIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
-      <path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z" />
     </svg>
   );
 }

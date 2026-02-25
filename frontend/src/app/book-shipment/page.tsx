@@ -8,12 +8,20 @@ import { bookingStorage } from '@/lib/bookingStorage';
 import { BookingRecord, BookingSegment, BookingStatus } from '@/types/booking';
 import { formatCurrency, getPortLabel, getCityLabel } from '@/lib/bookingConstants';
 import { Ship, Truck, ArrowLeft, Package, Plane, MapPin, Calendar, Trash2, Globe } from 'lucide-react';
+import { Suspense } from 'react';
+import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { bookShipmentTourSteps, mobileBookShipmentTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 
 type ActiveSegment = null | 'international' | 'local';
 type Tab = 'new' | 'bookings';
 type Filter = 'all' | BookingSegment | BookingStatus;
 
-export default function BookShipmentPage() {
+function BookShipmentContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileBookShipmentTourSteps : bookShipmentTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'book-shipment', steps: tourSteps });
   const [tab, setTab] = useState<Tab>('new');
   const [activeSegment, setActiveSegment] = useState<ActiveSegment>(null);
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
@@ -89,12 +97,12 @@ export default function BookShipmentPage() {
 
   return (
     <AppLayout>      <div className="page-container">
-        <div className="content-header">
+        <div id="booking-header" className="content-header">
           <h1>Book Shipment</h1>
           <p>Book international freight or local logistics with competitive carrier quotes</p>        </div>
 
         {/* Tabs */}
-        <div className="tabs-container">
+        <div id="booking-tabs" className="tabs-container">
           <button
             className={`tab-btn ${tab === 'new' ? 'active' : ''}`}
             onClick={() => setTab('new')}
@@ -112,7 +120,7 @@ export default function BookShipmentPage() {
 
         {/* New Booking Tab */}
         {tab === 'new' && (
-          <div className="segment-cards">
+          <div id="booking-segments" className="segment-cards">
             <button className="segment-card" onClick={() => setActiveSegment('international')}>
               <div className="segment-icons">
                 <Ship size={28} />
@@ -483,6 +491,15 @@ export default function BookShipmentPage() {
           .filter-chip { padding: 8px 12px; font-size: 0.78rem; }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function BookShipmentPage() {
+  return (
+    <Suspense fallback={null}>
+      <BookShipmentContent />
+    </Suspense>
   );
 }

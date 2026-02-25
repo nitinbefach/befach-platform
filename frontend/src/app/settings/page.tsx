@@ -1,8 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { AppLayout } from '@/components/layout';
+import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { useTour } from '@/hooks/useTour';
+import { settingsTourSteps, mobileSettingsTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { useUser } from '@/context/UserModeContext';
 import {
   Building2, Users, Lock, Smartphone, Monitor, ChevronRight,
@@ -18,7 +22,6 @@ const allSidebarItems = [
   { id: 'market-insights', label: 'Market Insights' },
   { id: 'cost-calculator', label: 'Cost Calculator' },
   { id: 'compliance-tools', label: 'Compliance Tools' },
-  { id: 'ai-assistant', label: 'AI Assistant' },
   { id: 'track-shipment', label: 'Track Shipments' },
   { id: 'documents', label: 'Documents' },
   { id: 'team-management', label: 'Team Members' },
@@ -26,7 +29,10 @@ const allSidebarItems = [
   { id: 'api-settings', label: 'API Settings' },
 ];
 
-export default function SettingsPage() {
+function SettingsContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileSettingsTourSteps : settingsTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'settings', steps: tourSteps });
   const { organization, subscription, sidebarPreferences, updateSidebarPreferences, logout } = useUser();
   const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
 
@@ -76,7 +82,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Profile Banner */}
-      <div className="profile-banner">
+      <div id="settings-profile" className="profile-banner">
         <div className="profile-left">
           <div className="profile-avatar">{initials}</div>
           <div className="profile-identity">
@@ -100,7 +106,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Two-column layout for desktop */}
-      <div className="settings-grid">
+      <div id="settings-grid" className="settings-grid">
         {/* Left column */}
         <div className="settings-col">
 
@@ -138,7 +144,7 @@ export default function SettingsPage() {
           </section>
 
           {/* Notifications */}
-          <section className="card">
+          <section id="settings-notifications" className="card">
             <div className="card-head">
               <h3>Notifications</h3>
             </div>
@@ -797,7 +803,16 @@ export default function SettingsPage() {
           }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={null}>
+      <SettingsContent />
+    </Suspense>
   );
 }

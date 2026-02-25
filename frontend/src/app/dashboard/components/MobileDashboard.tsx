@@ -180,13 +180,17 @@ export default function MobileDashboard() {
         </div>
 
         {/* Horizontal Scroll Metrics */}
-        <MobileMetricsStrip />
+        <div id="dashboard-metrics">
+          <MobileMetricsStrip />
+        </div>
 
         {/* Quick Actions Button */}
-        <MobileQuickActions />
+        <div id="dashboard-quick-actions">
+          <MobileQuickActions />
+        </div>
 
         {/* Analytics Section */}
-        <section className="analytics-section">
+        <section id="dashboard-charts" className="analytics-section">
           <h2 className="section-title-text">
             <BarChart3 size={20} />
             Analytics
@@ -195,7 +199,7 @@ export default function MobileDashboard() {
         </section>
 
         {/* Active Orders - Using shared OrderCard */}
-        <section className="mobile-section">
+        <section id="dashboard-orders" className="mobile-section">
           <div className="section-header-row">
             <h2 className="section-title-text">
               <Package size={20} />
@@ -279,7 +283,7 @@ export default function MobileDashboard() {
         </section>
 
         {/* Market Insights - Using shared InsightCard */}
-        <section className="mobile-section">
+        <section id="dashboard-insights" className="mobile-section">
           <h2 className="section-title-text standalone">
             <Sparkles size={20} />
             Market Insights

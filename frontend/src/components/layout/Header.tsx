@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Calculator, Ship, BarChart3, Box, Truck, FileCheck,
-  Bot, FileText, Database, ChevronDown, Search, ArrowRight
+  FileText, Database, ChevronDown, Search, ArrowRight
 } from 'lucide-react';
 import { Logo } from '../ui';
 
@@ -130,16 +130,6 @@ export default function Header() {
                   )}
                   {activeTab === 'tools' && (
                     <div className="dropdown-items">
-                      <Link href="/ai-assistant" className="dropdown-item">
-                        <div className="dropdown-icon-box">
-                          <Bot size={22} />
-                        </div>
-                        <div className="dropdown-item-content">
-                          <h4>AI Assistant</h4>
-                          <p>Get instant answers 24/7.</p>
-                        </div>
-                        <ArrowRight size={18} className="dropdown-arrow" />
-                      </Link>
                       <Link href="/documents" className="dropdown-item">
                         <div className="dropdown-icon-box">
                           <FileText size={22} />

@@ -120,8 +120,6 @@ export default function WebDashboard() {
     recentActivity,
     marketInsights,
     calculationsLoading,
-    showTour,
-    handleCompleteTour,
   } = useDashboard();
 
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -177,7 +175,7 @@ export default function WebDashboard() {
           <div className="welcome-content">
             <h1 className="welcome-title">Welcome back, {organization?.name || 'there'}!</h1>
           </div>
-          <div className="quick-actions-bar">
+          <div id="dashboard-quick-actions" className="quick-actions-bar">
             {quickActions.map((action, idx) => (
               <motion.div
                 key={idx}
@@ -202,6 +200,7 @@ export default function WebDashboard() {
 
         {/* Primary Metrics Grid */}
         <motion.div
+          id="dashboard-metrics"
           className="metrics-grid"
           variants={prefersReducedMotion ? undefined : containerVariants}
           initial="hidden"
@@ -259,6 +258,7 @@ export default function WebDashboard() {
 
         {/* Charts Section - First Row */}
         <motion.div
+          id="dashboard-charts"
           className="charts-row"
           initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -529,7 +529,7 @@ export default function WebDashboard() {
 
         {/* Active Orders & Recent Activity - Using shared components */}
         <div className="two-column-section">
-          <div className="orders-section">
+          <div id="dashboard-orders" className="orders-section">
             <h3 className="subsection-title">Active Orders</h3>
             <div className="orders-list">
               {activeOrders.map((order) => (
@@ -549,7 +549,7 @@ export default function WebDashboard() {
         </div>
 
         {/* Market Insights Preview - Using shared InsightCard */}
-        <div className="insights-section">
+        <div id="dashboard-insights" className="insights-section">
           <div className="section-header">
             <h2 className="section-title">Market Insights</h2>
             <Link href="/market-insights" className="section-link">

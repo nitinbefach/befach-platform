@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PublicLayout from '@/components/layout/PublicLayout';
-import { Calculator, Search, BarChart3, FileCheck, Truck, Bot, ArrowRight, CheckCircle } from 'lucide-react';
+import { Calculator, Search, BarChart3, FileCheck, Truck, ArrowRight, CheckCircle } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
 
 const services = [
@@ -46,14 +46,6 @@ const services = [
     link: '/track-shipment',
     linkText: 'Track Shipment',
     features: ['Real-time tracking', 'Carrier comparison', 'Alerts']
-  },
-  {
-    icon: Bot,
-    title: 'AI Trade Assistant',
-    description: 'Instant answers to your import questions.',
-    link: '/ai-assistant',
-    linkText: 'Ask AI',
-    features: ['24/7 available', 'Regulations', 'Best practices']
   },
 ];
 

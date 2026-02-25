@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Logo } from '../ui';
 import { Search, Bell, User } from 'lucide-react';
 import { useMobile } from '@/hooks/useMobile';
-import { getAllFeatureStatus } from '@/lib/walkthroughStorage';
-import { FEATURE_FLOW_ORDER } from '@/lib/walkthroughSteps';
 import NotificationPanel from './NotificationPanel';
 import ProfileMenu from './ProfileMenu';
 
@@ -25,12 +23,6 @@ export default function TopBar({
   const { isMobile } = useMobile();
   const notifRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-
-  // Check if there are undiscovered features (for notification dot)
-  const hasUndiscovered = useMemo(() => {
-    const status = getAllFeatureStatus();
-    return FEATURE_FLOW_ORDER.some(id => !status[id] || status[id].visitCount === 0);
-  }, [notifOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close dropdowns on click outside (desktop only)
   useEffect(() => {
@@ -83,7 +75,6 @@ export default function TopBar({
         <div className="dropdown-anchor" ref={notifRef}>
           <button className={`icon-btn notification-btn ${notifOpen ? 'active' : ''}`} onClick={toggleNotif}>
             <Bell size={20} />
-            {hasUndiscovered && <span className="notification-dot"></span>}
           </button>
           <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
         </div>

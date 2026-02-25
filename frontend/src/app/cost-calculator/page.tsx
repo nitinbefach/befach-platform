@@ -1,9 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef, useReducer, useCallback } from 'react';
+import { useState, useEffect, useRef, useReducer, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { costCalculatorTourSteps, mobileCostCalculatorTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import {
   Calculator,
   Search,
@@ -651,10 +654,12 @@ function CalculatorRightPanel({ state, fobValue, fmt, fmtDetailed, onSave, onDow
 
 // ─── Component ───────────────────────────────────────────────────
 
-export default function CostCalculatorPage() {
+function CostCalculatorContent() {
   const [state, dispatch] = useReducer(formReducer, initialState);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const { isDesktop } = useMobile();
+  const { isMobile, isDesktop } = useMobile();
+  const tourSteps = isMobile ? mobileCostCalculatorTourSteps : costCalculatorTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'cost-calculator', steps: tourSteps });
 
   // HSN search
   const [hsnSuggestions, setHsnSuggestions] = useState<any[]>([]);
@@ -943,7 +948,7 @@ export default function CostCalculatorPage() {
     <AppLayout rightPanel={isDesktop ? <CalculatorRightPanel state={state} fobValue={fobValue} fmt={fmt} fmtDetailed={fmtDetailed} onSave={handleSave} onDownloadCSV={handleDownloadCSV} onReset={() => dispatch({ type: 'RESET' })} /> : undefined}>
       <div className="calc-page">
         {/* Header */}
-        <div className="page-header">
+        <div id="calc-header" className="page-header">
           <div className="header-left">
             <Calculator size={28} />
             <div>
@@ -957,7 +962,7 @@ export default function CostCalculatorPage() {
         </div>
 
         {/* ─── FORM ─── */}
-        <div className="form-card">
+        <div id="calc-form" className="form-card">
 
           {/* Product Name */}
           <div className="form-group">
@@ -1051,7 +1056,7 @@ export default function CostCalculatorPage() {
           )}
 
           {/* Shipping Mode */}
-          <div className="form-group">
+          <div id="calc-shipping-mode" className="form-group">
             <label className="label">Shipping Mode <span className="req">*</span></label>
             <div className="mode-grid">
               {shippingModes.map(mode => {
@@ -1353,6 +1358,7 @@ export default function CostCalculatorPage() {
 
           {/* Calculate Button */}
           <button
+            id="calc-submit-btn"
             type="button"
             className={`calc-btn ${!canCalculate ? 'calc-btn-disabled' : ''}`}
             onClick={handleCalculate}
@@ -2368,6 +2374,15 @@ export default function CostCalculatorPage() {
           }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function CostCalculatorPage() {
+  return (
+    <Suspense fallback={null}>
+      <CostCalculatorContent />
+    </Suspense>
   );
 }

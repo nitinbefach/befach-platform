@@ -1,9 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
+import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { useTour } from '@/hooks/useTour';
+import { smartSourcingTourSteps, mobileSmartSourcingTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, ChatWindow, EmptyState } from '@/components/search';
 import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats } from '@/lib/suppliers';
 import { MapPin, Star, Info, HelpCircle, FileText, UserPlus, X } from 'lucide-react';
@@ -21,7 +25,10 @@ const EXTERNAL_SUPPLIERS = [
   { id: 'EXT-006', name: 'Trade Data - Korea Smart Devices', source: 'Trade Data', rating: 4.4, products: ['Smart Watches', 'Earbuds'], location: 'South Korea', verified: false },
 ];
 
-export default function SmartSourcingPage() {
+function SmartSourcingContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileSmartSourcingTourSteps : smartSourcingTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'smart-sourcing', steps: tourSteps });
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const [activeTab, setActiveTab] = useState<SourceTab>('befach');
   const [searchQuery, setSearchQuery] = useState('');
@@ -120,13 +127,13 @@ export default function SmartSourcingPage() {
   };
 
   return (
-    <AppLayout searchPlaceholder="Search suppliers...">      <HeroSearch
+    <AppLayout searchPlaceholder="Search suppliers...">      <div id="sourcing-search"><HeroSearch
         onSearch={handleSearch}
         onToggleFilters={() => setShowFilters(!showFilters)}
         showFilters={showFilters}
         initialQuery={searchQuery}
         initialCategory={selectedCategory}
-      />
+      /></div>
 
       {showFilters && (
         <SearchFilters filters={filters} onFilterChange={setFilters} onClear={clearFilters} onApply={applyFilters} />
@@ -134,7 +141,7 @@ export default function SmartSourcingPage() {
 
       {/* Source Tabs - Only show after search */}
       {hasSearched && (
-        <div className="source-tabs">
+        <div id="sourcing-tabs" className="source-tabs">
           <button className={`source-tab ${activeTab === 'befach' ? 'active' : ''}`} onClick={() => setActiveTab('befach')}>
             Befach Partners <span className="tab-count">{searchResults.length}</span>
           </button>
@@ -146,7 +153,7 @@ export default function SmartSourcingPage() {
 
       {/* Stats Bar - Only show before search */}
       {!hasSearched && (
-        <div className="stats-bar">
+        <div id="sourcing-stats" className="stats-bar">
           <div className="stat-item"><span className="stat-value">{stats.total}</span><span className="stat-label">Verified Suppliers</span></div>
           <div className="stat-item"><span className="stat-value">{stats.premium}</span><span className="stat-label">Premium Partners</span></div>
           {stats.byCategory.map(cat => (
@@ -240,7 +247,7 @@ export default function SmartSourcingPage() {
 
       {/* Help FAB + Popup */}
       {hasSearched && searchResults.length > 0 && activeTab === 'befach' && (
-        <div className="help-fab-wrapper" ref={helpPopupRef}>
+        <div id="sourcing-help" className="help-fab-wrapper" ref={helpPopupRef}>
           {showHelpPopup && (
             <div className="help-popup">
               <div className="help-popup-header">
@@ -375,7 +382,16 @@ export default function SmartSourcingPage() {
           .external-actions button { padding: 8px; font-size: 0.8rem; }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
+  );
+}
+
+export default function SmartSourcingPage() {
+  return (
+    <Suspense fallback={null}>
+      <SmartSourcingContent />
+    </Suspense>
   );
 }

@@ -2,6 +2,39 @@
 
 All significant changes to the Befach project are documented here.
 
+## [1.0.0] - Feb 25, 2026 (Driver.js Guided Tours & Cleanup)
+
+### Added
+- **Driver.js walkthrough system** — replaced broken NextStep.js with lightweight Driver.js (5KB, MIT) for guided page tours
+  - `tourConfig.ts`: Driver.js configuration with Befach orange theming, smooth scroll, overlay
+  - `tourSteps.ts`: 28 step-set exports (14 pages x desktop + mobile variants)
+  - `tourStorage.ts`: per-page localStorage persistence (`befach-tour-{tourId}`)
+  - `useTour.ts` hook: auto-starts tour on first page visit, supports `?tour=true` URL override
+  - `TourFAB.tsx`: compass FAB button (fixed bottom-right) for manual tour re-trigger on all pages
+- **Tour integration on all 14 pages** — each page has `id` attributes on key sections, desktop + mobile step definitions, `<Suspense>` wrapper for `useSearchParams()`:
+  - Dashboard, Cost Calculator, Smart Sourcing, Our Vendors, Submit Requirement
+  - Market Insights, Book Shipment, Track Shipment, Documents, Compliance Tools
+  - My Orders, Reports, Settings, Team Management
+- **Auto-start behavior** — tours auto-start on first visit to each page; after completion, stored as done and won't re-trigger; TourFAB compass always available for manual replay
+- **Driver.js CSS theming** in `globals.css` — custom popover styling with orange accent, rounded corners, progress bar
+
+### Changed
+- **PostHog analytics** scoped to production only (`befach-platform.vercel.app`); disabled on localhost/preview
+- **TourFAB mobile positioning** — moved from `bottom: 210px` to `bottom: 156px` to sit just above the FeedbackWidget button with proper spacing
+- Onboarding flow redirects to `/dashboard?tour=true` after signup to auto-trigger dashboard tour
+
+### Removed
+- **NextStep.js walkthrough system** (broken card positioning):
+  - `nextstepjs` package removed from `package.json`
+  - Deleted: `GuidedTour.tsx`, `NextStepWrapper.tsx`, `TourCard.tsx` (old), `walkthroughSteps.ts`, `walkthroughStorage.ts`, `tourSteps.tsx` (old JSX version), `onboarding/index.ts`
+  - Removed `data-tour` attributes and `NextStepProvider` wrapper from all pages
+  - Removed tour-choice step from onboarding flow (now: profile -> goals -> dashboard)
+- **AI Chatbot system** (not needed for MVP):
+  - Deleted: `ai-assistant/page.tsx`, `AIChatbot.tsx`, `AINudge.tsx`, `aiChat.ts`, `aiNudge.ts`, `chat.ts` types
+  - Removed chatbot references from AppLayout and Sidebar
+
+---
+
 ## [0.9.0] - Feb 18, 2026 (Mobile UI Fixes & Nav Polish)
 
 ### Fixed
@@ -240,6 +273,7 @@ All significant changes to the Befach project are documented here.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.0.0 | Feb 25, 2026 | Driver.js guided tours & cleanup |
 | 0.9.0 | Feb 18, 2026 | Mobile UI fixes & nav polish |
 | 0.8.0 | Feb 18, 2026 | Data cleanup & orange rebrand |
 | 0.7.0 | Feb 13, 2026 | Header enhancements — notifications, profile & logo |

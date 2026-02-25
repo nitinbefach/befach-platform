@@ -1,7 +1,7 @@
 'use client';
 
 import { Logo } from '@/components/ui';
-import { useOnboarding, goalOptions, typeOptions, tourOptions } from './useOnboarding';
+import { useOnboarding, goalOptions, typeOptions } from './useOnboarding';
 
 export default function WebOnboarding() {
   const {
@@ -15,8 +15,6 @@ export default function WebOnboarding() {
     handleGoalToggle,
     handleGoalsSubmit,
     handleGoBack,
-    handleStartTour,
-    handleSkipTour,
     canSubmitProfile,
   } = useOnboarding();
 
@@ -33,14 +31,9 @@ export default function WebOnboarding() {
           <span className="step-label">Profile</span>
         </div>
         <div className="progress-line"></div>
-        <div className={`progress-step ${step === 'goals' ? 'active' : step === 'tour-choice' ? 'completed' : ''}`}>
+        <div className={`progress-step ${step === 'goals' ? 'active' : ''}`}>
           <span className="step-num">2</span>
           <span className="step-label">Goals</span>
-        </div>
-        <div className="progress-line"></div>
-        <div className={`progress-step ${step === 'tour-choice' ? 'active' : ''}`}>
-          <span className="step-num">3</span>
-          <span className="step-label">Get Started</span>
         </div>
       </div>
 
@@ -141,53 +134,6 @@ export default function WebOnboarding() {
           </div>
         )}
 
-        {step === 'tour-choice' && (
-          <div className="step-content tour-choice">
-            <div className="tour-check-icon">
-              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-                <circle cx="28" cy="28" r="28" fill="var(--accent-primary)" opacity="0.1"/>
-                <circle cx="28" cy="28" r="20" fill="var(--accent-primary)" opacity="0.12"/>
-                <path d="M19 28L25 34L38 21" stroke="var(--accent-primary)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <h1>You&apos;re all set!</h1>
-            <p className="step-subtitle">Would you like a quick tour of the platform?</p>
-
-            <div className="tour-options">
-              {(() => {
-                const StartIcon = tourOptions.start.icon;
-                const SkipIcon = tourOptions.skip.icon;
-                return (
-                  <>
-                    <button className="btn-tour" onClick={handleStartTour}>
-                      <div className="tour-btn-icon-wrap">
-                        <StartIcon size={22} />
-                      </div>
-                      <div>
-                        <strong>{tourOptions.start.label}</strong>
-                        <p>{tourOptions.start.desc}</p>
-                      </div>
-                    </button>
-
-                    <button className="btn-skip" onClick={handleSkipTour}>
-                      <div className="tour-btn-icon-wrap skip-icon">
-                        <SkipIcon size={22} />
-                      </div>
-                      <div>
-                        <strong>{tourOptions.skip.label}</strong>
-                        <p>{tourOptions.skip.desc}</p>
-                      </div>
-                    </button>
-                  </>
-                );
-              })()}
-            </div>
-
-            <p className="tour-note">
-              You can always access the tour later from Settings
-            </p>
-          </div>
-        )}
       </div>
 
       <style jsx>{`
@@ -433,75 +379,6 @@ export default function WebOnboarding() {
         .step-actions .btn-continue {
           flex: 2;
           margin-top: 0;
-        }
-        .tour-choice {
-          max-width: 500px;
-        }
-        .tour-check-icon {
-          margin-bottom: 20px;
-        }
-        .tour-options {
-          display: grid;
-          gap: 15px;
-          margin-top: 30px;
-        }
-        .btn-tour, .btn-skip {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          padding: 20px 25px;
-          border-radius: 12px;
-          cursor: pointer;
-          transition: all 0.2s;
-          text-align: left;
-          width: 100%;
-        }
-        .btn-tour {
-          background: var(--accent-gradient);
-          color: white;
-          border: none;
-        }
-        .btn-tour:hover {
-          box-shadow: 0 4px 16px rgba(249, 115, 22, 0.25);
-        }
-        .btn-skip {
-          background: var(--card-bg);
-          color: var(--text-primary);
-          border: 2px solid var(--border-color);
-        }
-        .btn-skip:hover { border-color: var(--accent-primary); }
-        .tour-btn-icon-wrap {
-          width: 44px;
-          height: 44px;
-          border-radius: 10px;
-          background: rgba(255, 255, 255, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .tour-btn-icon-wrap.skip-icon {
-          background: var(--bg-tertiary);
-          color: var(--text-secondary);
-        }
-        .btn-tour strong, .btn-skip strong {
-          display: block;
-          font-size: 1.1em;
-        }
-        .btn-tour p {
-          opacity: 0.9;
-          font-size: 0.9em;
-          margin: 3px 0 0 0;
-        }
-        .btn-skip p {
-          color: var(--text-secondary);
-          font-size: 0.9em;
-          margin: 3px 0 0 0;
-        }
-        .tour-note {
-          color: var(--text-muted);
-          font-size: 0.9em;
-          margin-top: 25px;
         }
         @media (max-width: 600px) {
           .type-options, .goals-grid {

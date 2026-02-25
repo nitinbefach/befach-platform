@@ -1,8 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { useTour } from '@/hooks/useTour';
+import { documentsTourSteps, mobileDocumentsTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { Receipt, ClipboardList, Ship, Package, ScrollText, Landmark, FileText, BookOpen, Check, Clock, Pause } from 'lucide-react';
 
 interface Document {
@@ -107,7 +111,10 @@ const typeLabels: Record<Document['type'], string> = {
   customs: 'Customs'
 };
 
-export default function DocumentsPage() {
+function DocumentsContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileDocumentsTourSteps : documentsTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'documents', steps: tourSteps });
   const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
   const [filter, setFilter] = useState<'all' | Document['type']>('all');
   const [orderFilter, setOrderFilter] = useState<string>('all');
@@ -148,14 +155,14 @@ export default function DocumentsPage() {
   };
 
   return (
-    <AppLayout>      <div className="content-header">
+    <AppLayout>      <div id="docs-header" className="content-header">
         <h1><FileText size={24} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> My Documents</h1>
         <p>Access all your import documents in one place</p>      </div>
 
       {/* Filters */}
-      <div className="filters-section">
+      <div id="docs-filters" className="filters-section">
         <div className="search-box">
-          <input 
+          <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -191,7 +198,7 @@ export default function DocumentsPage() {
           if (orderDocs.length === 0) return null;
 
           return (
-            <div key={order.id} className="order-docs-section">
+            <div key={order.id} id="docs-orders" className="order-docs-section">
               <div className="order-docs-header">
                 <div>
                   <span className="order-id">{order.id}</span>
@@ -303,7 +310,7 @@ export default function DocumentsPage() {
       )}
 
       {/* Help Section */}
-      <div className="help-section">
+      <div id="docs-guide" className="help-section">
         <h3><BookOpen size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} /> Document Guide</h3>
         <div className="help-grid">
           {Object.entries(typeLabels).map(([key, label]) => (
@@ -561,7 +568,16 @@ export default function DocumentsPage() {
         }
       `}</style>
       {promptElement}
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function DocumentsPage() {
+  return (
+    <Suspense fallback={null}>
+      <DocumentsContent />
+    </Suspense>
   );
 }
 

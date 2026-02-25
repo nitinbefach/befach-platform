@@ -1,13 +1,12 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/UserModeContext';
 import calculatorService from '@/services/calculatorService';
 import { CalculationRecord } from '@/types/calculator';
 import { LucideIcon } from 'lucide-react';
 import {
-  Package, TrendingUp, Users, Brain,
+  Package, TrendingUp, Users,
   Star, FileText, ShoppingCart, DollarSign,
   Clock, AlertCircle, CheckCircle
 } from 'lucide-react';
@@ -208,30 +207,17 @@ interface DashboardContextValue {
   // Loading states
   calculationsLoading: boolean;
 
-  // Tour state
-  showTour: boolean;
-  setShowTour: (show: boolean) => void;
-  handleCompleteTour: () => void;
 }
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
-  const searchParams = useSearchParams();
-  const { organization, hasCompletedTour, completeTour } = useUser();
+  const { organization } = useUser();
 
   // State
-  const [showTour, setShowTour] = useState(false);
   const [requirements, setRequirements] = useState<SubmittedRequirement[]>([]);
   const [recentCalculations, setRecentCalculations] = useState<CalculationRecord[]>([]);
   const [calculationsLoading, setCalculationsLoading] = useState(false);
-
-  // Tour effect
-  useEffect(() => {
-    if (searchParams.get('tour') === 'true' && !hasCompletedTour) {
-      setShowTour(true);
-    }
-  }, [searchParams, hasCompletedTour]);
 
   // Load requirements from localStorage
   useEffect(() => {
@@ -339,19 +325,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       href: '/our-vendors',
       color: '#f59e0b'
     },
-    {
-      icon: Brain,
-      title: 'AI Assistant',
-      count: 'Available',
-      href: '/ai-assistant',
-      color: '#8b5cf6'
-    },
   ];
-
-  const handleCompleteTour = () => {
-    setShowTour(false);
-    completeTour();
-  };
 
   const value: DashboardContextValue = {
     organization,
@@ -364,9 +338,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     recentActivity: recentActivityData,
     marketInsights: marketInsightsData,
     calculationsLoading,
-    showTour,
-    setShowTour,
-    handleCompleteTour,
   };
 
   return (

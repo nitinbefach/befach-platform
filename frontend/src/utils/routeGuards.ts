@@ -16,7 +16,6 @@ export const platformOnlyRoutes = [
   '/smart-sourcing',
   '/cost-calculator',
   '/compliance-tools',
-  '/ai-assistant',
   '/saved-suppliers',
   '/team-management',
   '/reports',
@@ -90,7 +89,6 @@ export function getRedirectPath(pathname: string, userMode: UserMode): string | 
       '/smart-sourcing': '/submit-requirement',
       '/cost-calculator': '/chat-support',
       '/compliance-tools': '/documents',
-      '/ai-assistant': '/chat-support',
       '/saved-suppliers': '/my-orders',
       '/team-management': '/settings',
       '/reports': '/billing-history',
@@ -105,7 +103,7 @@ export function getRedirectPath(pathname: string, userMode: UserMode): string | 
   if (userMode === 'platform' && isServiceOnlyRoute(pathname)) {
     const redirectMap: Record<string, string> = {
       '/submit-requirement': '/smart-sourcing',
-      '/chat-support': '/ai-assistant',
+      '/chat-support': '/dashboard',
       '/track-simple': '/track-shipment',
       '/dashboard-service': '/dashboard',
       '/billing-history': '/settings',

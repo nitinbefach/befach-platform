@@ -18,6 +18,10 @@ import { AppLayout } from '@/components/layout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { trackShipment, ShipmentTracking, formatShipmentNumber, getTimelineStatusColor } from '@/lib/tracking';
 import { usePrefersReducedMotion, useMobile } from '@/hooks/useMobile';
+import { Suspense } from 'react';
+import { useTour } from '@/hooks/useTour';
+import { trackShipmentTourSteps, mobileTrackShipmentTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { Package, Ship, MapPin, Clock, ChevronRight, Bookmark, Calendar, Check, Info } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
 
@@ -173,7 +177,7 @@ function MyShipmentsSection({
   );
 }
 
-export default function TrackShipmentPage() {
+function TrackShipmentContent() {
   const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
   const [trackingNumber, setTrackingNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -189,6 +193,8 @@ export default function TrackShipmentPage() {
 
   const prefersReducedMotion = usePrefersReducedMotion();
   const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileTrackShipmentTourSteps : trackShipmentTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'track-shipment', steps: tourSteps });
 
   // Load tracked shipments from localStorage
   useEffect(() => {
@@ -307,6 +313,7 @@ export default function TrackShipmentPage() {
         {/* My Shipments Section - Always visible at top */}
         {!shipmentData && (
           <motion.div
+            id="track-shipments"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
@@ -324,6 +331,7 @@ export default function TrackShipmentPage() {
             /* ========== SEARCH VIEW ========== */
             <motion.div
               key="search"
+              id="track-search"
               className="search-view"
               initial="hidden"
               animate="visible"
@@ -1890,6 +1898,15 @@ export default function TrackShipmentPage() {
         }
       `}</style>
       {promptElement}
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function TrackShipmentPage() {
+  return (
+    <Suspense fallback={null}>
+      <TrackShipmentContent />
+    </Suspense>
   );
 }

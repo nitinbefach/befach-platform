@@ -1,10 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { Modal } from '@/components/ui';
 import { Users, Lock, ClipboardList } from 'lucide-react';
 import { useUserMode } from '@/context/UserModeContext';
+import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { teamManagementTourSteps, mobileTeamManagementTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 
 interface TeamMember {
   id: string;
@@ -69,7 +73,10 @@ const roleColors = {
   viewer: '#6b7280'
 };
 
-export default function TeamManagementPage() {
+function TeamManagementContent() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileTeamManagementTourSteps : teamManagementTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'team-management', steps: tourSteps });
   const { subscription, organization } = useUserMode();
   const [members, setMembers] = useState(mockTeamMembers);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -135,7 +142,7 @@ export default function TeamManagementPage() {
       </div>
 
       {/* Seats Usage */}
-      <div className="seats-card">
+      <div id="team-seats" className="seats-card">
         <div className="seats-info">
           <h3>Team Seats</h3>
           <p className="seats-count">
@@ -159,7 +166,7 @@ export default function TeamManagementPage() {
       </div>
 
       {/* Team Members List */}
-      <div className="team-list">
+      <div id="team-members" className="team-list">
         <h2>Team Members</h2>
         <div className="members-grid">
           {members.map(member => (
@@ -236,7 +243,7 @@ export default function TeamManagementPage() {
       </div>
 
       {/* Roles Guide */}
-      <div className="roles-guide">
+      <div id="team-roles" className="roles-guide">
         <h2><ClipboardList size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} /> Roles & Permissions</h2>
         <div className="roles-grid">
           {(Object.keys(roleDescriptions) as TeamMember['role'][]).map(role => (
@@ -535,7 +542,16 @@ export default function TeamManagementPage() {
           }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function TeamManagementPage() {
+  return (
+    <Suspense fallback={null}>
+      <TeamManagementContent />
+    </Suspense>
   );
 }
 

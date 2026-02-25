@@ -29,7 +29,10 @@
       "Bash(npx vercel:*)",
       "Bash(netstat:*)",
       "Bash(powershell.exe -NoProfile -Command 'Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }; echo \"\"done\"\"')",
-      "Bash(npx next dev:*)"
+      "Bash(npx next dev:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(node test-walkthrough.js:*)",
+      "WebFetch(domain:dap.zoho.com)"
     ],
     "deny": [],
     "ask": []

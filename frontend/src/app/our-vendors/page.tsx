@@ -44,10 +44,18 @@ import {
   Plus, Search, Download, ChevronRight,
   MessageCircle, FileText, ShoppingCart, Trash2, Users
 } from 'lucide-react';
+import { Suspense } from 'react';
+import { useMobile } from '@/hooks/useMobile';
+import { useTour } from '@/hooks/useTour';
+import { ourVendorsTourSteps, mobileOurVendorsTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 
-export default function OurVendorsPage() {
+function OurVendorsContent() {
   const router = useRouter();
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileOurVendorsTourSteps : ourVendorsTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'our-vendors', steps: tourSteps });
   const [suppliers, setSuppliers] = useState<SavedSupplier[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -269,14 +277,15 @@ export default function OurVendorsPage() {
       </div>
 
       {/* PIPELINE STATS */}
-      <SupplierPipelineStats
+      <div id="vendors-pipeline"><SupplierPipelineStats
         stats={pipelineStats}
         onStageClick={handleStageClick}
         activeStages={filters.relationshipStages}
       />
+      </div>
 
       {/* TOOLBAR */}
-      <div className="toolbar">
+      <div id="vendors-toolbar" className="toolbar">
         <div className="toolbar-left">
           <button className="btn-primary" onClick={() => setAddSupplierModal(true)}>
             <Plus size={16} />
@@ -312,15 +321,16 @@ export default function OurVendorsPage() {
       </div>
 
       {/* FILTERS */}
-      <SupplierFilters
+      <div id="vendors-filters"><SupplierFilters
         filters={filters}
         onFiltersChange={setFilters}
         allTags={allTags}
         allCategories={allCategories}
       />
+      </div>
 
       {/* SUPPLIER LIST */}
-      <div className="suppliers-list">
+      <div id="vendors-list" className="suppliers-list">
         {/* Desktop table header */}
         <div className="table-header">
           <div className="col-expand"></div>
@@ -1568,6 +1578,15 @@ export default function OurVendorsPage() {
         }
       `}</style>
       {promptElement}
+      {!tourActive && <TourFAB onStart={startTour} />}
     </AppLayout>
+  );
+}
+
+export default function OurVendorsPage() {
+  return (
+    <Suspense fallback={null}>
+      <OurVendorsContent />
+    </Suspense>
   );
 }

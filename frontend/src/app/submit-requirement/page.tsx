@@ -1,9 +1,13 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
+import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { useTour } from '@/hooks/useTour';
+import { submitRequirementTourSteps, mobileSubmitRequirementTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import {
   createRequirement,
   addRequirementToStorage,
@@ -80,8 +84,11 @@ const units = [
   { value: 'containers_40', label: 'Containers (40ft)' },
 ];
 
-export default function SubmitRequirementPage() {
+function SubmitRequirementContent() {
   const router = useRouter();
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileSubmitRequirementTourSteps : submitRequirementTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'submit-requirement', steps: tourSteps });
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -766,12 +773,12 @@ export default function SubmitRequirementPage() {
   return (
     <AppLayout>      <div className="page-container">
         {/* Header */}
-        <div className="content-header">
+        <div id="req-header" className="content-header">
           <h1>Share Your Requirement</h1>
           <p>Tell us what you need and we&apos;ll find the best suppliers for you</p>        </div>
 
         {/* Tabs */}
-        <div className="tabs-container">
+        <div id="req-tabs" className="tabs-container">
           <button
             className={`tab ${activeTab === 'single' ? 'active' : ''}`}
             onClick={() => setActiveTab('single')}
@@ -789,7 +796,7 @@ export default function SubmitRequirementPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="tab-content">
+        <div id="req-form" className="tab-content">
           {/* Single Product Tab */}
           {activeTab === 'single' && (
             <form onSubmit={handleSubmitSingle} className="form-container">
@@ -1591,7 +1598,16 @@ export default function SubmitRequirementPage() {
           }
         }
       `}</style>
+      {!tourActive && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
+  );
+}
+
+export default function SubmitRequirementPage() {
+  return (
+    <Suspense fallback={null}>
+      <SubmitRequirementContent />
+    </Suspense>
   );
 }

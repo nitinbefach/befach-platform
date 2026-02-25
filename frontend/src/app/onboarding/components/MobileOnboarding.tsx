@@ -1,7 +1,7 @@
 'use client';
 
 import { Logo } from '@/components/ui';
-import { useOnboarding, goalOptions, typeOptions, tourOptions } from './useOnboarding';
+import { useOnboarding, goalOptions, typeOptions } from './useOnboarding';
 
 export default function MobileOnboarding() {
   const {
@@ -15,13 +15,11 @@ export default function MobileOnboarding() {
     handleGoalToggle,
     handleGoalsSubmit,
     handleGoBack,
-    handleStartTour,
-    handleSkipTour,
     canSubmitProfile,
   } = useOnboarding();
 
-  const stepIndex = step === 'profile' ? 0 : step === 'goals' ? 1 : 2;
-  const stepLabels = ['Profile', 'Goals', 'Get Started'];
+  const stepIndex = step === 'profile' ? 0 : 1;
+  const stepLabels = ['Profile', 'Goals'];
 
   return (
     <div className="m-onboarding">
@@ -154,36 +152,6 @@ export default function MobileOnboarding() {
           </div>
         )}
 
-        {/* STEP 3: TOUR CHOICE */}
-        {step === 'tour-choice' && (
-          <div className="m-step m-step-center">
-            <div className="m-celebration">
-              <div className="m-celebration-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="24" r="24" fill="var(--accent-primary)" opacity="0.12"/>
-                  <path d="M16 24L22 30L33 19" stroke="var(--accent-primary)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <h1>You&apos;re all set</h1>
-              <p>Your account is ready. Would you like a quick tour?</p>
-            </div>
-
-            <div className="m-tour-actions">
-              <button className="m-btn-primary" onClick={handleStartTour}>
-                Take the Tour
-                <span className="m-btn-sub">2 min walkthrough</span>
-              </button>
-
-              <button className="m-btn-text" onClick={handleSkipTour}>
-                Skip, go to dashboard
-              </button>
-            </div>
-
-            <p className="m-tour-note">
-              You can access the tour anytime from Settings
-            </p>
-          </div>
-        )}
       </div>
 
       <style jsx>{`
@@ -456,35 +424,6 @@ export default function MobileOnboarding() {
           color: white;
         }
 
-        /* Celebration */
-        .m-celebration {
-          margin-top: 32px;
-          margin-bottom: 32px;
-        }
-        .m-celebration-icon { margin-bottom: 20px; }
-        .m-celebration h1 {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin: 0 0 8px;
-        }
-        .m-celebration p {
-          font-size: 0.9rem;
-          color: var(--text-secondary);
-          margin: 0;
-          max-width: 260px;
-          line-height: 1.5;
-        }
-
-        /* Tour Actions */
-        .m-tour-actions {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          margin-bottom: 20px;
-        }
-
         /* Footer */
         .m-footer { margin-top: auto; padding-top: 20px; }
         .m-footer-split { display: flex; gap: 10px; }
@@ -541,11 +480,6 @@ export default function MobileOnboarding() {
         }
         .m-btn-text:active { color: var(--text-primary); }
 
-        .m-tour-note {
-          font-size: 0.78rem;
-          color: var(--text-muted);
-          margin: 0;
-        }
       `}</style>
     </div>
   );

@@ -36,7 +36,6 @@ const navigationConfig = {
         { id: 'exim-data', href: '/exim-data', icon: 'globe', label: 'EX-IM Data', section: 'analytics' },
         { id: 'cost-calculator', href: '/cost-calculator', icon: 'dollar', label: 'Cost Calculator', section: 'utilities' },
         { id: 'compliance-tools', href: '/compliance-tools', icon: 'shield', label: 'Compliance', section: 'utilities' },
-        { id: 'ai-assistant', href: '/ai-assistant', icon: 'chat', label: 'AI Assistant', section: 'utilities' },
       ],
     },
     logistics: {

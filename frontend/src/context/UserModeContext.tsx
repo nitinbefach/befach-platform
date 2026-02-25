@@ -32,15 +32,12 @@ interface UserContextType {
   subscription: Subscription | null;
   sidebarPreferences: SidebarPreferences;
   hasCompletedOnboarding: boolean;
-  hasCompletedTour: boolean;
   isLoading: boolean;
   login: (org: Organization) => void;
   logout: () => void;
   updateOrganization: (org: Partial<Organization>) => void;
   updateSidebarPreferences: (prefs: Partial<SidebarPreferences>) => void;
   completeOnboarding: () => void;
-  completeTour: () => void;
-  skipTour: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -48,7 +45,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 const STORAGE_KEY = 'befach-user';
 const SIDEBAR_PREFS_KEY = 'befach-sidebar-prefs';
 const ONBOARDING_KEY = 'befach-onboarding';
-const TOUR_KEY = 'befach-tour';
 
 const defaultSidebarPreferences: SidebarPreferences = {
   pinnedItems: ['dashboard', 'my-orders', 'submit-requirement'],
@@ -76,7 +72,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [subscription, setSubscription] = useState<Subscription | null>(defaultSubscription);
   const [sidebarPreferences, setSidebarPreferences] = useState<SidebarPreferences>(defaultSidebarPreferences);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(true);
-  const [hasCompletedTour, setHasCompletedTour] = useState(true);
   const [isLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
@@ -114,13 +109,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setOrganization(null);
     setSubscription(null);
     setHasCompletedOnboarding(false);
-    setHasCompletedTour(false);
     setSidebarPreferences(defaultSidebarPreferences);
-    
+
     safeStorage.removeItem(STORAGE_KEY);
     safeStorage.removeItem(SIDEBAR_PREFS_KEY);
     safeStorage.removeItem(ONBOARDING_KEY);
-    safeStorage.removeItem(TOUR_KEY);
     
     router.push('/');
   }, [router]);
@@ -150,16 +143,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     safeStorage.setItem(ONBOARDING_KEY, 'true');
   }, []);
 
-  const completeTour = useCallback(() => {
-    setHasCompletedTour(true);
-    safeStorage.setItem(TOUR_KEY, 'true');
-  }, []);
-
-  const skipTour = useCallback(() => {
-    setHasCompletedTour(true);
-    safeStorage.setItem(TOUR_KEY, 'true');
-  }, []);
-
   if (!mounted) {
     return null;
   }
@@ -173,15 +156,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         subscription,
         sidebarPreferences,
         hasCompletedOnboarding,
-        hasCompletedTour,
         isLoading,
         login,
         logout,
         updateOrganization,
         updateSidebarPreferences,
-        completeOnboarding,
-        completeTour,
-        skipTour
+        completeOnboarding
       }}
     >
       {children}

@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { AppLayout } from '@/components/layout';
+import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { useTour } from '@/hooks/useTour';
+import { marketInsightsTourSteps, mobileMarketInsightsTourSteps } from '@/lib/tourSteps';
+import TourFAB from '@/components/walkthrough/TourFAB';
 import { MarketProvider, useMarket } from '@/context/MarketContext';
 import { MarketOverviewCard } from '@/components/market/MarketOverviewCard';
 import { TrendingCommoditiesTable } from '@/components/market/TrendingCommoditiesTable';
@@ -14,7 +18,10 @@ import { marketDataService, mockCommodities } from '@/services/marketData';
 import { Commodity, MarketOverview, TimeRange } from '@/types/market';
 import '@/styles/market-insights.css';
 
-function MarketInsightsContent() {
+function MarketInsightsInner() {
+  const { isMobile } = useMobile();
+  const tourSteps = isMobile ? mobileMarketInsightsTourSteps : marketInsightsTourSteps;
+  const { startTour, isActive: tourActive } = useTour({ tourId: 'market-insights', steps: tourSteps });
   const {
     filters,
     updateFilters,
@@ -67,12 +74,12 @@ function MarketInsightsContent() {
         <p>Real-time commodity prices, market trends, and trade intelligence</p>      </div>
 
       {/* Market Overview Card */}
-      <div className="mb-6">
+      <div id="market-overview" className="mb-6">
         <MarketOverviewCard overview={marketOverview} loading={loading} />
       </div>
 
       {/* Market Filters */}
-      <div className="mb-6">
+      <div id="market-filters" className="mb-6">
         <MarketFilters
           filters={filters}
           onFiltersChange={updateFilters}
@@ -82,7 +89,7 @@ function MarketInsightsContent() {
 
       {/* Main Content with Tabs */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
+        <div id="market-tabs" className="lg:col-span-3">
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -200,7 +207,7 @@ function MarketInsightsContent() {
         </div>
 
         {/* Sidebar with Watchlist */}
-        <div className="lg:col-span-1">
+        <div id="market-watchlist" className="lg:col-span-1">
           <WatchlistWidget
             onCommodityClick={handleCommodityClick}
             onAddClick={() => setSelectedTab('overview')}
@@ -208,8 +215,17 @@ function MarketInsightsContent() {
           />
         </div>
       </div>
+      {!tourActive && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
+  );
+}
+
+function MarketInsightsContent() {
+  return (
+    <Suspense fallback={null}>
+      <MarketInsightsInner />
+    </Suspense>
   );
 }
 

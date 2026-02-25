@@ -20,7 +20,6 @@ import { MobileDrawer } from './MobileDrawer';
 import { BottomNav } from './BottomNav';
 import Modal from '../ui/Modal';
 import FeedbackWidget from '../feedback/FeedbackWidget';
-import AIChatbot from '../chat/AIChatbot';
 import { useMobile } from '@/hooks/useMobile';
 import { pageSlide, springConfig } from '@/lib/animations';
 
@@ -141,9 +140,6 @@ export default function AppLayout({
 
       {/* Global Feedback Widget */}
       <FeedbackWidget />
-
-      {/* Global AI Chatbot */}
-      <AIChatbot />
 
       {/* Get Started Modal */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Get Started with BEFACH">
