@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { useTour } from '@/hooks/useTour';
 import { settingsTourSteps, mobileSettingsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
@@ -38,6 +39,8 @@ function SettingsContent() {
 
   useEffect(() => {
     triggerTimeBasedFeedback('settings', 25000);
+    const timer = setTimeout(() => captureFeatureAction('settings', 'updated'), 25000);
+    return () => clearTimeout(timer);
   }, [triggerTimeBasedFeedback]);
 
   const [notifications, setNotifications] = useState({

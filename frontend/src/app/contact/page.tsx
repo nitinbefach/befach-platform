@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PublicLayout from '@/components/layout/PublicLayout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
 
@@ -27,6 +28,7 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    captureFeatureAction('contact', 'submitted');
     triggerFeedback('contact');
   };
 

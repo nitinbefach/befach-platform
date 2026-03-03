@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { reportsTourSteps, mobileReportsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { Modal } from '@/components/ui';
@@ -111,6 +112,7 @@ function ReportsContent() {
 
     setReports([report, ...reports]);
     setShowGenerateModal(false);
+    captureFeatureAction('report', 'generated', { type: newReport.type, dateRange: newReport.dateRange });
 
     // Simulate report generation
     setTimeout(() => {

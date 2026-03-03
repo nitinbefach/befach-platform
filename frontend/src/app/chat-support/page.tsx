@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { MessageCircle, Smartphone, Bot, Send, Phone, Mail, Clock, BookOpen } from 'lucide-react';
 
 interface Message {
@@ -66,6 +67,7 @@ export default function ChatSupportPage() {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    if (messages.length <= 1) captureFeatureAction('chat', 'started');
     setInputValue('');
     setIsTyping(true);
 

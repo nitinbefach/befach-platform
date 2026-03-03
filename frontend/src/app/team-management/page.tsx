@@ -7,6 +7,7 @@ import { Users, Lock, ClipboardList } from 'lucide-react';
 import { useUserMode } from '@/context/UserModeContext';
 import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { teamManagementTourSteps, mobileTeamManagementTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 
@@ -104,6 +105,7 @@ function TeamManagementContent() {
     setInviteEmail('');
     setInviteRole('member');
     setShowInviteModal(false);
+    captureFeatureAction('team', 'managed', { role: inviteRole });
   };
 
   const handleRoleChange = () => {

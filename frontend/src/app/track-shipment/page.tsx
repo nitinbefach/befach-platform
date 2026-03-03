@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { trackShipment, ShipmentTracking, formatShipmentNumber, getTimelineStatusColor } from '@/lib/tracking';
 import { usePrefersReducedMotion, useMobile } from '@/hooks/useMobile';
 import { Suspense } from 'react';
@@ -237,6 +238,7 @@ function TrackShipmentContent() {
       const data = await trackShipment(trackingNumber);
       if (data) {
         setShipmentData(data);
+        captureFeatureAction('shipment', 'tracked', { trackingNumber: data.shipmentNumber });
       } else {
         setError('No shipment found with this tracking number. Try: 0037');
       }

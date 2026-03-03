@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { CheckCircle, Mail, Download, FolderOpen, Check, AlertTriangle, Inbox, RefreshCw, X, Link2, MapPin, Briefcase } from 'lucide-react';
 import {
   CATEGORIES,
@@ -115,6 +116,7 @@ export default function InviteSupplierPage() {
     setLastInvitation(invitation);
     setIsSubmitting(false);
     setSubmitted(true);
+    captureFeatureAction('supplier', 'invited', { companyName: singleForm.companyName });
     triggerFeedback('invite-supplier');
   };
 

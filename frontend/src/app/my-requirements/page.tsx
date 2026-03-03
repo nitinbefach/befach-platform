@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { ClipboardList } from 'lucide-react';
 import RequirementCard from '@/components/requirements/RequirementCard';
 import RequirementStats from '@/components/requirements/RequirementStats';
@@ -44,6 +45,9 @@ export default function MyRequirementsPage() {
     // Check for dev mode
     const devParam = searchParams.get('dev');
     setIsDevMode(devParam === 'true');
+
+    const timer = setTimeout(() => captureFeatureAction('requirements', 'reviewed'), 20000);
+    return () => clearTimeout(timer);
   }, [searchParams]);
 
   // Demo mode: auto-progress status

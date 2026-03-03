@@ -6,6 +6,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { submitRequirementTourSteps, mobileSubmitRequirementTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import {
@@ -195,6 +196,7 @@ function SubmitRequirementContent() {
     setSubmittedRequirement(requirement);
     setRedirectCountdown(5);
     setSubmitted(true);
+    captureFeatureAction('requirement', 'submitted', { type: 'single' });
     triggerFeedback('submit-requirement');
   };
 
@@ -224,6 +226,7 @@ function SubmitRequirementContent() {
     setSubmittedRequirement(requirement);
     setRedirectCountdown(5);
     setSubmitted(true);
+    captureFeatureAction('requirement', 'submitted', { type: 'bulk' });
     triggerFeedback('submit-requirement');
   };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   ShipmentRecord,
   TraderSummary,
@@ -134,6 +135,7 @@ export function EximDataProvider({ children }: { children: ReactNode }) {
       setShippers(shipperResult);
       setCountries(countryResult);
       setHsCodes(hsResult);
+      captureFeatureAction('exim_data', 'searched', { query: params.searchTerms?.join(', ') });
     } catch (err) {
       console.error('Search failed:', err);
     } finally {

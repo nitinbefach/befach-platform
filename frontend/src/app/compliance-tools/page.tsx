@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { complianceTourSteps, mobileComplianceTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { Modal } from '@/components/ui';
@@ -72,6 +73,7 @@ function ComplianceToolsContent() {
     try {
       const result = await searchCompliance(params);
       setSearchResults(result.requirements);
+      captureFeatureAction('compliance', 'checked', { resultCount: result.requirements.length });
     } catch (error) {
       console.error('Search failed:', error);
     } finally {

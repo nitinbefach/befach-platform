@@ -5,6 +5,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
 import { getSavedSuppliers, type SavedSupplier } from '@/lib/savedSuppliers';
 import { createPayment } from '@/lib/payments';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   CURRENCIES,
   PAYMENT_METHODS,
@@ -116,6 +117,7 @@ export default function MakePaymentPage() {
     });
     setPaymentRef(payment.referenceNumber);
     setSuccess(true);
+    captureFeatureAction('payment', 'initiated', { segment: form.segment, method: form.method });
   };
 
   const handleReset = () => {

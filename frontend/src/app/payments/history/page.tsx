@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   getPayments,
   filterPayments,
@@ -27,6 +28,8 @@ export default function PaymentHistoryPage() {
 
   useEffect(() => {
     setPayments(getPayments());
+    const timer = setTimeout(() => captureFeatureAction('payment_history', 'viewed'), 20000);
+    return () => clearTimeout(timer);
   }, []);
 
   const filtered = filterPayments(payments, filters);

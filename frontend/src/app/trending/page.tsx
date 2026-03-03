@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { AppLayout } from '@/components/layout';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import Link from 'next/link';
 
 const trendingProducts = [
@@ -20,6 +22,11 @@ const trendingMarkets = [
 ];
 
 export default function TrendingPage() {
+  useEffect(() => {
+    const timer = setTimeout(() => captureFeatureAction('trending', 'explored'), 15000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <AppLayout>
       <div className="page-header">

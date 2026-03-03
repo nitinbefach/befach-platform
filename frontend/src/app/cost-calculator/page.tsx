@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { costCalculatorTourSteps, mobileCostCalculatorTourSteps } from '@/lib/tourSteps';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import {
   Calculator,
@@ -833,6 +834,7 @@ function CostCalculatorContent() {
           totalLandedCost, costPerUnit, exchangeRate: rate, breakdown,
         },
       });
+      captureFeatureAction('cost_calculator', 'calculated', { product: state.productName });
     }, 600);
   }, [canCalculate, state, fobValue]);
 

@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { safeStorage } from '@/lib/safeStorage';
+import posthog from 'posthog-js';
 
 export type UserRole = 'owner' | 'admin' | 'member' | 'viewer';
 
@@ -11,6 +12,11 @@ export interface Organization {
   type: 'individual' | 'company';
   teamSize: '1' | '2-5' | '6-20' | '20+';
   primaryGoals?: string[];
+  industry?: string;
+  role?: string;
+  experienceLevel?: string;
+  tradeVolume?: string;
+  tradeDirection?: string;
 }
 
 export interface Subscription {
@@ -57,6 +63,11 @@ const defaultOrganization: Organization = {
   type: 'company',
   teamSize: '2-5',
   primaryGoals: ['source-products', 'track-shipments', 'calculate-costs'],
+  industry: 'other',
+  role: 'owner',
+  experienceLevel: '1-3-years',
+  tradeVolume: 'exploring',
+  tradeDirection: 'import',
 };
 
 const defaultSubscription: Subscription = {
@@ -87,6 +98,31 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       console.error('Error loading user data:', e);
     }
+
+    // Re-identify returning users for PostHog session stitching
+    const savedUser = safeStorage.getItem(STORAGE_KEY);
+    if (savedUser) {
+      try {
+        const { organization: savedOrg, subscription: savedSub } = JSON.parse(savedUser);
+        if (savedOrg?.name) {
+          posthog.identify(savedOrg.name, {
+            company_name: savedOrg.name,
+            company_type: savedOrg.type,
+            team_size: savedOrg.teamSize,
+            plan: savedSub?.plan || 'free',
+            role: 'owner',
+            goals: savedOrg.primaryGoals || [],
+            industry: savedOrg.industry || '',
+            user_role: savedOrg.role || '',
+            experience_level: savedOrg.experienceLevel || '',
+            trade_volume: savedOrg.tradeVolume || '',
+            trade_direction: savedOrg.tradeDirection || '',
+          });
+        }
+      } catch (e) {
+        // Silently fail — don't block app initialization
+      }
+    }
   }, []);
 
   const login = useCallback((org: Organization) => {
@@ -102,6 +138,20 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       organization: org,
       subscription: { plan: 'free', seats: 1, validUntil: null }
     }));
+
+    posthog.identify(org.name, {
+      company_name: org.name,
+      company_type: org.type,
+      team_size: org.teamSize,
+      plan: 'free',
+      role: 'owner',
+      goals: org.primaryGoals || [],
+      industry: org.industry || '',
+      user_role: org.role || '',
+      experience_level: org.experienceLevel || '',
+      trade_volume: org.tradeVolume || '',
+      trade_direction: org.tradeDirection || '',
+    });
   }, []);
 
   const logout = useCallback(() => {
@@ -114,7 +164,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     safeStorage.removeItem(STORAGE_KEY);
     safeStorage.removeItem(SIDEBAR_PREFS_KEY);
     safeStorage.removeItem(ONBOARDING_KEY);
-    
+
+    posthog.reset();
+
     router.push('/');
   }, [router]);
 
@@ -141,7 +193,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const completeOnboarding = useCallback(() => {
     setHasCompletedOnboarding(true);
     safeStorage.setItem(ONBOARDING_KEY, 'true');
-  }, []);
+    posthog.capture('onboarding_completed', {
+      goals_count: organization?.primaryGoals?.length || 0,
+      industry: organization?.industry || '',
+      trade_volume: organization?.tradeVolume || '',
+    });
+  }, [organization]);
 
   if (!mounted) {
     return null;

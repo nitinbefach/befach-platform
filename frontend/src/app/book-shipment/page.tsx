@@ -7,6 +7,7 @@ import LocalBooking from './components/LocalBooking';
 import { bookingStorage } from '@/lib/bookingStorage';
 import { BookingRecord, BookingSegment, BookingStatus } from '@/types/booking';
 import { formatCurrency, getPortLabel, getCityLabel } from '@/lib/bookingConstants';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { Ship, Truck, ArrowLeft, Package, Plane, MapPin, Calendar, Trash2, Globe } from 'lucide-react';
 import { Suspense } from 'react';
 import { useMobile } from '@/hooks/useMobile';
@@ -38,6 +39,7 @@ function BookShipmentContent() {
   const handleBackFromWizard = () => {
     setActiveSegment(null);
     refreshBookings();
+    captureFeatureAction('shipment', 'booked', { segment: activeSegment });
   };
 
   const handleDelete = (id: string) => {

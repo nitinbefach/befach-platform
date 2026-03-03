@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { useTour } from '@/hooks/useTour';
 import { marketInsightsTourSteps, mobileMarketInsightsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
@@ -40,6 +41,8 @@ function MarketInsightsInner() {
 
   useEffect(() => {
     triggerTimeBasedFeedback('market-insights', 30000);
+    const timer = setTimeout(() => captureFeatureAction('market_insights', 'viewed'), 30000);
+    return () => clearTimeout(timer);
   }, [triggerTimeBasedFeedback]);
 
   // Fetch market data
