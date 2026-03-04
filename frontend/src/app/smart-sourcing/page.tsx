@@ -6,7 +6,6 @@ import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import { smartSourcingTourSteps, mobileSmartSourcingTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, ChatWindow, EmptyState } from '@/components/search';
@@ -94,7 +93,6 @@ function SmartSourcingContent() {
 
       setHasSearched(true);
       setIsSearching(false);
-      captureFeatureAction('smart_sourcing', 'searched', { query, resultCount: results.length });
       if (query) addToSearchHistory(query, results.length);
       triggerFeedback('supplier-search');
     }, 300);

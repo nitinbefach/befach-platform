@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PublicLayout from '@/components/layout/PublicLayout';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   Search, ShoppingCart, Filter, ChevronDown, Star,
   Grid3X3, List, ChevronLeft, ChevronRight, Package,
@@ -55,11 +54,6 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => captureFeatureAction('products', 'browsed'), 15000);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const savedTheme = safeStorage.getItem('theme');

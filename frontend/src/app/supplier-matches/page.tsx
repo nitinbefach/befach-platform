@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   Conversation,
   Message,
@@ -120,7 +119,6 @@ export default function MessagesPage() {
     sendMessage(selectedId, messageInput.trim());
     setMessageInput('');
     setConversations(getStoredConversations());
-    captureFeatureAction('suppliers', 'matched', { conversationId: selectedId });
 
     // Simulate supplier response after 2-3 seconds
     setTimeout(() => {

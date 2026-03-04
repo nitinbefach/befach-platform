@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   getFXRateComparison,
   generateFXHistory,
@@ -98,7 +97,6 @@ export default function FXRatesPage() {
     setAlerts(getRateAlerts());
     setAlertTarget('');
     setShowAlertForm(false);
-    captureFeatureAction('fx_rates', 'converted', { from: fromCurrency, to: toCurrency });
   };
 
   const handleRemoveAlert = (id: string) => {

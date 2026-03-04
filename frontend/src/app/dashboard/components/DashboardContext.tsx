@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useUser } from '@/context/UserModeContext';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import calculatorService from '@/services/calculatorService';
 import { CalculationRecord } from '@/types/calculator';
 import { LucideIcon } from 'lucide-react';
@@ -250,11 +249,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       }
     };
     loadCalculations();
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => captureFeatureAction('dashboard', 'engaged'), 15000);
-    return () => clearTimeout(timer);
   }, []);
 
   // Compute metrics

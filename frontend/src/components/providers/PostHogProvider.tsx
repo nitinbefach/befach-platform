@@ -9,13 +9,6 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     capture_pageview: false,
     person_profiles: 'identified_only',
-    autocapture: true,
-    capture_performance: true,
-    opt_in_site_apps: true,
-    session_recording: {
-      maskAllInputs: false,
-      maskInputOptions: { password: true },
-    },
   });
 }
 

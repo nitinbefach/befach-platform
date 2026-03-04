@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   History,
   Search,
@@ -36,8 +35,6 @@ export default function HistoryPage() {
 
   useEffect(() => {
     triggerTimeBasedFeedback('cost-calculator-history', 20000);
-    const timer = setTimeout(() => captureFeatureAction('cost_calculator_history', 'viewed'), 20000);
-    return () => clearTimeout(timer);
   }, [triggerTimeBasedFeedback]);
 
   // State

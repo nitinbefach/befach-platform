@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import { Modal } from '@/components/ui';
 import {
   SavedSupplier,
@@ -216,7 +215,6 @@ function OurVendorsContent() {
     });
     setSuppliers(getSavedSuppliers());
     setAddSupplierModal(false);
-    captureFeatureAction('vendors', 'browsed');
     triggerFeedback('vendor-management');
     setNewSupplierForm({
       name: '',

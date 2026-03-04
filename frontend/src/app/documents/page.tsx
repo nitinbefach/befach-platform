@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import { useTour } from '@/hooks/useTour';
 import { documentsTourSteps, mobileDocumentsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
@@ -138,7 +137,6 @@ function DocumentsContent() {
   });
 
   const handleDownload = (doc: Document) => {
-    captureFeatureAction('documents', 'managed', { docName: doc.name, docType: doc.type });
     // Simulate download
     alert(`Downloading ${doc.name}...`);
   };

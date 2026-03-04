@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
-import { captureFeatureAction } from '@/lib/posthogEvents';
 import { myOrdersTourSteps, mobileMyOrdersTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import {
@@ -79,7 +78,6 @@ function MyOrdersContent() {
     } else {
       setExpandedId(prev => prev === order.id ? null : order.id);
     }
-    captureFeatureAction('orders', 'viewed', { orderId: order.id });
   }, [isMobile]);
 
   // Bottom sheet
