@@ -338,7 +338,7 @@ function SmartSourcingContent() {
 
         .no-external { text-align: center; padding: 40px; color: var(--text-muted); }
 
-        .help-fab-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 90; display: flex; flex-direction: column; align-items: flex-end; }
+        .help-fab-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 900; display: flex; flex-direction: column; align-items: flex-end; }
         .help-fab { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(249,115,22,0.4); transition: all 0.2s; }
         .help-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(249,115,22,0.5); }
         .help-popup { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 12px; width: 280px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: popupSlideUp 0.2s ease-out; }
@@ -366,8 +366,9 @@ function SmartSourcingContent() {
           .sort-select { width: 100%; }
           .external-card { padding: 14px; }
           .external-cta { padding: 24px 16px; }
-          .help-fab-wrapper { bottom: 72px; right: 16px; }
-          .help-popup { width: 260px; }
+          .help-fab-wrapper { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); right: 16px; }
+          .help-fab { width: 46px; height: 46px; }
+          .help-popup { width: 260px; max-height: calc(100vh - 260px); overflow-y: auto; }
         }
 
         @media (max-width: 480px) {

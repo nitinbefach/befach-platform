@@ -251,6 +251,10 @@ export default function SupplierModal({
         }
 
         .supplier-rating {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 2px;
           color: #fbbf24;
           font-size: 0.9rem;
           margin-bottom: 4px;
@@ -565,8 +569,49 @@ export default function SupplierModal({
         }
 
         @media (max-width: 600px) {
+          .modal-header {
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+
+          .supplier-avatar {
+            width: 48px;
+            height: 48px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+          }
+
+          .supplier-info h2 {
+            font-size: 1.05rem;
+          }
+
+          .header-badges {
+            flex-direction: row;
+            width: 100%;
+            align-items: flex-start;
+            gap: 8px;
+          }
+
+          .tab {
+            padding: 10px 12px;
+            font-size: 0.82rem;
+          }
+
+          .modal-body {
+            min-height: 200px;
+            max-height: 50vh;
+          }
+
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
+          }
+
+          .metric {
+            padding: 12px;
+          }
+
+          .metric-value {
+            font-size: 1.1rem;
           }
 
           .info-grid {
@@ -579,6 +624,44 @@ export default function SupplierModal({
 
           .product-pricing {
             text-align: left;
+          }
+
+          .modal-footer button {
+            padding: 12px 10px;
+            font-size: 0.85rem;
+          }
+
+          .reviews-summary {
+            padding: 16px;
+          }
+
+          .rating-big .rating-value {
+            font-size: 2.2rem;
+          }
+
+          .reviews-placeholder {
+            padding: 24px 16px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .modal-footer {
+            flex-direction: column;
+          }
+
+          .modal-footer button {
+            width: 100%;
+          }
+
+          .modal-tabs {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .tab {
+            white-space: nowrap;
+            padding: 8px 10px;
+            font-size: 0.78rem;
           }
         }
       `}</style>
