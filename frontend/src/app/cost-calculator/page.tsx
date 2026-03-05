@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
+import posthog from 'posthog-js';
 import { costCalculatorTourSteps, mobileCostCalculatorTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import {
@@ -833,6 +834,7 @@ function CostCalculatorContent() {
           totalLandedCost, costPerUnit, exchangeRate: rate, breakdown,
         },
       });
+      posthog.capture('cost_calculator_calculated', { product: state.productName });
     }, 600);
   }, [canCalculate, state, fobValue]);
 
