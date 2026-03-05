@@ -6,7 +6,8 @@ import { PostHogProvider as PHProvider } from 'posthog-js/react';
 // Module-level init — runs once when file is imported, before any render
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    api_host: '/ingest',
+    ui_host: 'https://us.i.posthog.com',
     capture_pageview: false,
     person_profiles: 'identified_only',
     opt_in_site_apps: true,
