@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import {
   Conversation,
@@ -25,6 +26,7 @@ import {
   STATUS_CONFIG,
 } from '@/lib/conversations';
 import { MessageCircle, Star, FolderOpen, CheckCircle, Inbox, CircleDot, DollarSign, Archive, Paperclip } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 // Filter tabs configuration
 const FILTER_TABS: { id: ConversationFilter; label: string; iconKey: string }[] = [
@@ -47,6 +49,8 @@ function FilterIcon({ iconKey, size = 14 }: { iconKey: string; size?: number }) 
 }
 
 export default function MessagesPage() {
+  const searchParams = useSearchParams();
+
   // State
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -71,18 +75,24 @@ export default function MessagesPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load conversations on mount
+  // Load conversations on mount + auto-select from URL param
   useEffect(() => {
     const stored = getStoredConversations();
     setConversations(stored);
     setIsLoading(false);
+
+    // Auto-select conversation from ?chat= param (e.g. from Smart Sourcing)
+    const chatId = searchParams.get('chat');
+    if (chatId && stored.find(c => c.id === chatId)) {
+      setSelectedId(chatId);
+    }
 
     // Check for mobile view
     const checkMobile = () => setIsMobileView(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [searchParams]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -116,6 +126,7 @@ export default function MessagesPage() {
   const handleSendMessage = () => {
     if (!selectedId || !messageInput.trim()) return;
 
+    captureFeatureAction('suppliers', 'matched', { conversation_id: selectedId });
     sendMessage(selectedId, messageInput.trim());
     setMessageInput('');
     setConversations(getStoredConversations());

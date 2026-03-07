@@ -28,8 +28,12 @@ export default function SupplierModal({
   const allProducts = supplier.catalogue.flatMap((c) => c.products);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="">
+    <Modal isOpen={isOpen} onClose={onClose} title="" className="bottom-sheet" hideHeader>
       <div className="supplier-modal">
+        {/* Drag handle for mobile bottom sheet */}
+        <div className="sheet-handle-bar">
+          <div className="sheet-handle-indicator" />
+        </div>
         {/* Header */}
         <div className="modal-header">
           <div className="supplier-avatar">{supplier.companyName.charAt(0)}</div>
@@ -215,6 +219,13 @@ export default function SupplierModal({
       <style jsx>{`
         .supplier-modal {
           padding: 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        .sheet-handle-bar {
+          display: none;
         }
 
         .modal-header {
@@ -251,6 +262,10 @@ export default function SupplierModal({
         }
 
         .supplier-rating {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 2px;
           color: #fbbf24;
           font-size: 0.9rem;
           margin-bottom: 4px;
@@ -273,22 +288,27 @@ export default function SupplierModal({
           align-items: flex-end;
         }
 
-        .verified-badge {
-          background: rgba(34, 197, 94, 0.1);
-          color: #22c55e;
-          padding: 4px 12px;
+        .verified-badge,
+        .premium-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 4px 10px;
           border-radius: 16px;
           font-size: 0.75rem;
           font-weight: 600;
+          white-space: nowrap;
+          line-height: 1;
+        }
+
+        .verified-badge {
+          background: rgba(34, 197, 94, 0.1);
+          color: #22c55e;
         }
 
         .premium-badge {
           background: rgba(249, 115, 22, 0.1);
           color: #f97316;
-          padding: 4px 12px;
-          border-radius: 16px;
-          font-size: 0.75rem;
-          font-weight: 600;
         }
 
         .modal-tabs {
@@ -564,9 +584,113 @@ export default function SupplierModal({
           box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+          .sheet-handle-bar {
+            display: flex;
+            justify-content: center;
+            padding: 12px 0 4px;
+            flex-shrink: 0;
+          }
+
+          .sheet-handle-indicator {
+            width: 36px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+          }
+
+          .supplier-modal {
+            height: 100%;
+            max-height: 90vh;
+            padding: 0 16px;
+          }
+
+          .modal-header {
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            grid-template-rows: auto auto;
+            gap: 0 12px;
+            flex-shrink: 0;
+            padding-bottom: 14px;
+            margin-bottom: 0;
+          }
+
+          .supplier-avatar {
+            grid-row: 1;
+            grid-column: 1;
+            width: 44px;
+            height: 44px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            align-self: start;
+            margin-top: 2px;
+          }
+
+          .supplier-info {
+            grid-row: 1;
+            grid-column: 2;
+            min-width: 0;
+          }
+
+          .supplier-info h2 {
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .supplier-rating {
+            font-size: 0.8rem;
+          }
+
+          .supplier-rating span {
+            font-size: 0.75rem;
+          }
+
+          .supplier-location {
+            font-size: 0.8rem;
+          }
+
+          .header-badges {
+            grid-row: 2;
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 6px;
+            margin-top: 10px;
+          }
+
+          .modal-tabs {
+            flex-shrink: 0;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .tab {
+            padding: 10px 12px;
+            font-size: 0.82rem;
+            white-space: nowrap;
+          }
+
+          .modal-body {
+            flex: 1;
+            min-height: 0;
+            max-height: none;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
+          }
+
+          .metric {
+            padding: 12px;
+          }
+
+          .metric-value {
+            font-size: 1.1rem;
           }
 
           .info-grid {
@@ -579,6 +703,55 @@ export default function SupplierModal({
 
           .product-pricing {
             text-align: left;
+          }
+
+          .modal-footer {
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            background: var(--card-bg);
+            padding: 14px 0;
+            margin-top: 0;
+            gap: 10px;
+          }
+
+          .modal-footer button {
+            flex: 1;
+            padding: 12px 8px;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+          }
+
+          .reviews-summary {
+            padding: 16px;
+          }
+
+          .rating-big .rating-value {
+            font-size: 2.2rem;
+          }
+
+          .reviews-placeholder {
+            padding: 24px 16px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .modal-footer {
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .modal-footer button {
+            width: 100%;
+            padding: 13px 12px;
+          }
+
+          .tab {
+            padding: 8px 10px;
+            font-size: 0.78rem;
           }
         }
       `}</style>

@@ -248,7 +248,7 @@ export default function FeedbackWidget() {
         /* Menu */
         .widget-menu {
           position: absolute;
-          bottom: 82px;
+          bottom: ${isMobile ? '56px' : '82px'};
           right: 0;
           background: white;
           border-radius: 12px;
