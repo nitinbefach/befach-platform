@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/UserModeContext';
+import posthog from 'posthog-js';
 import {
-  Search, Truck, Calculator, BarChart3, FileCheck, Users,
+  PackageSearch, Ship, BadgeDollarSign, TrendingUp, ShieldCheck, Handshake,
   User, Building2, type LucideIcon
 } from 'lucide-react';
 
@@ -17,12 +18,12 @@ export interface GoalOption {
 }
 
 export const goalOptions: GoalOption[] = [
-  { id: 'source-products', label: 'Source products from suppliers', icon: Search },
-  { id: 'track-shipments', label: 'Track shipments and logistics', icon: Truck },
-  { id: 'calculate-costs', label: 'Calculate import costs and duties', icon: Calculator },
-  { id: 'market-research', label: 'Research market trends', icon: BarChart3 },
-  { id: 'manage-compliance', label: 'Manage compliance and documents', icon: FileCheck },
-  { id: 'team-collaboration', label: 'Collaborate with my team', icon: Users },
+  { id: 'source-products', label: 'Source products from suppliers', icon: PackageSearch },
+  { id: 'track-shipments', label: 'Track shipments and logistics', icon: Ship },
+  { id: 'calculate-costs', label: 'Calculate import costs and duties', icon: BadgeDollarSign },
+  { id: 'market-research', label: 'Research market trends', icon: TrendingUp },
+  { id: 'manage-compliance', label: 'Manage compliance and documents', icon: ShieldCheck },
+  { id: 'team-collaboration', label: 'Collaborate with my team', icon: Handshake },
 ];
 
 export const typeOptions = {
@@ -62,6 +63,10 @@ export function useOnboarding(): UseOnboardingReturn {
         teamSize: '1',
         primaryGoals: []
       });
+      posthog.identify(companyName.trim(), {
+        company_name: companyName.trim(),
+        company_type: companyType,
+      });
       setStep('goals');
     }
   };
@@ -76,6 +81,12 @@ export function useOnboarding(): UseOnboardingReturn {
 
   const handleGoalsSubmit = () => {
     completeOnboarding();
+    posthog.capture('onboarding_completed', {
+      company_name: companyName.trim(),
+      company_type: companyType,
+      goals: selectedGoals,
+      goals_count: selectedGoals.length,
+    });
     router.push(redirectTo || '/dashboard?tour=true');
   };
 

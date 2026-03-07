@@ -210,7 +210,7 @@ export default function FeedbackWidget() {
         /* Widget Container */
         .widget-container {
           position: fixed;
-          bottom: ${isMobile ? 'calc(132px + env(safe-area-inset-bottom, 0px))' : '24px'};
+          bottom: ${isMobile ? 'calc(100px + env(safe-area-inset-bottom, 0px))' : '24px'};
           right: ${isMobile ? '16px' : '24px'};
           z-index: 900;
         }
@@ -248,7 +248,7 @@ export default function FeedbackWidget() {
         /* Menu */
         .widget-menu {
           position: absolute;
-          bottom: 82px;
+          bottom: ${isMobile ? '56px' : '82px'};
           right: 0;
           background: white;
           border-radius: 12px;

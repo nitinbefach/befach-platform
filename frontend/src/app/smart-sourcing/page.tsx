@@ -2,17 +2,20 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
 import { useMobile } from '@/hooks/useMobile';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { smartSourcingTourSteps, mobileSmartSourcingTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
-import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, ChatWindow, EmptyState } from '@/components/search';
-import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats } from '@/lib/suppliers';
+import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, EmptyState } from '@/components/search';
+import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats, saveSupplierFromSearch } from '@/lib/suppliers';
+import { createConversation, getStoredConversations } from '@/lib/conversations';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { MapPin, Star, Info, HelpCircle, FileText, UserPlus, X } from 'lucide-react';
 
-type ModalType = 'none' | 'supplier-detail' | 'contact' | 'chat';
+type ModalType = 'none' | 'supplier-detail' | 'contact';
 type SourceTab = 'befach' | 'external';
 
 // Mock external suppliers from Alibaba, Trade Data, etc.
@@ -26,6 +29,7 @@ const EXTERNAL_SUPPLIERS = [
 ];
 
 function SmartSourcingContent() {
+  const router = useRouter();
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileSmartSourcingTourSteps : smartSourcingTourSteps;
   const { startTour, isActive: tourActive } = useTour({ tourId: 'smart-sourcing', steps: tourSteps });
@@ -94,6 +98,7 @@ function SmartSourcingContent() {
       setHasSearched(true);
       setIsSearching(false);
       if (query) addToSearchHistory(query, results.length);
+      captureFeatureAction('smart_sourcing', 'searched', { query, results_count: results.length });
       triggerFeedback('supplier-search');
     }, 300);
   };
@@ -126,14 +131,33 @@ function SmartSourcingContent() {
     setActiveModal(type);
   };
 
+  const handleStartChat = (supplier: Supplier) => {
+    const existing = getStoredConversations().find(c => c.supplierId === supplier.id);
+    if (existing) {
+      router.push(`/supplier-matches?chat=${existing.id}`);
+      return;
+    }
+    const conversation = createConversation({
+      supplierId: supplier.id,
+      supplierName: supplier.companyName,
+      supplierCountry: supplier.location.country,
+      supplierCategory: supplier.catalogue[0]?.category,
+      supplierVerified: supplier.partnerStatus === 'verified' || supplier.partnerStatus === 'premium',
+      supplierRating: supplier.metrics.avgRating,
+      source: 'direct_contact',
+    });
+    saveSupplierFromSearch(supplier, 'chat');
+    router.push(`/supplier-matches?chat=${conversation.id}`);
+  };
+
   return (
     <AppLayout searchPlaceholder="Search suppliers...">      <div id="sourcing-search"><HeroSearch
-        onSearch={handleSearch}
-        onToggleFilters={() => setShowFilters(!showFilters)}
-        showFilters={showFilters}
-        initialQuery={searchQuery}
-        initialCategory={selectedCategory}
-      /></div>
+      onSearch={handleSearch}
+      onToggleFilters={() => setShowFilters(!showFilters)}
+      showFilters={showFilters}
+      initialQuery={searchQuery}
+      initialCategory={selectedCategory}
+    /></div>
 
       {showFilters && (
         <SearchFilters filters={filters} onFilterChange={setFilters} onClear={clearFilters} onApply={applyFilters} />
@@ -164,7 +188,7 @@ function SmartSourcingContent() {
 
       {/* Befach Partners Tab */}
       {activeTab === 'befach' && hasSearched && (
-        <section className="results-section">
+        <section id="sourcing-results" className="results-section">
           {isSearching ? (
             <div className="loading"><div className="spinner"></div><p>Searching suppliers...</p></div>
           ) : searchResults.length > 0 ? (
@@ -184,7 +208,7 @@ function SmartSourcingContent() {
                     result={result}
                     onView={(s) => openModal('supplier-detail', s)}
                     onContact={(s) => openModal('contact', s)}
-                    onChat={(s) => openModal('chat', s)}
+                    onChat={(s) => handleStartChat(s)}
                   />
                 ))}
               </div>
@@ -255,18 +279,12 @@ function SmartSourcingContent() {
                 <button className="help-popup-close" onClick={() => setShowHelpPopup(false)}><X size={16} /></button>
               </div>
               <Link href="/submit-requirement" className="help-popup-item" onClick={() => setShowHelpPopup(false)}>
-                <div className="help-popup-icon req"><FileText size={18} /></div>
-                <div>
-                  <div className="help-popup-title">Share Your Requirement</div>
-                  <div className="help-popup-desc">Let us find suppliers for you</div>
-                </div>
+                <div className="help-popup-icon req"><FileText size={16} /></div>
+                <span className="help-popup-title">Share Your Requirement</span>
               </Link>
               <Link href="/invite-supplier" className="help-popup-item" onClick={() => setShowHelpPopup(false)}>
-                <div className="help-popup-icon invite"><UserPlus size={18} /></div>
-                <div>
-                  <div className="help-popup-title">Invite Your Suppliers</div>
-                  <div className="help-popup-desc">Bring your existing suppliers to Befach</div>
-                </div>
+                <div className="help-popup-icon invite"><UserPlus size={16} /></div>
+                <span className="help-popup-title">Invite Your Suppliers</span>
               </Link>
             </div>
           )}
@@ -278,17 +296,14 @@ function SmartSourcingContent() {
 
       {/* Modals */}
       {selectedSupplier && activeModal === 'supplier-detail' && (
-        <SupplierModal supplier={selectedSupplier} isOpen={true} onClose={() => setActiveModal('none')} onContact={() => setActiveModal('contact')} onChat={() => setActiveModal('chat')} />
+        <SupplierModal supplier={selectedSupplier} isOpen={true} onClose={() => setActiveModal('none')} onContact={() => setActiveModal('contact')} onChat={() => handleStartChat(selectedSupplier)} />
       )}
       {selectedSupplier && activeModal === 'contact' && (
         <ContactModal supplier={selectedSupplier} isOpen={true} onClose={() => setActiveModal('none')} searchQuery={searchQuery} />
       )}
-      {selectedSupplier && activeModal === 'chat' && (
-        <ChatWindow supplier={selectedSupplier} isOpen={true} onClose={() => setActiveModal('none')} />
-      )}
 
       <style jsx>{`
-        .source-tabs { display: flex; gap: 8px; margin-bottom: 24px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 6px; width: fit-content; }
+        .source-tabs { display: flex; gap: 8px; margin-bottom: 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 6px; width: fit-content; }
         .source-tab { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); position: relative; }
         .source-tab:hover { color: var(--text-primary); background: var(--bg-secondary); }
         .source-tab.active { color: #f97316; background: rgba(249,115,22,0.1); }
@@ -341,18 +356,17 @@ function SmartSourcingContent() {
         .help-fab-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 900; display: flex; flex-direction: column; align-items: flex-end; }
         .help-fab { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(249,115,22,0.4); transition: all 0.2s; }
         .help-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(249,115,22,0.5); }
-        .help-popup { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; margin-bottom: 12px; width: 280px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: popupSlideUp 0.2s ease-out; }
+        .help-popup { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; margin-bottom: 12px; width: 240px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: popupSlideUp 0.2s ease-out; }
         @keyframes popupSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .help-popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }
-        .help-popup-header span { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+        .help-popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
+        .help-popup-header span { font-weight: 600; font-size: 0.85rem; color: var(--text-primary); }
         .help-popup-close { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px; }
-        .help-popup-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; text-decoration: none; color: var(--text-primary); transition: background 0.2s; }
-        .help-popup-item:hover { background: var(--bg-hover, rgba(255,255,255,0.05)); }
-        .help-popup-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .help-popup-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: var(--text-primary); transition: background 0.15s; }
+        .help-popup-item:hover { background: var(--bg-hover, rgba(0,0,0,0.04)); }
+        .help-popup-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .help-popup-icon.req { background: rgba(249,115,22,0.12); color: #f97316; }
-        .help-popup-icon.invite { background: rgba(59,130,246,0.12); color: #60a5fa; }
-        .help-popup-title { font-weight: 600; font-size: 0.9rem; }
-        .help-popup-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+        .help-popup-icon.invite { background: rgba(59,130,246,0.12); color: #3b82f6; }
+        .help-popup-title { font-weight: 600; font-size: 0.85rem; }
 
         @media (max-width: 768px) {
           .source-tabs { width: 100%; }
@@ -366,9 +380,9 @@ function SmartSourcingContent() {
           .sort-select { width: 100%; }
           .external-card { padding: 14px; }
           .external-cta { padding: 24px 16px; }
-          .help-fab-wrapper { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); right: 16px; }
+          .help-fab-wrapper { bottom: calc(220px + env(safe-area-inset-bottom, 0px)); right: 16px; }
           .help-fab { width: 46px; height: 46px; }
-          .help-popup { width: 260px; max-height: calc(100vh - 260px); overflow-y: auto; }
+          .help-popup { width: 220px; max-height: calc(100vh - 260px); overflow-y: auto; }
         }
 
         @media (max-width: 480px) {
