@@ -24,6 +24,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import AppLayout from '@/components/layout/AppLayout';
 import { useDashboard, timeAgo } from './DashboardContext';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 // Import shared components
 import {
@@ -115,7 +116,7 @@ function MobileQuickActions() {
                       key={idx}
                       href={action.href}
                       className="action-card"
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => { captureFeatureAction('dashboard', 'engaged', { action: action.title }); setIsOpen(false); }}
                     >
                       <div
                         className="action-icon"

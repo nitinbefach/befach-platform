@@ -28,6 +28,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { ArrowRightLeft, Bell, Trash2, Plus, TrendingUp } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 export default function FXRatesPage() {
   const { isMobile } = useMobile();
@@ -78,6 +79,7 @@ export default function FXRatesPage() {
   });
 
   const swapCurrencies = () => {
+    captureFeatureAction('fx_rates', 'converted', { from: fromCurrency, to: toCurrency });
     setFromCurrency(toCurrency);
     setToCurrency(fromCurrency);
   };

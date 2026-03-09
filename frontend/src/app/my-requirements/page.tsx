@@ -23,6 +23,7 @@ import {
   STATUS_CONFIG,
 } from '@/lib/requirements';
 import { addToRecycleBin } from '@/lib/recycle-bin';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 export default function MyRequirementsPage() {
   const router = useRouter();
@@ -44,6 +45,9 @@ export default function MyRequirementsPage() {
     // Check for dev mode
     const devParam = searchParams.get('dev');
     setIsDevMode(devParam === 'true');
+
+    const timer = setTimeout(() => captureFeatureAction('requirements', 'reviewed'), 20000);
+    return () => clearTimeout(timer);
   }, [searchParams]);
 
   // Demo mode: auto-progress status

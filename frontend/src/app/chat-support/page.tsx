@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { MessageCircle, Smartphone, Bot, Send, Phone, Mail, Clock, BookOpen } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface Message {
   id: number;
@@ -57,6 +58,10 @@ export default function ChatSupportPage() {
 
   const sendMessage = async (content: string, actionId?: string) => {
     if (!content.trim()) return;
+
+    if (messages.filter(m => m.type === 'user').length === 0) {
+      captureFeatureAction('chat', 'started');
+    }
 
     const userMessage: Message = {
       id: messages.length + 1,

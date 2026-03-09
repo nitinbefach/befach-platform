@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import posthog from 'posthog-js';
 import { safeStorage } from '@/lib/safeStorage';
 
 export type UserRole = 'owner' | 'admin' | 'member' | 'viewer';
@@ -76,10 +77,27 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
-  // Load saved sidebar preferences from localStorage
+  // Load saved user data and sidebar preferences from localStorage
   useEffect(() => {
     setMounted(true);
     try {
+      const savedUser = safeStorage.getItem(STORAGE_KEY);
+      if (savedUser) {
+        const { organization: savedOrg, subscription: savedSub } = JSON.parse(savedUser);
+        if (savedOrg?.name) {
+          setOrganization(savedOrg);
+          if (savedSub) setSubscription(savedSub);
+          try {
+            posthog.identify(savedOrg.name, {
+              name: savedOrg.name,
+              company_type: savedOrg.type,
+              team_size: savedOrg.teamSize,
+              plan: savedSub?.plan || 'free',
+              goals: savedOrg.primaryGoals || [],
+            });
+          } catch (e) { /* PostHog not initialized in dev */ }
+        }
+      }
       const savedPrefs = safeStorage.getItem(SIDEBAR_PREFS_KEY);
       if (savedPrefs) {
         setSidebarPreferences(JSON.parse(savedPrefs));
@@ -102,6 +120,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       organization: org,
       subscription: { plan: 'free', seats: 1, validUntil: null }
     }));
+
+    try {
+      posthog.identify(org.name, {
+        name: org.name,
+        company_type: org.type,
+        team_size: org.teamSize,
+        plan: 'free',
+        goals: org.primaryGoals || [],
+      });
+    } catch (e) { /* PostHog not initialized in dev */ }
   }, []);
 
   const logout = useCallback(() => {
@@ -114,7 +142,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     safeStorage.removeItem(STORAGE_KEY);
     safeStorage.removeItem(SIDEBAR_PREFS_KEY);
     safeStorage.removeItem(ONBOARDING_KEY);
-    
+
+    try { posthog.reset(); } catch (e) { /* noop in dev */ }
+
     router.push('/');
   }, [router]);
 
@@ -141,6 +171,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const completeOnboarding = useCallback(() => {
     setHasCompletedOnboarding(true);
     safeStorage.setItem(ONBOARDING_KEY, 'true');
+    try { posthog.capture('onboarding_completed'); } catch (e) { /* noop in dev */ }
   }, []);
 
   if (!mounted) {

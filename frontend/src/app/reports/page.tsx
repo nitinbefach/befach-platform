@@ -8,6 +8,7 @@ import { reportsTourSteps, mobileReportsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { Modal } from '@/components/ui';
 import { Package, DollarSign, TrendingDown, Factory, Lock, BarChart3, TrendingUp, ClipboardList } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface Report {
   id: string;
@@ -111,6 +112,7 @@ function ReportsContent() {
 
     setReports([report, ...reports]);
     setShowGenerateModal(false);
+    captureFeatureAction('report', 'generated', { type: newReport.type });
 
     // Simulate report generation
     setTimeout(() => {

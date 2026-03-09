@@ -46,6 +46,7 @@ import {
 } from 'lucide-react';
 import { Suspense } from 'react';
 import { useMobile } from '@/hooks/useMobile';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { useTour } from '@/hooks/useTour';
 import { ourVendorsTourSteps, mobileOurVendorsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
@@ -127,6 +128,9 @@ function OurVendorsContent() {
   };
 
   const handleToggleExpand = (id: string) => {
+    if (expandedId !== id) {
+      captureFeatureAction('vendors', 'browsed', { supplier_id: id });
+    }
     setExpandedId(expandedId === id ? null : id);
   };
 

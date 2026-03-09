@@ -12,6 +12,7 @@ import {
   Building2, Users, Lock, Smartphone, Monitor, ChevronRight,
   LogOut, Download, Trash2, CreditCard, Code2, Pin, PinOff,
 } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 const allSidebarItems = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -65,6 +66,7 @@ function SettingsContent() {
       ? currentPinned.filter(id => id !== itemId)
       : [...currentPinned, itemId];
     updateSidebarPreferences({ pinnedItems: newPinned });
+    captureFeatureAction('settings', 'updated', { action: 'toggle_pin', item: itemId });
   };
 
   const isPinned = (itemId: string) => sidebarPreferences.pinnedItems.includes(itemId);

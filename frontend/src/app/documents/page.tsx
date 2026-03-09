@@ -8,6 +8,7 @@ import { useTour } from '@/hooks/useTour';
 import { documentsTourSteps, mobileDocumentsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { Receipt, ClipboardList, Ship, Package, ScrollText, Landmark, FileText, BookOpen, Check, Clock, Pause } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface Document {
   id: string;
@@ -137,6 +138,7 @@ function DocumentsContent() {
   });
 
   const handleDownload = (doc: Document) => {
+    captureFeatureAction('documents', 'managed', { action: 'download', doc_type: doc.type });
     // Simulate download
     alert(`Downloading ${doc.name}...`);
   };

@@ -59,6 +59,12 @@
 .driver-popover-arrow-side-bottom .driver-popover-arrow {
     border-color: var(--bg-secondary) !important;
 }
+@media (max-width: 480px) {
+    .driver-popover {
+        max-width: 280px !important;
+        padding: 16px !important;
+    }
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -1259,6 +1265,44 @@ body {
     color: var(--text-secondary);
     margin-bottom: 24px;
     font-size: 0.95rem;
+}
+
+/* Bottom Sheet Modal Variant (mobile only) */
+@media (max-width: 768px) {
+    .modal-overlay.bottom-sheet {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modal-container.bottom-sheet {
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        border-radius: 20px 20px 0 0;
+        max-height: 90vh;
+        padding: 0;
+        animation: modalSlideUp 0.3s ease;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-container.bottom-sheet .modal-close {
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
 }
 
 .form-group {

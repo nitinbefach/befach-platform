@@ -16,6 +16,7 @@ import { WatchlistWidget } from '@/components/market/WatchlistWidget';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { marketDataService, mockCommodities } from '@/services/marketData';
 import { Commodity, MarketOverview, TimeRange } from '@/types/market';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import '@/styles/market-insights.css';
 
 function MarketInsightsInner() {
@@ -40,6 +41,8 @@ function MarketInsightsInner() {
 
   useEffect(() => {
     triggerTimeBasedFeedback('market-insights', 30000);
+    const timer = setTimeout(() => captureFeatureAction('market_insights', 'viewed'), 30000);
+    return () => clearTimeout(timer);
   }, [triggerTimeBasedFeedback]);
 
   // Fetch market data

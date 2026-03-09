@@ -401,6 +401,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
             {navigationConfig.standalone.map((item) => (
               <Link
                 key={item.id}
+                id={`nav-${item.id}`}
                 href={item.href}
                 className={`${styles.navIconItem} ${styles.navItemExpanded} ${isStandaloneActive(item.href) ? styles.active : ''}`}
                 onClick={onClose}
@@ -420,6 +421,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 <div key={key}>
                   {/* Section Header */}
                   <div
+                    id={`nav-${key}`}
                     className={`${styles.navIconItem} ${styles.navItemExpanded} ${sectionActive ? styles.active : ''}`}
                     onClick={() => togglePanel(key)}
                   >
@@ -493,6 +495,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           {navigationConfig.standalone.map((item) => (
             <Link
               key={item.id}
+              id={`nav-${item.id}`}
               href={item.href}
               className={`${styles.navIconItem} ${isStandaloneActive(item.href) ? styles.active : ''}`}
               onClick={onClose}
@@ -506,6 +509,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           {Object.entries(navigationConfig.sections).map(([key, section]) => (
             <div
               key={key}
+              id={`nav-${key}`}
               className={`${styles.navIconItem} ${isSectionActive(key) ? styles.active : ''} ${activePanel === key ? styles.hovered : ''}`}
               onClick={() => togglePanel(key)}
             >

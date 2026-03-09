@@ -19,6 +19,7 @@ import {
   CreateInvitationInput,
 } from '@/lib/suppliers';
 import { saveSupplierFromInvitation } from '@/lib/savedSuppliers';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 type TabType = 'single' | 'bulk' | 'invitations';
 type InvitationFilter = 'all' | 'pending' | 'accepted' | 'expired' | 'cancelled';
@@ -115,6 +116,7 @@ export default function InviteSupplierPage() {
     setLastInvitation(invitation);
     setIsSubmitting(false);
     setSubmitted(true);
+    captureFeatureAction('supplier', 'invited', { company: singleForm.companyName });
     triggerFeedback('invite-supplier');
   };
 

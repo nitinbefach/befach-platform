@@ -15,6 +15,7 @@ import {
   Order, STAGES, getOrders, saveOrders,
   getOrderCounts, filterOrders, groupByDate, createOrder
 } from '@/lib/orders';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 function MyOrdersContent() {
   const router = useRouter();
@@ -72,6 +73,7 @@ function MyOrdersContent() {
 
   // Card click
   const handleCardClick = useCallback((order: Order) => {
+    captureFeatureAction('orders', 'viewed', { order_id: order.id });
     if (isMobile) {
       setSheetOrder(order);
       document.body.style.overflow = 'hidden';

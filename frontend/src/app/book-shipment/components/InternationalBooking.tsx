@@ -19,6 +19,7 @@ import { bookingStorage } from '@/lib/bookingStorage';
 import QuoteCard from './QuoteCard';
 import BookingSuccess from './BookingSuccess';
 import { ArrowLeft, ArrowRight, Ship, Plane, Package, Loader2, Check, AlertTriangle } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface InternationalBookingProps {
   onBack: () => void;
@@ -113,6 +114,7 @@ export default function InternationalBooking({ onBack }: InternationalBookingPro
       const record = bookingStorage.save('international', form, selectedQuote);
       setSavedBooking(record);
       setBooking(false);
+      captureFeatureAction('shipment', 'booked', { segment: 'international' });
     }, 2000);
   };
 

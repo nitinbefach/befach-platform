@@ -380,7 +380,7 @@ function SmartSourcingContent() {
           .sort-select { width: 100%; }
           .external-card { padding: 14px; }
           .external-cta { padding: 24px 16px; }
-          .help-fab-wrapper { bottom: calc(220px + env(safe-area-inset-bottom, 0px)); right: 16px; }
+          .help-fab-wrapper { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); right: 16px; }
           .help-fab { width: 46px; height: 46px; }
           .help-popup { width: 220px; max-height: calc(100vh - 260px); overflow-y: auto; }
         }

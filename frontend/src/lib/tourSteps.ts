@@ -3,6 +3,15 @@ import { DriveStep } from 'driver.js';
 // ─── Dashboard ──────────────────────────────────────────────
 export const dashboardTourSteps: DriveStep[] = [
   {
+    element: '#nav-dashboard',
+    popover: {
+      title: 'Welcome to Befach!',
+      description: 'This is your Dashboard — your home base for managing imports. Use the sidebar to navigate between sections.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#dashboard-quick-actions',
     popover: {
       title: 'Quick Actions',
@@ -50,6 +59,15 @@ export const dashboardTourSteps: DriveStep[] = [
 ];
 
 export const mobileDashboardTourSteps: DriveStep[] = [
+  {
+    element: '#bnav-dashboard',
+    popover: {
+      title: 'Welcome to Befach!',
+      description: 'Navigate between pages using this bar. Tap Home anytime to return here.',
+      side: 'top',
+      align: 'center',
+    },
+  },
   {
     element: '#dashboard-metrics',
     popover: {
@@ -99,6 +117,15 @@ export const mobileDashboardTourSteps: DriveStep[] = [
 
 // ─── Cost Calculator ────────────────────────────────────────
 export const costCalculatorTourSteps: DriveStep[] = [
+  {
+    element: '#nav-tools',
+    popover: {
+      title: 'Tools Section',
+      description: 'The Cost Calculator lives under Tools — along with Market Insights and Compliance.',
+      side: 'right',
+      align: 'start',
+    },
+  },
   {
     element: '#calc-header',
     popover: {
@@ -170,6 +197,15 @@ export const mobileCostCalculatorTourSteps: DriveStep[] = [
 // ─── Smart Sourcing ─────────────────────────────────────────
 export const smartSourcingTourSteps: DriveStep[] = [
   {
+    element: '#nav-sourcing',
+    popover: {
+      title: 'Sourcing Section',
+      description: 'Find suppliers, manage vendors, and share requirements — all from the Sourcing section in the sidebar.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#sourcing-search',
     popover: {
       title: 'Search Suppliers',
@@ -209,6 +245,15 @@ export const smartSourcingTourSteps: DriveStep[] = [
 
 export const mobileSmartSourcingTourSteps: DriveStep[] = [
   {
+    element: '#bnav-smart-sourcing',
+    popover: {
+      title: 'Smart Sourcing',
+      description: 'Tap Search anytime to find and connect with verified suppliers.',
+      side: 'top',
+      align: 'center',
+    },
+  },
+  {
     element: '#sourcing-search',
     popover: {
       title: 'Search Suppliers',
@@ -231,7 +276,7 @@ export const mobileSmartSourcingTourSteps: DriveStep[] = [
     popover: {
       title: 'Need Help?',
       description: 'Tap to share your requirement or invite suppliers.',
-      side: 'bottom',
+      side: 'top',
       align: 'center',
     },
   },
@@ -239,6 +284,15 @@ export const mobileSmartSourcingTourSteps: DriveStep[] = [
 
 // ─── Our Vendors ────────────────────────────────────────────
 export const ourVendorsTourSteps: DriveStep[] = [
+  {
+    element: '#nav-sourcing',
+    popover: {
+      title: 'Sourcing Section',
+      description: 'Our Vendors is part of the Sourcing section — manage your supplier relationships here.',
+      side: 'right',
+      align: 'start',
+    },
+  },
   {
     element: '#vendors-pipeline',
     popover: {
@@ -310,6 +364,15 @@ export const mobileOurVendorsTourSteps: DriveStep[] = [
 // ─── Submit Requirement ─────────────────────────────────────
 export const submitRequirementTourSteps: DriveStep[] = [
   {
+    element: '#nav-sourcing',
+    popover: {
+      title: 'Sourcing Section',
+      description: 'Share your import requirements from the Sourcing section. We match you with the best suppliers.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#req-header',
     popover: {
       title: 'Share Your Requirement',
@@ -340,6 +403,15 @@ export const submitRequirementTourSteps: DriveStep[] = [
 
 export const mobileSubmitRequirementTourSteps: DriveStep[] = [
   {
+    element: '#bnav-submit-requirement',
+    popover: {
+      title: 'Share Requirement',
+      description: 'Tap the Add button anytime to submit a new import requirement.',
+      side: 'top',
+      align: 'center',
+    },
+  },
+  {
     element: '#req-tabs',
     popover: {
       title: 'Single or Bulk',
@@ -361,6 +433,15 @@ export const mobileSubmitRequirementTourSteps: DriveStep[] = [
 
 // ─── Market Insights ────────────────────────────────────────
 export const marketInsightsTourSteps: DriveStep[] = [
+  {
+    element: '#nav-tools',
+    popover: {
+      title: 'Tools Section',
+      description: 'Market Insights is under Tools — track commodity prices, trends, and import opportunities.',
+      side: 'right',
+      align: 'start',
+    },
+  },
   {
     element: '#market-overview',
     popover: {
@@ -432,6 +513,15 @@ export const mobileMarketInsightsTourSteps: DriveStep[] = [
 // ─── Book Shipment ──────────────────────────────────────────
 export const bookShipmentTourSteps: DriveStep[] = [
   {
+    element: '#nav-logistics',
+    popover: {
+      title: 'Logistics Section',
+      description: 'Book and track shipments from the Logistics section in the sidebar.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#booking-header',
     popover: {
       title: 'Book Shipment',
@@ -484,6 +574,15 @@ export const mobileBookShipmentTourSteps: DriveStep[] = [
 // ─── Track Shipment ─────────────────────────────────────────
 export const trackShipmentTourSteps: DriveStep[] = [
   {
+    element: '#nav-logistics',
+    popover: {
+      title: 'Logistics Section',
+      description: 'Track all your shipments from the Logistics section.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#track-shipments',
     popover: {
       title: 'My Shipments',
@@ -526,6 +625,15 @@ export const mobileTrackShipmentTourSteps: DriveStep[] = [
 
 // ─── Documents ──────────────────────────────────────────────
 export const documentsTourSteps: DriveStep[] = [
+  {
+    element: '#nav-logistics',
+    popover: {
+      title: 'Logistics Section',
+      description: 'Access your import documents from the Logistics section.',
+      side: 'right',
+      align: 'start',
+    },
+  },
   {
     element: '#docs-header',
     popover: {
@@ -597,6 +705,15 @@ export const mobileDocumentsTourSteps: DriveStep[] = [
 // ─── Compliance Tools ───────────────────────────────────────
 export const complianceTourSteps: DriveStep[] = [
   {
+    element: '#nav-tools',
+    popover: {
+      title: 'Tools Section',
+      description: 'Compliance tools are under the Tools section — manage customs clearance and BOE filings.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#compliance-welcome',
     popover: {
       title: 'Compliance Dashboard',
@@ -667,6 +784,15 @@ export const mobileComplianceTourSteps: DriveStep[] = [
 // ─── My Orders ──────────────────────────────────────────────
 export const myOrdersTourSteps: DriveStep[] = [
   {
+    element: '#nav-my-orders',
+    popover: {
+      title: 'My Orders',
+      description: 'Access all your orders from the sidebar. Track status, view details, and manage deliveries.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#orders-stats',
     popover: {
       title: 'Order Statistics',
@@ -727,6 +853,15 @@ export const mobileMyOrdersTourSteps: DriveStep[] = [
 
 // ─── Reports ────────────────────────────────────────────────
 export const reportsTourSteps: DriveStep[] = [
+  {
+    element: '#nav-team',
+    popover: {
+      title: 'Team Section',
+      description: 'Reports are under the Team section — view analytics and generate custom reports.',
+      side: 'right',
+      align: 'start',
+    },
+  },
   {
     element: '#reports-stats',
     popover: {
@@ -798,6 +933,15 @@ export const mobileReportsTourSteps: DriveStep[] = [
 // ─── Settings ───────────────────────────────────────────────
 export const settingsTourSteps: DriveStep[] = [
   {
+    element: '#nav-settings',
+    popover: {
+      title: 'Settings',
+      description: 'Manage your profile, notifications, and account preferences from the Settings section.',
+      side: 'right',
+      align: 'start',
+    },
+  },
+  {
     element: '#settings-profile',
     popover: {
       title: 'Your Profile',
@@ -820,13 +964,22 @@ export const settingsTourSteps: DriveStep[] = [
     popover: {
       title: 'Notifications',
       description: 'Control which notifications you receive — order updates, shipment tracking, price alerts, and more.',
-      side: 'right',
-      align: 'start',
+      side: 'bottom',
+      align: 'center',
     },
   },
 ];
 
 export const mobileSettingsTourSteps: DriveStep[] = [
+  {
+    element: '#bnav-settings',
+    popover: {
+      title: 'Settings',
+      description: 'Tap Profile to manage your account and preferences.',
+      side: 'top',
+      align: 'center',
+    },
+  },
   {
     element: '#settings-profile',
     popover: {
@@ -849,6 +1002,15 @@ export const mobileSettingsTourSteps: DriveStep[] = [
 
 // ─── Team Management ────────────────────────────────────────
 export const teamManagementTourSteps: DriveStep[] = [
+  {
+    element: '#nav-team',
+    popover: {
+      title: 'Team Section',
+      description: 'Manage your team members, roles, and permissions from the Team section.',
+      side: 'right',
+      align: 'start',
+    },
+  },
   {
     element: '#team-seats',
     popover: {

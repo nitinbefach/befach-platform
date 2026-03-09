@@ -6,6 +6,7 @@ import './globals.css'
 import { UserProvider } from '@/context/UserModeContext'
 import { PostHogProvider } from '@/components/providers/PostHogProvider'
 import { PostHogPageView } from '@/components/providers/PostHogPageView'
+import TrackingConsent from '@/components/TrackingConsent'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,6 +43,7 @@ export default function RootLayout({
           </Suspense>
           <UserProvider>
               {children}
+              <TrackingConsent />
           </UserProvider>
         </PostHogProvider>
       </body>

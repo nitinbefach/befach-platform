@@ -6,6 +6,7 @@ import PublicLayout from '@/components/layout/PublicLayout';
 import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 export default function ContactPage() {
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
@@ -27,6 +28,7 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    captureFeatureAction('contact', 'submitted');
     triggerFeedback('contact');
   };
 
