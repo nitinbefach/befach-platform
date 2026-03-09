@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import posthog from 'posthog-js';
+import { reloadPostHogSurveys } from '@/components/providers/PostHogProvider';
 import { safeStorage } from '@/lib/safeStorage';
 
 export type UserRole = 'owner' | 'admin' | 'member' | 'viewer';
@@ -95,6 +96,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               plan: savedSub?.plan || 'free',
               goals: savedOrg.primaryGoals || [],
             });
+            reloadPostHogSurveys();
           } catch (e) { /* PostHog not initialized in dev */ }
         }
       }
@@ -129,6 +131,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         plan: 'free',
         goals: org.primaryGoals || [],
       });
+      reloadPostHogSurveys();
     } catch (e) { /* PostHog not initialized in dev */ }
   }, []);
 

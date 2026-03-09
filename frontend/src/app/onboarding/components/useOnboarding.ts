@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/UserModeContext';
 import posthog from 'posthog-js';
+import { reloadPostHogSurveys } from '@/components/providers/PostHogProvider';
 import {
   PackageSearch, Ship, BadgeDollarSign, TrendingUp, ShieldCheck, Handshake,
   User, Building2, type LucideIcon
@@ -67,6 +68,7 @@ export function useOnboarding(): UseOnboardingReturn {
         company_name: companyName.trim(),
         company_type: companyType,
       });
+      reloadPostHogSurveys();
       setStep('goals');
     }
   };
@@ -87,6 +89,7 @@ export function useOnboarding(): UseOnboardingReturn {
       goals: selectedGoals,
       goals_count: selectedGoals.length,
     });
+    reloadPostHogSurveys();
     router.push(redirectTo || '/dashboard?tour=true');
   };
 
