@@ -24,6 +24,7 @@ import { trackShipmentTourSteps, mobileTrackShipmentTourSteps } from '@/lib/tour
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { Package, Ship, MapPin, Clock, ChevronRight, Bookmark, Calendar, Check, Info } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 // Types for tracked shipments
 interface TrackedShipment {
@@ -237,6 +238,7 @@ function TrackShipmentContent() {
       const data = await trackShipment(trackingNumber);
       if (data) {
         setShipmentData(data);
+        captureFeatureAction('shipment', 'tracked', { tracking_number: trackingNumber });
       } else {
         setError('No shipment found with this tracking number. Try: 0037');
       }

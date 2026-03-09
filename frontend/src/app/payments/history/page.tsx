@@ -12,6 +12,7 @@ import {
 import { STATUS_CONFIG, formatPaymentCurrency } from '@/lib/paymentConstants';
 import type { PaymentRecord, PaymentFilters, PaymentStatus, PaymentSegment } from '@/types/payments';
 import { Download, ChevronRight, X, Clock, ArrowUpRight, Wallet, Filter, Globe } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 export default function PaymentHistoryPage() {
   const { isMobile } = useMobile();
@@ -27,6 +28,8 @@ export default function PaymentHistoryPage() {
 
   useEffect(() => {
     setPayments(getPayments());
+    const timer = setTimeout(() => captureFeatureAction('payment_history', 'viewed'), 20000);
+    return () => clearTimeout(timer);
   }, []);
 
   const filtered = filterPayments(payments, filters);

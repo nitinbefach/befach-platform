@@ -9,6 +9,7 @@ import { complianceTourSteps, mobileComplianceTourSteps } from '@/lib/tourSteps'
 import TourFAB from '@/components/walkthrough/TourFAB';
 import { Modal } from '@/components/ui';
 import { ComplianceSearch, ComplianceResultCard } from '@/components/compliance';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import {
   searchCompliance,
   getComplianceStats,
@@ -72,6 +73,7 @@ function ComplianceToolsContent() {
     try {
       const result = await searchCompliance(params);
       setSearchResults(result.requirements);
+      captureFeatureAction('compliance', 'checked', { hsn_code: params.hsnCode });
     } catch (error) {
       console.error('Search failed:', error);
     } finally {

@@ -19,6 +19,7 @@ import {
 } from '@/lib/paymentConstants';
 import type { PaymentSegment, MakePaymentFormData, BeneficiaryDetails } from '@/types/payments';
 import { ArrowLeft, ArrowRight, Check, Send, Download, RefreshCw } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 const INITIAL_FORM: MakePaymentFormData = {
   segment: 'international',
@@ -116,6 +117,7 @@ export default function MakePaymentPage() {
     });
     setPaymentRef(payment.referenceNumber);
     setSuccess(true);
+    captureFeatureAction('payment', 'initiated', { segment: form.segment, method: form.method });
   };
 
   const handleReset = () => {

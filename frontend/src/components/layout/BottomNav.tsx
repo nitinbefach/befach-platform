@@ -40,6 +40,7 @@ export function BottomNav({ className = '' }: BottomNavProps) {
         return (
           <Link
             key={item.href}
+            id={`bnav-${item.href.slice(1)}`}
             href={item.href}
             className={`bottom-nav-item ${isActive ? 'active' : ''} ${item.primary ? 'primary' : ''}`}
           >

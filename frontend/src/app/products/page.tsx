@@ -9,6 +9,7 @@ import {
   MessageCircle, Shield, Truck, Menu, SlidersHorizontal
 } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 // Dummy product data
 const products = [
@@ -58,6 +59,8 @@ export default function ProductsPage() {
   useEffect(() => {
     const savedTheme = safeStorage.getItem('theme');
     setDarkMode(savedTheme === 'dark');
+    const timer = setTimeout(() => captureFeatureAction('products', 'browsed'), 15000);
+    return () => clearTimeout(timer);
   }, []);
 
   const toggleCategory = (categoryName: string) => {

@@ -12,6 +12,7 @@ import {
   HSCodeBreakdown,
 } from '@/types/exim';
 import { eximDataService } from '@/services/eximDataService';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 export type TabId = 'shipments' | 'summary' | 'consignee' | 'shipper';
 
@@ -134,6 +135,7 @@ export function EximDataProvider({ children }: { children: ReactNode }) {
       setShippers(shipperResult);
       setCountries(countryResult);
       setHsCodes(hsResult);
+      captureFeatureAction('exim_data', 'searched', { query: params.keyword, results: shipmentResult.totalCount });
     } catch (err) {
       console.error('Search failed:', err);
     } finally {

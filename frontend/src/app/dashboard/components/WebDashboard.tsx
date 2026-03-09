@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { AppLayout } from '@/components/layout';
 import { usePrefersReducedMotion } from '@/hooks/useMobile';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 import { Package, ArrowRight, Star, Activity } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -184,7 +185,7 @@ export default function WebDashboard() {
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
                 style={{ display: 'contents' }}
               >
-                <Link href={action.href} className="quick-action-button">
+                <Link href={action.href} className="quick-action-button" onClick={() => captureFeatureAction('dashboard', 'engaged', { action: action.title })}>
                   <div className="action-icon-wrapper" style={{ backgroundColor: `${action.color}15` }}>
                     <action.icon className="action-icon" style={{ color: action.color }} />
                   </div>

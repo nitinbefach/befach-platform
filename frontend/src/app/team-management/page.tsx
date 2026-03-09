@@ -9,6 +9,7 @@ import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { teamManagementTourSteps, mobileTeamManagementTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface TeamMember {
   id: string;
@@ -104,6 +105,7 @@ function TeamManagementContent() {
     setInviteEmail('');
     setInviteRole('member');
     setShowInviteModal(false);
+    captureFeatureAction('team', 'managed', { action: 'invite', role: inviteRole });
   };
 
   const handleRoleChange = () => {

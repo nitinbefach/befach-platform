@@ -20,6 +20,7 @@ import { bookingStorage } from '@/lib/bookingStorage';
 import QuoteCard from './QuoteCard';
 import BookingSuccess from './BookingSuccess';
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface LocalBookingProps {
   onBack: () => void;
@@ -111,6 +112,7 @@ export default function LocalBooking({ onBack }: LocalBookingProps) {
       const record = bookingStorage.save('local', form, selectedQuote);
       setSavedBooking(record);
       setBooking(false);
+      captureFeatureAction('shipment', 'booked', { segment: 'local' });
     }, 1500);
   };
 

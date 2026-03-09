@@ -16,6 +16,7 @@ import {
   UrgencyLevel,
 } from '@/lib/requirements';
 import { Package, ClipboardList, Search, CheckCircle, FolderOpen, Clock, Zap, Flame, Lightbulb, FileText, Download, BarChart3 } from 'lucide-react';
+import { captureFeatureAction } from '@/lib/posthogEvents';
 
 type TabType = 'single' | 'bulk';
 
@@ -195,6 +196,7 @@ function SubmitRequirementContent() {
     setSubmittedRequirement(requirement);
     setRedirectCountdown(5);
     setSubmitted(true);
+    captureFeatureAction('requirement', 'submitted', { type: 'single', product: singleForm.productName });
     triggerFeedback('submit-requirement');
   };
 
@@ -224,6 +226,7 @@ function SubmitRequirementContent() {
     setSubmittedRequirement(requirement);
     setRedirectCountdown(5);
     setSubmitted(true);
+    captureFeatureAction('requirement', 'submitted', { type: 'bulk', product_count: parsedProducts.length });
     triggerFeedback('submit-requirement');
   };
 

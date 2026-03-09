@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Befach International — Gommand Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* ===== CSS CUSTOM PROPERTIES ===== */
+    :root {
+      --primary-start: #f59e0b;
+      --primary-end: #d97706;
+      --primary-mid: #e8930f;
+      --dark: #111827;
+      --dark-card: #1f2937;
+      --light-bg: #faf9f7;
+      --white: #ffffff;
+      --text-heading: #111827;
+      --text-body: #6b7280;
+      --text-muted: #9ca3af;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+      --gradient-primary: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      --container: 1200px;
+      --header-height: 72px;
+
+      /* Problem/Solution theme */
+      --problem-bg: #f8f8f8;
+      --problem-accent: #b91c1c;
+      --problem-accent-soft: rgba(185, 28, 28, 0.08);
+      --problem-border: rgba(185, 28, 28, 0.15);
+      --solution-bg: #fffbeb;
+      --solution-accent: #d97706;
+      --solution-accent-soft: rgba(217, 119, 6, 0.08);
+    }
+
+    /* ===== RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-heading);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* ===== UTILITIES ===== */
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 48px);
+    }
+
+    .gradient-text {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: var(--text-heading);
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      font-size: clamp(1rem, 2vw, 1.12rem);
+      color: var(--text-body);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.15s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.3s;
+    }
+
+    /* ===== SCROLL PROGRESS BAR ===== */
+    .scroll-progress {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      height: 3px;
+      background: var(--gradient-primary);
+      z-index: 999;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 1000;
+      transition: box-shadow 0.3s;
+    }
+
+    .header.scrolled {
+      box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 48px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-body);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-heading);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary-end);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary:hover {
+      background: #b45309;
+    }
+
+    .btn-outline {
+      border: 1.5px solid var(--border);
+      color: var(--text-heading);
+      background: var(--white);
+      padding: 12px 24px;
+      font-size: 0.9rem;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary-start);
+      color: var(--primary-end);
+      background: #fffbeb;
+    }
+
+    .header-cta {
+      padding: 10px 22px;
+      font-size: 0.88rem;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-heading);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 999;
+      flex-direction: column;
+      padding: 24px;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-heading);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .mobile-nav .btn {
+      margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+
+      .nav-links,
+      .header-cta {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+
+    /* ===== HERO ===== */
+    .hero {
+      padding-top: calc(var(--header-height) + 80px);
+      padding-bottom: 80px;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -20%;
+      width: 60%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--problem-accent-soft);
+      border: 1px solid var(--problem-border);
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--problem-accent);
+      margin-bottom: 24px;
+    }
+
+    .hero-eyebrow i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.25rem, 5.5vw, 3.75rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      color: var(--text-body);
+      line-height: 1.75;
+      margin-bottom: 36px;
+      max-width: 560px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .hero-ctas .btn-primary {
+      padding: 15px 32px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+    }
+
+    .hero-ctas .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .hero-secondary-link {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .hero-secondary-link:hover {
+      color: var(--primary-end);
+    }
+
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .hero-trust-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+
+    /* Floating problem cards on the right side of hero */
+    .hero-visual {
+      position: absolute;
+      right: clamp(48px, 8vw, 120px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .hero-float-card {
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      border: 1px solid;
+      max-width: 260px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-float-card i {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .hero-float-card.problem-card {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .hero-float-card.chaos-card {
+      background: #fefce8;
+      border-color: #fef08a;
+      color: #854d0e;
+      margin-left: 40px;
+    }
+
+    .hero-float-card.warning-card {
+      background: #f8f8f8;
+      border-color: var(--border);
+      color: var(--text-body);
+      margin-left: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-visual {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        min-height: auto;
+        padding-top: calc(var(--header-height) + 48px);
+        padding-bottom: 56px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-ctas .btn-primary {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding-top: calc(var(--header-height) + 32px);
+        padding-bottom: 40px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.92rem;
+        margin-bottom: 28px;
+      }
+
+      .hero-eyebrow {
+        font-size: 0.72rem;
+        margin-bottom: 18px;
+      }
+    }
+
+
+    /* ===== PAIN STATS STRIP ===== */
+    .pain-section {
+      padding: 72px 0;
+      background: var(--white);
+      border-top: 1px solid var(--border-light);
+      position: relative;
+    }
+
+    .pain-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0, 0, 0, 0.02) 39px, rgba(0, 0, 0, 0.02) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0, 0, 0, 0.02) 39px, rgba(0, 0, 0, 0.02) 40px);
+      pointer-events: none;
+    }
+
+    .pain-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .pain-header .section-label {
+      color: var(--problem-accent);
+    }
+
+    .pain-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+
+    .pain-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--problem-accent);
+      border-radius: var(--radius-sm);
+      padding: 20px 18px;
+      transition: all 0.25s;
+    }
+
+    .pain-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--problem-border);
+      border-left-color: var(--problem-accent);
+    }
+
+    .pain-stat {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--problem-accent);
+      line-height: 1.1;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .pain-desc {
+      font-size: 0.8rem;
+      color: var(--text-body);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1024px) {
+      .pain-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .pain-section {
+        padding: 48px 0;
+      }
+
+      .pain-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 12px;
+        padding-bottom: 12px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .pain-card {
+        min-width: 220px;
+        scroll-snap-align: start;
+        flex-shrink: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pain-section {
+        padding: 36px 0;
+      }
+
+      .pain-card {
+        min-width: 200px;
+        padding: 16px 14px;
+      }
+
+      .pain-stat {
+        font-size: 1.25rem;
+      }
+    }
+
+
+    /* ===== PROBLEM-SOLUTION PAIRS ===== */
+    .ps-section {
+      padding: 0;
+    }
+
+    .ps-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+    }
+
+    .ps-pair.reversed .ps-problem {
+      order: 2;
+    }
+
+    .ps-pair.reversed .ps-solution {
+      order: 1;
+    }
+
+    .ps-problem {
+      background: var(--problem-bg);
+      padding: clamp(40px, 5vw, 72px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ps-solution {
+      background: var(--solution-bg);
+      padding: clamp(40px, 5vw, 72px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .ps-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ps-label i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .ps-label.problem {
+      color: var(--problem-accent);
+    }
+
+    .ps-label.solution {
+      color: var(--solution-accent);
+    }
+
+    .ps-headline {
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .ps-problem .ps-headline {
+      color: #0f172a;
+    }
+
+    .ps-solution .ps-headline {
+      color: var(--text-heading);
+    }
+
+    .ps-body {
+      font-size: 0.92rem;
+      color: var(--text-body);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      max-width: 480px;
+    }
+
+    .ps-visual {
+      margin-top: auto;
+    }
+
+    .ps-micro-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-end);
+      margin-top: 8px;
+      transition: gap 0.2s;
+    }
+
+    .ps-micro-cta:hover {
+      gap: 10px;
+    }
+
+    .ps-micro-cta i {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Problem illustrations (CSS-only) */
+    .illust-spreadsheet {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      max-width: 220px;
+      padding: 10px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .illust-cell {
+      height: 22px;
+      border-radius: 3px;
+      background: var(--border-light);
+    }
+
+    .illust-cell.error {
+      background: #fecaca;
+    }
+
+    .illust-cell.header {
+      background: var(--border);
+    }
+
+    .illust-cell.value {
+      background: #e0f2fe;
+    }
+
+    .illust-cell.question {
+      background: #fef3c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--problem-accent);
+    }
+
+    /* Browser tabs chaos illustration */
+    .illust-tabs {
+      display: flex;
+      gap: 0;
+      max-width: 280px;
+    }
+
+    .illust-tab {
+      padding: 6px 12px;
+      border-radius: 6px 6px 0 0;
+      font-size: 0.6rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--white);
+      margin-right: -4px;
+      white-space: nowrap;
+      color: var(--text-muted);
+    }
+
+    .illust-tab:nth-child(odd) {
+      background: #f9fafb;
+    }
+
+    .illust-tab.active-tab {
+      background: var(--white);
+      color: var(--text-heading);
+      z-index: 1;
+    }
+
+    /* Stale report illustration */
+    .illust-report {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      max-width: 220px;
+      position: relative;
+    }
+
+    .illust-report-line {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--border-light);
+      margin-bottom: 6px;
+    }
+
+    .illust-report-line:first-child {
+      width: 60%;
+      background: var(--border);
+    }
+
+    .illust-report-line:nth-child(2) {
+      width: 90%;
+    }
+
+    .illust-report-line:nth-child(3) {
+      width: 75%;
+    }
+
+    .illust-report-stamp {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--problem-accent);
+      background: #fef2f2;
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid #fecaca;
+      transform: rotate(3deg);
+    }
+
+    /* Risky supplier card */
+    .illust-supplier {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      max-width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .illust-supplier-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .illust-supplier-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .illust-supplier-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 2px;
+    }
+
+    .illust-supplier-badges {
+      display: flex;
+      gap: 4px;
+    }
+
+    .illust-badge-unknown {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    /* Blocked shipment */
+    .illust-blocked {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      max-width: 240px;
+    }
+
+    .illust-blocked-bar {
+      background: #fef2f2;
+      border-bottom: 1px solid #fecaca;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--problem-accent);
+    }
+
+    .illust-blocked-bar i {
+      width: 12px;
+      height: 12px;
+    }
+
+    .illust-blocked-body {
+      padding: 12px;
+    }
+
+    .illust-blocked-line {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border-light);
+      margin-bottom: 5px;
+    }
+
+    /* Solution visuals */
+    .mini-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 65px;
+    }
+
+    .mini-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+    }
+
+    .mini-bar-label {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .carrier-strip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .carrier-badge {
+      padding: 5px 12px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-body);
+    }
+
+    .mini-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-body);
+    }
+
+    .check-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #dcfce7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-dot i {
+      width: 11px;
+      height: 11px;
+      color: #16a34a;
+    }
+
+    .mini-trend {
+      width: 100%;
+      height: 50px;
+    }
+
+    .mini-trend polyline {
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Verified supplier card */
+    .illust-verified-supplier {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      max-width: 240px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .verified-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #dcfce7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .verified-avatar i {
+      width: 16px;
+      height: 16px;
+      color: #16a34a;
+    }
+
+    .verified-info {
+      flex: 1;
+    }
+
+    .verified-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 2px;
+    }
+
+    .verified-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 5px;
+      background: #dcfce7;
+      border-radius: 3px;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #16a34a;
+    }
+
+    .verified-badge i {
+      width: 9px;
+      height: 9px;
+    }
+
+    .verified-stars {
+      color: #f59e0b;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+    }
+
+    /* PS responsive */
+    @media (max-width: 1024px) {
+      .ps-pair {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .ps-pair {
+        grid-template-columns: 1fr;
+      }
+
+      .ps-pair.reversed .ps-problem {
+        order: 1;
+      }
+
+      .ps-pair.reversed .ps-solution {
+        order: 2;
+      }
+
+      .ps-problem,
+      .ps-solution {
+        padding: 36px clamp(16px, 4vw, 48px);
+      }
+
+      .ps-headline {
+        font-size: 1.2rem;
+      }
+
+      .ps-body {
+        font-size: 0.88rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .ps-problem,
+      .ps-solution {
+        padding: 28px 16px;
+      }
+
+      .ps-headline {
+        font-size: 1.1rem;
+      }
+
+      .ps-body {
+        font-size: 0.85rem;
+      }
+
+      .ps-label {
+        font-size: 0.65rem;
+      }
+    }
+
+    /* Pair divider on mobile */
+    .ps-divider {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: linear-gradient(to right, var(--problem-bg), var(--solution-bg));
+    }
+
+    .ps-divider-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-end);
+    }
+
+    .ps-divider-arrow i {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .ps-divider {
+        display: flex;
+        padding: 6px 0;
+      }
+    }
+
+
+    /* ===== UNIFIED PLATFORM ===== */
+    .platform-section {
+      padding: 80px 0;
+      background: var(--white);
+      border-top: 1px solid var(--border-light);
+    }
+
+    .platform-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .platform-header .section-label {
+      color: var(--primary-end);
+    }
+
+    .platform-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .platform-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .platform-card:hover {
+      border-color: var(--primary-start);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
+    }
+
+    .platform-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .platform-card-icon i {
+      width: 18px;
+      height: 18px;
+    }
+
+    .platform-card-icon.orange {
+      background: #fef3c7;
+      color: var(--primary-end);
+    }
+
+    .platform-card-icon.blue {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .platform-card-icon.green {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .platform-card-icon.purple {
+      background: #ede9fe;
+      color: #7c3aed;
+    }
+
+    .platform-card-icon.red {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .platform-card-icon.teal {
+      background: #ccfbf1;
+      color: #0d9488;
+    }
+
+    .platform-card-icon.indigo {
+      background: #e0e7ff;
+      color: #4f46e5;
+    }
+
+    .platform-card-icon.pink {
+      background: #fce7f3;
+      color: #db2777;
+    }
+
+    .platform-card h3 {
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .platform-card p {
+      font-size: 0.8rem;
+      color: var(--text-body);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1024px) {
+      .platform-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .platform-section {
+        padding: 48px 0;
+      }
+
+      .platform-header {
+        margin-bottom: 32px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .platform-section {
+        padding: 36px 0;
+      }
+
+      .platform-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .platform-card {
+        padding: 18px;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .platform-card p {
+        display: none;
+      }
+    }
+
+
+    /* ===== SOCIAL PROOF ===== */
+    .proof-section {
+      padding: 80px 0;
+      background: var(--light-bg);
+    }
+
+    .proof-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .proof-header .section-label {
+      color: var(--primary-end);
+    }
+
+    .proof-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    /* Stat strip */
+    .stat-strip {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 48px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      overflow: hidden;
+    }
+
+    .stat-strip-item {
+      flex: 1;
+      padding: 20px 24px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-strip-item:last-child {
+      border-right: none;
+    }
+
+    .stat-strip-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-heading);
+      line-height: 1.2;
+    }
+
+    .stat-strip-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Testimonials grid */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .testimonial-metric {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .testimonial-metric-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--primary-start);
+      line-height: 1;
+    }
+
+    .testimonial-metric-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .testimonial-quote {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-body);
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .testimonial-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin-bottom: 16px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .testimonial-avatar.a1 {
+      background: #d97706;
+    }
+
+    .testimonial-avatar.a2 {
+      background: #2563eb;
+    }
+
+    .testimonial-avatar.a3 {
+      background: #7c3aed;
+    }
+
+    .testimonial-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .testimonial-role {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1024px) {
+      .testimonials-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stat-strip {
+        flex-wrap: wrap;
+      }
+
+      .stat-strip-item {
+        flex: 1 1 50%;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .stat-strip-item:nth-child(2) {
+        border-right: none;
+      }
+
+      .stat-strip-item:nth-child(3),
+      .stat-strip-item:nth-child(4) {
+        border-bottom: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .proof-section {
+        padding: 48px 0;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-strip {
+        margin-bottom: 32px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .proof-section {
+        padding: 36px 0;
+      }
+
+      .stat-strip-item {
+        padding: 14px 16px;
+      }
+
+      .stat-strip-value {
+        font-size: 1.2rem;
+      }
+
+      .stat-strip-label {
+        font-size: 0.7rem;
+      }
+
+      .testimonial-card {
+        padding: 20px;
+      }
+
+      .testimonial-metric-value {
+        font-size: 1.4rem;
+      }
+
+      .testimonial-quote {
+        font-size: 0.85rem;
+      }
+    }
+
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 72px 0;
+      background: linear-gradient(180deg, var(--white) 0%, #fffbeb 100%);
+      text-align: center;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .cta-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: var(--text-heading);
+      margin-bottom: 16px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.05rem);
+      color: var(--text-body);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-buttons .btn-primary {
+      background: var(--gradient-primary);
+      padding: 15px 36px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .cta-buttons .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .cta-note {
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .cta-note span {
+      margin: 0 6px;
+      opacity: 0.4;
+    }
+
+    @media (max-width: 480px) {
+      .cta-section {
+        padding: 40px 0;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        padding: 0 16px;
+      }
+
+      .cta-buttons .btn {
+        width: 100%;
+      }
+
+      .cta-title {
+        font-size: 1.5rem;
+      }
+
+      .cta-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+      }
+    }
+
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #1c1917;
+      padding: 56px 0 0;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-brand {
+      text-align: center;
+      padding: 28px 0 8px;
+    }
+
+    .footer-brand .logo {
+      justify-content: center;
+    }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      margin-top: 12px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-col h4 {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.85rem;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--primary-start);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      font-size: 0.8rem;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-socials a {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .footer-socials a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--white);
+    }
+
+    .footer-socials a i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .footer-logo-img {
+      height: 38px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .footer {
+        padding: 40px 0 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        padding: 28px 0 0;
+      }
+
+      .footer-col a {
+        padding: 6px 0;
+        font-size: 0.82rem;
+      }
+
+      .footer-grid {
+        gap: 24px;
+        padding-bottom: 28px;
+      }
+
+      .footer-bottom {
+        padding: 18px 0;
+        font-size: 0.72rem;
+      }
+
+      .footer-socials a {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* ===== GLOBAL SMALL MOBILE ===== */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 14px;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+      }
+
+      .section-subtitle {
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <img src="../public/logo.png" alt="Befach International" class="logo-img">
+      </a>
+      <nav class="nav-links">
+        <a href="#problems">Problems</a>
+        <a href="#solutions">Solutions</a>
+        <a href="#platform">Platform</a>
+        <a href="#proof">Results</a>
+        <a href="#cta">Contact</a>
+      </nav>
+      <a href="#cta" class="btn btn-primary header-cta">Start Free Trial</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#problems" onclick="closeMobileNav()">Problems</a>
+    <a href="#solutions" onclick="closeMobileNav()">Solutions</a>
+    <a href="#platform" onclick="closeMobileNav()">Platform</a>
+    <a href="#proof" onclick="closeMobileNav()">Results</a>
+    <a href="#cta" onclick="closeMobileNav()">Contact</a>
+    <a href="#cta" class="btn btn-primary" onclick="closeMobileNav()">Start Free Trial</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <i data-lucide="alert-triangle"></i>
+          The global trade problem
+        </div>
+        <h1 class="hero-title">
+          Global trade shouldn't<br>feel <span class="gradient-text">like this.</span>
+        </h1>
+        <p class="hero-subtitle">
+          You're juggling spreadsheets for landed costs, calling carriers for quotes, emailing suppliers for
+          updates, and praying you got the compliance right. There has to be a better way.
+        </p>
+        <div class="hero-ctas">
+          <a href="#problems" class="btn btn-primary">
+            See the better way
+            <i data-lucide="arrow-down" style="width:18px;height:18px;"></i>
+          </a>
+          <a href="#cta" class="hero-secondary-link">Already know Befach? Start free trial &rarr;</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-dot"></div>
+          Trusted by 500+ importers and exporters across 30 countries
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating problem hints -->
+    <div class="hero-visual">
+      <div class="hero-float-card problem-card">
+        <i data-lucide="x-circle"></i>
+        Spreadsheet formula error in cell D47
+      </div>
+      <div class="hero-float-card chaos-card">
+        <i data-lucide="clock"></i>
+        Waiting 3 days for carrier quote...
+      </div>
+      <div class="hero-float-card warning-card">
+        <i data-lucide="alert-circle"></i>
+        Shipment held: Missing documentation
+      </div>
+      <div class="hero-float-card problem-card" style="margin-left:30px;">
+        <i data-lucide="help-circle"></i>
+        Is this supplier actually verified?
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== PAIN STATS STRIP ===== -->
+  <section class="pain-section" id="problems">
+    <div class="container">
+      <div class="pain-header reveal">
+        <p class="section-label">The real cost</p>
+        <h2 class="section-title">What fragmented trade operations cost you</h2>
+        <p class="section-subtitle">These aren't edge cases. This is the daily reality for thousands of importers and
+          exporters.</p>
+      </div>
+      <div class="pain-grid reveal reveal-delay-1">
+        <div class="pain-card">
+          <div class="pain-stat">4-6 hrs</div>
+          <div class="pain-desc">spent per shipment calculating landed costs manually</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-stat">15-20%</div>
+          <div class="pain-desc">overpaid on freight by not comparing carrier rates</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-stat">$12K</div>
+          <div class="pain-desc">lost annually to compliance penalties and delays</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-stat">3-5 days</div>
+          <div class="pain-desc">wasted per month chasing supplier updates</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-stat">7 tools</div>
+          <div class="pain-desc">average disconnected platforms per trade team</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== PROBLEM-SOLUTION PAIRS ===== -->
+  <section class="ps-section" id="solutions">
+
+    <!-- Pair 1: Landed Cost -->
+    <div class="ps-pair">
+      <div class="ps-problem reveal">
+        <div class="ps-label problem">
+          <i data-lucide="alert-triangle"></i>
+          Problem
+        </div>
+        <h2 class="ps-headline">You don't know your real import costs until it's too late</h2>
+        <p class="ps-body">Duties, taxes, freight, insurance, handling charges &mdash; most importers discover their
+          actual landed cost weeks after the purchase order. Spreadsheet formulas break. Exchange rates shift. One
+          miscalculation can wipe out your margins.</p>
+        <div class="ps-visual">
+          <div class="illust-spreadsheet">
+            <div class="illust-cell header"></div>
+            <div class="illust-cell header"></div>
+            <div class="illust-cell header"></div>
+            <div class="illust-cell header"></div>
+            <div class="illust-cell value"></div>
+            <div class="illust-cell"></div>
+            <div class="illust-cell error"></div>
+            <div class="illust-cell"></div>
+            <div class="illust-cell"></div>
+            <div class="illust-cell question">?</div>
+            <div class="illust-cell"></div>
+            <div class="illust-cell error"></div>
+            <div class="illust-cell value"></div>
+            <div class="illust-cell"></div>
+            <div class="illust-cell"></div>
+            <div class="illust-cell question">?</div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-divider">
+        <div class="ps-divider-arrow"><i data-lucide="arrow-down"></i></div>
+      </div>
+      <div class="ps-solution reveal reveal-delay-1">
+        <div class="ps-label solution">
+          <i data-lucide="check-circle-2"></i>
+          Befach Solution
+        </div>
+        <h2 class="ps-headline">Know your exact landed cost before you commit</h2>
+        <p class="ps-body">Our Landed Cost Calculator breaks down duties, taxes, freight, and insurance instantly for
+          any product to any country. Update one variable and the entire cost structure recalculates in real time.</p>
+        <div class="ps-visual">
+          <div class="mini-bars" style="margin-bottom:24px;">
+            <div class="mini-bar" style="height:60%;background:#fde68a;">
+              <span class="mini-bar-label">Product</span>
+            </div>
+            <div class="mini-bar" style="height:35%;background:#f59e0b;">
+              <span class="mini-bar-label">Duty</span>
+            </div>
+            <div class="mini-bar" style="height:20%;background:#d97706;">
+              <span class="mini-bar-label">Tax</span>
+            </div>
+            <div class="mini-bar" style="height:25%;background:#b45309;">
+              <span class="mini-bar-label">Freight</span>
+            </div>
+            <div class="mini-bar" style="height:10%;background:#92400e;">
+              <span class="mini-bar-label">Ins.</span>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="ps-micro-cta">
+          Try the cost calculator <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pair 2: Shipping -->
+    <div class="ps-pair reversed">
+      <div class="ps-problem reveal">
+        <div class="ps-label problem">
+          <i data-lucide="alert-triangle"></i>
+          Problem
+        </div>
+        <h2 class="ps-headline">Comparing carrier rates means 6 browser tabs and 3 phone calls</h2>
+        <p class="ps-body">Every shipment is a new negotiation. You're emailing freight forwarders, checking carrier
+          websites one by one, and hoping the quote you got yesterday is still valid. Meanwhile, your competitor already
+          shipped.</p>
+        <div class="ps-visual">
+          <div class="illust-tabs">
+            <div class="illust-tab active-tab">DHL</div>
+            <div class="illust-tab">FedEx</div>
+            <div class="illust-tab">Maersk</div>
+            <div class="illust-tab">UPS</div>
+            <div class="illust-tab">Flexport</div>
+            <div class="illust-tab">DSV</div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-divider">
+        <div class="ps-divider-arrow"><i data-lucide="arrow-down"></i></div>
+      </div>
+      <div class="ps-solution reveal reveal-delay-1">
+        <div class="ps-label solution">
+          <i data-lucide="check-circle-2"></i>
+          Befach Solution
+        </div>
+        <h2 class="ps-headline">50+ carriers. One search. Instant comparison.</h2>
+        <p class="ps-body">Compare rates across DHL, FedEx, Maersk, UPS and 46 more carriers in seconds. Book
+          directly, track in real-time, and get alerts when your cargo moves.</p>
+        <div class="ps-visual">
+          <div class="carrier-strip">
+            <span class="carrier-badge">DHL</span>
+            <span class="carrier-badge">FedEx</span>
+            <span class="carrier-badge">Maersk</span>
+            <span class="carrier-badge">UPS</span>
+            <span class="carrier-badge">+46 more</span>
+          </div>
+        </div>
+        <a href="#" class="ps-micro-cta" style="margin-top:16px;">
+          Compare shipping rates <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pair 3: Market Intelligence -->
+    <div class="ps-pair">
+      <div class="ps-problem reveal">
+        <div class="ps-label problem">
+          <i data-lucide="alert-triangle"></i>
+          Problem
+        </div>
+        <h2 class="ps-headline">You're making sourcing decisions based on outdated data</h2>
+        <p class="ps-body">Which markets are growing for your product? What are competitors paying? Where are duty rates
+          changing? Without real-time trade intelligence, you're flying blind &mdash; and leaving money on the table.
+        </p>
+        <div class="ps-visual">
+          <div class="illust-report">
+            <div class="illust-report-stamp">OUTDATED</div>
+            <div class="illust-report-line"></div>
+            <div class="illust-report-line"></div>
+            <div class="illust-report-line"></div>
+            <div class="illust-report-line" style="width:50%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-divider">
+        <div class="ps-divider-arrow"><i data-lucide="arrow-down"></i></div>
+      </div>
+      <div class="ps-solution reveal reveal-delay-1">
+        <div class="ps-label solution">
+          <i data-lucide="check-circle-2"></i>
+          Befach Solution
+        </div>
+        <h2 class="ps-headline">Real-time EXIM intelligence at your fingertips</h2>
+        <p class="ps-body">Access live trade data, market trends, pricing patterns, and competitor insights across
+          global markets. Identify new opportunities before your competition does.</p>
+        <div class="ps-visual">
+          <svg class="mini-trend" viewBox="0 0 200 50" preserveAspectRatio="none">
+            <polyline points="0,40 20,38 50,30 80,32 110,20 140,22 170,10 200,8" style="stroke:#4f46e5;" />
+            <polyline points="0,45 20,42 50,40 80,38 110,35 140,30 170,28 200,25"
+              style="stroke:#a5b4fc;stroke-dasharray:4 3;" />
+          </svg>
+        </div>
+        <a href="#" class="ps-micro-cta">
+          Explore market insights <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pair 4: Sourcing -->
+    <div class="ps-pair reversed">
+      <div class="ps-problem reveal">
+        <div class="ps-label problem">
+          <i data-lucide="alert-triangle"></i>
+          Problem
+        </div>
+        <h2 class="ps-headline">Finding a trustworthy supplier feels like a gamble</h2>
+        <p class="ps-body">Alibaba listings with stock photos. WhatsApp contacts from trade shows. No way to verify
+          quality certifications, production capacity, or compliance history. One bad supplier can cost you an entire
+          season's inventory.</p>
+        <div class="ps-visual">
+          <div class="illust-supplier">
+            <div class="illust-supplier-avatar">?</div>
+            <div class="illust-supplier-info">
+              <div class="illust-supplier-name">Unknown Manufacturer</div>
+              <div class="illust-supplier-badges">
+                <div class="illust-badge-unknown">?</div>
+                <div class="illust-badge-unknown">?</div>
+                <div class="illust-badge-unknown">?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-divider">
+        <div class="ps-divider-arrow"><i data-lucide="arrow-down"></i></div>
+      </div>
+      <div class="ps-solution reveal reveal-delay-1">
+        <div class="ps-label solution">
+          <i data-lucide="check-circle-2"></i>
+          Befach Solution
+        </div>
+        <h2 class="ps-headline">850+ verified suppliers with quality guarantees</h2>
+        <p class="ps-body">Every supplier on Befach is verified for business registration, quality certifications,
+          production capacity, and trade history. View ratings, request samples, and communicate directly.</p>
+        <div class="ps-visual">
+          <div class="illust-verified-supplier">
+            <div class="verified-avatar"><i data-lucide="shield-check"></i></div>
+            <div class="verified-info">
+              <div class="verified-name">Shenzen Premium Mfg.</div>
+              <div class="verified-meta">
+                <span class="verified-badge"><i data-lucide="check"></i> Verified</span>
+                <span class="verified-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="ps-micro-cta" style="margin-top:16px;">
+          Find verified suppliers <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pair 5: Compliance -->
+    <div class="ps-pair">
+      <div class="ps-problem reveal">
+        <div class="ps-label problem">
+          <i data-lucide="alert-triangle"></i>
+          Problem
+        </div>
+        <h2 class="ps-headline">One compliance mistake can hold your cargo at customs for weeks</h2>
+        <p class="ps-body">Wrong HS code. Missing certificate of origin. Expired phytosanitary permit. Trade compliance
+          is a minefield of regulations that change by country and product. The penalties aren't just fines &mdash;
+          they're lost time, lost customers, and lost trust.</p>
+        <div class="ps-visual">
+          <div class="illust-blocked">
+            <div class="illust-blocked-bar">
+              <i data-lucide="alert-octagon"></i>
+              SHIPMENT HELD — Missing documentation
+            </div>
+            <div class="illust-blocked-body">
+              <div class="illust-blocked-line" style="width:70%;"></div>
+              <div class="illust-blocked-line" style="width:90%;"></div>
+              <div class="illust-blocked-line" style="width:50%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-divider">
+        <div class="ps-divider-arrow"><i data-lucide="arrow-down"></i></div>
+      </div>
+      <div class="ps-solution reveal reveal-delay-1">
+        <div class="ps-label solution">
+          <i data-lucide="check-circle-2"></i>
+          Befach Solution
+        </div>
+        <h2 class="ps-headline">Automated compliance checks before your shipment leaves</h2>
+        <p class="ps-body">AI-powered HS code classification, automated document checklists, restricted party
+          screening, and real-time regulatory updates. Know you're compliant before you ship, not after customs flags
+          you.</p>
+        <div class="ps-visual">
+          <div class="mini-checklist">
+            <div class="check-item">
+              <div class="check-dot"><i data-lucide="check"></i></div>
+              Import license verified
+            </div>
+            <div class="check-item">
+              <div class="check-dot"><i data-lucide="check"></i></div>
+              HS code validated
+            </div>
+            <div class="check-item">
+              <div class="check-dot"><i data-lucide="check"></i></div>
+              Sanctions screening clear
+            </div>
+            <div class="check-item">
+              <div class="check-dot"><i data-lucide="check"></i></div>
+              Documents complete
+            </div>
+          </div>
+        </div>
+        <a href="#" class="ps-micro-cta" style="margin-top:16px;">
+          Check compliance requirements <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ===== UNIFIED PLATFORM ===== -->
+  <section class="platform-section" id="platform">
+    <div class="container">
+      <div class="platform-header reveal">
+        <p class="section-label">One Platform</p>
+        <h2 class="section-title">Everything connects. Everything works together.</h2>
+        <p class="section-subtitle">Befach isn't 8 separate tools bolted together. It's one intelligent platform where
+          every piece of your trade operation is connected.</p>
+      </div>
+      <div class="platform-grid reveal reveal-delay-1">
+        <div class="platform-card">
+          <div class="platform-card-icon orange"><i data-lucide="receipt"></i></div>
+          <h3>Landed Cost Calculator</h3>
+          <p>Instant duties, taxes, freight, and insurance calculations for any product to any country.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon blue"><i data-lucide="ship"></i></div>
+          <h3>Shipping & Logistics</h3>
+          <p>Compare 50+ carrier rates, book shipments, and track cargo in real time.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon indigo"><i data-lucide="trending-up"></i></div>
+          <h3>EXIM Intelligence</h3>
+          <p>Real-time trade data, market trends, and competitor insights.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon teal"><i data-lucide="factory"></i></div>
+          <h3>Smart Sourcing</h3>
+          <p>Find and verify suppliers with quality guarantees and on-platform communication.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon green"><i data-lucide="file-check-2"></i></div>
+          <h3>Compliance Tools</h3>
+          <p>AI-powered HS classification, document checks, and sanctions screening.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon purple"><i data-lucide="sparkles"></i></div>
+          <h3>AI Trade Assistant</h3>
+          <p>Instant answers to trade questions, document drafting, and regulatory guidance.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon red"><i data-lucide="package-check"></i></div>
+          <h3>Order Management</h3>
+          <p>Track every order from purchase to delivery with milestone notifications.</p>
+        </div>
+        <div class="platform-card">
+          <div class="platform-card-icon pink"><i data-lucide="wallet"></i></div>
+          <h3>Payments & Invoicing</h3>
+          <p>Multi-currency payments, pro-forma invoices, and automated reconciliation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== SOCIAL PROOF ===== -->
+  <section class="proof-section" id="proof">
+    <div class="container">
+      <div class="proof-header reveal">
+        <p class="section-label">Results</p>
+        <h2 class="section-title">Real traders. Real results.</h2>
+        <p class="section-subtitle">See how businesses like yours are saving time and money with Befach.</p>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="stat-strip reveal reveal-delay-1">
+        <div class="stat-strip-item">
+          <div class="stat-strip-value">500+</div>
+          <div class="stat-strip-label">Active businesses</div>
+        </div>
+        <div class="stat-strip-item">
+          <div class="stat-strip-value">30+</div>
+          <div class="stat-strip-label">Countries</div>
+        </div>
+        <div class="stat-strip-item">
+          <div class="stat-strip-value">2M+</div>
+          <div class="stat-strip-label">Shipments tracked</div>
+        </div>
+        <div class="stat-strip-item">
+          <div class="stat-strip-value">$150M+</div>
+          <div class="stat-strip-label">Trade facilitated</div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="testimonials-grid reveal reveal-delay-2">
+        <div class="testimonial-card">
+          <div class="testimonial-metric">
+            <span class="testimonial-metric-value">25%</span>
+            <span class="testimonial-metric-label">cost reduction</span>
+          </div>
+          <p class="testimonial-quote">"Befach transformed our sourcing process. We reduced landed costs by 25% in the
+            first quarter alone. The cost calculator pays for itself."</p>
+          <div class="testimonial-divider"></div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar a1">RK</div>
+            <div>
+              <div class="testimonial-name">Rajesh Kumar</div>
+              <div class="testimonial-role">CEO, TechImports India</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-metric">
+            <span class="testimonial-metric-value">40%</span>
+            <span class="testimonial-metric-label">revenue growth</span>
+          </div>
+          <p class="testimonial-quote">"The EXIM data analytics helped us identify three new export markets we hadn't
+            considered. Revenue grew 40% year-over-year."</p>
+          <div class="testimonial-divider"></div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar a2">SC</div>
+            <div>
+              <div class="testimonial-name">Sarah Chen</div>
+              <div class="testimonial-role">Director, Global Trade Co.</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-metric">
+            <span class="testimonial-metric-value">3x</span>
+            <span class="testimonial-metric-label">faster clearance</span>
+          </div>
+          <p class="testimonial-quote">"Their customs clearance and compliance tools are exceptional. We went from 3-day
+            clearance times to same-day. Absolutely game-changing."</p>
+          <div class="testimonial-divider"></div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar a3">MR</div>
+            <div>
+              <div class="testimonial-name">Michael Roberts</div>
+              <div class="testimonial-role">Founder, Import Solutions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <h2 class="cta-title">Stop wrestling with global trade.<br>Start commanding it.</h2>
+        <p class="cta-subtitle">Join 500+ businesses that replaced spreadsheets, phone calls, and guesswork with one
+          intelligent platform. Start free &mdash; no credit card, no commitment.</p>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-primary">
+            Start Your Free Trial
+            <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+          </a>
+          <a href="#" class="btn btn-outline">
+            Schedule a Demo
+          </a>
+        </div>
+        <p class="cta-note">14-day free trial <span>&middot;</span> No credit card required <span>&middot;</span> Setup
+          in 5 minutes</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="#">Cost Calculator</a>
+          <a href="#">Shipping & Logistics</a>
+          <a href="#">EXIM Intelligence</a>
+          <a href="#">AI Assistant</a>
+          <a href="#">Compliance Tools</a>
+        </div>
+        <div class="footer-col">
+          <h4>Solutions</h4>
+          <a href="#">For Importers</a>
+          <a href="#">For Exporters</a>
+          <a href="#">For Freight Forwarders</a>
+          <a href="#">For Enterprises</a>
+          <a href="#">For SMBs</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Befach International. All rights reserved.</span>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+          <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
+          <a href="#" aria-label="YouTube"><i data-lucide="youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <img src="../public/logo.png" alt="Befach International" class="logo-img footer-logo-img">
+        </a>
+        <p>Simplifying global trade with intelligent tools for cost calculation, logistics, compliance, and market
+          intelligence.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Initialize Lucide icons
+    document.addEventListener('DOMContentLoaded', function () {
+      lucide.createIcons();
+    });
+
+    // ===== Header scroll effect =====
+    window.addEventListener('scroll', function () {
+      var header = document.getElementById('header');
+      if (window.scrollY > 20) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      // Scroll progress bar
+      var scrollTop = window.scrollY;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      document.getElementById('scrollProgress').style.width = progress + '%';
+    });
+
+    // ===== Hamburger menu =====
+    var hamburger = document.getElementById('hamburger');
+    var mobileNav = document.getElementById('mobileNav');
+
+    hamburger.addEventListener('click', function () {
+      this.classList.toggle('active');
+      mobileNav.classList.toggle('open');
+      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeMobileNav() {
+      hamburger.classList.remove('active');
+      mobileNav.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ===== Scroll reveal with IntersectionObserver =====
+    (function () {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReduced) {
+        // Show everything immediately
+        document.querySelectorAll('.reveal').forEach(function (el) {
+          el.classList.add('visible');
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+</body>
+
+</html>

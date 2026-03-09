@@ -7,9 +7,11 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  className?: string;
+  hideHeader?: boolean;
 }
 
-export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export default function Modal({ isOpen, onClose, title, children, className = '', hideHeader = false }: ModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -29,12 +31,14 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay active" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="modal-container">
+    <div className={`modal-overlay active ${className}`} onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className={`modal-container ${className}`}>
         <button className="modal-close" onClick={onClose}>&times;</button>
-        <div className="modal-header">
-          <h2>{title}</h2>
-        </div>
+        {!hideHeader && title && (
+          <div className="modal-header">
+            <h2>{title}</h2>
+          </div>
+        )}
         {children}
       </div>
     </div>

@@ -211,7 +211,7 @@ export default function FeedbackWidget() {
         .widget-container {
           position: fixed;
           bottom: ${isMobile ? 'calc(100px + env(safe-area-inset-bottom, 0px))' : '24px'};
-          right: ${isMobile ? '16px' : '24px'};
+          ${isMobile ? 'left: 16px;' : 'right: 24px;'}
           z-index: 900;
         }
 
@@ -249,8 +249,8 @@ export default function FeedbackWidget() {
         .widget-menu {
           position: absolute;
           bottom: ${isMobile ? '56px' : '82px'};
-          right: 0;
-          background: white;
+          ${isMobile ? 'left: 0;' : 'right: 0;'}
+          background: var(--card-bg);
           border-radius: 12px;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
           padding: 8px;
@@ -272,11 +272,11 @@ export default function FeedbackWidget() {
           border-radius: 8px;
           cursor: pointer;
           font-size: 14px;
-          color: #374151;
+          color: var(--text-primary);
           transition: background 0.15s;
         }
         .menu-item:hover {
-          background: #f3f4f6;
+          background: var(--bg-secondary);
         }
 
         /* Modal Overlay */

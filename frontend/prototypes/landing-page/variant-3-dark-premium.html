@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Befach — Variant 3: Dark Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1a1a1a;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(255,255,255,0.12);
+    --text: #fafafa;
+    --text-muted: #888888;
+    --text-dim: #666666;
+    --orange: #f97316;
+    --orange-muted: rgba(249,115,22,0.15);
+    --green: #4ade80;
+    --red: #f87171;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Space Grotesk', sans-serif; color: var(--text); line-height: 1.6; background: var(--bg); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,10,0.8); backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--orange); color: var(--bg); padding: 8px 20px; border-radius: 8px;
+    font-weight: 600; font-size: 13px; text-decoration: none; transition: all 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.9; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 100px 48px 80px; text-align: center;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(249,115,22,0.08) 0%, transparent 50%);
+    position: relative;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 64px; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, rgba(249,115,22,0.3), transparent);
+  }
+  .hero-inner { max-width: 800px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 500;
+    color: var(--text-muted); margin-bottom: 32px;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif; font-size: 72px; font-weight: 400;
+    line-height: 1.05; margin-bottom: 24px; letter-spacing: -1px;
+  }
+  .hero h1 em { font-style: italic; color: var(--orange); }
+  .hero p { font-size: 18px; color: var(--text-muted); max-width: 520px; margin: 0 auto 36px; }
+  .trust-pills { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+  .trust-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 100px; font-size: 13px; color: var(--text-muted);
+  }
+  .trust-pill .check { color: var(--green); font-weight: 700; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; }
+  .btn-glow {
+    background: var(--orange); color: var(--bg); padding: 14px 32px; border-radius: 10px;
+    font-weight: 700; font-size: 15px; text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 0 30px rgba(249,115,22,0.2);
+  }
+  .btn-glow:hover { box-shadow: 0 0 50px rgba(249,115,22,0.35); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: var(--text); padding: 14px 32px; border-radius: 10px;
+    font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--text-muted); }
+
+  /* SECTIONS */
+  section { padding: 96px 48px; }
+  .label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--orange); margin-bottom: 12px;
+  }
+  .heading {
+    font-family: 'Instrument Serif', serif; font-size: 44px; font-weight: 400;
+    line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.5px;
+  }
+  .subtext { font-size: 16px; color: var(--text-muted); max-width: 540px; margin-bottom: 48px; }
+
+  /* PROBLEM */
+  .problem { border-top: 1px solid var(--border); }
+  .problem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+  .problem-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; transition: all 0.3s;
+  }
+  .problem-item:hover { border-color: var(--border-hover); }
+  .problem-item .icon { font-size: 24px; margin-bottom: 16px; }
+  .problem-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .problem-item p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .stat-bar {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    padding: 28px; background: var(--orange-muted); border-radius: 12px;
+    border: 1px solid rgba(249,115,22,0.2);
+  }
+  .stat-bar .num { font-size: 48px; font-weight: 700; color: var(--orange); }
+  .stat-bar .txt { font-size: 14px; color: var(--text-muted); max-width: 300px; }
+  .bridge-line {
+    text-align: center; margin-top: 40px; font-size: 20px; font-weight: 500;
+    color: var(--orange); letter-spacing: 1px;
+  }
+
+  /* PILLARS */
+  .pillars { border-top: 1px solid var(--border); }
+  .pillar-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border-radius: 16px; overflow: hidden; }
+  .pillar-cell {
+    background: var(--surface); padding: 32px 20px; text-align: center;
+    transition: background 0.3s;
+  }
+  .pillar-cell:hover { background: var(--surface-2); }
+  .pillar-idx { font-size: 36px; font-weight: 700; color: rgba(249,115,22,0.2); margin-bottom: 16px; }
+  .pillar-cell h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .pillar-cell p { font-size: 13px; color: var(--text-dim); }
+
+  /* HOW IT WORKS */
+  .how { border-top: 1px solid var(--border); text-align: center; }
+  .steps-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+  .step-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px 20px; position: relative;
+    transition: all 0.3s;
+  }
+  .step-box:hover { border-color: var(--orange); }
+  .step-box::before {
+    content: attr(data-step); position: absolute; top: -14px; left: 50%;
+    transform: translateX(-50%); background: var(--orange); color: var(--bg);
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .step-box h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; margin-top: 8px; }
+  .step-box p { font-size: 13px; color: var(--text-dim); }
+
+  /* SOCIAL PROOF */
+  .proof { border-top: 1px solid var(--border); }
+  .proof-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 48px; }
+  .metric {
+    text-align: center; padding: 24px;
+    background: var(--surface); border-radius: 12px; border: 1px solid var(--border);
+  }
+  .metric .value { font-size: 32px; font-weight: 700; color: var(--orange); }
+  .metric .meta { font-size: 12px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .review {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+  }
+  .review .stars { color: var(--orange); font-size: 14px; margin-bottom: 12px; letter-spacing: 2px; }
+  .review .body { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+  .review .who { font-size: 13px; font-weight: 600; }
+  .review .where { font-size: 12px; color: var(--text-dim); }
+
+  /* POSITIONING */
+  .positioning {
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(249,115,22,0.06) 0%, transparent 50%);
+  }
+  .positioning .heading em { font-style: italic; color: var(--orange); }
+  .positioning p { color: var(--text-muted); max-width: 560px; margin: 0 auto 12px; font-size: 16px; }
+  .pos-tags { display: flex; justify-content: center; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+  .pos-tag {
+    padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  }
+  .neg { background: rgba(248,113,113,0.08); color: var(--red); border: 1px solid rgba(248,113,113,0.15); }
+  .pos { background: var(--orange-muted); color: var(--orange); border: 1px solid rgba(249,115,22,0.25); }
+
+  /* FINAL CTA */
+  .final-cta {
+    text-align: center; padding: 96px 48px;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+    border-top: 1px solid var(--border);
+  }
+  .final-cta p { color: var(--text-muted); font-size: 16px; margin-bottom: 36px; }
+
+  footer {
+    text-align: center; padding: 40px; color: var(--text-dim); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 1024px) {
+    .hero h1 { font-size: 48px; }
+    .problem-grid { grid-template-columns: repeat(2, 1fr); }
+    .pillar-row { grid-template-columns: repeat(2, 1fr); }
+    .steps-row { grid-template-columns: repeat(2, 1fr); }
+    .reviews { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .hero h1 { font-size: 36px; }
+    section { padding: 56px 20px; }
+    .heading { font-size: 30px; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .pillar-row { grid-template-columns: 1fr; }
+    .steps-row { grid-template-columns: 1fr; }
+    .proof-metrics { grid-template-columns: repeat(2, 1fr); }
+    .stat-bar { flex-direction: column; text-align: center; }
+    .trust-pills { flex-direction: column; align-items: center; }
+    .hero-actions { flex-direction: column; }
+    .pos-tags { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">be<span>fach</span></div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#pillars">Pillars</a>
+    <a href="#how">Process</a>
+    <a href="#proof">Proof</a>
+    <a href="#cta" class="nav-cta">Start Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Now Serving Indian Importers</div>
+    <h1>Import Without Risk.<br><em>Scale Without Stress.</em></h1>
+    <p>We simplify global sourcing, compliance, and landed cost management for Indian dealers, distributors, and manufacturers who depend on imports.</p>
+    <div class="trust-pills">
+      <div class="trust-pill"><span class="check">✓</span> Supplier validation before payment</div>
+      <div class="trust-pill"><span class="check">✓</span> End-to-end compliance handling</div>
+      <div class="trust-pill"><span class="check">✓</span> Landed cost clarity before shipment</div>
+    </div>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-glow">Simplify My Imports</a>
+      <a href="#" class="btn-ghost">Talk to an Expert</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="label">The Problem</div>
+  <h2 class="heading">Importing Shouldn't Feel Like a Gamble</h2>
+  <p class="subtext">Most Indian businesses face these costly risks every single shipment.</p>
+  <div class="problem-grid">
+    <div class="problem-item">
+      <div class="icon">⚠️</div>
+      <h3>Unverified Suppliers</h3>
+      <p>Paying overseas factories without proper validation — fraud, quality failures, financial loss.</p>
+    </div>
+    <div class="problem-item">
+      <div class="icon">📋</div>
+      <h3>Customs Issues</h3>
+      <p>Wrong HS codes, missing docs, regulatory changes stalling cargo for weeks.</p>
+    </div>
+    <div class="problem-item">
+      <div class="icon">💸</div>
+      <h3>Hidden Costs</h3>
+      <p>Unexpected duties, freight surcharges, and fees eating into locked-in profits.</p>
+    </div>
+    <div class="problem-item">
+      <div class="icon">🕐</div>
+      <h3>Shipment Delays</h3>
+      <p>Late deliveries disrupting production and damaging customer relationships.</p>
+    </div>
+  </div>
+  <div class="stat-bar">
+    <div class="num">67%</div>
+    <div class="txt">of Indian SMEs face supply chain disruptions at least once a year. One delay can wipe out months of profit.</div>
+  </div>
+  <div class="bridge-line">THAT'S WHERE BEFACH STEPS IN →</div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars" id="pillars">
+  <div class="label">Five Pillars</div>
+  <h2 class="heading">A Structured System to Simplify Imports</h2>
+  <p class="subtext">Five interconnected pillars protecting your margins and ensuring compliance.</p>
+  <div class="pillar-row">
+    <div class="pillar-cell">
+      <div class="pillar-idx">01</div>
+      <h3>Risk & Compliance</h3>
+      <p>Supplier validation. Documentation accuracy. Regulatory clarity.</p>
+    </div>
+    <div class="pillar-cell">
+      <div class="pillar-idx">02</div>
+      <h3>Margin Protection</h3>
+      <p>Landed cost forecasting. Duty optimization. Freight strategy.</p>
+    </div>
+    <div class="pillar-cell">
+      <div class="pillar-idx">03</div>
+      <h3>Global Sourcing</h3>
+      <p>Verified factories. Negotiation support. Long-term partnerships.</p>
+    </div>
+    <div class="pillar-cell">
+      <div class="pillar-idx">04</div>
+      <h3>Visibility</h3>
+      <p>Clear roadmap. Defined timelines. Shipment tracking.</p>
+    </div>
+    <div class="pillar-cell">
+      <div class="pillar-idx">05</div>
+      <h3>Advisory</h3>
+      <p>Import planning. Product viability. Scale strategy.</p>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:40px;">
+    <a href="#how" class="btn-glow">See How It Works</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="label">Process</div>
+  <h2 class="heading">From Supplier to Your Warehouse — Simplified</h2>
+  <p class="subtext" style="margin:0 auto 48px;">Four clear steps. No surprises.</p>
+  <div class="steps-row">
+    <div class="step-box" data-step="1">
+      <h3>Requirement Analysis</h3>
+      <p>Product specs, volumes, quality standards, and delivery timelines.</p>
+    </div>
+    <div class="step-box" data-step="2">
+      <h3>Supplier Validation & Costing</h3>
+      <p>Verified factories, negotiated pricing, complete landed cost breakdown.</p>
+    </div>
+    <div class="step-box" data-step="3">
+      <h3>Compliance & Docs</h3>
+      <p>HS codes, BIS certifications, customs paperwork — handled.</p>
+    </div>
+    <div class="step-box" data-step="4">
+      <h3>Delivery & Support</h3>
+      <p>Tracking, port clearance, and post-import advisory.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof" id="proof">
+  <div class="label">Results</div>
+  <h2 class="heading">Trusted by Import-Dependent Businesses</h2>
+  <div class="proof-metrics">
+    <div class="metric"><div class="value">50+</div><div class="meta">Industries</div></div>
+    <div class="metric"><div class="value">12+</div><div class="meta">Countries</div></div>
+    <div class="metric"><div class="value">₹200Cr+</div><div class="meta">Handled</div></div>
+    <div class="metric"><div class="value">15+</div><div class="meta">Years</div></div>
+  </div>
+  <div class="reviews">
+    <div class="review">
+      <div class="stars">★★★★★</div>
+      <div class="body">"Reduced landed cost by 8% on auto parts imports. Befach found pricing gaps we didn't know existed."</div>
+      <div class="who">Rajesh Mehta</div>
+      <div class="where">Auto Parts Distributor, Mumbai</div>
+    </div>
+    <div class="review">
+      <div class="stars">★★★★★</div>
+      <div class="body">"Zero customs holds in 14 months. Their compliance handling gives us total peace of mind."</div>
+      <div class="who">Priya Sharma</div>
+      <div class="where">Electronics Manufacturer, Delhi NCR</div>
+    </div>
+    <div class="review">
+      <div class="stars">★★★★★</div>
+      <div class="body">"Scaled from 2 containers/month to 8 without adding a single person to our import team."</div>
+      <div class="who">Vikram Patel</div>
+      <div class="where">Industrial Chemicals Dealer, Ahmedabad</div>
+    </div>
+  </div>
+</section>
+
+<!-- POSITIONING -->
+<section class="positioning">
+  <div class="label">Identity</div>
+  <h2 class="heading">We Don't Clear Shipments.<br><em>We Clear Paths for Growth.</em></h2>
+  <p>Not a freight forwarder. Not just a sourcing agent. Your import risk management partner — built to protect margins, ensure compliance, and simplify global trade.</p>
+  <div class="pos-tags">
+    <span class="pos-tag neg">✕ Not a Freight Forwarder</span>
+    <span class="pos-tag neg">✕ Not Just a Sourcing Agent</span>
+    <span class="pos-tag pos">✓ Import Risk Management Partner</span>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="cta">
+  <div class="label">Start</div>
+  <h2 class="heading">Ready to Import with Confidence?</h2>
+  <p>Let's assess your current import risks and cost leakages.</p>
+  <a href="#" class="btn-glow" style="font-size:17px; padding:16px 40px;">Simplify My Imports Today</a>
+</section>
+
+<footer>
+  <div class="logo" style="margin-bottom:8px;">be<span>fach</span></div>
+  &copy; 2026 Befach. All rights reserved.
+</footer>
+
+</body>
+</html>

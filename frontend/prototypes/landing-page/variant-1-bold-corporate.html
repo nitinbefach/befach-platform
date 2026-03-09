@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Befach — Variant 1: Bold Corporate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --orange: #f97316;
+    --orange-dark: #ea580c;
+    --orange-light: #fed7aa;
+    --navy: #0f172a;
+    --slate-800: #1e293b;
+    --slate-600: #475569;
+    --slate-400: #94a3b8;
+    --slate-100: #f1f5f9;
+    --white: #ffffff;
+    --red-500: #ef4444;
+    --green-500: #22c55e;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); line-height: 1.6; background: var(--white); }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0 40px; height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-size: 24px; font-weight: 800; color: var(--navy); }
+  .logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--slate-600); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-cta {
+    background: var(--orange); color: white; padding: 10px 24px; border-radius: 8px;
+    font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 120px 80px 80px;
+    background: linear-gradient(135deg, var(--white) 0%, #fff7ed 50%, var(--white) 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%);
+  }
+  .hero-content { max-width: 680px; position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--orange-light); color: var(--orange-dark);
+    padding: 6px 16px; border-radius: 100px; font-size: 13px; font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 56px; font-weight: 900; line-height: 1.1;
+    letter-spacing: -0.03em; margin-bottom: 24px;
+  }
+  .hero h1 em { font-style: normal; color: var(--orange); }
+  .hero p { font-size: 20px; color: var(--slate-600); margin-bottom: 16px; max-width: 540px; }
+  .trust-signals { display: flex; flex-direction: column; gap: 12px; margin: 32px 0; }
+  .trust-signals li {
+    list-style: none; display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 500; color: var(--slate-800);
+  }
+  .trust-signals li::before {
+    content: '✓'; display: flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #dcfce7; color: var(--green-500); font-size: 13px; font-weight: 700;
+  }
+  .hero-ctas { display: flex; gap: 16px; margin-top: 40px; }
+  .btn-primary {
+    background: var(--orange); color: white; padding: 16px 32px; border-radius: 10px;
+    font-weight: 700; font-size: 16px; text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.2s; box-shadow: 0 4px 14px rgba(249,115,22,0.3);
+  }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(249,115,22,0.4); }
+  .btn-secondary {
+    background: transparent; color: var(--navy); padding: 16px 32px; border-radius: 10px;
+    font-weight: 600; font-size: 16px; text-decoration: none; border: 2px solid var(--slate-400);
+    transition: all 0.2s; cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+
+  .hero-visual {
+    flex: 1; display: flex; justify-content: center; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .hero-graphic {
+    width: 420px; height: 420px; border-radius: 24px;
+    background: linear-gradient(145deg, var(--navy) 0%, var(--slate-800) 100%);
+    display: flex; flex-direction: column; padding: 40px; gap: 20px;
+    box-shadow: 0 40px 80px rgba(15,23,42,0.2);
+    transform: rotate(2deg);
+  }
+  .graphic-row {
+    display: flex; gap: 12px; align-items: center;
+  }
+  .graphic-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .graphic-bar { height: 12px; border-radius: 6px; flex: 1; }
+  .graphic-card {
+    background: rgba(255,255,255,0.08); border-radius: 12px; padding: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .graphic-card-title { color: var(--slate-400); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .graphic-card-value { color: white; font-size: 28px; font-weight: 800; }
+  .graphic-card-sub { color: var(--green-500); font-size: 13px; font-weight: 600; margin-top: 4px; }
+
+  /* ─── SECTIONS COMMON ─── */
+  section { padding: 100px 80px; }
+  .section-label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--orange); margin-bottom: 12px;
+  }
+  .section-title { font-size: 42px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .section-subtitle { font-size: 18px; color: var(--slate-600); max-width: 600px; margin-bottom: 48px; }
+
+  /* ─── PROBLEM ─── */
+  .problem { background: var(--navy); color: white; }
+  .problem .section-title { color: white; }
+  .problem .section-subtitle { color: var(--slate-400); }
+  .problem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 48px; }
+  .problem-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 28px;
+    transition: all 0.3s;
+  }
+  .problem-card:hover { background: rgba(255,255,255,0.08); border-color: var(--orange); transform: translateY(-4px); }
+  .problem-icon { font-size: 28px; margin-bottom: 16px; }
+  .problem-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: white; }
+  .problem-card p { font-size: 14px; color: var(--slate-400); line-height: 1.6; }
+  .problem-stat {
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(249,115,22,0.05));
+    border: 1px solid rgba(249,115,22,0.2); border-radius: 16px;
+    padding: 32px; text-align: center;
+  }
+  .problem-stat .stat-number { font-size: 48px; font-weight: 900; color: var(--orange); }
+  .problem-stat .stat-text { font-size: 16px; color: var(--slate-400); margin-top: 8px; }
+  .bridge {
+    text-align: center; margin-top: 48px; font-size: 22px; font-weight: 600; color: var(--orange);
+  }
+
+  /* ─── PILLARS ─── */
+  .pillars { background: var(--slate-100); }
+  .pillars-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+  .pillar-card {
+    background: white; border-radius: 16px; padding: 32px 24px;
+    border: 1px solid rgba(0,0,0,0.06); transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .pillar-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--orange); opacity: 0; transition: opacity 0.3s;
+  }
+  .pillar-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+  .pillar-card:hover::before { opacity: 1; }
+  .pillar-number {
+    font-size: 48px; font-weight: 900; color: var(--orange-light); margin-bottom: 16px;
+    line-height: 1;
+  }
+  .pillar-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+  .pillar-card p { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+
+  /* ─── HOW IT WORKS ─── */
+  .how-it-works { text-align: center; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 48px; position: relative; }
+  .steps::before {
+    content: ''; position: absolute; top: 40px; left: 10%; right: 10%; height: 2px;
+    background: linear-gradient(90deg, var(--orange-light), var(--orange), var(--orange-light));
+  }
+  .step { position: relative; text-align: center; }
+  .step-number {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--orange); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 800; margin: 0 auto 20px;
+    position: relative; z-index: 1;
+    box-shadow: 0 4px 20px rgba(249,115,22,0.3);
+  }
+  .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .step p { font-size: 14px; color: var(--slate-600); }
+
+  /* ─── SOCIAL PROOF ─── */
+  .social-proof { background: var(--slate-100); }
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 60px; }
+  .stat-item { text-align: center; }
+  .stat-item .stat-val { font-size: 40px; font-weight: 900; color: var(--orange); }
+  .stat-item .stat-label { font-size: 14px; color: var(--slate-600); margin-top: 4px; }
+  .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .testimonial-card {
+    background: white; border-radius: 16px; padding: 32px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .testimonial-card .quote { font-size: 15px; color: var(--slate-800); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+  .testimonial-card .author { font-size: 14px; font-weight: 600; }
+  .testimonial-card .role { font-size: 13px; color: var(--slate-400); }
+
+  /* ─── POSITIONING ─── */
+  .positioning { background: var(--navy); color: white; text-align: center; }
+  .positioning .section-title { color: white; margin: 0 auto 20px; }
+  .positioning .section-title em { font-style: normal; color: var(--orange); }
+  .positioning p { color: var(--slate-400); max-width: 640px; margin: 0 auto 16px; font-size: 17px; }
+  .positioning-tags { display: flex; justify-content: center; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
+  .positioning-tag {
+    padding: 10px 24px; border-radius: 100px; font-size: 14px; font-weight: 600;
+  }
+  .tag-not { background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+  .tag-is { background: rgba(249,115,22,0.15); color: var(--orange); border: 1px solid rgba(249,115,22,0.3); }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta {
+    text-align: center; padding: 100px 80px;
+    background: linear-gradient(135deg, #fff7ed 0%, var(--white) 50%, #fff7ed 100%);
+  }
+  .final-cta .section-title { margin: 0 auto 16px; }
+  .final-cta p { color: var(--slate-600); font-size: 17px; margin-bottom: 40px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy); color: var(--slate-400); padding: 60px 80px 40px;
+    text-align: center; font-size: 14px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .hero { flex-direction: column; padding: 120px 40px 60px; text-align: center; }
+    .hero-content { max-width: 100%; }
+    .hero h1 { font-size: 40px; }
+    .trust-signals { align-items: center; }
+    .hero-ctas { justify-content: center; }
+    .hero-visual { display: none; }
+    section { padding: 60px 40px; }
+    .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .steps::before { display: none; }
+    .testimonials { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 40px; }
+    .hero h1 { font-size: 32px; }
+    .hero p { font-size: 16px; }
+    .hero-ctas { flex-direction: column; }
+    section { padding: 48px 20px; }
+    .section-title { font-size: 28px; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .pillars-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .positioning-tags { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">be<span>fach</span></div>
+  <div class="nav-links">
+    <a href="#problem">Why Befach</a>
+    <a href="#pillars">Services</a>
+    <a href="#how">Process</a>
+    <a href="#proof">Results</a>
+    <a href="#cta" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🔒 Trusted Import Partner</div>
+    <h1>Import Without Risk.<br><em>Scale Without Stress.</em></h1>
+    <p>We simplify global sourcing, compliance, and landed cost management for Indian dealers, distributors, and manufacturers who depend on imports.</p>
+    <ul class="trust-signals">
+      <li>Supplier validation before payment</li>
+      <li>End-to-end compliance handling</li>
+      <li>Landed cost clarity before shipment</li>
+    </ul>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn-primary">Simplify My Imports</a>
+      <a href="#" class="btn-secondary">Talk to an Expert</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-graphic">
+      <div class="graphic-row">
+        <div class="graphic-dot" style="background:#22c55e"></div>
+        <div class="graphic-bar" style="background:rgba(255,255,255,0.1); width:60%"></div>
+      </div>
+      <div class="graphic-card">
+        <div class="graphic-card-title">Landed Cost Savings</div>
+        <div class="graphic-card-value">₹12.4L</div>
+        <div class="graphic-card-sub">↓ 8% vs last quarter</div>
+      </div>
+      <div class="graphic-card">
+        <div class="graphic-card-title">Compliance Status</div>
+        <div class="graphic-card-value" style="color:#22c55e; font-size:22px">All Clear ✓</div>
+      </div>
+      <div class="graphic-row">
+        <div class="graphic-dot" style="background:var(--orange)"></div>
+        <div class="graphic-bar" style="background:var(--orange); width:75%; opacity:0.3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="section-label">The Challenge</div>
+  <h2 class="section-title">Importing Shouldn't Feel Like a Gamble</h2>
+  <p class="section-subtitle">Most Indian businesses face these costly risks every single shipment.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">⚠️</div>
+      <h3>Unverified Suppliers</h3>
+      <p>Paying overseas factories without proper validation exposes you to fraud, quality failures, and financial loss.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📋</div>
+      <h3>Sudden Customs Issues</h3>
+      <p>Incorrect HS codes, missing documents, or regulatory changes can stall your cargo at ports for weeks.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>Hidden Costs Killing Margins</h3>
+      <p>Unexpected duties, freight surcharges, and handling fees eat into profits you thought were locked in.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🕐</div>
+      <h3>Shipment Delays</h3>
+      <p>Late deliveries disrupt production schedules, miss seasonal windows, and damage customer relationships.</p>
+    </div>
+  </div>
+  <div class="problem-stat">
+    <div class="stat-number">67%</div>
+    <div class="stat-text">of Indian SMEs face supply chain disruptions at least once a year.<br>One delay can wipe out months of profit.</div>
+  </div>
+  <div class="bridge">That's where Befach steps in. →</div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars" id="pillars">
+  <div class="section-label">Our Approach</div>
+  <h2 class="section-title">A Structured System to Simplify Imports</h2>
+  <p class="section-subtitle">Five interconnected pillars that protect your margins, ensure compliance, and give you complete visibility.</p>
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-number">01</div>
+      <h3>Risk & Compliance Control</h3>
+      <p>Supplier validation, documentation accuracy, regulatory clarity — before you commit a rupee.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-number">02</div>
+      <h3>Margin Protection</h3>
+      <p>Clear landed cost forecasting. Duty optimization. Freight strategy that preserves your profit.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-number">03</div>
+      <h3>Reliable Global Sourcing</h3>
+      <p>Verified factories. Negotiation support. Long-term partnerships you can depend on.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-number">04</div>
+      <h3>Full Process Visibility</h3>
+      <p>Clear import roadmap. Defined timelines. Real-time shipment tracking at every stage.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-number">05</div>
+      <h3>Strategic Advisory</h3>
+      <p>Import planning, product viability assessment, and scale strategy for growing businesses.</p>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:48px;">
+    <a href="#how" class="btn-primary">See How It Works</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how">
+  <div class="section-label">Process</div>
+  <h2 class="section-title">From Supplier to Your Warehouse — Simplified</h2>
+  <p class="section-subtitle" style="margin:0 auto 48px;">Four clear steps. No surprises. Full transparency.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Requirement Analysis</h3>
+      <p>We understand your product, volumes, quality standards, and timelines.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>Supplier Validation & Costing</h3>
+      <p>Verified factories, negotiated pricing, and complete landed cost breakdown.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>Compliance & Documentation</h3>
+      <p>HS codes, BIS certifications, customs paperwork — all handled end to end.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">4</div>
+      <h3>Delivery & Support</h3>
+      <p>Shipment tracking, port clearance, and post-import advisory support.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social-proof" id="proof">
+  <div class="section-label">Results</div>
+  <h2 class="section-title">Trusted by Import-Dependent Businesses</h2>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-val">50+</div>
+      <div class="stat-label">Industries Served</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">12+</div>
+      <div class="stat-label">Countries Sourced</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">₹200Cr+</div>
+      <div class="stat-label">Shipment Value Handled</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">15+</div>
+      <div class="stat-label">Years of Expertise</div>
+    </div>
+  </div>
+  <div class="testimonials">
+    <div class="testimonial-card">
+      <div class="quote">"Reduced our landed cost by 8% on auto parts imports. Befach found pricing gaps we didn't know existed."</div>
+      <div class="author">Rajesh Mehta</div>
+      <div class="role">Auto Parts Distributor, Mumbai</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote">"Zero customs holds in 14 months. Their compliance handling gives us total peace of mind."</div>
+      <div class="author">Priya Sharma</div>
+      <div class="role">Electronics Manufacturer, Delhi NCR</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote">"We scaled from 2 containers/month to 8 without adding a single person to our import team."</div>
+      <div class="author">Vikram Patel</div>
+      <div class="role">Industrial Chemicals Dealer, Ahmedabad</div>
+    </div>
+  </div>
+</section>
+
+<!-- POSITIONING -->
+<section class="positioning">
+  <div class="section-label">Who We Are</div>
+  <h2 class="section-title">We Don't Clear Shipments.<br><em>We Clear Paths for Growth.</em></h2>
+  <p>Befach is not a freight forwarder. Not just a sourcing agent. We are your import risk management partner — built to protect margins, ensure compliance, and simplify every step of global trade.</p>
+  <div class="positioning-tags">
+    <span class="positioning-tag tag-not">✕ Not a Freight Forwarder</span>
+    <span class="positioning-tag tag-not">✕ Not Just a Sourcing Agent</span>
+    <span class="positioning-tag tag-is">✓ Import Risk Management Partner</span>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="cta">
+  <div class="section-label">Get Started</div>
+  <h2 class="section-title">Ready to Import with Confidence?</h2>
+  <p>Let's assess your current import risks and cost leakages — no commitment required.</p>
+  <a href="#" class="btn-primary" style="font-size:18px; padding:18px 40px;">Simplify My Imports Today</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo" style="margin-bottom:16px;">be<span>fach</span></div>
+  <p>&copy; 2026 Befach. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

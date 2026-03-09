@@ -1,8 +1,7 @@
 'use client';
 
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { useMobile } from '@/hooks/useMobile';
-import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { dashboardTourSteps, mobileDashboardTourSteps } from '@/lib/tourSteps';
 import { DashboardProvider, WebDashboard, MobileDashboard } from './components';
@@ -10,19 +9,13 @@ import TourFAB from '@/components/walkthrough/TourFAB';
 
 function DashboardContent() {
   const { isMobile } = useMobile();
-  const { triggerNPSCheck, npsElement } = useFeedbackTrigger();
   const tourSteps = isMobile ? mobileDashboardTourSteps : dashboardTourSteps;
   const { startTour, isActive: tourActive } = useTour({ tourId: 'dashboard', steps: tourSteps });
-
-  useEffect(() => {
-    triggerNPSCheck();
-  }, [triggerNPSCheck]);
 
   return (
     <>
       {isMobile ? <MobileDashboard /> : <WebDashboard />}
       {!tourActive && <TourFAB onStart={startTour} />}
-      {npsElement}
     </>
   );
 }
