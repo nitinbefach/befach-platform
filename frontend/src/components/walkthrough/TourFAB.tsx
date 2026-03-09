@@ -23,7 +23,7 @@ export default function TourFAB({ onStart }: TourFABProps) {
       <style jsx>{`
         .tour-fab {
           position: fixed;
-          bottom: ${isMobile ? 'calc(150px + env(safe-area-inset-bottom, 0px))' : '84px'};
+          bottom: ${isMobile ? 'calc(80px + env(safe-area-inset-bottom, 0px))' : '84px'};
           right: ${isMobile ? '16px' : '24px'};
           z-index: 900;
           width: ${isMobile ? '46px' : '48px'};

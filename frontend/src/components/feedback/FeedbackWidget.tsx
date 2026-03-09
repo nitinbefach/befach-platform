@@ -210,7 +210,7 @@ export default function FeedbackWidget() {
         /* Widget Container */
         .widget-container {
           position: fixed;
-          bottom: ${isMobile ? 'calc(100px + env(safe-area-inset-bottom, 0px))' : '24px'};
+          bottom: ${isMobile ? 'calc(80px + env(safe-area-inset-bottom, 0px))' : '24px'};
           ${isMobile ? 'left: 16px;' : 'right: 24px;'}
           z-index: 900;
         }
