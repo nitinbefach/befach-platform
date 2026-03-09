@@ -6,6 +6,8 @@ import LandingFooter from '@/components/landing/LandingFooter';
 import BrowserMockup from '@/components/landing/BrowserMockup';
 import InteractiveDemo from '@/components/landing/InteractiveDemo';
 import ServicesBento from '@/components/landing/ServicesBento';
+import SplitCardStack from '@/components/landing/showcase/SplitCardStack';
+import { showcaseCards } from '@/components/landing/showcase/showcaseContent';
 
 const testimonials = [
   {
@@ -78,6 +80,9 @@ export default function HomePage() {
       {/* ===== SERVICES BENTO GRID ===== */}
       <ServicesBento />
 
+      {/* ===== PROBLEM → SOLUTION SHOWCASE ===== */}
+      <SplitCardStack cards={showcaseCards} />
+
       {/* ===== TESTIMONIALS ===== */}
       <section className="testimonials-section" id="testimonials">
         <div className="container">
@@ -138,7 +143,7 @@ export default function HomePage() {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           color: var(--landing-text-heading);
           line-height: 1.6;
-          overflow-x: hidden;
+          overflow-x: clip;
         }
 
         .container {

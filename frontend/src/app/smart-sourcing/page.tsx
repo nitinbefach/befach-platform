@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
@@ -13,7 +13,7 @@ import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, E
 import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats, saveSupplierFromSearch } from '@/lib/suppliers';
 import { createConversation, getStoredConversations } from '@/lib/conversations';
 import { captureFeatureAction } from '@/lib/posthogEvents';
-import { MapPin, Star, Info, HelpCircle, FileText, UserPlus, X } from 'lucide-react';
+import { MapPin, Star, Info, FileText, UserPlus } from 'lucide-react';
 
 type ModalType = 'none' | 'supplier-detail' | 'contact';
 type SourceTab = 'befach' | 'external';
@@ -59,8 +59,6 @@ function SmartSourcingContent() {
   const [isSearching, setIsSearching] = useState(false);
   const [activeModal, setActiveModal] = useState<ModalType>('none');
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
-  const [showHelpPopup, setShowHelpPopup] = useState(false);
-  const helpPopupRef = useRef<HTMLDivElement>(null);
   const [stats, setStats] = useState({ total: 0, premium: 0, byCategory: [] as { id: string; name: string; count: number }[] });
 
   useEffect(() => {
@@ -212,6 +210,18 @@ function SmartSourcingContent() {
                   />
                 ))}
               </div>
+              <div className="cant-find-card">
+                <h3>Can&apos;t find what you need?</h3>
+                <p>Let our team source verified suppliers for you, or invite a supplier you already work with.</p>
+                <div className="cant-find-actions">
+                  <Link href="/submit-requirement" className="cant-find-btn primary">
+                    <FileText size={16} /> Share Your Requirement
+                  </Link>
+                  <Link href="/invite-supplier" className="cant-find-btn secondary">
+                    <UserPlus size={16} /> Invite Your Suppliers
+                  </Link>
+                </div>
+              </div>
             </>
           ) : (
             <EmptyState
@@ -267,31 +277,6 @@ function SmartSourcingContent() {
             <Link href="/submit-requirement" className="btn-submit-req">Share Your Requirement</Link>
           </div>
         </section>
-      )}
-
-      {/* Help FAB + Popup */}
-      {hasSearched && searchResults.length > 0 && activeTab === 'befach' && (
-        <div id="sourcing-help" className="help-fab-wrapper" ref={helpPopupRef}>
-          {showHelpPopup && (
-            <div className="help-popup">
-              <div className="help-popup-header">
-                <span>Can&apos;t find what you need?</span>
-                <button className="help-popup-close" onClick={() => setShowHelpPopup(false)}><X size={16} /></button>
-              </div>
-              <Link href="/submit-requirement" className="help-popup-item" onClick={() => setShowHelpPopup(false)}>
-                <div className="help-popup-icon req"><FileText size={16} /></div>
-                <span className="help-popup-title">Share Your Requirement</span>
-              </Link>
-              <Link href="/invite-supplier" className="help-popup-item" onClick={() => setShowHelpPopup(false)}>
-                <div className="help-popup-icon invite"><UserPlus size={16} /></div>
-                <span className="help-popup-title">Invite Your Suppliers</span>
-              </Link>
-            </div>
-          )}
-          <button className="help-fab" onClick={() => setShowHelpPopup(!showHelpPopup)}>
-            {showHelpPopup ? <X size={22} /> : <HelpCircle size={22} />}
-          </button>
-        </div>
       )}
 
       {/* Modals */}
@@ -353,20 +338,15 @@ function SmartSourcingContent() {
 
         .no-external { text-align: center; padding: 40px; color: var(--text-muted); }
 
-        .help-fab-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 900; display: flex; flex-direction: column; align-items: flex-end; }
-        .help-fab { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(249,115,22,0.4); transition: all 0.2s; }
-        .help-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(249,115,22,0.5); }
-        .help-popup { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; margin-bottom: 12px; width: 240px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: popupSlideUp 0.2s ease-out; }
-        @keyframes popupSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .help-popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
-        .help-popup-header span { font-weight: 600; font-size: 0.85rem; color: var(--text-primary); }
-        .help-popup-close { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px; }
-        .help-popup-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: var(--text-primary); transition: background 0.15s; }
-        .help-popup-item:hover { background: var(--bg-hover, rgba(0,0,0,0.04)); }
-        .help-popup-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .help-popup-icon.req { background: rgba(249,115,22,0.12); color: #f97316; }
-        .help-popup-icon.invite { background: rgba(59,130,246,0.12); color: #3b82f6; }
-        .help-popup-title { font-weight: 600; font-size: 0.85rem; }
+        .cant-find-card { margin-top: 24px; background: var(--card-bg); border: 1px dashed var(--border-color); border-radius: 14px; padding: 24px; text-align: center; }
+        .cant-find-card h3 { margin: 0 0 6px; font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+        .cant-find-card p { margin: 0 0 16px; font-size: 0.88rem; color: var(--text-secondary); }
+        .cant-find-actions { display: flex; gap: 10px; justify-content: center; }
+        .cant-find-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+        .cant-find-btn.primary { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+        .cant-find-btn.primary:hover { box-shadow: 0 4px 14px rgba(249,115,22,0.35); }
+        .cant-find-btn.secondary { background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); }
+        .cant-find-btn.secondary:hover { border-color: #f97316; color: #f97316; }
 
         @media (max-width: 768px) {
           .source-tabs { width: 100%; }
@@ -380,9 +360,9 @@ function SmartSourcingContent() {
           .sort-select { width: 100%; }
           .external-card { padding: 14px; }
           .external-cta { padding: 24px 16px; }
-          .help-fab-wrapper { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); right: 16px; }
-          .help-fab { width: 46px; height: 46px; }
-          .help-popup { width: 220px; max-height: calc(100vh - 260px); overflow-y: auto; }
+          .cant-find-card { padding: 18px; margin-top: 18px; }
+          .cant-find-actions { flex-direction: column; }
+          .cant-find-btn { justify-content: center; padding: 12px 16px; }
         }
 
         @media (max-width: 480px) {
