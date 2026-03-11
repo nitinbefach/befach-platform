@@ -7,6 +7,8 @@ import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { myOrdersTourSteps, mobileMyOrdersTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import {
   Package, Clock, CheckCircle, DollarSign,
   Plus, Search, X, ChevronRight, Check, ArrowRight
@@ -21,7 +23,7 @@ function MyOrdersContent() {
   const router = useRouter();
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileMyOrdersTourSteps : myOrdersTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'my-orders', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'my-orders', steps: tourSteps });
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -1479,7 +1481,18 @@ function MyOrdersContent() {
           .form-row { grid-template-columns: 1fr; }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

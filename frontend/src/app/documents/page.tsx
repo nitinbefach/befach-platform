@@ -7,6 +7,8 @@ import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { documentsTourSteps, mobileDocumentsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { Receipt, ClipboardList, Ship, Package, ScrollText, Landmark, FileText, BookOpen, Check, Clock, Pause } from 'lucide-react';
 import { captureFeatureAction } from '@/lib/posthogEvents';
 
@@ -115,7 +117,7 @@ const typeLabels: Record<Document['type'], string> = {
 function DocumentsContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileDocumentsTourSteps : documentsTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'documents', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'documents', steps: tourSteps });
   const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
   const [filter, setFilter] = useState<'all' | Document['type']>('all');
   const [orderFilter, setOrderFilter] = useState<string>('all');
@@ -570,7 +572,18 @@ function DocumentsContent() {
         }
       `}</style>
       {promptElement}
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

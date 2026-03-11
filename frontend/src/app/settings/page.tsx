@@ -7,6 +7,8 @@ import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { settingsTourSteps, mobileSettingsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { useUser } from '@/context/UserModeContext';
 import {
   Building2, Users, Lock, Smartphone, Monitor, ChevronRight,
@@ -33,7 +35,7 @@ const allSidebarItems = [
 function SettingsContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileSettingsTourSteps : settingsTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'settings', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'settings', steps: tourSteps });
   const { organization, subscription, sidebarPreferences, updateSidebarPreferences, logout } = useUser();
   const { triggerTimeBasedFeedback, promptElement } = useFeedbackTrigger();
 
@@ -805,7 +807,18 @@ function SettingsContent() {
           }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
   );

@@ -6,6 +6,8 @@ import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { reportsTourSteps, mobileReportsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { Modal } from '@/components/ui';
 import { Package, DollarSign, TrendingDown, Factory, Lock, BarChart3, TrendingUp, ClipboardList } from 'lucide-react';
 import { captureFeatureAction } from '@/lib/posthogEvents';
@@ -76,7 +78,7 @@ const typeIcons: Record<Report['type'], React.ReactNode> = {
 function ReportsContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileReportsTourSteps : reportsTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'reports', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'reports', steps: tourSteps });
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [reports, setReports] = useState(mockReports);
   const [newReport, setNewReport] = useState({
@@ -522,7 +524,18 @@ function ReportsContent() {
           }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

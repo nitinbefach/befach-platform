@@ -22,6 +22,8 @@ import { Suspense } from 'react';
 import { useTour } from '@/hooks/useTour';
 import { trackShipmentTourSteps, mobileTrackShipmentTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { Package, Ship, MapPin, Clock, ChevronRight, Bookmark, Calendar, Check, Info } from 'lucide-react';
 import { safeStorage } from '@/lib/safeStorage';
 import { captureFeatureAction } from '@/lib/posthogEvents';
@@ -195,7 +197,7 @@ function TrackShipmentContent() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileTrackShipmentTourSteps : trackShipmentTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'track-shipment', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'track-shipment', steps: tourSteps });
 
   // Load tracked shipments from localStorage
   useEffect(() => {
@@ -1900,7 +1902,18 @@ function TrackShipmentContent() {
         }
       `}</style>
       {promptElement}
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

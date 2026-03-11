@@ -13,6 +13,8 @@ import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { bookShipmentTourSteps, mobileBookShipmentTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 
 type ActiveSegment = null | 'international' | 'local';
 type Tab = 'new' | 'bookings';
@@ -21,7 +23,7 @@ type Filter = 'all' | BookingSegment | BookingStatus;
 function BookShipmentContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileBookShipmentTourSteps : bookShipmentTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'book-shipment', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'book-shipment', steps: tourSteps });
   const [tab, setTab] = useState<Tab>('new');
   const [activeSegment, setActiveSegment] = useState<ActiveSegment>(null);
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
@@ -491,7 +493,18 @@ function BookShipmentContent() {
           .filter-chip { padding: 8px 12px; font-size: 0.78rem; }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

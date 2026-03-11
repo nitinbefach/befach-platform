@@ -7,6 +7,8 @@ import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { complianceTourSteps, mobileComplianceTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { Modal } from '@/components/ui';
 import { ComplianceSearch, ComplianceResultCard } from '@/components/compliance';
 import { captureFeatureAction } from '@/lib/posthogEvents';
@@ -37,7 +39,7 @@ import {
 function ComplianceToolsContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileComplianceTourSteps : complianceTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'compliance-tools', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'compliance-tools', steps: tourSteps });
   const [boeModal, setBoeModal] = useState(false);
   const [searchResults, setSearchResults] = useState<ComplianceRequirement[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -881,7 +883,18 @@ function ComplianceToolsContent() {
           }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

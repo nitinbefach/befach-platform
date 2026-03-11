@@ -9,6 +9,8 @@ import { useMobile } from '@/hooks/useMobile';
 import { useTour } from '@/hooks/useTour';
 import { teamManagementTourSteps, mobileTeamManagementTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { captureFeatureAction } from '@/lib/posthogEvents';
 
 interface TeamMember {
@@ -77,7 +79,7 @@ const roleColors = {
 function TeamManagementContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileTeamManagementTourSteps : teamManagementTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'team-management', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'team-management', steps: tourSteps });
   const { subscription, organization } = useUserMode();
   const [members, setMembers] = useState(mockTeamMembers);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -544,7 +546,18 @@ function TeamManagementContent() {
           }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

@@ -6,16 +6,29 @@ import { useTour } from '@/hooks/useTour';
 import { dashboardTourSteps, mobileDashboardTourSteps } from '@/lib/tourSteps';
 import { DashboardProvider, WebDashboard, MobileDashboard } from './components';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 
 function DashboardContent() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileDashboardTourSteps : dashboardTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'dashboard', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'dashboard', steps: tourSteps });
 
   return (
     <>
       {isMobile ? <MobileDashboard /> : <WebDashboard />}
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </>
   );
 }

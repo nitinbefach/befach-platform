@@ -7,6 +7,8 @@ import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { marketInsightsTourSteps, mobileMarketInsightsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { MarketProvider, useMarket } from '@/context/MarketContext';
 import { MarketOverviewCard } from '@/components/market/MarketOverviewCard';
 import { TrendingCommoditiesTable } from '@/components/market/TrendingCommoditiesTable';
@@ -22,7 +24,7 @@ import '@/styles/market-insights.css';
 function MarketInsightsInner() {
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileMarketInsightsTourSteps : marketInsightsTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'market-insights', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'market-insights', steps: tourSteps });
   const {
     filters,
     updateFilters,
@@ -218,7 +220,18 @@ function MarketInsightsInner() {
           />
         </div>
       </div>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
   );

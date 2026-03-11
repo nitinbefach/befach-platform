@@ -8,6 +8,8 @@ import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { submitRequirementTourSteps, mobileSubmitRequirementTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import {
   createRequirement,
   addRequirementToStorage,
@@ -89,7 +91,7 @@ function SubmitRequirementContent() {
   const router = useRouter();
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileSubmitRequirementTourSteps : submitRequirementTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'submit-requirement', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'submit-requirement', steps: tourSteps });
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -1601,7 +1603,18 @@ function SubmitRequirementContent() {
           }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
   );

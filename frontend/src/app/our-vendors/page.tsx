@@ -50,13 +50,15 @@ import { captureFeatureAction } from '@/lib/posthogEvents';
 import { useTour } from '@/hooks/useTour';
 import { ourVendorsTourSteps, mobileOurVendorsTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 
 function OurVendorsContent() {
   const router = useRouter();
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileOurVendorsTourSteps : ourVendorsTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'our-vendors', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'our-vendors', steps: tourSteps });
   const [suppliers, setSuppliers] = useState<SavedSupplier[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -1582,7 +1584,18 @@ function OurVendorsContent() {
         }
       `}</style>
       {promptElement}
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }

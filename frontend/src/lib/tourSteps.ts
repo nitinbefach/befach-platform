@@ -1,1071 +1,855 @@
-import { DriveStep } from 'driver.js';
+import { Step } from 'react-joyride';
 
 // ─── Dashboard ──────────────────────────────────────────────
-export const dashboardTourSteps: DriveStep[] = [
+export const dashboardTourSteps: Step[] = [
   {
-    element: '#nav-dashboard',
-    popover: {
-      title: 'Welcome to Befach!',
-      description: 'This is your Dashboard — your home base for managing imports. Use the sidebar to navigate between sections.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-dashboard',
+    title: 'Welcome to Befach!',
+    content: 'This is your Dashboard — your home base for managing imports. Use the sidebar to navigate between sections.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-quick-actions',
-    popover: {
-      title: 'Quick Actions',
-      description: 'Jump straight into key tasks — submit requirements, track shipments, find suppliers, or use the AI assistant.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#dashboard-quick-actions',
+    title: 'Quick Actions',
+    content: 'Jump straight into key tasks — submit requirements, track shipments, find suppliers, or use the AI assistant.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-metrics',
-    popover: {
-      title: 'Your Metrics',
-      description: 'See your total orders, spend, active suppliers, and savings at a glance. These update as you use the platform.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#dashboard-metrics',
+    title: 'Your Metrics',
+    content: 'See your total orders, spend, active suppliers, and savings at a glance. These update as you use the platform.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-charts',
-    popover: {
-      title: 'Revenue & Trends',
-      description: 'Track your revenue growth, cost savings, and supplier performance over time with interactive charts.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#dashboard-charts',
+    title: 'Revenue & Trends',
+    content: 'Track your revenue growth, cost savings, and supplier performance over time with interactive charts.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-orders',
-    popover: {
-      title: 'Active Orders',
-      description: 'Monitor your in-progress orders, check ETAs, and see which suppliers are handling each shipment.',
-      side: 'top',
-      align: 'start',
-    },
+    target: '#dashboard-orders',
+    title: 'Active Orders',
+    content: 'Monitor your in-progress orders, check ETAs, and see which suppliers are handling each shipment.',
+    placement: 'top-start',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-insights',
-    popover: {
-      title: 'Market Insights',
-      description: 'Stay ahead with real-time market data — commodity prices, growth trends, and import opportunities.',
-      side: 'top',
-      align: 'start',
-    },
+    target: '#dashboard-insights',
+    title: 'Market Insights',
+    content: 'Stay ahead with real-time market data — commodity prices, growth trends, and import opportunities.',
+    placement: 'top-start',
+    disableBeacon: true,
   },
 ];
 
-export const mobileDashboardTourSteps: DriveStep[] = [
+export const mobileDashboardTourSteps: Step[] = [
   {
-    element: '#bnav-dashboard',
-    popover: {
-      title: 'Welcome to Befach!',
-      description: 'Navigate between pages using this bar. Tap Home anytime to return here.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#bnav-dashboard',
+    title: 'Welcome to Befach!',
+    content: 'Navigate between pages using this bar. Tap Home anytime to return here.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-metrics',
-    popover: {
-      title: 'Your Metrics',
-      description: 'Scroll to see orders, spend, suppliers, and savings at a glance.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#dashboard-metrics',
+    title: 'Your Metrics',
+    content: 'Scroll to see orders, spend, suppliers, and savings at a glance.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-quick-actions',
-    popover: {
-      title: 'Quick Actions',
-      description: 'Tap to submit requirements, track shipments, or chat with the AI assistant.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#dashboard-quick-actions',
+    title: 'Quick Actions',
+    content: 'Tap to submit requirements, track shipments, or chat with the AI assistant.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-charts',
-    popover: {
-      title: 'Analytics',
-      description: 'Revenue, savings, and monthly trends — all in one view.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#dashboard-charts',
+    title: 'Analytics',
+    content: 'Revenue, savings, and monthly trends — all in one view.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-orders',
-    popover: {
-      title: 'Active Orders',
-      description: 'Check your in-progress orders, ETAs, and supplier details.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#dashboard-orders',
+    title: 'Active Orders',
+    content: 'Check your in-progress orders, ETAs, and supplier details.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#dashboard-insights',
-    popover: {
-      title: 'Market Insights',
-      description: 'Real-time commodity prices and import opportunities.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#dashboard-insights',
+    title: 'Market Insights',
+    content: 'Real-time commodity prices and import opportunities.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Cost Calculator ────────────────────────────────────────
-export const costCalculatorTourSteps: DriveStep[] = [
+export const costCalculatorTourSteps: Step[] = [
   {
-    element: '#nav-tools',
-    popover: {
-      title: 'Tools Section',
-      description: 'The Cost Calculator lives under Tools — along with Market Insights and Compliance.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-tools',
+    title: 'Tools Section',
+    content: 'The Cost Calculator lives under Tools — along with Market Insights and Compliance.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#calc-header',
-    popover: {
-      title: 'Landed Cost Calculator',
-      description: 'Calculate the total import cost for any product including duties, freight, and taxes.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#calc-header',
+    title: 'Landed Cost Calculator',
+    content: 'Calculate the total import cost for any product including duties, freight, and taxes.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#calc-form',
-    popover: {
-      title: 'Enter Product Details',
-      description: 'Fill in your product name, HSN code, quantity, and unit price. Duty rates are auto-fetched from the HSN code.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#calc-form',
+    title: 'Enter Product Details',
+    content: 'Fill in your product name, HSN code, quantity, and unit price. Duty rates are auto-fetched from the HSN code.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#calc-shipping-mode',
-    popover: {
-      title: 'Choose Shipping Mode',
-      description: 'Select sea, air, or road freight. Transit days auto-adjust based on your choice.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#calc-shipping-mode',
+    title: 'Choose Shipping Mode',
+    content: 'Select sea, air, or road freight. Transit days auto-adjust based on your choice.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#calc-submit-btn',
-    popover: {
-      title: 'Calculate',
-      description: 'Hit calculate to see your total landed cost with a full breakdown of duties, taxes, and freight charges.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#calc-submit-btn',
+    title: 'Calculate',
+    content: 'Hit calculate to see your total landed cost with a full breakdown of duties, taxes, and freight charges.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileCostCalculatorTourSteps: DriveStep[] = [
+export const mobileCostCalculatorTourSteps: Step[] = [
   {
-    element: '#calc-form',
-    popover: {
-      title: 'Product Details',
-      description: 'Enter product name, HSN code, quantity, and price.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#calc-form',
+    title: 'Product Details',
+    content: 'Enter product name, HSN code, quantity, and price.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#calc-shipping-mode',
-    popover: {
-      title: 'Shipping Mode',
-      description: 'Pick sea, air, or road. Transit time adjusts automatically.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#calc-shipping-mode',
+    title: 'Shipping Mode',
+    content: 'Pick sea, air, or road. Transit time adjusts automatically.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#calc-submit-btn',
-    popover: {
-      title: 'Calculate',
-      description: 'Tap to see your full landed cost breakdown.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#calc-submit-btn',
+    title: 'Calculate',
+    content: 'Tap to see your full landed cost breakdown.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Smart Sourcing ─────────────────────────────────────────
-export const smartSourcingTourSteps: DriveStep[] = [
+export const smartSourcingTourSteps: Step[] = [
   {
-    element: '#nav-sourcing',
-    popover: {
-      title: 'Sourcing Section',
-      description: 'Find suppliers, manage vendors, and share requirements — all from the Sourcing section in the sidebar.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-sourcing',
+    title: 'Sourcing Section',
+    content: 'Find suppliers, manage vendors, and share requirements — all from the Sourcing section in the sidebar.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-search',
-    popover: {
-      title: 'Search Suppliers',
-      description: 'Search by product name or category. Use filters to narrow by country, rating, certifications, and more.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#sourcing-search',
+    title: 'Search Suppliers',
+    content: 'Search by product name or category. Use filters to narrow by country, rating, certifications, and more.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-stats',
-    popover: {
-      title: 'Supplier Network',
-      description: 'See how many verified and premium suppliers are available across different categories.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#sourcing-stats',
+    title: 'Supplier Network',
+    content: 'See how many verified and premium suppliers are available across different categories.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-results',
-    popover: {
-      title: 'Supplier Cards',
-      description: 'View supplier details, ratings, and specializations. Click to see full profiles, send inquiries, or start a chat.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#sourcing-results',
+    title: 'Supplier Cards',
+    content: 'View supplier details, ratings, and specializations. Click to see full profiles, send inquiries, or start a chat.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-help',
-    popover: {
-      title: 'Need Help?',
-      description: "Can't find what you need? Share your requirement or invite your own suppliers to the platform.",
-      side: 'left',
-      align: 'center',
-    },
+    target: '#sourcing-help',
+    title: 'Need Help?',
+    content: "Can't find what you need? Share your requirement or invite your own suppliers to the platform.",
+    placement: 'left',
+    disableBeacon: true,
   },
 ];
 
-export const mobileSmartSourcingTourSteps: DriveStep[] = [
+export const mobileSmartSourcingTourSteps: Step[] = [
   {
-    element: '#bnav-smart-sourcing',
-    popover: {
-      title: 'Smart Sourcing',
-      description: 'Tap Search anytime to find and connect with verified suppliers.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#bnav-smart-sourcing',
+    title: 'Smart Sourcing',
+    content: 'Tap Search anytime to find and connect with verified suppliers.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-search',
-    popover: {
-      title: 'Search Suppliers',
-      description: 'Search by product or category, then filter results.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#sourcing-search',
+    title: 'Search Suppliers',
+    content: 'Search by product or category, then filter results.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-stats',
-    popover: {
-      title: 'Supplier Network',
-      description: 'See verified and premium supplier counts.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#sourcing-stats',
+    title: 'Supplier Network',
+    content: 'See verified and premium supplier counts.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#sourcing-help',
-    popover: {
-      title: 'Need Help?',
-      description: 'Tap to share your requirement or invite suppliers.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#sourcing-help',
+    title: 'Need Help?',
+    content: 'Tap to share your requirement or invite suppliers.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Our Vendors ────────────────────────────────────────────
-export const ourVendorsTourSteps: DriveStep[] = [
+export const ourVendorsTourSteps: Step[] = [
   {
-    element: '#nav-sourcing',
-    popover: {
-      title: 'Sourcing Section',
-      description: 'Our Vendors is part of the Sourcing section — manage your supplier relationships here.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-sourcing',
+    title: 'Sourcing Section',
+    content: 'Our Vendors is part of the Sourcing section — manage your supplier relationships here.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#vendors-pipeline',
-    popover: {
-      title: 'Supplier Pipeline',
-      description: 'See your suppliers organized by relationship stage. Click a stage to filter the list below.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#vendors-pipeline',
+    title: 'Supplier Pipeline',
+    content: 'See your suppliers organized by relationship stage. Click a stage to filter the list below.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#vendors-toolbar',
-    popover: {
-      title: 'Manage Vendors',
-      description: 'Add new suppliers manually, find new ones via Smart Sourcing, or export your list to CSV.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#vendors-toolbar',
+    title: 'Manage Vendors',
+    content: 'Add new suppliers manually, find new ones via Smart Sourcing, or export your list to CSV.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#vendors-filters',
-    popover: {
-      title: 'Filter & Sort',
-      description: 'Filter by tags, categories, or relationship stage. Sort by rating, orders, or recency.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#vendors-filters',
+    title: 'Filter & Sort',
+    content: 'Filter by tags, categories, or relationship stage. Sort by rating, orders, or recency.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#vendors-list',
-    popover: {
-      title: 'Supplier List',
-      description: 'Click any supplier to expand their details, send RFQs, message them, or manage tags and notes.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#vendors-list',
+    title: 'Supplier List',
+    content: 'Click any supplier to expand their details, send RFQs, message them, or manage tags and notes.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileOurVendorsTourSteps: DriveStep[] = [
+export const mobileOurVendorsTourSteps: Step[] = [
   {
-    element: '#vendors-pipeline',
-    popover: {
-      title: 'Pipeline Overview',
-      description: 'Tap a stage to filter suppliers by relationship status.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#vendors-pipeline',
+    title: 'Pipeline Overview',
+    content: 'Tap a stage to filter suppliers by relationship status.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#vendors-toolbar',
-    popover: {
-      title: 'Actions',
-      description: 'Add suppliers, search, or export your vendor list.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#vendors-toolbar',
+    title: 'Actions',
+    content: 'Add suppliers, search, or export your vendor list.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#vendors-list',
-    popover: {
-      title: 'Vendor Cards',
-      description: 'Tap a supplier to expand details and take actions.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#vendors-list',
+    title: 'Vendor Cards',
+    content: 'Tap a supplier to expand details and take actions.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Submit Requirement ─────────────────────────────────────
-export const submitRequirementTourSteps: DriveStep[] = [
+export const submitRequirementTourSteps: Step[] = [
   {
-    element: '#nav-sourcing',
-    popover: {
-      title: 'Sourcing Section',
-      description: 'Share your import requirements from the Sourcing section. We match you with the best suppliers.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-sourcing',
+    title: 'Sourcing Section',
+    content: 'Share your import requirements from the Sourcing section. We match you with the best suppliers.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#req-header',
-    popover: {
-      title: 'Share Your Requirement',
-      description: "Tell us what you need to import and we'll match you with the best suppliers.",
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#req-header',
+    title: 'Share Your Requirement',
+    content: "Tell us what you need to import and we'll match you with the best suppliers.",
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#req-tabs',
-    popover: {
-      title: 'Single or Bulk',
-      description: 'Submit a single product requirement, or bulk-upload multiple products via CSV.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#req-tabs',
+    title: 'Single or Bulk',
+    content: 'Submit a single product requirement, or bulk-upload multiple products via CSV.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#req-form',
-    popover: {
-      title: 'Product Form',
-      description: 'Fill in product details, quantity, target price, and any special requirements. We handle supplier matching.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#req-form',
+    title: 'Product Form',
+    content: 'Fill in product details, quantity, target price, and any special requirements. We handle supplier matching.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileSubmitRequirementTourSteps: DriveStep[] = [
+export const mobileSubmitRequirementTourSteps: Step[] = [
   {
-    element: '#bnav-submit-requirement',
-    popover: {
-      title: 'Share Requirement',
-      description: 'Tap the Add button anytime to submit a new import requirement.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#bnav-submit-requirement',
+    title: 'Share Requirement',
+    content: 'Tap the Add button anytime to submit a new import requirement.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#req-tabs',
-    popover: {
-      title: 'Single or Bulk',
-      description: 'Choose single product or bulk CSV upload.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#req-tabs',
+    title: 'Single or Bulk',
+    content: 'Choose single product or bulk CSV upload.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#req-form',
-    popover: {
-      title: 'Product Details',
-      description: "Enter what you need and we'll find suppliers for you.",
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#req-form',
+    title: 'Product Details',
+    content: "Enter what you need and we'll find suppliers for you.",
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
 // ─── Market Insights ────────────────────────────────────────
-export const marketInsightsTourSteps: DriveStep[] = [
+export const marketInsightsTourSteps: Step[] = [
   {
-    element: '#nav-tools',
-    popover: {
-      title: 'Tools Section',
-      description: 'Market Insights is under Tools — track commodity prices, trends, and import opportunities.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-tools',
+    title: 'Tools Section',
+    content: 'Market Insights is under Tools — track commodity prices, trends, and import opportunities.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#market-overview',
-    popover: {
-      title: 'Market Overview',
-      description: 'Key market indicators at a glance — trading volume, active commodities, and overall market sentiment.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#market-overview',
+    title: 'Market Overview',
+    content: 'Key market indicators at a glance — trading volume, active commodities, and overall market sentiment.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#market-filters',
-    popover: {
-      title: 'Filter Markets',
-      description: 'Filter by category, region, or price range to focus on commodities that matter to you.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#market-filters',
+    title: 'Filter Markets',
+    content: 'Filter by category, region, or price range to focus on commodities that matter to you.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#market-tabs',
-    popover: {
-      title: 'Explore Data',
-      description: 'Switch between Overview (trending table), Price Charts (visual trends), and Opportunities (actionable alerts).',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#market-tabs',
+    title: 'Explore Data',
+    content: 'Switch between Overview (trending table), Price Charts (visual trends), and Opportunities (actionable alerts).',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#market-watchlist',
-    popover: {
-      title: 'Your Watchlist',
-      description: 'Track commodities you care about. Add items from the overview to monitor price changes.',
-      side: 'left',
-      align: 'start',
-    },
+    target: '#market-watchlist',
+    title: 'Your Watchlist',
+    content: 'Track commodities you care about. Add items from the overview to monitor price changes.',
+    placement: 'left-start',
+    disableBeacon: true,
   },
 ];
 
-export const mobileMarketInsightsTourSteps: DriveStep[] = [
+export const mobileMarketInsightsTourSteps: Step[] = [
   {
-    element: '#market-overview',
-    popover: {
-      title: 'Market Overview',
-      description: 'Key market indicators and trading volume.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#market-overview',
+    title: 'Market Overview',
+    content: 'Key market indicators and trading volume.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#market-filters',
-    popover: {
-      title: 'Filters',
-      description: 'Filter by category, region, or price range.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#market-filters',
+    title: 'Filters',
+    content: 'Filter by category, region, or price range.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#market-tabs',
-    popover: {
-      title: 'Explore',
-      description: 'Switch between Overview, Charts, and Opportunities.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#market-tabs',
+    title: 'Explore',
+    content: 'Switch between Overview, Charts, and Opportunities.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
 // ─── Book Shipment ──────────────────────────────────────────
-export const bookShipmentTourSteps: DriveStep[] = [
+export const bookShipmentTourSteps: Step[] = [
   {
-    element: '#nav-logistics',
-    popover: {
-      title: 'Logistics Section',
-      description: 'Book and track shipments from the Logistics section in the sidebar.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-logistics',
+    title: 'Logistics Section',
+    content: 'Book and track shipments from the Logistics section in the sidebar.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#booking-header',
-    popover: {
-      title: 'Book Shipment',
-      description: 'Book international ocean/air freight or domestic logistics with competitive carrier quotes.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#booking-header',
+    title: 'Book Shipment',
+    content: 'Book international ocean/air freight or domestic logistics with competitive carrier quotes.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#booking-tabs',
-    popover: {
-      title: 'New or Existing',
-      description: 'Create a new booking or view your existing bookings and their status.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#booking-tabs',
+    title: 'New or Existing',
+    content: 'Create a new booking or view your existing bookings and their status.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#booking-segments',
-    popover: {
-      title: 'Choose Segment',
-      description: 'Select International Freight for ocean/air cargo, or Local Logistics for domestic pan-India delivery.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#booking-segments',
+    title: 'Choose Segment',
+    content: 'Select International Freight for ocean/air cargo, or Local Logistics for domestic pan-India delivery.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileBookShipmentTourSteps: DriveStep[] = [
+export const mobileBookShipmentTourSteps: Step[] = [
   {
-    element: '#booking-tabs',
-    popover: {
-      title: 'New or Existing',
-      description: 'Create a new booking or check your bookings.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#booking-tabs',
+    title: 'New or Existing',
+    content: 'Create a new booking or check your bookings.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#booking-segments',
-    popover: {
-      title: 'Choose Type',
-      description: 'International freight or local logistics.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#booking-segments',
+    title: 'Choose Type',
+    content: 'International freight or local logistics.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
 // ─── Track Shipment ─────────────────────────────────────────
-export const trackShipmentTourSteps: DriveStep[] = [
+export const trackShipmentTourSteps: Step[] = [
   {
-    element: '#nav-logistics',
-    popover: {
-      title: 'Logistics Section',
-      description: 'Track all your shipments from the Logistics section.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-logistics',
+    title: 'Logistics Section',
+    content: 'Track all your shipments from the Logistics section.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#track-shipments',
-    popover: {
-      title: 'My Shipments',
-      description: 'Quick access to your saved shipments. Click any to instantly view its tracking details.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#track-shipments',
+    title: 'My Shipments',
+    content: 'Quick access to your saved shipments. Click any to instantly view its tracking details.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#track-search',
-    popover: {
-      title: 'Track a Shipment',
-      description: 'Enter a BL, container, or booking number to get real-time tracking. Try "0037" for a demo.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#track-search',
+    title: 'Track a Shipment',
+    content: 'Enter a BL, container, or booking number to get real-time tracking. Try "0037" for a demo.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
-export const mobileTrackShipmentTourSteps: DriveStep[] = [
+export const mobileTrackShipmentTourSteps: Step[] = [
   {
-    element: '#track-shipments',
-    popover: {
-      title: 'My Shipments',
-      description: 'Tap a saved shipment for instant tracking.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#track-shipments',
+    title: 'My Shipments',
+    content: 'Tap a saved shipment for instant tracking.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#track-search',
-    popover: {
-      title: 'Track',
-      description: 'Enter tracking number. Try "0037" for a demo.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#track-search',
+    title: 'Track',
+    content: 'Enter tracking number. Try "0037" for a demo.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
 // ─── Documents ──────────────────────────────────────────────
-export const documentsTourSteps: DriveStep[] = [
+export const documentsTourSteps: Step[] = [
   {
-    element: '#nav-logistics',
-    popover: {
-      title: 'Logistics Section',
-      description: 'Access your import documents from the Logistics section.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-logistics',
+    title: 'Logistics Section',
+    content: 'Access your import documents from the Logistics section.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#docs-header',
-    popover: {
-      title: 'My Documents',
-      description: 'Access all your import documents — invoices, BOE filings, shipping docs, and certificates — in one place.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#docs-header',
+    title: 'My Documents',
+    content: 'Access all your import documents — invoices, BOE filings, shipping docs, and certificates — in one place.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#docs-filters',
-    popover: {
-      title: 'Search & Filter',
-      description: 'Search documents by name, filter by order or document type to find exactly what you need.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#docs-filters',
+    title: 'Search & Filter',
+    content: 'Search documents by name, filter by order or document type to find exactly what you need.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#docs-orders',
-    popover: {
-      title: 'Documents by Order',
-      description: 'Documents are grouped by order. Click "View All" to see every document for a specific order.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#docs-orders',
+    title: 'Documents by Order',
+    content: 'Documents are grouped by order. Click "View All" to see every document for a specific order.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#docs-guide',
-    popover: {
-      title: 'Document Guide',
-      description: 'Not sure what a document type means? This guide explains each type and its purpose.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#docs-guide',
+    title: 'Document Guide',
+    content: 'Not sure what a document type means? This guide explains each type and its purpose.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileDocumentsTourSteps: DriveStep[] = [
+export const mobileDocumentsTourSteps: Step[] = [
   {
-    element: '#docs-filters',
-    popover: {
-      title: 'Search & Filter',
-      description: 'Search documents or filter by order and type.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#docs-filters',
+    title: 'Search & Filter',
+    content: 'Search documents or filter by order and type.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#docs-orders',
-    popover: {
-      title: 'Your Documents',
-      description: 'Documents grouped by order. Tap to expand.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#docs-orders',
+    title: 'Your Documents',
+    content: 'Documents grouped by order. Tap to expand.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#docs-guide',
-    popover: {
-      title: 'Document Guide',
-      description: 'Learn what each document type means.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#docs-guide',
+    title: 'Document Guide',
+    content: 'Learn what each document type means.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Compliance Tools ───────────────────────────────────────
-export const complianceTourSteps: DriveStep[] = [
+export const complianceTourSteps: Step[] = [
   {
-    element: '#nav-tools',
-    popover: {
-      title: 'Tools Section',
-      description: 'Compliance tools are under the Tools section — manage customs clearance and BOE filings.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-tools',
+    title: 'Tools Section',
+    content: 'Compliance tools are under the Tools section — manage customs clearance and BOE filings.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#compliance-welcome',
-    popover: {
-      title: 'Compliance Dashboard',
-      description: 'Your hub for customs clearance, BOE filing, and regulatory compliance. Use quick actions to file BOE instantly.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#compliance-welcome',
+    title: 'Compliance Dashboard',
+    content: 'Your hub for customs clearance, BOE filing, and regulatory compliance. Use quick actions to file BOE instantly.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#compliance-metrics',
-    popover: {
-      title: 'Compliance Metrics',
-      description: 'Track BOE filings, compliance rate, active alerts, and average clearance time at a glance.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#compliance-metrics',
+    title: 'Compliance Metrics',
+    content: 'Track BOE filings, compliance rate, active alerts, and average clearance time at a glance.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#compliance-search',
-    popover: {
-      title: 'Search Requirements',
-      description: 'Look up compliance requirements by HSN code or product description to check duties, licenses, and regulations.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#compliance-search',
+    title: 'Search Requirements',
+    content: 'Look up compliance requirements by HSN code or product description to check duties, licenses, and regulations.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#compliance-boe',
-    popover: {
-      title: 'Recent BOE Filings',
-      description: 'View your recent Bill of Entry filings, their status, and duty amounts paid.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#compliance-boe',
+    title: 'Recent BOE Filings',
+    content: 'View your recent Bill of Entry filings, their status, and duty amounts paid.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileComplianceTourSteps: DriveStep[] = [
+export const mobileComplianceTourSteps: Step[] = [
   {
-    element: '#compliance-metrics',
-    popover: {
-      title: 'Key Metrics',
-      description: 'BOE count, compliance rate, alerts, and clearance time.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#compliance-metrics',
+    title: 'Key Metrics',
+    content: 'BOE count, compliance rate, alerts, and clearance time.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#compliance-search',
-    popover: {
-      title: 'Search',
-      description: 'Look up compliance by HSN code or product.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#compliance-search',
+    title: 'Search',
+    content: 'Look up compliance by HSN code or product.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#compliance-boe',
-    popover: {
-      title: 'BOE Filings',
-      description: 'Your recent Bill of Entry filings and status.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#compliance-boe',
+    title: 'BOE Filings',
+    content: 'Your recent Bill of Entry filings and status.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── My Orders ──────────────────────────────────────────────
-export const myOrdersTourSteps: DriveStep[] = [
+export const myOrdersTourSteps: Step[] = [
   {
-    element: '#nav-my-orders',
-    popover: {
-      title: 'My Orders',
-      description: 'Access all your orders from the sidebar. Track status, view details, and manage deliveries.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-my-orders',
+    title: 'My Orders',
+    content: 'Access all your orders from the sidebar. Track status, view details, and manage deliveries.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#orders-stats',
-    popover: {
-      title: 'Order Statistics',
-      description: 'See total orders, in-progress count, completed deliveries, and total value. Click any stat to filter.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#orders-stats',
+    title: 'Order Statistics',
+    content: 'See total orders, in-progress count, completed deliveries, and total value. Click any stat to filter.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#orders-filters',
-    popover: {
-      title: 'Filter Orders',
-      description: 'Filter by status (processing, shipped, delivered) and search by order ID or product name.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#orders-filters',
+    title: 'Filter Orders',
+    content: 'Filter by status (processing, shipped, delivered) and search by order ID or product name.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#orders-timeline',
-    popover: {
-      title: 'Order Timeline',
-      description: 'Your orders in chronological order. Click any card to see full details, tracking, and documents.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#orders-timeline',
+    title: 'Order Timeline',
+    content: 'Your orders in chronological order. Click any card to see full details, tracking, and documents.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileMyOrdersTourSteps: DriveStep[] = [
+export const mobileMyOrdersTourSteps: Step[] = [
   {
-    element: '#orders-stats',
-    popover: {
-      title: 'Quick Stats',
-      description: 'Tap a stat card to filter orders by that status.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#orders-stats',
+    title: 'Quick Stats',
+    content: 'Tap a stat card to filter orders by that status.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#orders-filters',
-    popover: {
-      title: 'Filter & Search',
-      description: 'Filter by status or search by order ID.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#orders-filters',
+    title: 'Filter & Search',
+    content: 'Filter by status or search by order ID.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#orders-timeline',
-    popover: {
-      title: 'Your Orders',
-      description: 'Tap any order to view details.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#orders-timeline',
+    title: 'Your Orders',
+    content: 'Tap any order to view details.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Reports ────────────────────────────────────────────────
-export const reportsTourSteps: DriveStep[] = [
+export const reportsTourSteps: Step[] = [
   {
-    element: '#nav-team',
-    popover: {
-      title: 'Team Section',
-      description: 'Reports are under the Team section — view analytics and generate custom reports.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-team',
+    title: 'Team Section',
+    content: 'Reports are under the Team section — view analytics and generate custom reports.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#reports-stats',
-    popover: {
-      title: 'Summary Stats',
-      description: 'Key metrics for your import operations — order count, total spend, and active suppliers.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#reports-stats',
+    title: 'Summary Stats',
+    content: 'Key metrics for your import operations — order count, total spend, and active suppliers.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#reports-chart',
-    popover: {
-      title: 'Import Trends',
-      description: 'Visual trends of your import volume over time. Toggle between 6 months, 1 year, and all time.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#reports-chart',
+    title: 'Import Trends',
+    content: 'Visual trends of your import volume over time. Toggle between 6 months, 1 year, and all time.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#reports-list',
-    popover: {
-      title: 'Saved Reports',
-      description: 'View, download, or delete your generated reports. Click "Generate Report" to create new ones.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#reports-list',
+    title: 'Saved Reports',
+    content: 'View, download, or delete your generated reports. Click "Generate Report" to create new ones.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#reports-quick',
-    popover: {
-      title: 'Quick Reports',
-      description: 'One-click access to common reports: monthly orders, spending, supplier overview, and compliance.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#reports-quick',
+    title: 'Quick Reports',
+    content: 'One-click access to common reports: monthly orders, spending, supplier overview, and compliance.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileReportsTourSteps: DriveStep[] = [
+export const mobileReportsTourSteps: Step[] = [
   {
-    element: '#reports-stats',
-    popover: {
-      title: 'Summary Stats',
-      description: 'Key metrics for your import operations.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#reports-stats',
+    title: 'Summary Stats',
+    content: 'Key metrics for your import operations.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#reports-list',
-    popover: {
-      title: 'Your Reports',
-      description: 'Download or generate new reports.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#reports-list',
+    title: 'Your Reports',
+    content: 'Download or generate new reports.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#reports-quick',
-    popover: {
-      title: 'Quick Reports',
-      description: 'Tap for instant common reports.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#reports-quick',
+    title: 'Quick Reports',
+    content: 'Tap for instant common reports.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
 // ─── Settings ───────────────────────────────────────────────
-export const settingsTourSteps: DriveStep[] = [
+export const settingsTourSteps: Step[] = [
   {
-    element: '#nav-settings',
-    popover: {
-      title: 'Settings',
-      description: 'Manage your profile, notifications, and account preferences from the Settings section.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-settings',
+    title: 'Settings',
+    content: 'Manage your profile, notifications, and account preferences from the Settings section.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#settings-profile',
-    popover: {
-      title: 'Your Profile',
-      description: 'Your account details, organization, plan, and team seat information at a glance.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#settings-profile',
+    title: 'Your Profile',
+    content: 'Your account details, organization, plan, and team seat information at a glance.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#settings-grid',
-    popover: {
-      title: 'Settings',
-      description: 'Update your profile, manage notifications, customize sidebar shortcuts, and configure security settings.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#settings-grid',
+    title: 'Settings',
+    content: 'Update your profile, manage notifications, customize sidebar shortcuts, and configure security settings.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#settings-notifications',
-    popover: {
-      title: 'Notifications',
-      description: 'Control which notifications you receive — order updates, shipment tracking, price alerts, and more.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#settings-notifications',
+    title: 'Notifications',
+    content: 'Control which notifications you receive — order updates, shipment tracking, price alerts, and more.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
-export const mobileSettingsTourSteps: DriveStep[] = [
+export const mobileSettingsTourSteps: Step[] = [
   {
-    element: '#bnav-settings',
-    popover: {
-      title: 'Settings',
-      description: 'Tap Profile to manage your account and preferences.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#bnav-settings',
+    title: 'Settings',
+    content: 'Tap Profile to manage your account and preferences.',
+    placement: 'top',
+    disableBeacon: true,
   },
   {
-    element: '#settings-profile',
-    popover: {
-      title: 'Your Profile',
-      description: 'Account details and plan information.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#settings-profile',
+    title: 'Your Profile',
+    content: 'Account details and plan information.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#settings-grid',
-    popover: {
-      title: 'Settings',
-      description: 'Profile, notifications, sidebar, and security.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#settings-grid',
+    title: 'Settings',
+    content: 'Profile, notifications, sidebar, and security.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
 ];
 
 // ─── Team Management ────────────────────────────────────────
-export const teamManagementTourSteps: DriveStep[] = [
+export const teamManagementTourSteps: Step[] = [
   {
-    element: '#nav-team',
-    popover: {
-      title: 'Team Section',
-      description: 'Manage your team members, roles, and permissions from the Team section.',
-      side: 'right',
-      align: 'start',
-    },
+    target: '#nav-team',
+    title: 'Team Section',
+    content: 'Manage your team members, roles, and permissions from the Team section.',
+    placement: 'right-start',
+    disableBeacon: true,
   },
   {
-    element: '#team-seats',
-    popover: {
-      title: 'Team Seats',
-      description: 'See how many seats you have used out of your plan limit. Upgrade to add more members.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#team-seats',
+    title: 'Team Seats',
+    content: 'See how many seats you have used out of your plan limit. Upgrade to add more members.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#team-members',
-    popover: {
-      title: 'Team Members',
-      description: 'View all team members, their roles, and status. Change roles or remove members as needed.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#team-members',
+    title: 'Team Members',
+    content: 'View all team members, their roles, and status. Change roles or remove members as needed.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#team-roles',
-    popover: {
-      title: 'Roles & Permissions',
-      description: 'Understand what each role can do — Owner, Admin, Member, and Viewer have different access levels.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#team-roles',
+    title: 'Roles & Permissions',
+    content: 'Understand what each role can do — Owner, Admin, Member, and Viewer have different access levels.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];
 
-export const mobileTeamManagementTourSteps: DriveStep[] = [
+export const mobileTeamManagementTourSteps: Step[] = [
   {
-    element: '#team-seats',
-    popover: {
-      title: 'Team Seats',
-      description: 'See how many seats are used in your plan.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#team-seats',
+    title: 'Team Seats',
+    content: 'See how many seats are used in your plan.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#team-members',
-    popover: {
-      title: 'Members',
-      description: 'View and manage your team members.',
-      side: 'bottom',
-      align: 'center',
-    },
+    target: '#team-members',
+    title: 'Members',
+    content: 'View and manage your team members.',
+    placement: 'bottom',
+    disableBeacon: true,
   },
   {
-    element: '#team-roles',
-    popover: {
-      title: 'Roles Guide',
-      description: 'Learn what each role can do.',
-      side: 'top',
-      align: 'center',
-    },
+    target: '#team-roles',
+    title: 'Roles Guide',
+    content: 'Learn what each role can do.',
+    placement: 'top',
+    disableBeacon: true,
   },
 ];

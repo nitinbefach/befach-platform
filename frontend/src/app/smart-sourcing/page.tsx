@@ -9,6 +9,8 @@ import { useFeedbackTrigger } from '@/hooks/useFeedbackTrigger';
 import { useTour } from '@/hooks/useTour';
 import { smartSourcingTourSteps, mobileSmartSourcingTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import { HeroSearch, SearchFilters, SupplierCard, SupplierModal, ContactModal, EmptyState } from '@/components/search';
 import { Supplier, SearchResult, searchSuppliers, addToSearchHistory, getSupplierStats, saveSupplierFromSearch } from '@/lib/suppliers';
 import { createConversation, getStoredConversations } from '@/lib/conversations';
@@ -32,7 +34,7 @@ function SmartSourcingContent() {
   const router = useRouter();
   const { isMobile } = useMobile();
   const tourSteps = isMobile ? mobileSmartSourcingTourSteps : smartSourcingTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'smart-sourcing', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'smart-sourcing', steps: tourSteps });
   const { triggerFeedback, promptElement } = useFeedbackTrigger();
   const [activeTab, setActiveTab] = useState<SourceTab>('befach');
   const [searchQuery, setSearchQuery] = useState('');
@@ -377,7 +379,18 @@ function SmartSourcingContent() {
           .external-actions button { padding: 8px; font-size: 0.8rem; }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
       {promptElement}
     </AppLayout>
   );

@@ -8,6 +8,8 @@ import { useTour } from '@/hooks/useTour';
 import { captureFeatureAction } from '@/lib/posthogEvents';
 import { costCalculatorTourSteps, mobileCostCalculatorTourSteps } from '@/lib/tourSteps';
 import TourFAB from '@/components/walkthrough/TourFAB';
+import Joyride from 'react-joyride';
+import { joyrideStyles, BefachTooltip } from '@/lib/tourConfig';
 import {
   Calculator,
   Search,
@@ -660,7 +662,7 @@ function CostCalculatorContent() {
   const resultsRef = useRef<HTMLDivElement>(null);
   const { isMobile, isDesktop } = useMobile();
   const tourSteps = isMobile ? mobileCostCalculatorTourSteps : costCalculatorTourSteps;
-  const { startTour, isActive: tourActive } = useTour({ tourId: 'cost-calculator', steps: tourSteps });
+  const { run, startTour, handleJoyrideCallback } = useTour({ tourId: 'cost-calculator', steps: tourSteps });
 
   // HSN search
   const [hsnSuggestions, setHsnSuggestions] = useState<any[]>([]);
@@ -2376,7 +2378,18 @@ function CostCalculatorContent() {
           }
         }
       `}</style>
-      {!tourActive && <TourFAB onStart={startTour} />}
+      <Joyride
+        steps={tourSteps}
+        run={run}
+        continuous
+        showProgress
+        showSkipButton
+        scrollToFirstStep
+        callback={handleJoyrideCallback}
+        tooltipComponent={BefachTooltip}
+        styles={joyrideStyles}
+      />
+      {!run && <TourFAB onStart={startTour} />}
     </AppLayout>
   );
 }
