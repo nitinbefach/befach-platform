@@ -582,6 +582,8 @@ function DocumentsContent() {
         callback={handleJoyrideCallback}
         tooltipComponent={BefachTooltip}
         styles={joyrideStyles}
+        floaterProps={{ disableAnimation: true }}
+        disableScrollParentFix
       />
       {!run && <TourFAB onStart={startTour} />}
     </AppLayout>

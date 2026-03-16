@@ -210,8 +210,8 @@ export default function FeedbackWidget() {
         /* Widget Container */
         .widget-container {
           position: fixed;
-          bottom: ${isMobile ? 'calc(80px + env(safe-area-inset-bottom, 0px))' : '24px'};
-          ${isMobile ? 'left: 16px;' : 'right: 24px;'}
+          bottom: ${isMobile ? 'calc(100px + env(safe-area-inset-bottom, 0px))' : '24px'};
+          right: ${isMobile ? '16px' : '24px'};
           z-index: 900;
         }
 
@@ -248,8 +248,8 @@ export default function FeedbackWidget() {
         /* Menu */
         .widget-menu {
           position: absolute;
-          bottom: ${isMobile ? '56px' : '82px'};
-          ${isMobile ? 'left: 0;' : 'right: 0;'}
+          bottom: ${isMobile ? '56px' : '62px'};
+          right: 0;
           background: var(--card-bg);
           border-radius: 12px;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
