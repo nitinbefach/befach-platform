@@ -1,3 +1,5 @@
+'use client';
+
 import posthog from 'posthog-js';
 
 /**
@@ -10,10 +12,13 @@ export function captureFeatureAction(
   properties?: Record<string, any>
 ) {
   try {
-    posthog.capture(`${feature}_${action}`, {
-      feature_name: feature,
-      ...properties,
-    });
+    if ((posthog as any).__loaded) {
+      console.log(`[PostHog Event] ${feature}_${action}`, properties);
+      posthog.capture(`${feature}_${action}`, {
+        feature_name: feature,
+        ...properties,
+      });
+    }
   } catch (e) {
     // PostHog may not be initialized in dev mode
   }

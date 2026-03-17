@@ -174,7 +174,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const completeOnboarding = useCallback(() => {
     setHasCompletedOnboarding(true);
     safeStorage.setItem(ONBOARDING_KEY, 'true');
-    try { posthog.capture('onboarding_completed'); } catch (e) { /* noop in dev */ }
+    // onboarding_completed event is already captured in useOnboarding.ts with full properties
   }, []);
 
   if (!mounted) {

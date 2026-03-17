@@ -837,6 +837,7 @@ function CostCalculatorContent() {
         },
       });
       captureFeatureAction('cost_calculator', 'calculated', { product: state.productName });
+      captureFeatureAction('calculator_feedback', 'triggered', { product: state.productName });
     }, 600);
   }, [canCalculate, state, fobValue]);
 
